@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Forest Survival</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a1c10; font-family: Arial, sans-serif; color: #fff; touch-action: none; }
+#menu { position: fixed; inset: 0; background: radial-gradient(circle at center, #1b3b24, #050a06); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; padding: 20px; text-align: center; }
+#menu h1 { font-size: 56px; color: #c6ff00; text-shadow: 0 0 30px #4caf50; margin-bottom: 10px; letter-spacing: 4px; }
+#menu p { color: #8ba88e; margin-bottom: 30px; font-size: 16px; }
+.btn { background: #c6ff00; color: #000; font-size: 18px; font-weight: bold; padding: 18px 40px; border: none; border-radius: 10px; cursor: pointer; margin: 6px; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
+.btn:hover { background: #d4ff33; transform: scale(1.05); }
+.btn2 { background: transparent; color: #fff; border: 2px solid #c6ff00; }
+.btn2:hover { background: rgba(198,255,0,0.1); }
+#game { display: none; position: relative; width: 100vw; height: 100vh; }
+canvas { display: block; position: absolute; top: 0; left: 0; }
+#ui { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); padding: 12px; border-radius: 12px; font-size: 12px; pointer-events: none; }
+#ui div { margin-bottom: 6px; font-weight: bold; }
+.bar { width: 160px; height: 10px; background: #000; border-radius: 5px; overflow: hidden; margin-top: 3px; }
+.bar-inner { height: 100%; width: 100%; transition: width 0.2s; }
+#hp { background: #ef5350; }
+#en { background: #ffee58; }
+#hg { background: #a1887f; }
+#info { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); padding: 10px 18px; border-radius: 12px; font-size: 14px; color: #c6ff00; font-weight: bold; pointer-events: none; }
+#hint { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); padding: 8px 22px; border-radius: 20px; color: #c6ff00; font-size: 14px; display: none; pointer-events: none; font-weight: bold; }
+#btns { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; background: rgba(0,0,0,0.7); padding: 8px; border-radius: 12px; }
+.slot { width: 50px; height: 50px; background: #1b3b24; border: 2px solid #4caf50; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; position: relative; transition: 0.15s; }
+.slot.active { border-color: #c6ff00; box-shadow: 0 0 15px #c6ff00; background: rgba(198,255,0,0.1); }
+.slot span { position: absolute; bottom: 0px; right: 4px; font-size: 11px; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px #000; }
+#mobile { display: none; position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+#joy { position: absolute; bottom: 30px; left: 30px; width: 140px; height: 140px; border-radius: 50%; background: rgba(198,255,0,0.12); border: 2px solid rgba(198,255,0,0.4); pointer-events: auto; }
+#knob { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; background: rgba(198,255,0,0.6); border: 2px solid #c6ff00; transition: transform 0.05s; }
+#actions { position: absolute; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 12px; pointer-events: auto; }
+.abtn { width: 75px; height: 75px; border-radius: 50%; background: rgba(0,0,0,0.6); border: 2px solid #c6ff00; color: #fff; font-size: 28px; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; }
+.abtn:active { background: rgba(198,255,0,0.3); transform: scale(0.9); }
+#notif { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 5px; align-items: center; pointer-events: none; z-index: 20; }
+.nf { background: rgba(0,0,0,0.85); padding: 10px 22px; border-radius: 20px; border: 1px solid #c6ff00; color: #fff; font-size: 13px; font-weight: bold; animation: fade 3s forwards; }
+@keyframes fade { 0%{opacity:1} 70%{opacity:1} 100%{opacity:0; transform: translateY(-20px);} }
+#night { position: absolute; inset: 0; pointer-events: none; background: transparent; z-index: 5; }
+#err { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(200,0,0,0.9); color: #fff; padding: 15px; border-radius: 8px; font-size: 12px; max-width: 90vw; display: none; z-index: 200; font-family: monospace; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<div id="menu">
+    <h1>FOREST SURVIVAL</h1>
+    <p>Выживай, собирай ресурсы, строй базу</p>
+    <button class="btn" onclick="startGame(false)">▶ НАЧАТЬ (ПК)</button>
+    <button class="btn btn2" onclick="startGame(true)">📱 НАЧАТЬ (ТЕЛЕФОН)</button>
+</div>
+
+<div id="game">
+    <canvas id="cv"></canvas>
+    
+    <div id="ui">
+        <div>❤️ HP<div class="bar"><div class="bar-inner" id="hp"></div></div></div>
+        <div>⚡ Энергия<div class="bar"><div class="bar-inner" id="en"></div></div></div>
+        <div>🍖 Сытость<div class="bar"><div class="bar-inner" id="hg"></div></div></div>
+    </div>
+    
+    <div id="info">☀️ День 1, 06:00</div>
+    <div id="hint">Нажми E чтобы собрать</div>
+    
+    <div id="btns">
+        <div class="slot active" onclick="selSlot(0,this)">✋</div>
+        <div class="slot" onclick="selSlot(1,this)">🪵<span id="c1">0</span></div>
+        <div class="slot" onclick="selSlot(2,this)">🪨<span id="c2">0</span></div>
+        <div class="slot" onclick="selSlot(3,this)">🍓<span id="c3">0</span></div>
+        <div class="slot" onclick="selSlot(4,this)">🏏<span id="c4">0</span></div>
+        <div class="slot" onclick="selSlot(5,this)">🔥<span id="c5">0</span></div>
+        <div class="slot" onclick="selSlot(6,this)">🧱<span id="c6">0</span></div>
+    </div>
+    
+    <div id="mobile">
+        <div id="joy"><div id="knob"></div></div>
+        <div id="actions">
+            <div class="abtn" id="ab1">✋</div>
+            <div class="abtn" id="ab2">⚔️</div>
+            <div class="abtn" id="ab3">🏃</div>
+        </div>
+    </div>
+    
+    <div id="notif"></div>
+    <div id="night"></div>
+    <div id="err"></div>
+</div>
+
+<script>
+// ============================================================
+// БЕЗОПАСНАЯ ОБЁРТКА ДЛЯ LOCALSTORAGE
+// ============================================================
+function storageGet(key) {
+    try { return localStorage.getItem(key); } catch(e) { return null; }
+}
+function storageSet(key, val) {
+    try { localStorage.setItem(key, val); return true; } catch(e) { return false; }
+}
+function storageClear() {
+    try { localStorage.clear(); } catch(e) {}
+}
+
+// ============================================================
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+// ============================================================
+var canvas, ctx, W = 800, H = 600;
+var gameOn = false;
+var mobile = false;
+var keys = {};
+var world = { trees: [], stones: [], berries: [], lakes: [], walls: [], fires: [], mobs: [] };
+var cam = { x: 0, y: 0 };
+var parts = [];
+var time = 0.3;
+var day = 1;
+var slot = 0;
+var joyX = 0, joyY = 0, joyActive = false;
+var touchStartX = 0, touchStartY = 0, touchId = null;
+
+var p = {
+    x: 0, y: 0, vx: 0, vy: 0, r: 16,
+    hp: 100, maxhp: 100,
+    en: 100, maxen: 100,
+    hg: 100, maxhg: 100,
+    wood: 0, stone: 0, berry: 0, fire: 0, wall: 0, bat: 0,
+    face: 1, anim: 0, atkCd: 0, batSwing: 0
+};
+
+function showError(msg) {
+    var e = document.getElementById('err');
+    e.style.display = 'block';
+    e.textContent = 'ОШИБКА: ' + msg;
+    console.error(msg);
+}
+
+window.onerror = function(msg, url, line) {
+    showError(msg + ' (строка ' + line + ')');
+    return false;
+};
+
+// ============================================================
+// СТАРТ ИГРЫ
+// ============================================================
+function startGame(isMobile) {
+    try {
+        mobile = isMobile;
+        canvas = document.getElementById('cv');
+        if (!canvas) { showError('Canvas не найден'); return; }
+        ctx = canvas.getContext('2d');
+        if (!ctx) { showError('2D контекст не получен'); return; }
+        
+        resize();
+        window.addEventListener('resize', resize);
+        
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('game').style.display = 'block';
+        if (mobile) document.getElementById('mobile').style.display = 'block';
+        
+        generateWorld();
+        loadSave();
+        updateUI();
+        setupInput();
+        if (mobile) setupTouch();
+        
+        gameOn = true;
+        requestAnimationFrame(loop);
+        console.log('Игра запущена. Игрок:', p.x, p.y, 'Деревьев:', world.trees.length);
+    } catch (e) {
+        showError(e.message);
+    }
+}
+
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+}
+
+// ============================================================
+// МИР
+// ============================================================
+function generateWorld() {
+    world = { trees: [], stones: [], berries: [], lakes: [], walls: [], fires: [], mobs: [] };
+    p.x = 0; p.y = 0;
+    p.vx = 0; p.vy = 0;
+    
+    var i, x, y, dist;
+    
+    for (i = 0; i < 200; i++) {
+        x = (Math.random() - 0.5) * 4000;
+        y = (Math.random() - 0.5) * 4000;
+        dist = Math.sqrt(x*x + y*y);
+        if (dist < 100) continue;
+        world.trees.push({ x: x, y: y, r: 30, got: false });
+    }
+    for (i = 0; i < 100; i++) {
+        x = (Math.random() - 0.5) * 4000;
+        y = (Math.random() - 0.5) * 4000;
+        dist = Math.sqrt(x*x + y*y);
+        if (dist < 100) continue;
+        world.stones.push({ x: x, y: y, r: 22, got: false });
+    }
+    for (i = 0; i < 80; i++) {
+        x = (Math.random() - 0.5) * 4000;
+        y = (Math.random() - 0.5) * 4000;
+        dist = Math.sqrt(x*x + y*y);
+        if (dist < 100) continue;
+        world.berries.push({ x: x, y: y, r: 14, got: false });
+    }
+    for (i = 0; i < 5; i++) {
+        x = (Math.random() - 0.5) * 3500;
+        y = (Math.random() - 0.5) * 3500;
+        dist = Math.sqrt(x*x + y*y);
+        if (dist < 300) continue;
+        world.lakes.push({ x: x, y: y, r: 100 + Math.random() * 100 });
+    }
+    for (i = 0; i < 15; i++) {
+        x = (Math.random() - 0.5) * 3000;
+        y = (Math.random() - 0.5) * 3000;
+        dist = Math.sqrt(x*x + y*y);
+        if (dist < 400) continue;
+        var isWolf = Math.random() < 0.3;
+        world.mobs.push({
+            x: x, y: y, type: isWolf ? 'wolf' : 'rabbit',
+            r: isWolf ? 16 : 11, hp: isWolf ? 30 : 10,
+            vx: 0, vy: 0, cd: 0, timer: 0
+        });
+    }
+}
+
+// ============================================================
+// СОХРАНЕНИЕ (безопасное)
+// ============================================================
+function saveGame() {
+    var data = {
+        px: p.x, py: p.y, hp: p.hp, en: p.en, hg: p.hg,
+        wood: p.wood, stone: p.stone, berry: p.berry, fire: p.fire, wall: p.wall, bat: p.bat,
+        day: day, time: time,
+        walls: world.walls, fires: world.fires
+    };
+    if (storageSet('fs_save_v2', JSON.stringify(data))) {
+        showNotif('💾 Сохранено');
+    } else {
+        showNotif('⚠️ Сохранение недоступно');
+    }
+}
+
+function loadSave() {
+    var s = storageGet('fs_save_v2');
+    if (!s) return;
+    try {
+        var d = JSON.parse(s);
+        if (typeof d.px !== 'number' || isNaN(d.px)) return;
+        p.x = d.px; p.y = d.py;
+        p.hp = d.hp || 100; p.en = d.en || 100; p.hg = d.hg || 100;
+        p.wood = d.wood || 0; p.stone = d.stone || 0; p.berry = d.berry || 0;
+        p.fire = d.fire || 0; p.wall = d.wall || 0; p.bat = d.bat || 0;
+        day = d.day || 1; time = d.time || 0.3;
+        if (Array.isArray(d.walls)) world.walls = d.walls;
+        if (Array.isArray(d.fires)) world.fires = d.fires;
+        showNotif('Прогресс загружен');
+    } catch(e) {}
+}
+
+// ============================================================
+// ВВОД
+// ============================================================
+function setupInput() {
+    window.addEventListener('keydown', function(e) {
+        var k = e.key.toLowerCase();
+        keys[k] = true;
+        if (k === 'e' || k === 'у') interact();
+        if (e.key === ' ') { e.preventDefault(); attack(); }
+        if (k === 'c' || k === 'с') { if (p.fire > 0) { world.fires.push({x: p.x + p.face*50, y: p.y}); p.fire--; updateUI(); showNotif('🔥 Поставлен'); } }
+        if (k === 'f' || k === 'а') saveGame();
+        if (e.key >= '1' && e.key <= '7') {
+            var slots = document.querySelectorAll('.slot');
+            selSlot(parseInt(e.key) - 1, slots[parseInt(e.key) - 1]);
+        }
+    });
+    window.addEventListener('keyup', function(e) { keys[e.key.toLowerCase()] = false; });
+    
+    canvas.addEventListener('mousedown', function(e) {
+        if (e.button === 0) {
+            var wx = e.clientX + cam.x;
+            var wy = e.clientY + cam.y;
+            if (slot === 5 && p.fire > 0) {
+                world.fires.push({ x: wx, y: wy });
+                p.fire--; updateUI(); showNotif('🔥 Поставлен');
+            } else if (slot === 6 && p.wall > 0) {
+                world.walls.push({ x: wx, y: wy, r: 25 });
+                p.wall--; updateUI(); showNotif('🧱 Поставлена');
+            }
+        }
+    });
+    canvas.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+}
+
+function selSlot(i, el) {
+    slot = i;
+    var slots = document.querySelectorAll('.slot');
+    for (var k = 0; k < slots.length; k++) slots[k].classList.remove('active');
+    if (el) el.classList.add('active');
+}
+
+function setupTouch() {
+    var joy = document.getElementById('joy');
+    if (!joy) return;
+    var knob = document.getElementById('knob');
+    
+    joy.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        var t = e.changedTouches[0];
+        touchId = t.identifier;
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        joyActive = true;
+    }, { passive: false });
+    
+    joy.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            var t = e.changedTouches[i];
+            if (t.identifier !== touchId) continue;
+            var dx = t.clientX - touchStartX;
+            var dy = t.clientY - touchStartY;
+            var dist = Math.sqrt(dx*dx + dy*dy);
+            var max = 55;
+            if (dist > max) { dx = dx/dist*max; dy = dy/dist*max; }
+            knob.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+            joyX = dx / max;
+            joyY = dy / max;
+        }
+    }, { passive: false });
+    
+    function endJoy(e) {
+        joyActive = false;
+        joyX = 0; joyY = 0;
+        knob.style.transform = 'translate(0,0)';
+        touchId = null;
+    }
+    joy.addEventListener('touchend', endJoy);
+    joy.addEventListener('touchcancel', endJoy);
+    
+    document.getElementById('ab1').addEventListener('touchstart', function(e) { e.preventDefault(); interact(); });
+    document.getElementById('ab2').addEventListener('touchstart', function(e) { e.preventDefault(); attack(); });
+    document.getElementById('ab3').addEventListener('touchstart', function(e) { e.preventDefault(); keys['shift'] = true; });
+    document.getElementById('ab3').addEventListener('touchend', function(e) { e.preventDefault(); keys['shift'] = false; });
+}
+
+// ============================================================
+// ДЕЙСТВИЯ
+// ============================================================
+function interact() {
+    if (!gameOn) return;
+    var all = [];
+    var i;
+    for (i = 0; i < world.trees.length; i++) all.push({ obj: world.trees[i], type: 'tree' });
+    for (i = 0; i < world.stones.length; i++) all.push({ obj: world.stones[i], type: 'stone' });
+    for (i = 0; i < world.berries.length; i++) all.push({ obj: world.berries[i], type: 'berry' });
+    
+    for (i = 0; i < all.length; i++) {
+        var o = all[i].obj;
+        if (o.got) continue;
+        var d = Math.sqrt((p.x-o.x)*(p.x-o.x) + (p.y-o.y)*(p.y-o.y));
+        if (d < p.r + o.r + 30) {
+            o.got = true;
+            if (all[i].type === 'tree') { p.wood += 2; showNotif('+2 🪵'); }
+            else if (all[i].type === 'stone') { p.stone += 2; showNotif('+2 🪨'); }
+            else { p.berry += 1; p.hg = Math.min(100, p.hg + 15); showNotif('+1 🍓 +15 HP'); }
+            updateUI();
+            return;
+        }
+    }
+    showNotif('Нечего собирать рядом');
+}
+
+function attack() {
+    if (!gameOn || p.atkCd > 0) return;
+    p.atkCd = 25;
+    p.batSwing = 1;
+    for (var i = 0; i < world.mobs.length; i++) {
+        var m = world.mobs[i];
+        if (m.hp <= 0) continue;
+        var d = Math.sqrt((p.x-m.x)*(p.x-m.x) + (p.y-m.y)*(p.y-m.y));
+        if (d < p.r + m.r + 35) {
+            m.hp -= 15;
+            showNotif('-15 HP');
+        }
+    }
+}
+
+function updateUI() {
+    document.getElementById('c1').textContent = p.wood;
+    document.getElementById('c2').textContent = p.stone;
+    document.getElementById('c3').textContent = p.berry;
+    document.getElementById('c4').textContent = p.bat;
+    document.getElementById('c5').textContent = p.fire;
+    document.getElementById('c6').textContent = p.wall;
+}
+
+function showNotif(txt) {
+    var n = document.createElement('div');
+    n.className = 'nf';
+    n.textContent = txt;
+    document.getElementById('notif').appendChild(n);
+    setTimeout(function() { n.remove(); }, 3000);
+}
+
+// ============================================================
+// ЛОГИКА
+// ============================================================
+function update(dt) {
+    if (!gameOn) return;
+    
+    var ax = 0, ay = 0;
+    if (keys['w'] || keys['ц'] || keys['arrowup']) ay -= 1;
+    if (keys['s'] || keys['ы'] || keys['arrowdown']) ay += 1;
+    if (keys['a'] || keys['ф'] || keys['arrowleft']) ax -= 1;
+    if (keys['d'] || keys['в'] || keys['arrowright']) ax += 1;
+    if (mobile && joyActive) { ax = joyX; ay = joyY; }
+    
+    var len = Math.sqrt(ax*ax + ay*ay);
+    if (len > 1) { ax /= len; ay /= len; }
+    
+    var sprint = keys['shift'] && p.en > 0;
+    var spd = sprint ? 0.5 : 0.3;
+    if (sprint) p.en -= 0.3;
+    else if (p.en < p.maxen) p.en += 0.1;
+    
+    p.vx += ax * spd;
+    p.vy += ay * spd;
+    p.vx *= 0.88;
+    p.vy *= 0.88;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    
+    if (p.vx > 0.05) p.face = 1;
+    else if (p.vx < -0.05) p.face = -1;
+    
+    if (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05) p.anim += 0.2 * dt;
+    else p.anim = 0;
+    
+    if (p.atkCd > 0) p.atkCd -= dt;
+    if (p.batSwing > 0) p.batSwing -= 0.1 * dt;
+    
+    // Коллизии
+    var i, s, d, ang, minD;
+    for (i = 0; i < world.trees.length; i++) {
+        s = world.trees[i];
+        if (s.got) continue;
+        d = Math.sqrt((p.x-s.x)*(p.x-s.x) + (p.y-s.y)*(p.y-s.y));
+        minD = p.r + s.r;
+        if (d < minD && d > 0.1) {
+            ang = Math.atan2(p.y - s.y, p.x - s.x);
+            p.x = s.x + Math.cos(ang) * minD;
+            p.y = s.y + Math.sin(ang) * minD;
+        }
+    }
+    for (i = 0; i < world.stones.length; i++) {
+        s = world.stones[i];
+        if (s.got) continue;
+        d = Math.sqrt((p.x-s.x)*(p.x-s.x) + (p.y-s.y)*(p.y-s.y));
+        minD = p.r + s.r;
+        if (d < minD && d > 0.1) {
+            ang = Math.atan2(p.y - s.y, p.x - s.x);
+            p.x = s.x + Math.cos(ang) * minD;
+            p.y = s.y + Math.sin(ang) * minD;
+        }
+    }
+    for (i = 0; i < world.walls.length; i++) {
+        s = world.walls[i];
+        d = Math.sqrt((p.x-s.x)*(p.x-s.x) + (p.y-s.y)*(p.y-s.y));
+        minD = p.r + s.r;
+        if (d < minD && d > 0.1) {
+            ang = Math.atan2(p.y - s.y, p.x - s.x);
+            p.x = s.x + Math.cos(ang) * minD;
+            p.y = s.y + Math.sin(ang) * minD;
+        }
+    }
+    
+    // Вода
+    for (i = 0; i < world.lakes.length; i++) {
+        var l = world.lakes[i];
+        d = Math.sqrt((p.x-l.x)*(p.x-l.x) + (p.y-l.y)*(p.y-l.y));
+        if (d < l.r + p.r) {
+            ang = Math.atan2(p.y - l.y, p.x - l.x);
+            p.x = l.x + Math.cos(ang) * (l.r + p.r);
+            p.y = l.y + Math.sin(ang) * (l.r + p.r);
+            p.vx *= 0.5; p.vy *= 0.5;
+        }
+    }
+    
+    // Мобы
+    for (i = 0; i < world.mobs.length; i++) {
+        var m = world.mobs[i];
+        if (m.hp <= 0) continue;
+        var mdx = p.x - m.x, mdy = p.y - m.y;
+        var md = Math.sqrt(mdx*mdx + mdy*mdy);
+        if (md > 500) continue;
+        
+        if (m.type === 'wolf' && md < 250) {
+            m.vx += (mdx/md) * 0.15;
+            m.vy += (mdy/md) * 0.15;
+            if (md < p.r + m.r + 5 && m.cd <= 0) {
+                p.hp -= 5;
+                m.cd = 60;
+                showNotif('-5 HP от волка');
+            }
+        } else if (m.type === 'rabbit' && md < 150) {
+            m.vx -= (mdx/md) * 0.2;
+            m.vy -= (mdy/md) * 0.2;
+        } else {
+            m.timer -= dt;
+            if (m.timer <= 0) {
+                m.timer = 100 + Math.random() * 100;
+                m.vx = (Math.random() - 0.5) * 0.4;
+                m.vy = (Math.random() - 0.5) * 0.4;
+            }
+        }
+        if (m.cd > 0) m.cd -= dt;
+        m.vx *= 0.92; m.vy *= 0.92;
+        m.x += m.vx * dt; m.y += m.vy * dt;
+    }
+    
+    var aliveMobs = [];
+    for (i = 0; i < world.mobs.length; i++) {
+        if (world.mobs[i].hp > 0) aliveMobs.push(world.mobs[i]);
+    }
+    world.mobs = aliveMobs;
+    
+    p.hg -= 0.005 * dt;
+    if (p.hg <= 0) { p.hg = 0; p.hp -= 0.05 * dt; }
+    if (p.hp <= 0) {
+        p.hp = 0;
+        gameOn = false;
+        showError('Вы погибли! Обновите страницу.');
+        return;
+    }
+    
+    cam.x += (p.x - W/2 - cam.x) * 0.1;
+    cam.y += (p.y - H/2 - cam.y) * 0.1;
+    
+    for (i = parts.length - 1; i >= 0; i--) {
+        var pt = parts[i];
+        pt.x += pt.vx * dt; pt.y += pt.vy * dt;
+        pt.vx *= 0.95; pt.vy *= 0.95;
+        pt.life -= dt;
+        if (pt.life <= 0) parts.splice(i, 1);
+    }
+    
+    time += 0.0001 * dt;
+    if (time > 1) { time = 0; day++; }
+    var dark = Math.sin(time * Math.PI * 2) * 0.5 + 0.5;
+    document.getElementById('night').style.background = 'rgba(0,0,0,' + (dark * 0.6) + ')';
+    
+    var hours = Math.floor(time * 24);
+    var mins = Math.floor((time * 24 - hours) * 60);
+    var icon = (hours >= 6 && hours < 18) ? '☀️' : '🌙';
+    document.getElementById('info').textContent = icon + ' День ' + day + ', ' + (hours < 10 ? '0' : '') + hours + ':' + (mins < 10 ? '0' : '') + mins;
+    
+    document.getElementById('hp').style.width = (p.hp / p.maxhp * 100) + '%';
+    document.getElementById('en').style.width = (p.en / p.maxen * 100) + '%';
+    document.getElementById('hg').style.width = (p.hg / p.maxhg * 100) + '%';
+    
+    var near = false;
+    var allObjs = world.trees.concat(world.stones, world.berries);
+    for (i = 0; i < allObjs.length; i++) {
+        var o = allObjs[i];
+        if (o.got) continue;
+        d = Math.sqrt((p.x-o.x)*(p.x-o.x) + (p.y-o.y)*(p.y-o.y));
+        if (d < p.r + o.r + 30) { near = true; break; }
+    }
+    document.getElementById('hint').style.display = near ? 'block' : 'none';
+}
+
+// ============================================================
+// ОТРИСОВКА
+// ============================================================
+function drawPlayer() {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.beginPath();
+    ctx.ellipse(0, 18, 18, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    var leg = Math.sin(p.anim * 3) * 8;
+    var arm = Math.cos(p.anim * 3) * 8;
+    if (p.anim === 0) { leg = 0; arm = 0; }
+    
+    ctx.strokeStyle = '#1565c0';
+    ctx.lineWidth = 7;
+    ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-6, 10); ctx.lineTo(-6 + leg, 22); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(6, 10); ctx.lineTo(6 - leg, 22); ctx.stroke();
+    
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(-6 + leg, 22, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6 - leg, 22, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1565c0';
+    ctx.beginPath(); ctx.arc(-6 + leg, 22, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6 - leg, 22, 3, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(-12, -5, 24, 22);
+    ctx.strokeStyle = '#1565c0';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-12, -5, 24, 22);
+    
+    ctx.fillStyle = '#1565c0';
+    ctx.fillRect(-14, -3, 8, 12);
+    ctx.fillRect(6, -3, 8, 12);
+    
+    ctx.strokeStyle = '#fce4d6';
+    ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(-12, 2); ctx.lineTo(-20 - arm, 12); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(12, 2); ctx.lineTo(20 + arm, 12); ctx.stroke();
+    
+    ctx.fillStyle = '#fce4d6';
+    ctx.beginPath();
+    ctx.arc(0, -18, 16, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.fillStyle = '#111';
+    ctx.beginPath();
+    ctx.arc(0, -20, 18, Math.PI, 0);
+    ctx.fill();
+    ctx.beginPath(); ctx.arc(-14, -12, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(14, -12, 8, 0, Math.PI * 2); ctx.fill();
+    
+    ctx.beginPath();
+    ctx.moveTo(-18, -18);
+    ctx.quadraticCurveTo(-10, -32, 0, -26);
+    ctx.quadraticCurveTo(10, -32, 18, -18);
+    ctx.lineTo(12, -14);
+    ctx.quadraticCurveTo(0, -22, -12, -14);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.ellipse(-6, -16, 4, 5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(6, -16, 4, 5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#5d4037';
+    ctx.beginPath(); ctx.arc(-6, -16, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6, -16, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(-6, -16, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(6, -16, 1.5, 0, Math.PI * 2); ctx.fill();
+    
+    if (p.bat > 0) {
+        ctx.save();
+        var angle = p.face === 1 ? -0.3 : 0.3;
+        if (p.batSwing > 0) angle = p.face === 1 ? -1.5 : 1.5;
+        ctx.translate(20 + arm, 12);
+        ctx.rotate(angle);
+        ctx.fillStyle = '#8d6e63';
+        ctx.fillRect(0, -3, 35, 6);
+        ctx.fillStyle = '#5d4037';
+        ctx.fillRect(30, -4, 8, 8);
+        ctx.restore();
+    }
+    
+    ctx.restore();
+}
+
+function draw() {
+    if (!gameOn) return;
+    
+    ctx.fillStyle = '#3a5a3a';
+    ctx.fillRect(0, 0, W, H);
+    
+    ctx.save();
+    ctx.translate(-cam.x, -cam.y);
+    
+    var i;
+    for (i = 0; i < world.lakes.length; i++) {
+        var l = world.lakes[i];
+        ctx.fillStyle = '#1e3b5e';
+        ctx.beginPath(); ctx.arc(l.x, l.y, l.r, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < world.walls.length; i++) {
+        var w = world.walls[i];
+        ctx.fillStyle = '#5d4037';
+        ctx.fillRect(w.x - 25, w.y - 25, 50, 50);
+        ctx.fillStyle = '#8d6e63';
+        ctx.fillRect(w.x - 20, w.y - 20, 40, 40);
+    }
+    
+    for (i = 0; i < world.trees.length; i++) {
+        var t = world.trees[i];
+        if (t.got) continue;
+        if (t.x < cam.x - 100 || t.x > cam.x + W + 100 || t.y < cam.y - 100 || t.y > cam.y + H + 100) continue;
+        ctx.fillStyle = '#5d4037';
+        ctx.beginPath(); ctx.arc(t.x, t.y, 12, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#2e7d32';
+        ctx.beginPath(); ctx.arc(t.x, t.y - 20, 25, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#4caf50';
+        ctx.beginPath(); ctx.arc(t.x - 12, t.y - 30, 15, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(t.x + 12, t.y - 25, 15, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < world.stones.length; i++) {
+        var s = world.stones[i];
+        if (s.got) continue;
+        if (s.x < cam.x - 100 || s.x > cam.x + W + 100 || s.y < cam.y - 100 || s.y > cam.y + H + 100) continue;
+        ctx.fillStyle = '#757575';
+        ctx.beginPath(); ctx.arc(s.x, s.y, 22, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#9e9e9e';
+        ctx.beginPath(); ctx.arc(s.x - 5, s.y - 5, 13, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < world.berries.length; i++) {
+        var b = world.berries[i];
+        if (b.got) continue;
+        if (b.x < cam.x - 100 || b.x > cam.x + W + 100 || b.y < cam.y - 100 || b.y > cam.y + H + 100) continue;
+        ctx.fillStyle = '#c62828';
+        ctx.beginPath(); ctx.arc(b.x, b.y, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(b.x + 7, b.y - 4, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(b.x - 4, b.y + 7, 5, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < world.fires.length; i++) {
+        var f = world.fires[i];
+        var glow = ctx.createRadialGradient(f.x, f.y, 5, f.x, f.y, 150);
+        glow.addColorStop(0, 'rgba(255,150,0,0.5)');
+        glow.addColorStop(1, 'rgba(255,150,0,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(f.x, f.y, 150, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#8d6e63';
+        ctx.beginPath(); ctx.arc(f.x, f.y, 15, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#ff5722';
+        ctx.beginPath(); ctx.arc(f.x, f.y - 5, 10, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#ffeb3b';
+        ctx.beginPath(); ctx.arc(f.x, f.y - 8, 5, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < world.mobs.length; i++) {
+        var m = world.mobs[i];
+        if (m.hp <= 0) continue;
+        if (m.x < cam.x - 100 || m.x > cam.x + W + 100 || m.y < cam.y - 100 || m.y > cam.y + H + 100) continue;
+        ctx.fillStyle = m.type === 'wolf' ? '#616161' : '#d7ccc8';
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = m.type === 'wolf' ? '#f44336' : '#000';
+        ctx.beginPath(); ctx.arc(m.x - 4, m.y - 3, 2.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(m.x + 4, m.y - 3, 2.5, 0, Math.PI * 2); ctx.fill();
+    }
+    
+    for (i = 0; i < parts.length; i++) {
+        var pt = parts[i];
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = pt.life / pt.max;
+        ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    
+    drawPlayer();
+    
+    ctx.restore();
+}
+
+// ============================================================
+// ЦИКЛ
+// ============================================================
+var lastT = 0;
+function loop(t) {
+    if (!gameOn) return;
+    var dt = (t - lastT) / 16.66;
+    lastT = t;
+    if (dt > 3) dt = 3;
+    if (dt < 0) dt = 0;
+    
+    try {
+        update(dt);
+        draw();
+    } catch(e) {
+        showError(e.message);
+        gameOn = false;
+        return;
+    }
+    requestAnimationFrame(loop);
+}
+
+setInterval(function() {
+    if (gameOn) saveGame();
+}, 30000);
+</script>
+</body>
+</html>
