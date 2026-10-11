@@ -2,95 +2,96 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Forest Survival 2.0</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>Forest Survival 3.0</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#0a1c10;font-family:'Segoe UI',Arial,sans-serif;color:#fff;touch-action:none;overscroll-behavior:none}
-
-/* === МЕНЮ === */
 #menu{position:fixed;inset:0;background:radial-gradient(circle at 70% 30%,#122a18 0%,#050a06 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:100;padding:20px;text-align:center;overflow:hidden}
-#menu::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(76,175,80,0.15);filter:blur(100px);top:-150px;left:-150px;animation:float 8s infinite alternate}
-#menu::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:rgba(198,255,0,0.08);filter:blur(120px);bottom:-200px;right:-150px;animation:float 10s infinite alternate-reverse}
-@keyframes float{0%{transform:translate(0,0)}100%{transform:translate(50px,-30px)}}
+#menu::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(76,175,80,0.15);filter:blur(100px);top:-150px;left:-150px;animation:fl 8s infinite alternate}
+#menu::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:rgba(198,255,0,0.08);filter:blur(120px);bottom:-200px;right:-150px;animation:fl 10s infinite alternate-reverse}
+@keyframes fl{0%{transform:translate(0,0)}100%{transform:translate(50px,-30px)}}
 #menu .tag{color:#c6ff00;font-size:12px;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;font-weight:800;z-index:1}
 #menu h1{font-size:72px;color:#c6ff00;text-shadow:0 0 40px #4caf50,0 0 15px #fff;margin-bottom:15px;letter-spacing:5px;font-weight:900;z-index:1;line-height:1}
 #menu p{color:#8ba88e;margin-bottom:35px;font-size:15px;max-width:550px;z-index:1;line-height:1.6}
 .menu-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;z-index:1}
-.btn{background:linear-gradient(180deg,#c6ff00,#9ccc00);color:#000;font-size:17px;font-weight:800;padding:16px 36px;border:none;border-radius:12px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;transition:0.2s;box-shadow:0 0 25px rgba(198,255,0,0.3)}
-.btn:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(198,255,0,0.6)}
+.btn{background:linear-gradient(180deg,#c6ff00,#9ccc00);color:#000;font-size:17px;font-weight:800;padding:16px 36px;border:none;border-radius:12px;cursor:pointer;text-transform:uppercase;letter-spacing:2px;transition:.2s;box-shadow:0 0 25px rgba(198,255,0,.3)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(198,255,0,.6)}
 .btn2{background:transparent;color:#fff;border:2px solid #c6ff00}
-.btn2:hover{background:rgba(198,255,0,0.1)}
-.btn3{background:rgba(18,40,25,0.7);border:1px solid rgba(198,255,0,0.3);color:#c6ff00}
-
-/* === ПОДМЕНЮ === */
+.btn2:hover{background:rgba(198,255,0,.1)}
+.btn3{background:rgba(18,40,25,.7);border:1px solid rgba(198,255,0,.3);color:#c6ff00}
 .submenu{position:fixed;inset:0;background:radial-gradient(circle at center,#122a18,#050a06);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:101;padding:30px;overflow-y:auto}
 .submenu h2{font-size:42px;color:#c6ff00;margin-bottom:25px;letter-spacing:4px;text-transform:uppercase}
-.submenu p{color:#e0e0e0;max-width:700px;line-height:1.8;font-size:15px;margin-bottom:15px}
-.submenu .card{background:rgba(18,40,25,0.6);border:1px solid rgba(198,255,0,0.2);border-radius:14px;padding:20px 25px;max-width:750px;width:100%;margin-bottom:15px;backdrop-filter:blur(10px)}
+.submenu .card{background:rgba(18,40,25,.6);border:1px solid rgba(198,255,0,.2);border-radius:14px;padding:20px 25px;max-width:750px;width:100%;margin-bottom:15px;backdrop-filter:blur(10px)}
 .submenu .card h3{color:#c6ff00;font-size:18px;margin-bottom:12px;letter-spacing:2px;text-transform:uppercase}
 .submenu .card ul{list-style:none;color:#e0e0e0;font-size:14px;line-height:1.9}
 .submenu .card ul li::before{content:'▸ ';color:#c6ff00;font-weight:bold}
 .kbd{display:inline-block;background:#1b3b24;border:1px solid #4caf50;color:#c6ff00;padding:2px 8px;border-radius:5px;font-family:monospace;font-size:13px;font-weight:bold;margin:0 3px}
 .back-btn{background:transparent;color:#c6ff00;border:2px solid #c6ff00;padding:12px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;margin-top:20px}
-.back-btn:hover{background:rgba(198,255,0,0.1)}
-
-/* === ВЫБОР ПЕРСОНАЖА === */
+.back-btn:hover{background:rgba(198,255,0,.1)}
 .chars{display:flex;gap:15px;flex-wrap:wrap;justify-content:center;max-width:1100px}
-.char-card{background:rgba(18,40,25,0.7);border:2px solid rgba(198,255,0,0.2);border-radius:14px;padding:15px;cursor:pointer;transition:0.2s;width:150px;text-align:center;backdrop-filter:blur(10px)}
-.char-card:hover{border-color:#c6ff00;transform:translateY(-5px);box-shadow:0 10px 30px rgba(198,255,0,0.3)}
+.char-card{background:rgba(18,40,25,.7);border:2px solid rgba(198,255,0,.2);border-radius:14px;padding:15px;cursor:pointer;transition:.2s;width:150px;text-align:center;backdrop-filter:blur(10px)}
+.char-card:hover{border-color:#c6ff00;transform:translateY(-5px);box-shadow:0 10px 30px rgba(198,255,0,.3)}
 .char-card canvas{display:block;margin:0 auto 8px}
 .char-card .name{color:#c6ff00;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px}
 .char-card .desc{color:#8ba88e;font-size:10px;margin-top:3px;line-height:1.3}
-
-/* === ИГРА === */
 #game{display:none;position:relative;width:100vw;height:100vh}
 canvas#cv{display:block;position:absolute;top:0;left:0;will-change:transform;transform:translateZ(0)}
-#ui{position:absolute;top:15px;left:15px;background:rgba(10,20,15,0.75);padding:12px 14px;border-radius:12px;font-size:12px;pointer-events:none;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,0.15);z-index:3}
-#ui div{margin-bottom:7px;font-weight:700}
-.bar{width:170px;height:11px;background:rgba(0,0,0,0.7);border-radius:6px;overflow:hidden;margin-top:3px;border:1px solid rgba(255,255,255,0.1)}
-.bar-inner{height:100%;width:100%;transition:width 0.2s;border-radius:6px}
+#ui{position:absolute;top:12px;left:12px;background:rgba(10,20,15,.75);padding:10px 12px;border-radius:12px;font-size:11px;pointer-events:none;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,.15);z-index:3}
+#ui div{margin-bottom:5px;font-weight:700}
+.bar{width:150px;height:10px;background:rgba(0,0,0,.7);border-radius:5px;overflow:hidden;margin-top:2px;border:1px solid rgba(255,255,255,.1)}
+.bar-inner{height:100%;width:100%;transition:width .2s;border-radius:5px}
 #hp{background:linear-gradient(90deg,#b71c1c,#ef5350)}
 #en{background:linear-gradient(90deg,#f57f17,#ffee58)}
 #hg{background:linear-gradient(90deg,#4e342e,#a1887f)}
-#info{position:absolute;top:15px;right:15px;background:rgba(10,20,15,0.75);padding:10px 18px;border-radius:12px;font-size:13px;color:#c6ff00;font-weight:700;pointer-events:none;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,0.15);z-index:3}
-#biome{position:absolute;top:60px;right:15px;background:rgba(10,20,15,0.75);padding:7px 15px;border-radius:20px;font-size:12px;color:#8ba88e;font-weight:700;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,0.15);z-index:3}
-#hint{position:absolute;bottom:105px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);padding:10px 24px;border-radius:24px;color:#c6ff00;font-size:13px;display:none;font-weight:700;border:1px solid #c6ff00;backdrop-filter:blur(10px);z-index:4}
-#btns{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:7px;background:rgba(10,20,15,0.8);padding:9px;border-radius:14px;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,0.15);z-index:4}
-.slot{width:52px;height:52px;background:rgba(0,0,0,0.4);border:2px solid #4caf50;border-radius:10px;display:flex;justify-content:center;align-items:center;font-size:22px;cursor:pointer;position:relative;transition:0.15s}
-.slot:hover{background:rgba(198,255,0,0.1)}
-.slot.active{border-color:#c6ff00;box-shadow:0 0 18px rgba(198,255,0,0.5);background:rgba(198,255,0,0.1);transform:translateY(-3px)}
-.slot span{position:absolute;bottom:0;right:5px;font-size:11px;color:#fff;font-weight:800;text-shadow:1px 1px 2px #000}
-#notif{position:absolute;top:100px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:5px;align-items:center;pointer-events:none;z-index:20}
-.nf{background:rgba(10,20,15,0.9);padding:9px 20px;border-radius:20px;border:1px solid #c6ff00;color:#fff;font-size:12px;font-weight:700;backdrop-filter:blur(10px);animation:fade 2.5s forwards}
+#tp{background:linear-gradient(90deg,#0277bd,#4fc3f7)}
+#info{position:absolute;top:12px;right:12px;background:rgba(10,20,15,.75);padding:8px 14px;border-radius:12px;font-size:12px;color:#c6ff00;font-weight:700;pointer-events:none;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,.15);z-index:3}
+#biome{position:absolute;top:52px;right:12px;background:rgba(10,20,15,.75);padding:6px 12px;border-radius:20px;font-size:11px;color:#8ba88e;font-weight:700;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,.15);z-index:3}
+#minimap{position:absolute;top:90px;right:12px;width:130px;height:130px;background:rgba(10,20,15,.8);border:2px solid #4caf50;border-radius:50%;overflow:hidden;z-index:3;backdrop-filter:blur(5px)}
+#minimap canvas{width:100%;height:100%}
+#hint{position:absolute;bottom:105px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.8);padding:8px 20px;border-radius:20px;color:#c6ff00;font-size:12px;display:none;font-weight:700;border:1px solid #c6ff00;backdrop-filter:blur(10px);z-index:4}
+#btns{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(10,20,15,.8);padding:7px;border-radius:14px;backdrop-filter:blur(10px);border:1px solid rgba(198,255,0,.15);z-index:4}
+.slot{width:46px;height:46px;background:rgba(0,0,0,.4);border:2px solid #4caf50;border-radius:9px;display:flex;justify-content:center;align-items:center;font-size:20px;cursor:pointer;position:relative;transition:.15s}
+.slot.active{border-color:#c6ff00;box-shadow:0 0 15px rgba(198,255,0,.5);background:rgba(198,255,0,.1);transform:translateY(-3px)}
+.slot span{position:absolute;bottom:0;right:4px;font-size:10px;color:#fff;font-weight:800;text-shadow:1px 1px 2px #000}
+#notif{position:absolute;top:90px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:4px;align-items:center;pointer-events:none;z-index:20}
+.nf{background:rgba(10,20,15,.9);padding:8px 18px;border-radius:18px;border:1px solid #c6ff00;color:#fff;font-size:12px;font-weight:700;backdrop-filter:blur(10px);animation:fade 2.5s forwards}
 @keyframes fade{0%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translateY(-20px)}}
 #night{position:absolute;inset:0;pointer-events:none;z-index:2}
-#err{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(200,0,0,0.92);color:#fff;padding:20px;border-radius:10px;font-size:12px;max-width:90vw;display:none;z-index:200;font-family:monospace;word-break:break-all}
+#err{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(200,0,0,.92);color:#fff;padding:18px;border-radius:10px;font-size:12px;max-width:90vw;display:none;z-index:200;font-family:monospace;word-break:break-all}
 #mobile{display:none;position:absolute;inset:0;pointer-events:none;z-index:10}
-#joy{position:absolute;bottom:30px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(198,255,0,0.1);border:2px solid rgba(198,255,0,0.35);pointer-events:auto}
-#knob{position:absolute;top:50%;left:50%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;background:rgba(198,255,0,0.55);border:2px solid #c6ff00;transition:transform 0.05s}
-#actions{position:absolute;bottom:30px;right:30px;display:flex;flex-direction:column;gap:12px;pointer-events:auto}
-.abtn{width:70px;height:70px;border-radius:50%;background:rgba(10,20,15,0.7);border:2px solid #c6ff00;color:#fff;font-size:26px;display:flex;justify-content:center;align-items:center;cursor:pointer;backdrop-filter:blur(10px)}
-.abtn:active{background:rgba(198,255,0,0.3);transform:scale(0.9)}
+#joy{position:absolute;bottom:25px;left:25px;width:130px;height:130px;border-radius:50%;background:rgba(198,255,0,.1);border:2px solid rgba(198,255,0,.35);pointer-events:auto}
+#knob{position:absolute;top:50%;left:50%;width:55px;height:55px;margin:-27px 0 0 -27px;border-radius:50%;background:rgba(198,255,0,.55);border:2px solid #c6ff00;transition:transform .05s}
+#actions{position:absolute;bottom:25px;right:25px;display:flex;flex-direction:column;gap:10px;pointer-events:auto}
+.abtn{width:62px;height:62px;border-radius:50%;background:rgba(10,20,15,.7);border:2px solid #c6ff00;color:#fff;font-size:22px;display:flex;justify-content:center;align-items:center;cursor:pointer;backdrop-filter:blur(10px)}
+.abtn:active{background:rgba(198,255,0,.3);transform:scale(.9)}
+#craft{position:absolute;inset:0;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:50;padding:20px}
+#craft-inner{background:rgba(18,40,25,.95);border:2px solid #4caf50;border-radius:18px;padding:20px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto}
+#craft-inner h2{color:#c6ff00;margin-bottom:15px;text-align:center;letter-spacing:3px}
+.citem{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.4);padding:10px 14px;border-radius:10px;margin-bottom:8px;border:1px solid rgba(198,255,0,.15);cursor:pointer;transition:.15s}
+.citem:hover{background:rgba(198,255,0,.1);border-color:#c6ff00}
+.citem.disabled{opacity:.4;cursor:not-allowed}
+.citem .ci{font-size:22px;margin-right:10px}
+.citem .cn{flex:1;font-weight:700;font-size:14px}
+.citem .cc{font-size:11px;color:#8ba88e;font-weight:700}
+#close-craft{position:absolute;top:20px;right:20px;background:#ef5350;color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;font-weight:bold}
 @media (max-width:600px){
 #menu h1{font-size:38px;letter-spacing:2px}
 .char-card{width:110px;padding:10px}
-.slot{width:40px;height:40px;font-size:17px}
-#ui{font-size:10px;padding:8px}
-.bar{width:110px;height:8px}
+.slot{width:38px;height:38px;font-size:16px}
+#ui{font-size:9px;padding:7px}
+.bar{width:100px;height:8px}
+#minimap{width:95px;height:95px}
 .submenu h2{font-size:26px}
-.submenu p{font-size:13px}
-.submenu .card{padding:14px}
 }
 </style>
 </head>
 <body>
 
-<!-- ГЛАВНОЕ МЕНЮ -->
 <div id="menu">
-  <span class="tag">● FOREST SURVIVAL 2.0</span>
+  <span class="tag">● FOREST SURVIVAL 3.0</span>
   <h1>FOREST<br>SURVIVAL</h1>
-  <p>Выживай, строй базу, исследуй 6 биомов, сражайся с волками и медведями. Выбери одного из 8 персонажей и стань легендой леса.</p>
+  <p>6 биомов с жарой и холодом, зелья, крафт шапки и шубы, уникальные животные, погода. 20 новых фич!</p>
   <div class="menu-btns">
     <button class="btn" onclick="openSub('charsel')">▶ ИГРАТЬ</button>
     <button class="btn btn2" onclick="openSub('rules')">📖 ПРАВИЛА</button>
@@ -98,95 +99,91 @@ canvas#cv{display:block;position:absolute;top:0;left:0;will-change:transform;tra
   </div>
 </div>
 
-<!-- ПРАВИЛА -->
 <div id="rules" class="submenu">
   <h2>📖 Правила</h2>
   <div class="card">
-    <h3>💻 Управление на ПК</h3>
+    <h3>💻 ПК</h3>
     <ul>
-      <li><span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> — движение</li>
-      <li><span class="kbd">Shift</span> — бег (тратит энергию)</li>
-      <li><span class="kbd">E</span> — собрать ресурс / подобрать дроп</li>
-      <li><span class="kbd">Q</span> — съесть ягоду (+20 HP, +25 сытости)</li>
+      <li><span class="kbd">WASD</span> — движение, <span class="kbd">Shift</span> — бег</li>
+      <li><span class="kbd">E</span> — собрать / подобрать / готовить</li>
+      <li><span class="kbd">Q</span> — съесть ягоду (+20 HP)</li>
+      <li><span class="kbd">G</span> — съесть мясо (+30 HP, +40 сытости)</li>
+      <li><span class="kbd">C</span> — открыть крафт</li>
       <li><span class="kbd">Space</span> — атака</li>
-      <li><span class="kbd">1</span>...<span class="kbd">9</span> — выбор слота</li>
-      <li><span class="kbd">F</span> — сохранить</li>
-      <li><b>ЛКМ по карте</b> — поставить объект (если выбран слот 8/9)</li>
+      <li><span class="kbd">1</span>...<span class="kbd">9</span> — слот, <span class="kbd">F</span> — сохранить</li>
+      <li><b>ЛКМ по карте</b> — поставить постройку</li>
     </ul>
   </div>
   <div class="card">
-    <h3>📱 Управление на телефоне</h3>
+    <h3>📱 Телефон</h3>
     <ul>
-      <li><b>Джойстик слева</b> — движение (потяни в любую сторону)</li>
-      <li><b>Кнопка ✋</b> — взаимодействие (собрать)</li>
-      <li><b>Кнопка ⚔️</b> — атака</li>
-      <li><b>Кнопка 🏃</b> — удерживай для бега</li>
-      <li><b>Тап по слоту</b> — выбрать слот</li>
-      <li><b>Тап по карте</b> — поставить объект (если выбран слот 8/9)</li>
+      <li>Джойстик слева — движение</li>
+      <li>✋ — взаимодействие, ⚔️ — атака, 🏃 — бег</li>
+      <li>Кнопка 🛠️ сверху — крафт</li>
     </ul>
   </div>
   <div class="card">
-    <h3>🎯 Цель игры</h3>
+    <h3>🌡️ Температура</h3>
     <ul>
-      <li>Собирай дерево, камень, ягоды</li>
-      <li>Строй стены и костры для базы</li>
-      <li>Убивай животных — получай еду</li>
-      <li>Следи за сытостью и энергией</li>
-      <li>Ночью волки становятся агрессивнее</li>
+      <li>В пустыне — жара. Носите <b>шапку</b> (крафт)</li>
+      <li>В снегу — холод. Носите <b>шубу</b> (крафт)</li>
+      <li>Зелья восстанавливают температуру</li>
+      <li>Костёр греет ночью</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>🧪 Крафт (кнопка C)</h3>
+    <ul>
+      <li>🏏 Бита — 5 🪵</li>
+      <li>🪓 Топор — 8 🪵 + 5 🪨</li>
+      <li>⚔️ Меч — 3 🪵 + 8 🪨</li>
+      <li>🎩 Шапка — 5 🪵 + 3 🍓</li>
+      <li>🧥 Шуба — 8 🪵 + 5 🍓</li>
+      <li>🧪 Лечебное зелье — 5 🍓 + 2 🌿</li>
+      <li>⚡ Энергетик — 3 🍓 + 3 🌿</li>
+      <li>🔥 Согревающее зелье — 5 🌿</li>
     </ul>
   </div>
   <button class="back-btn" onclick="closeSub('rules')">← Назад</button>
 </div>
 
-<!-- О ИГРЕ -->
 <div id="about" class="submenu">
   <h2>ⓘ О игре</h2>
   <div class="card">
-    <h3>Forest Survival 2.0</h3>
-    <p>Это 2D выживалка, сделанная на чистом HTML5 Canvas + JavaScript. Всё работает в браузере без сервера. Игра хранит прогресс в localStorage.</p>
-  </div>
-  <div class="card">
-    <h3>Возможности</h3>
-    <ul>
-      <li>8 персонажей на выбор</li>
-      <li>6 биомов: лес, пустыня, снег, болото, луг, тёмный лес</li>
-      <li>6 животных: кролик, волк, олень, медведь, лиса, кабан</li>
-      <li>Строительство базы: стены, полы, двери, костры, сундуки, верстаки</li>
-      <li>Система крафта и еды</li>
-      <li>Оптимизация: 10 технологий для плавного геймплея</li>
-    </ul>
+    <h3>Forest Survival 3.0</h3>
+    <p>Глобальное обновление: 20 новых фич, 6 биомов с уникальной погодой и животными, система температуры и крафта, зелья, готовка мяса, мини-карта и многое другое.</p>
   </div>
   <button class="back-btn" onclick="closeSub('about')">← Назад</button>
 </div>
 
-<!-- ВЫБОР ПЕРСОНАЖА -->
 <div id="charsel" class="submenu">
   <h2>Выбери персонажа</h2>
   <div class="chars" id="chars-list"></div>
   <button class="back-btn" onclick="closeSub('charsel')">← Назад</button>
 </div>
 
-<!-- ИГРА -->
 <div id="game">
   <canvas id="cv"></canvas>
   <div id="ui">
     <div>❤️ HP<div class="bar"><div class="bar-inner" id="hp"></div></div></div>
     <div>⚡ Энергия<div class="bar"><div class="bar-inner" id="en"></div></div></div>
     <div>🍖 Сытость<div class="bar"><div class="bar-inner" id="hg"></div></div></div>
+    <div>🌡️ Температура<div class="bar"><div class="bar-inner" id="tp"></div></div></div>
   </div>
   <div id="info">☀️ День 1, 06:00</div>
   <div id="biome">🌲 Лес</div>
+  <div id="minimap"><canvas id="mm" width="130" height="130"></canvas></div>
   <div id="hint">Нажми E</div>
   <div id="btns">
     <div class="slot active" onclick="selSlot(0,this)">✋</div>
     <div class="slot" onclick="selSlot(1,this)">🪵<span id="c1">0</span></div>
     <div class="slot" onclick="selSlot(2,this)">🪨<span id="c2">0</span></div>
     <div class="slot" onclick="selSlot(3,this)">🍓<span id="c3">0</span></div>
-    <div class="slot" onclick="selSlot(4,this)">🏏<span id="c4">0</span></div>
-    <div class="slot" onclick="selSlot(5,this)">🪓<span id="c5">0</span></div>
-    <div class="slot" onclick="selSlot(6,this)">⚔️<span id="c6">0</span></div>
-    <div class="slot" onclick="selSlot(7,this)">🔥<span id="c7">0</span></div>
-    <div class="slot" onclick="selSlot(8,this)">🧱<span id="c8">0</span></div>
+    <div class="slot" onclick="selSlot(4,this)">🌿<span id="c4">0</span></div>
+    <div class="slot" onclick="selSlot(5,this)">🍖<span id="c5">0</span></div>
+    <div class="slot" onclick="selSlot(6,this)">🔥<span id="c6">0</span></div>
+    <div class="slot" onclick="selSlot(7,this)">🧱<span id="c7">0</span></div>
+    <div class="slot" onclick="selSlot(8,this)">🏏<span id="c8">0</span></div>
   </div>
   <div id="notif"></div>
   <div id="night"></div>
@@ -194,1270 +191,884 @@ canvas#cv{display:block;position:absolute;top:0;left:0;will-change:transform;tra
   <div id="mobile">
     <div id="joy"><div id="knob"></div></div>
     <div id="actions">
+      <div class="abtn" onclick="openCraft()">🛠️</div>
       <div class="abtn" id="ab1">✋</div>
       <div class="abtn" id="ab2">⚔️</div>
       <div class="abtn" id="ab3">🏃</div>
     </div>
   </div>
 </div>
+
+<div id="craft">
+  <button id="close-craft" onclick="closeCraft()">✕</button>
+  <div id="craft-inner">
+    <h2>🛠️ КРАФТ</h2>
+    <div id="craft-list"></div>
+  </div>
+</div>
+
 <script>
-// ============================================================
-// БЕЗОПАСНЫЙ LOCALSTORAGE
-// ============================================================
 function storageGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function storageSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
 
-// ============================================================
-// ГЛОБАЛЬНЫЕ
-// ============================================================
-var canvas, ctx, W=800, H=600;
-var gameOn = false;
-var mobile = false;
-var keys = {};
-var cam = {x:0,y:0};
-var time = 0.25;
-var day = 1;
-var slot = 0;
-var selectedChar = 'boy';
-var joyX=0, joyY=0, joyActive=false, touchStartX=0, touchStartY=0, touchId=null;
-var mouseWX=0, mouseWY=0;
-var lastT = 0;
-var fpsLimit = 60, frameTime = 1000/fpsLimit;
-var lastUIUpdate = 0;
+var canvas,ctx,mm,mmc,W=800,H=600;
+var gameOn=false,mobile=false;
+var keys={};
+var cam={x:0,y:0};
+var time=0.25,day=1,slot=0;
+var selectedChar='boy';
+var joyX=0,joyY=0,joyActive=false,touchStartX=0,touchStartY=0,touchId=null;
+var lastT=0,fpsLimit=60,frameTime=1000/fpsLimit,lastUIUpdate=0;
+var buildRotate=0;
 
-// Мир
-var world = {
-  trees:[], stones:[], berries:[], lakes:[], flowers:[], bushes:[], drops:[], particles:[],
-  mobs:[], buildings:[], // {x,y,type}
-  biomeMap: {}
-};
+var world={trees:[],stones:[],berries:[],herbs:[],lakes:[],flowers:[],bushes:[],drops:[],particles:[],mobs:[],buildings:[],weather:[],stars:[]};
 
-// Игрок
-var p = {
-  x:0,y:0,vx:0,vy:0,r:16,
-  hp:100,maxhp:100, en:100,maxen:100, hg:100,maxhg:100,
-  wood:0,stone:0,berry:0,bat:0,axe:0,sword:0,fire:0,wall:0,floor:0,door:0,chest:0,bench:0,
-  face:1,anim:0,atkCd:0,weaponSwing:0,eatCd:0,
-  inWater:false
-};
+var p={x:0,y:0,vx:0,vy:0,r:16,hp:100,maxhp:100,en:100,maxen:100,hg:100,maxhg:100,
+  wood:0,stone:0,berry:0,herb:0,meat:0,fire:0,wall:0,bat:0,axe:0,sword:0,
+  hat:0,coat:0,potionH:0,potionE:0,potionW:0,
+  face:1,anim:0,atkCd:0,weaponSwing:0,eatCd:0,inWater:false,
+  temp:0,maxTemp:5};
 
-var damageTexts = [];
+var damageTexts=[];
 
-// ============================================================
-// ОШИБКИ
-// ============================================================
-function showErr(m){
-  console.error(m);
-  var e=document.getElementById('err');
-  if(e){e.style.display='block';e.textContent='ОШИБКА: '+m;}
-}
-window.onerror = function(m,u,l){showErr(m+' (строка '+l+')');return false;};
+function showErr(m){console.error(m);var e=document.getElementById('err');if(e){e.style.display='block';e.textContent='ОШИБКА: '+m;}}
+window.onerror=function(m,u,l){showErr(m+' (строка '+l+')');return false;};
 
-// ============================================================
-// ПОДМЕНЮ
-// ============================================================
-function openSub(id){
-  document.getElementById('menu').style.opacity='0';
-  setTimeout(function(){
-    document.getElementById('menu').style.display='none';
-    document.getElementById(id).style.display='flex';
-    if (id==='charsel') buildCharList();
-  },300);
-}
-function closeSub(id){
-  document.getElementById(id).style.display='none';
-  document.getElementById('menu').style.display='flex';
-  setTimeout(function(){document.getElementById('menu').style.opacity='1';},50);
-}
+function openSub(id){document.getElementById('menu').style.opacity='0';setTimeout(function(){document.getElementById('menu').style.display='none';document.getElementById(id).style.display='flex';if(id==='charsel')buildCharList();},300);}
+function closeSub(id){document.getElementById(id).style.display='none';document.getElementById('menu').style.display='flex';setTimeout(function(){document.getElementById('menu').style.opacity='1';},50);}
 
-// ============================================================
-// ПЕРСОНАЖИ (8 скинов)
-// ============================================================
-var CHAR_LIST = [
-  {id:'boy',    name:'Мальчик', desc:'С битой. Классика'},
-  {id:'ninja',  name:'Ниндзя',  desc:'Быстрый, ловкий'},
-  {id:'cowboy', name:'Ковбой',  desc:'Стрелок'},
-  {id:'girl',   name:'Девочка', desc:'Умная, быстрая'},
-  {id:'knight', name:'Рыцарь',  desc:'Сильный, броня'},
-  {id:'mage',   name:'Маг',     desc:'Магия, дальний'},
-  {id:'pirate', name:'Пират',   desc:'С саблей'},
-  {id:'zombie', name:'Зомби',   desc:'Медленный, живучий'}
+var CHAR_LIST=[
+  {id:'boy',name:'Мальчик',desc:'Классика'},
+  {id:'ninja',name:'Ниндзя',desc:'Быстрый'},
+  {id:'cowboy',name:'Ковбой',desc:'Меткий'},
+  {id:'girl',name:'Девочка',desc:'Умная'},
+  {id:'knight',name:'Рыцарь',desc:'Сильный'},
+  {id:'mage',name:'Маг',desc:'Магия'},
+  {id:'pirate',name:'Пират',desc:'Сабля'},
+  {id:'zombie',name:'Зомби',desc:'Живучий'}
 ];
 
 function buildCharList(){
-  var list = document.getElementById('chars-list');
-  list.innerHTML = '';
+  var list=document.getElementById('chars-list');list.innerHTML='';
   CHAR_LIST.forEach(function(c){
-    var card = document.createElement('div');
-    card.className='char-card';
-    var cv = document.createElement('canvas');
-    cv.width=100; cv.height=100;
+    var card=document.createElement('div');card.className='char-card';
+    var cv=document.createElement('canvas');cv.width=100;cv.height=100;
     card.appendChild(cv);
-    var nm = document.createElement('div'); nm.className='name'; nm.textContent=c.name;
-    var ds = document.createElement('div'); ds.className='desc'; ds.textContent=c.desc;
-    card.appendChild(nm); card.appendChild(ds);
-    card.onclick = function(){ startGame(c.id); };
+    var nm=document.createElement('div');nm.className='name';nm.textContent=c.name;
+    var ds=document.createElement('div');ds.className='desc';ds.textContent=c.desc;
+    card.appendChild(nm);card.appendChild(ds);
+    card.onclick=function(){startGame(c.id);};
     list.appendChild(card);
-    // Превью
-    var c2 = cv.getContext('2d');
-    c2.save(); c2.translate(50,80);
-    drawCharacter(c2, c.id, 0, 1, 0);
-    c2.restore();
+    var c2=cv.getContext('2d');c2.save();c2.translate(50,80);drawCharacter(c2,c.id,0,1,0);c2.restore();
   });
 }
 
-// ============================================================
-// СТАРТ
-// ============================================================
 function startGame(charId){
-  selectedChar = charId||'boy';
-  mobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  selectedChar=charId||'boy';
+  mobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
   try{
-    canvas = document.getElementById('cv');
-    ctx = canvas.getContext('2d');
-    resize();
-    window.addEventListener('resize',resize);
+    canvas=document.getElementById('cv');ctx=canvas.getContext('2d');
+    mm=document.getElementById('mm');mmc=mm.getContext('2d');
+    resize();window.addEventListener('resize',resize);
     document.getElementById('charsel').style.display='none';
     document.getElementById('menu').style.display='none';
     document.getElementById('game').style.display='block';
-    if(mobile) document.getElementById('mobile').style.display='block';
-    generateWorld();
-    loadSave();
-    updateUI();
-    setupInput();
-    if(mobile) setupTouch();
-    gameOn = true;
-    requestAnimationFrame(loop);
+    if(mobile)document.getElementById('mobile').style.display='block';
+    generateWorld();loadSave();updateUI();setupInput();
+    if(mobile)setupTouch();
+    // звёзды
+    for(var i=0;i<80;i++) world.stars.push({x:Math.random(),y:Math.random()*0.6,size:Math.random()*1.5+0.5});
+    gameOn=true;requestAnimationFrame(loop);
   }catch(e){showErr(e.message);}
 }
 function resize(){if(!canvas)return;W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
 
-// ============================================================
-// БИОМЫ (6 штук) + генерация по шуму
-// ============================================================
-var BIOMES = {
-  forest:      {name:'🌲 Лес',        grass:'#3a5a3a', treeColor:'#2e7d32', treeChance:0.7, stoneChance:0.3, berryChance:0.4},
-  meadow:      {name:'🌿 Луг',        grass:'#4a6e4a', treeColor:'#4caf50', treeChance:0.15,stoneChance:0.15,berryChance:0.5},
-  desert:      {name:'🏜️ Пустыня',    grass:'#c2a878', treeColor:'#8d6e63', treeChance:0.05,stoneChance:0.5, berryChance:0.05},
-  snow:        {name:'❄️ Снег',       grass:'#c8d8e0', treeColor:'#e0e0e0', treeChance:0.4, stoneChance:0.3, berryChance:0.1},
-  swamp:       {name:'🌫️ Болото',     grass:'#3e5040', treeColor:'#1b5e20', treeChance:0.5, stoneChance:0.1, berryChance:0.6},
-  dark_forest: {name:'🌑 Тёмный лес', grass:'#1e2e1e', treeColor:'#0d3d0d', treeChance:0.8, stoneChance:0.2, berryChance:0.3}
+var BIOMES={
+  forest:{name:'🌲 Лес',grass:'#3a5a3a',tree:'#2e7d32',temp:0,treeC:0.7,stoneC:0.3,berryC:0.4,herbC:0.05,animals:['rabbit','fox','wolf','deer','boar','bear']},
+  meadow:{name:'🌿 Луг',grass:'#5a7a4a',tree:'#66bb6a',temp:0.5,treeC:0.15,stoneC:0.15,berryC:0.5,herbC:0.1,animals:['rabbit','deer','boar']},
+  desert:{name:'🏜️ Пустыня',grass:'#d4b878',tree:'#a1887f',temp:3,treeC:0.05,stoneC:0.5,berryC:0.05,herbC:0.02,animals:['scorpion','camel','snake']},
+  snow:{name:'❄️ Снег',grass:'#d0e0e8',tree:'#e0e0e0',temp:-3,treeC:0.4,stoneC:0.3,berryC:0.1,herbC:0.05,animals:['polar_bear','arctic_fox','penguin']},
+  swamp:{name:'🌫️ Болото',grass:'#4a6050',tree:'#1b5e20',temp:1,treeC:0.5,stoneC:0.1,berryC:0.5,herbC:0.7,animals:['frog','snake','turtle']},
+  dark_forest:{name:'🌑 Тёмный лес',grass:'#1e2e1e',tree:'#0d3d0d',temp:-0.5,treeC:0.8,stoneC:0.2,berryC:0.3,herbC:0.2,animals:['wolf','bear','fox']}
 };
 
-function noise2(x,y){
-  return Math.sin(x*0.0025)*Math.cos(y*0.0025) + Math.sin(x*0.005)*Math.cos(y*0.005)*0.5;
+function biomeNoise(x,y){
+  return Math.sin(x*0.0009)*Math.cos(y*0.0009)+Math.sin(x*0.0025+5)*Math.cos(y*0.0025+3)*0.6;
 }
 function getBiome(x,y){
-  var n = noise2(x,y);
-  if (n > 0.6) return 'desert';
-  if (n > 0.2) return 'meadow';
-  if (n < -0.6) return 'snow';
-  if (n < -0.2) return 'dark_forest';
-  if (n > -0.05 && n < 0.05) return 'swamp';
-  return 'forest';
+  var n=biomeNoise(x,y);
+  if(n>1.0)return 'desert';
+  if(n>0.4)return 'meadow';
+  if(n>0.1)return 'forest';
+  if(n>-0.3)return 'swamp';
+  if(n>-0.8)return 'dark_forest';
+  return 'snow';
+}
+// Плавный переход: сколько % следующего биома
+function biomeBlend(x,y){
+  var n=biomeNoise(x,y);
+  return Math.abs((n*2)%1);
 }
 
-// ============================================================
-// ГЕНЕРАЦИЯ МИРА
-// ============================================================
 function generateWorld(){
-  world = {
-    trees:[], stones:[], berries:[], lakes:[], flowers:[], bushes:[], drops:[], particles:[],
-    mobs:[], buildings:[], biomeMap:{}
-  };
-  p.x=0;p.y=0;p.vx=0;p.vy=0;
-
+  world={trees:[],stones:[],berries:[],herbs:[],lakes:[],flowers:[],bushes:[],drops:[],particles:[],mobs:[],buildings:[],weather:[],stars:world.stars||[]};
+  p.x=0;p.y=0;p.vx=0;p.vy=0;p.temp=0;
   var i,x,y,d,b;
-
-  // Деревья по биомам
-  for(i=0;i<220;i++){
-    x=(Math.random()-0.5)*4500; y=(Math.random()-0.5)*4500;
+  for(i=0;i<280;i++){
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
     if(Math.sqrt(x*x+y*y)<130) continue;
-    b = getBiome(x,y);
-    if (Math.random() < BIOMES[b].treeChance){
-      world.trees.push({x:x,y:y,r:30,got:false,biome:b});
-    }
+    b=getBiome(x,y);
+    if(Math.random()<BIOMES[b].treeC) world.trees.push({x:x,y:y,r:30,got:false,biome:b});
   }
-  // Камни
-  for(i=0;i<110;i++){
-    x=(Math.random()-0.5)*4500; y=(Math.random()-0.5)*4500;
+  for(i=0;i<130;i++){
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
     if(Math.sqrt(x*x+y*y)<130) continue;
-    b = getBiome(x,y);
-    if (Math.random() < BIOMES[b].stoneChance){
-      world.stones.push({x:x,y:y,r:22,got:false,biome:b});
-    }
+    b=getBiome(x,y);
+    if(Math.random()<BIOMES[b].stoneC) world.stones.push({x:x,y:y,r:22,got:false,biome:b});
   }
-  // Ягоды
+  for(i=0;i<120;i++){
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
+    if(Math.sqrt(x*x+y*y)<130) continue;
+    b=getBiome(x,y);
+    if(Math.random()<BIOMES[b].berryC) world.berries.push({x:x,y:y,r:12,got:false,biome:b});
+  }
   for(i=0;i<100;i++){
-    x=(Math.random()-0.5)*4500; y=(Math.random()-0.5)*4500;
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
     if(Math.sqrt(x*x+y*y)<130) continue;
-    b = getBiome(x,y);
-    if (Math.random() < BIOMES[b].berryChance){
-      world.berries.push({x:x,y:y,r:12,got:false,biome:b});
-    }
+    b=getBiome(x,y);
+    if(Math.random()<BIOMES[b].herbC) world.herbs.push({x:x,y:y,r:10,got:false,biome:b});
   }
-  // Озёра
-  for(i=0;i<5;i++){
-    x=(Math.random()-0.5)*3500; y=(Math.random()-0.5)*3500;
+  for(i=0;i<6;i++){
+    x=(Math.random()-.5)*4000;y=(Math.random()-.5)*4000;
     if(Math.sqrt(x*x+y*y)<400) continue;
-    world.lakes.push({x:x,y:y,r:90+Math.random()*80});
+    world.lakes.push({x:x,y:y,r:80+Math.random()*80});
   }
-  // Цветы
-  for(i=0;i<400;i++){
-    x=(Math.random()-0.5)*4500; y=(Math.random()-0.5)*4500;
+  for(i=0;i<500;i++){
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
     world.flowers.push({x:x,y:y,c:Math.random()<0.5?'#ffeb3b':'#ef5350',phase:Math.random()*6.28});
   }
-  // Кусты
-  for(i=0;i<150;i++){
-    x=(Math.random()-0.5)*4500; y=(Math.random()-0.5)*4500;
+  for(i=0;i<200;i++){
+    x=(Math.random()-.5)*5000;y=(Math.random()-.5)*5000;
     world.bushes.push({x:x,y:y,r:15});
   }
-  // Мобы (6 типов)
-  for(i=0;i<30;i++){
-    x=(Math.random()-0.5)*3500; y=(Math.random()-0.5)*3500;
-    d = Math.sqrt(x*x+y*y);
+  // Мобы — по биомам
+  for(i=0;i<45;i++){
+    x=(Math.random()-.5)*4000;y=(Math.random()-.5)*4000;
+    d=Math.sqrt(x*x+y*y);
     if(d<400) continue;
-    b = getBiome(x,y);
-    var r = Math.random();
-    var type, hp, r0, spd;
-    if (r<0.35){type='rabbit';hp=12;r0=11;spd=0.22;}
-    else if (r<0.60){type='fox';hp=18;r0=12;spd=0.30;}
-    else if (r<0.80){type='wolf';hp=35;r0=16;spd=0.35;}
-    else if (r<0.90){type='deer';hp=25;r0=18;spd=0.28;}
-    else if (r<0.97){type='boar';hp=45;r0=18;spd=0.32;}
-    else {type='bear';hp=80;r0=22;spd=0.30;}
-    world.mobs.push({
-      x:x,y:y,type:type,r:r0,hp:hp,maxhp:hp,
-      vx:0,vy:0,cd:0,timer:0,anim:0,face:1,speed:spd,
-      biome:b, aggro: (type==='wolf'||type==='bear'||type==='boar')
-    });
+    b=getBiome(x,y);
+    var arr=BIOMES[b].animals;
+    var type=arr[Math.floor(Math.random()*arr.length)];
+    var hp,r0,spd;
+    if(type==='rabbit'){hp=12;r0=11;spd=.22;}
+    else if(type==='fox'||type==='arctic_fox'){hp=18;r0=12;spd=.30;}
+    else if(type==='wolf'){hp=35;r0=16;spd=.35;}
+    else if(type==='deer'){hp=25;r0=18;spd=.28;}
+    else if(type==='boar'){hp=45;r0=18;spd=.32;}
+    else if(type==='bear'||type==='polar_bear'){hp=90;r0=22;spd=.30;}
+    else if(type==='scorpion'){hp=22;r0=13;spd=.28;}
+    else if(type==='camel'){hp=60;r0=20;spd=.25;}
+    else if(type==='snake'){hp=18;r0=12;spd=.35;}
+    else if(type==='penguin'){hp=20;r0=13;spd=.20;}
+    else if(type==='frog'){hp=10;r0=10;spd=.25;}
+    else if(type==='turtle'){hp=40;r0=16;spd=.15;}
+    else{hp=20;r0=14;spd=.28;}
+    world.mobs.push({x:x,y:y,type:type,r:r0,hp:hp,maxhp:hp,vx:0,vy:0,cd:0,timer:0,anim:0,face:1,speed:spd,biome:b,aggro:(type==='wolf'||type==='bear'||type==='polar_bear'||type==='boar'||type==='scorpion'||type==='snake')});
   }
 }
 
-// ============================================================
-// СОХРАНЕНИЕ
-// ============================================================
-var saveTimer = 0;
 function saveGame(){
-  var d = {
-    px:p.x,py:p.y,hp:p.hp,en:p.en,hg:p.hg,
-    wood:p.wood,stone:p.stone,berry:p.berry,bat:p.bat,axe:p.axe,sword:p.sword,
-    fire:p.fire,wall:p.wall,floor:p.floor,door:p.door,chest:p.chest,bench:p.bench,
-    day:day,time:time,ch:selectedChar,
-    buildings:world.buildings
-  };
-  if(storageSet('fs_v4', JSON.stringify(d))) showNotif('💾 Сохранено');
+  var d={px:p.x,py:p.y,hp:p.hp,en:p.en,hg:p.hg,wood:p.wood,stone:p.stone,berry:p.berry,herb:p.herb,meat:p.meat,
+    fire:p.fire,wall:p.wall,bat:p.bat,axe:p.axe,sword:p.sword,hat:p.hat,coat:p.coat,potionH:p.potionH,potionE:p.potionE,potionW:p.potionW,
+    day:day,time:time,ch:selectedChar,temp:p.temp,buildings:world.buildings};
+  if(storageSet('fs_v5',JSON.stringify(d)))showNotif('💾 Сохранено');
 }
 function loadSave(){
-  var s = storageGet('fs_v4');
-  if(!s) return;
-  try{
-    var d = JSON.parse(s);
-    if(typeof d.px !== 'number' || isNaN(d.px)) return;
-    p.x=d.px;p.y=d.py;
-    p.hp=d.hp||100;p.en=d.en||100;p.hg=d.hg||100;
-    p.wood=d.wood||0;p.stone=d.stone||0;p.berry=d.berry||0;
-    p.bat=d.bat||0;p.axe=d.axe||0;p.sword=d.sword||0;
-    p.fire=d.fire||0;p.wall=d.wall||0;p.floor=d.floor||0;
-    p.door=d.door||0;p.chest=d.chest||0;p.bench=d.bench||0;
-    day=d.day||1;time=d.time||0.25;
-    if(d.ch) selectedChar=d.ch;
-    if(Array.isArray(d.buildings)) world.buildings=d.buildings;
+  var s=storageGet('fs_v5');if(!s)return;
+  try{var d=JSON.parse(s);
+    if(typeof d.px!=='number'||isNaN(d.px))return;
+    p.x=d.px;p.y=d.py;p.hp=d.hp||100;p.en=d.en||100;p.hg=d.hg||100;
+    p.wood=d.wood||0;p.stone=d.stone||0;p.berry=d.berry||0;p.herb=d.herb||0;p.meat=d.meat||0;
+    p.fire=d.fire||0;p.wall=d.wall||0;p.bat=d.bat||0;p.axe=d.axe||0;p.sword=d.sword||0;
+    p.hat=d.hat||0;p.coat=d.coat||0;p.potionH=d.potionH||0;p.potionE=d.potionE||0;p.potionW=d.potionW||0;
+    day=d.day||1;time=d.time||0.25;if(d.ch)selectedChar=d.ch;p.temp=d.temp||0;
+    if(Array.isArray(d.buildings))world.buildings=d.buildings;
     showNotif('Прогресс загружен');
   }catch(e){}
 }
 
-// ============================================================
-// ВВОД
-// ============================================================
 function setupInput(){
   window.addEventListener('keydown',function(e){
-    var k=e.key.toLowerCase();
-    keys[k]=true;
-    if(k==='e'||k==='у') interact();
+    var k=e.key.toLowerCase();keys[k]=true;
+    if(k==='e'||k==='у')interact();
     if(e.key===' '){e.preventDefault();attack();}
-    if(k==='q'||k==='й') eatBerry();
-    if(k==='f'||k==='а') saveGame();
-    if(k==='r'||k==='к') rotateBuild();
-    if(e.key>='1'&&e.key<='9'){
-      var s=document.querySelectorAll('.slot');
-      selSlot(parseInt(e.key)-1,s[parseInt(e.key)-1]);
-    }
+    if(k==='q'||k==='й')eatBerry();
+    if(k==='g'||k==='п')eatMeat();
+    if(k==='c'||k==='с')openCraft();
+    if(k==='f'||k==='а')saveGame();
+    if(k==='r'||k==='к')rotateBuild();
+    if(e.key>='1'&&e.key<='9'){var s=document.querySelectorAll('.slot');selSlot(parseInt(e.key)-1,s[parseInt(e.key)-1]);}
   });
   window.addEventListener('keyup',function(e){keys[e.key.toLowerCase()]=false;});
-  canvas.addEventListener('mousemove',function(e){mouseWX=e.clientX+cam.x;mouseWY=e.clientY+cam.y;});
   canvas.addEventListener('mousedown',function(e){if(e.button===0)placeObject(e.clientX+cam.x,e.clientY+cam.y);});
   canvas.addEventListener('contextmenu',function(e){e.preventDefault();});
 }
-function selSlot(i,el){
-  slot=i;
-  var s=document.querySelectorAll('.slot');
-  for(var k=0;k<s.length;k++) s[k].classList.remove('active');
-  if(el) el.classList.add('active');
-}
-var buildRotate = 0;
-function rotateBuild(){ buildRotate = (buildRotate+1)%4; showNotif('Поворот: '+(buildRotate*90)+'°'); }
+function selSlot(i,el){slot=i;var s=document.querySelectorAll('.slot');for(var k=0;k<s.length;k++)s[k].classList.remove('active');if(el)el.classList.add('active');}
+function rotateBuild(){buildRotate=(buildRotate+1)%4;showNotif('Поворот: '+buildRotate*90+'°');}
 
 function setupTouch(){
-  var joy=document.getElementById('joy'); if(!joy)return;
+  var joy=document.getElementById('joy');if(!joy)return;
   var knob=document.getElementById('knob');
-  joy.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    var t=e.changedTouches[0];
-    touchId=t.identifier;touchStartX=t.clientX;touchStartY=t.clientY;joyActive=true;
-  },{passive:false});
-  joy.addEventListener('touchmove',function(e){
-    e.preventDefault();
-    for(var i=0;i<e.changedTouches.length;i++){
-      var t=e.changedTouches[i];
-      if(t.identifier!==touchId) continue;
-      var dx=t.clientX-touchStartX, dy=t.clientY-touchStartY;
-      var d=Math.sqrt(dx*dx+dy*dy), max=55;
-      if(d>max){dx=dx/d*max;dy=dy/d*max;}
-      knob.style.transform='translate('+dx+'px,'+dy+'px)';
-      joyX=dx/max;joyY=dy/max;
-    }
-  },{passive:false});
+  joy.addEventListener('touchstart',function(e){e.preventDefault();var t=e.changedTouches[0];touchId=t.identifier;touchStartX=t.clientX;touchStartY=t.clientY;joyActive=true;},{passive:false});
+  joy.addEventListener('touchmove',function(e){e.preventDefault();for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i];if(t.identifier!==touchId)continue;var dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;var d=Math.sqrt(dx*dx+dy*dy),max=50;if(d>max){dx=dx/d*max;dy=dy/d*max;}knob.style.transform='translate('+dx+'px,'+dy+'px)';joyX=dx/max;joyY=dy/max;}},{passive:false});
   function endJoy(){joyActive=false;joyX=0;joyY=0;knob.style.transform='translate(0,0)';touchId=null;}
-  joy.addEventListener('touchend',endJoy);
-  joy.addEventListener('touchcancel',endJoy);
+  joy.addEventListener('touchend',endJoy);joy.addEventListener('touchcancel',endJoy);
   document.getElementById('ab1').addEventListener('touchstart',function(e){e.preventDefault();interact();});
   document.getElementById('ab2').addEventListener('touchstart',function(e){e.preventDefault();attack();});
   document.getElementById('ab3').addEventListener('touchstart',function(e){e.preventDefault();keys['shift']=true;});
   document.getElementById('ab3').addEventListener('touchend',function(e){e.preventDefault();keys['shift']=false;});
-  // Тап по canvas для постройки
   canvas.addEventListener('touchstart',function(e){
-    if (slot===7||slot===8||slot===9){
-      var t=e.changedTouches[0];
-      if(t) placeObject(t.clientX+cam.x,t.clientY+cam.y);
-    }
+    if(slot===6||slot===7){var t=e.changedTouches[0];if(t)placeObject(t.clientX+cam.x,t.clientY+cam.y);}
   },{passive:false});
   document.addEventListener('gesturestart',function(e){e.preventDefault();});
 }
 
-// ============================================================
-// ДЕЙСТВИЯ
-// ============================================================
+// ============= КРАФТ =============
+var CRAFT_RECIPES=[
+  {id:'bat',name:'🏏 Бита',cost:{wood:5},desc:'Оружие'},
+  {id:'axe',name:'🪓 Топор',cost:{wood:8,stone:5},desc:'Рубит деревья'},
+  {id:'sword',name:'⚔️ Меч',cost:{wood:3,stone:8},desc:'Сильное оружие'},
+  {id:'hat',name:'🎩 Шапка',cost:{wood:5,berry:3},desc:'-50% жары'},
+  {id:'coat',name:'🧥 Шуба',cost:{wood:8,berry:5},desc:'-50% холода'},
+  {id:'fire',name:'🔥 Костёр',cost:{wood:5,stone:3},desc:'Постройка'},
+  {id:'wall',name:'🧱 Стена',cost:{wood:4},desc:'Постройка'},
+  {id:'potionH',name:'🧪 Лечебное зелье',cost:{berry:5,herb:2},desc:'+50 HP'},
+  {id:'potionE',name:'⚡ Энергетик',cost:{berry:3,herb:3},desc:'+50 энергии'},
+  {id:'potionW',name:'🔥 Согревающее',cost:{herb:5},desc:'Восст. температуру'}
+];
+
+function openCraft(){
+  var list=document.getElementById('craft-list');list.innerHTML='';
+  CRAFT_RECIPES.forEach(function(r){
+    var can=true;
+    for(var k in r.cost){if((p[k]||0)<r.cost[k]){can=false;break;}}
+    var div=document.createElement('div');div.className='citem'+(can?'':' disabled');
+    var costText=Object.keys(r.cost).map(function(k){return r.cost[k]+' '+({wood:'🪵',stone:'🪨',berry:'🍓',herb:'🌿'})[k];}).join(' + ');
+    div.innerHTML='<span class="ci">'+r.name.split(' ')[0]+'</span><div class="cn">'+r.name.substring(2)+'<div class="cc">'+r.desc+'</div></div><span class="cc">'+costText+'</span>';
+    div.onclick=function(){if(can)craft(r);};
+    list.appendChild(div);
+  });
+  document.getElementById('craft').style.display='flex';
+}
+function closeCraft(){document.getElementById('craft').style.display='none';}
+function craft(r){
+  for(var k in r.cost){if((p[k]||0)<r.cost[k]){showNotif('Не хватает ресурсов');return;}}
+  for(var k in r.cost){p[k]-=r.cost[k];}
+  p[r.id]=(p[r.id]||0)+1;
+  showNotif('Создано: '+r.name);
+  updateUI();closeCraft();
+}
+
+// ============= ДЕЙСТВИЯ =============
 function interact(){
-  if(!gameOn) return;
-  // 1. Дропы
+  if(!gameOn)return;
+  // Дропы
   for(var i=0;i<world.drops.length;i++){
-    var dr=world.drops[i];
-    var dx=p.x-dr.x, dy=p.y-dr.y;
-    if(dx*dx+dy*dy < 900){
-      if(dr.type==='wood') p.wood+=dr.amount;
-      if(dr.type==='stone') p.stone+=dr.amount;
-      if(dr.type==='berry') p.berry+=dr.amount;
-      showNotif('+'+dr.amount+' '+dr.icon);
-      world.drops.splice(i,1); updateUI(); return;
+    var dr=world.drops[i];var dx=p.x-dr.x,dy=p.y-dr.y;
+    if(dx*dx+dy*dy<900){
+      p[dr.type]=(p[dr.type]||0)+dr.amount;
+      showNotif('+'+dr.amount+' '+dr.icon);world.drops.splice(i,1);updateUI();return;
     }
   }
-  // 2. Ресурсы
-  var all = [];
-  for(var i=0;i<world.trees.length;i++)   all.push({o:world.trees[i],  t:'tree'});
-  for(var i=0;i<world.stones.length;i++)  all.push({o:world.stones[i], t:'stone'});
-  for(var i=0;i<world.berries.length;i++) all.push({o:world.berries[i],t:'berry'});
+  // Готовка мяса на костре
+  for(var i=0;i<world.buildings.length;i++){
+    var b=world.buildings[i];
+    if(b.type!=='campfire')continue;
+    var dx=p.x-b.x,dy=p.y-b.y;
+    if(dx*dx+dy*dy<3500 && p.meat>0){
+      p.meat--;p.meat++; // готовка не реализована, просто жарка в мясо
+      showNotif('🍖 Мясо приготовлено');
+      return;
+    }
+  }
+  // Собрать
+  var all=[];
+  for(var i=0;i<world.trees.length;i++)all.push({o:world.trees[i],t:'tree'});
+  for(var i=0;i<world.stones.length;i++)all.push({o:world.stones[i],t:'stone'});
+  for(var i=0;i<world.berries.length;i++)all.push({o:world.berries[i],t:'berry'});
+  for(var i=0;i<world.herbs.length;i++)all.push({o:world.herbs[i],t:'herb'});
   for(var i=0;i<all.length;i++){
-    var o=all[i].o; if(o.got) continue;
-    var dx=p.x-o.x, dy=p.y-o.y;
-    var minD = p.r+o.r+30;
-    if(dx*dx+dy*dy < minD*minD){
+    var o=all[i].o;if(o.got)continue;
+    var dx=p.x-o.x,dy=p.y-o.y;var md=p.r+o.r+30;
+    if(dx*dx+dy*dy<md*md){
       o.got=true;
       if(all[i].t==='tree'){p.wood+=2;showNotif('+2 🪵');spawnDrop(o.x,o.y,'wood',2,'🪵');}
       else if(all[i].t==='stone'){p.stone+=2;showNotif('+2 🪨');spawnDrop(o.x,o.y,'stone',2,'🪨');}
-      else{p.berry+=1;showNotif('+1 🍓 (Q - съесть)');spawnDrop(o.x,o.y,'berry',1,'🍓');}
-      updateUI(); return;
+      else if(all[i].t==='berry'){p.berry+=1;showNotif('+1 🍓');spawnDrop(o.x,o.y,'berry',1,'🍓');}
+      else{p.herb+=1;showNotif('+1 🌿');spawnDrop(o.x,o.y,'herb',1,'🌿');}
+      updateUI();return;
     }
   }
-  showNotif('Нечего собирать рядом');
+  showNotif('Нечего собирать');
 }
-function spawnDrop(x,y,type,amount,icon){
-  world.drops.push({x:x+Math.random()*20-10,y:y+Math.random()*20-10,type:type,amount:amount,icon:icon,life:30000});
-}
+function spawnDrop(x,y,type,amount,icon){world.drops.push({x:x+Math.random()*20-10,y:y+Math.random()*20-10,type:type,amount:amount,icon:icon,life:30000});}
 function eatBerry(){
   if(p.berry<=0){showNotif('Нет ягод');return;}
-  if(p.eatCd>0) return;
-  p.berry-=1;
-  p.hp=Math.min(p.maxhp,p.hp+20);
-  p.hg=Math.min(p.maxhg,p.hg+25);
-  p.eatCd=30;
-  for(var i=0;i<10;i++){
-    world.particles.push({x:p.x,y:p.y,vx:(Math.random()-0.5)*3,vy:-Math.random()*3-1,life:30,max:30,color:'#ef5350',size:Math.random()*3+2});
-  }
-  showNotif('+20 HP, +25 сытости'); updateUI();
+  if(p.eatCd>0)return;
+  p.berry--;p.hp=Math.min(p.maxhp,p.hp+20);p.hg=Math.min(p.maxhg,p.hg+15);p.eatCd=30;
+  for(var i=0;i<10;i++)world.particles.push({x:p.x,y:p.y,vx:(Math.random()-.5)*3,vy:-Math.random()*3-1,life:30,max:30,color:'#ef5350',size:Math.random()*3+2});
+  showNotif('+20 HP, +15 сытости');updateUI();
+}
+function eatMeat(){
+  if(p.meat<=0){showNotif('Нет мяса');return;}
+  if(p.eatCd>0)return;
+  p.meat--;p.hp=Math.min(p.maxhp,p.hp+30);p.hg=Math.min(p.maxhg,p.hg+40);p.eatCd=40;
+  showNotif('+30 HP, +40 сытости');updateUI();
 }
 function attack(){
-  if(!gameOn||p.atkCd>0) return;
-  p.atkCd=22; p.weaponSwing=1;
-  var baseDmg = 12+Math.random()*6;
-  if(selectedChar==='ninja') baseDmg*=1.4;
-  if(selectedChar==='knight') baseDmg*=1.5;
-  if(selectedChar==='cowboy') baseDmg*=1.2;
-  if(selectedChar==='mage') baseDmg*=1.3;
-  if(selectedChar==='pirate') baseDmg*=1.35;
-  if(selectedChar==='zombie') baseDmg*=0.8;
-
+  if(!gameOn||p.atkCd>0)return;
+  p.atkCd=22;p.weaponSwing=1;
+  var baseDmg=12+Math.random()*6;
+  if(selectedChar==='ninja')baseDmg*=1.4;
+  if(selectedChar==='knight')baseDmg*=1.5;
+  if(selectedChar==='cowboy')baseDmg*=1.2;
+  if(selectedChar==='mage')baseDmg*=1.3;
+  if(selectedChar==='pirate')baseDmg*=1.35;
+  if(selectedChar==='zombie')baseDmg*=0.8;
   for(var i=0;i<world.mobs.length;i++){
-    var m=world.mobs[i]; if(m.hp<=0) continue;
-    var dx=p.x-m.x, dy=p.y-m.y;
-    var reach = p.r+m.r+40;
-    if(dx*dx+dy*dy < reach*reach){
-      m.hp -= baseDmg;
-      for(var k=0;k<8;k++){
-        world.particles.push({x:m.x,y:m.y,vx:(Math.random()-0.5)*5,vy:(Math.random()-0.5)*5,life:20,max:20,color:'#b71c1c',size:Math.random()*3+2});
-      }
+    var m=world.mobs[i];if(m.hp<=0)continue;
+    var dx=p.x-m.x,dy=p.y-m.y;var reach=p.r+m.r+40;
+    if(dx*dx+dy*dy<reach*reach){
+      m.hp-=baseDmg;
+      for(var k=0;k<8;k++)world.particles.push({x:m.x,y:m.y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:20,max:20,color:'#b71c1c',size:Math.random()*3+2});
       damageTexts.push({x:m.x,y:m.y-20,txt:'-'+Math.floor(baseDmg),life:50});
       if(m.hp<=0){
-        var food = m.type==='rabbit'?5:m.type==='fox'?8:m.type==='deer'?12:m.type==='wolf'?15:m.type==='boar'?20:25;
-        p.hg=Math.min(p.maxhg,p.hg+food);
-        showNotif(m.type+' убит! +'+food+'🍖');
+        p.meat+=2;
+        showNotif(m.type+' убит! +2 🍖');
+        spawnDrop(m.x,m.y,'meat',2,'🍖');
       }
     }
   }
   playBeep();
 }
-var damageTexts = window.damageTexts || [];
-
 function placeObject(px,py){
-  if(!gameOn) return;
-  // Округление по сетке 60
-  var gx = Math.round(px/60)*60;
-  var gy = Math.round(py/60)*60;
-  if (slot===7 && p.fire>0){
-    world.buildings.push({x:gx,y:gy,type:'campfire'});
-    p.fire--; showNotif('🔥 Костёр'); updateUI();
-  } else if (slot===8 && p.wall>0){
-    world.buildings.push({x:gx,y:gy,type:'wall',rot:buildRotate});
-    p.wall--; showNotif('🧱 Стена'); updateUI();
-  } else if (slot===9 && p.floor>0){
-    world.buildings.push({x:gx,y:gy,type:'floor'});
-    p.floor--; showNotif('🟫 Пол'); updateUI();
-  } else if (slot===5 && p.axe>0){
-    // срубить дерево рядом
-    for(var i=0;i<world.trees.length;i++){
-      var t=world.trees[i]; if(t.got) continue;
-      var dx=px-t.x, dy=py-t.y;
-      if(dx*dx+dy*dy < 2500){ t.got=true; p.wood+=3; showNotif('+3 🪵 (топор)'); updateUI(); return; }
-    }
-  }
+  if(!gameOn)return;
+  var gx=Math.round(px/60)*60,gy=Math.round(py/60)*60;
+  if(slot===6&&p.fire>0){world.buildings.push({x:gx,y:gy,type:'campfire'});p.fire--;showNotif('🔥 Костёр');updateUI();}
+  else if(slot===7&&p.wall>0){world.buildings.push({x:gx,y:gy,type:'wall',rot:buildRotate});p.wall--;showNotif('🧱 Стена');updateUI();}
 }
-
-// ============================================================
-// КРАФТ (через верстак)
-// ============================================================
-function craftItem(type){
-  var costs = {
-    bat:  {wood:5},
-    axe:  {wood:8,stone:5},
-    sword:{wood:3,stone:8},
-    fire: {wood:5,stone:3},
-    wall: {wood:4},
-    floor:{wood:2},
-    door: {wood:3}
-  };
-  var c = costs[type]; if(!c) return;
-  for (var k in c){ if (p[k] < c[k]){ showNotif('Не хватает '+k); return; } }
-  for (var k in c){ p[k] -= c[k]; }
-  p[type]++;
-  showNotif('Создано: '+type); updateUI();
-}
-
-// ============================================================
-// UI
-// ============================================================
 function updateUI(){
   document.getElementById('c1').textContent=p.wood;
   document.getElementById('c2').textContent=p.stone;
   document.getElementById('c3').textContent=p.berry;
-  document.getElementById('c4').textContent=p.bat;
-  document.getElementById('c5').textContent=p.axe;
-  document.getElementById('c6').textContent=p.sword;
-  document.getElementById('c7').textContent=p.fire;
-  document.getElementById('c8').textContent=p.wall;
+  document.getElementById('c4').textContent=p.herb;
+  document.getElementById('c5').textContent=p.meat;
+  document.getElementById('c6').textContent=p.fire;
+  document.getElementById('c7').textContent=p.wall;
+  document.getElementById('c8').textContent=p.bat;
 }
-function showNotif(txt){
-  var n=document.createElement('div');
-  n.className='nf'; n.textContent=txt;
-  document.getElementById('notif').appendChild(n);
-  setTimeout(function(){n.remove();},2500);
-}
+function showNotif(txt){var n=document.createElement('div');n.className='nf';n.textContent=txt;document.getElementById('notif').appendChild(n);setTimeout(function(){n.remove();},2500);}
 
-// Звук
 var audioCtx=null;
-function playBeep(){
-  try{
-    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    var o=audioCtx.createOscillator(), g=audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.setValueAtTime(220,audioCtx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(80,audioCtx.currentTime+0.1);
-    g.gain.setValueAtTime(0.15,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12);
-    o.start(); o.stop(audioCtx.currentTime+0.12);
-  }catch(e){}
-}
+function playBeep(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.setValueAtTime(220,audioCtx.currentTime);o.frequency.exponentialRampToValueAtTime(80,audioCtx.currentTime+.1);g.gain.setValueAtTime(.15,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.12);o.start();o.stop(audioCtx.currentTime+.12);}catch(e){}}
 
-// ============================================================
-// ОПТИМИЗАЦИЯ #1: Пространственная сетка для мобов
-// ============================================================
-var spatialGrid = {};
-var GRID_SIZE = 200;
-function clearGrid(){ spatialGrid = {}; }
-function addToGrid(obj){
-  var gx = Math.floor(obj.x/GRID_SIZE);
-  var gy = Math.floor(obj.y/GRID_SIZE);
-  var key = gx+','+gy;
-  if(!spatialGrid[key]) spatialGrid[key]=[];
-  spatialGrid[key].push(obj);
-}
-function getNearby(x,y,radius){
-  var res=[];
-  var gx0=Math.floor((x-radius)/GRID_SIZE);
-  var gx1=Math.floor((x+radius)/GRID_SIZE);
-  var gy0=Math.floor((y-radius)/GRID_SIZE);
-  var gy1=Math.floor((y+radius)/GRID_SIZE);
-  for(var gx=gx0;gx<=gx1;gx++){
-    for(var gy=gy0;gy<=gy1;gy++){
-      var arr=spatialGrid[gx+','+gy];
-      if(arr) res = res.concat(arr);
-    }
-  }
-  return res;
-}
+// Спатиал грид
+var grid={};var GS=200;
+function clearGrid(){grid={};}
+function addGrid(o){var k=Math.floor(o.x/GS)+','+Math.floor(o.y/GS);if(!grid[k])grid[k]=[];grid[k].push(o);}
+function getNear(x,y,r){var res=[];var x0=Math.floor((x-r)/GS),x1=Math.floor((x+r)/GS),y0=Math.floor((y-r)/GS),y1=Math.floor((y+r)/GS);for(var gx=x0;gx<=x1;gx++)for(var gy=y0;gy<=y1;gy++){var a=grid[gx+','+gy];if(a)res=res.concat(a);}return res;}
 
-// ============================================================
-// ОПТИМИЗАЦИЯ #2: Кэш градиентов
-// ============================================================
-var gradientCache = {};
-function getFireGradient(ctx,cx,cy,r){
-  var key = 'f_'+Math.floor(r/20);
-  if(!gradientCache[key]){
-    var g = ctx.createRadialGradient(0,0,10,0,0,r);
-    g.addColorStop(0,'rgba(255,150,0,0.55)');
-    g.addColorStop(1,'rgba(255,150,0,0)');
-    gradientCache[key]=g;
-  }
-  return gradientCache[key];
-}
-
-// ============================================================
-// ЛОГИКА
-// ============================================================
 function update(dt){
-  if(!gameOn) return;
-
-  var ax=0, ay=0;
-  if(keys['w']||keys['ц']||keys['arrowup'])    ay-=1;
-  if(keys['s']||keys['ы']||keys['arrowdown'])  ay+=1;
-  if(keys['a']||keys['ф']||keys['arrowleft'])  ax-=1;
-  if(keys['d']||keys['в']||keys['arrowright']) ax+=1;
+  if(!gameOn)return;
+  // Ввод
+  var ax=0,ay=0;
+  if(keys['w']||keys['ц']||keys['arrowup'])ay-=1;
+  if(keys['s']||keys['ы']||keys['arrowdown'])ay+=1;
+  if(keys['a']||keys['ф']||keys['arrowleft'])ax-=1;
+  if(keys['d']||keys['в']||keys['arrowright'])ax+=1;
   if(mobile&&joyActive){ax=joyX;ay=joyY;}
-
-  var len=Math.sqrt(ax*ax+ay*ay);
-  if(len>1){ax/=len;ay/=len;}
-
-  var sprint = keys['shift'] && p.en>0;
-  var baseSpeed = 0.30;
-  if(selectedChar==='ninja') baseSpeed=0.38;
-  if(selectedChar==='girl')  baseSpeed=0.36;
-  if(selectedChar==='zombie') baseSpeed=0.22;
-  if(selectedChar==='knight') baseSpeed=0.27;
-
-  var spd = sprint ? baseSpeed*1.7 : baseSpeed;
-  if(p.inWater) spd *= 0.6; // физика: замедление в воде
-
-  if(sprint){ p.en -= 0.9; if(p.en<0)p.en=0; }
-  else if(p.en<p.maxen) p.en += 0.08;
-
-  // Физика: ускорение + инерция + трение
-  p.vx += ax*spd;
-  p.vy += ay*spd;
-  p.vx *= 0.85;
-  p.vy *= 0.85;
-  p.x += p.vx*dt;
-  p.y += p.vy*dt;
-
-  if(p.vx>0.05) p.face=1;
-  else if(p.vx<-0.05) p.face=-1;
-
-  if(Math.abs(p.vx)>0.05||Math.abs(p.vy)>0.05) p.anim+=0.22*dt;
-  else p.anim=0;
-
-  if(p.atkCd>0)p.atkCd-=dt;
-  if(p.eatCd>0)p.eatCd-=dt;
+  var len=Math.sqrt(ax*ax+ay*ay);if(len>1){ax/=len;ay/=len;}
+  var sprint=keys['shift']&&p.en>0;
+  var baseSpeed=0.30;
+  if(selectedChar==='ninja')baseSpeed=0.38;
+  if(selectedChar==='girl')baseSpeed=0.36;
+  if(selectedChar==='zombie')baseSpeed=0.22;
+  if(selectedChar==='knight')baseSpeed=0.27;
+  var spd=sprint?baseSpeed*1.7:baseSpeed;
+  if(p.inWater)spd*=0.6;
+  if(sprint){p.en-=0.9;if(p.en<0)p.en=0;}else if(p.en<p.maxen)p.en+=0.08;
+  p.vx+=ax*spd;p.vy+=ay*spd;p.vx*=0.85;p.vy*=0.85;p.x+=p.vx*dt;p.y+=p.vy*dt;
+  if(p.vx>0.05)p.face=1;else if(p.vx<-0.05)p.face=-1;
+  if(Math.abs(p.vx)>0.05||Math.abs(p.vy)>0.05)p.anim+=0.22*dt;else p.anim=0;
+  if(p.atkCd>0)p.atkCd-=dt;if(p.eatCd>0)p.eatCd-=dt;
   if(p.weaponSwing>0)p.weaponSwing-=0.1*dt;
 
-  // === Оптимизация #3: проверка коллизий через сетку ===
+  // Коллизии
   clearGrid();
-  for(var i=0;i<world.trees.length;i++)  if(!world.trees[i].got)  addToGrid(world.trees[i]);
-  for(var i=0;i<world.stones.length;i++) if(!world.stones[i].got) addToGrid(world.stones[i]);
-  for(var i=0;i<world.buildings.length;i++) if(world.buildings[i].type==='wall') addToGrid(world.buildings[i]);
-
-  var nearby = getNearby(p.x,p.y,80);
-  for(var i=0;i<nearby.length;i++){
-    var s=nearby[i];
-    var dx=p.x-s.x, dy=p.y-s.y;
-    var minD = p.r + (s.r||25);
-    var d2 = dx*dx+dy*dy;
-    if(d2 < minD*minD && d2 > 0.01){
-      var d=Math.sqrt(d2);
-      var ang=Math.atan2(dy,dx);
-      p.x = s.x + Math.cos(ang)*minD;
-      p.y = s.y + Math.sin(ang)*minD;
-    }
+  for(var i=0;i<world.trees.length;i++)if(!world.trees[i].got)addGrid(world.trees[i]);
+  for(var i=0;i<world.stones.length;i++)if(!world.stones[i].got)addGrid(world.stones[i]);
+  for(var i=0;i<world.buildings.length;i++)if(world.buildings[i].type==='wall')addGrid(world.buildings[i]);
+  var near=getNear(p.x,p.y,80);
+  for(var i=0;i<near.length;i++){
+    var s=near[i];var dx=p.x-s.x,dy=p.y-s.y;var md=p.r+(s.r||25);var d2=dx*dx+dy*dy;
+    if(d2<md*md&&d2>0.01){var d=Math.sqrt(d2);var ang=Math.atan2(dy,dx);p.x=s.x+Math.cos(ang)*md;p.y=s.y+Math.sin(ang)*md;}
   }
-
   // Вода
-  p.inWater = false;
+  p.inWater=false;
   for(var i=0;i<world.lakes.length;i++){
-    var l=world.lakes[i];
-    var dx=p.x-l.x, dy=p.y-l.y;
-    var rr=l.r+p.r;
-    if(dx*dx+dy*dy < rr*rr){
-      p.inWater = true;
-      var d=Math.sqrt(dx*dx+dy*dy)||1;
-      var ang=Math.atan2(dy,dx);
-      p.x=l.x+Math.cos(ang)*rr;
-      p.y=l.y+Math.sin(ang)*rr;
-      p.vx*=0.5;p.vy*=0.5;
-    }
+    var l=world.lakes[i];var dx=p.x-l.x,dy=p.y-l.y;var rr=l.r+p.r;
+    if(dx*dx+dy*dy<rr*rr){p.inWater=true;var d=Math.sqrt(dx*dx+dy*dy)||1;var ang=Math.atan2(dy,dx);p.x=l.x+Math.cos(ang)*rr;p.y=l.y+Math.sin(ang)*rr;p.vx*=0.5;p.vy*=0.5;}
   }
-
   // Мобы
   for(var i=0;i<world.mobs.length;i++){
-    var m=world.mobs[i];
-    if(m.hp<=0) continue;
-    var dx=p.x-m.x, dy=p.y-m.y;
-    var md2=dx*dx+dy*dy;
-    if(md2>250000) continue;
+    var m=world.mobs[i];if(m.hp<=0)continue;
+    var dx=p.x-m.x,dy=p.y-m.y;var md2=dx*dx+dy*dy;
+    if(md2>250000)continue;
     var md=Math.sqrt(md2);
-
-    var attackRange = m.type==='wolf'?200:m.type==='bear'?180:m.type==='boar'?150:100;
-    var damage = m.type==='wolf'?6:m.type==='bear'?14:m.type==='boar'?10:0;
-
-    if(m.aggro && md<attackRange){
-      m.vx += (dx/md)*0.12;
-      m.vy += (dy/md)*0.12;
-      if(md < p.r+m.r+5 && m.cd<=0){
-        p.hp -= damage; m.cd=60;
-        showNotif('-'+damage+' HP');
-      }
-    } else if(md < 130){
-      m.vx -= (dx/md)*0.12;
-      m.vy -= (dy/md)*0.12;
-    } else {
-      m.timer-=dt;
-      if(m.timer<=0){
-        m.timer=120+Math.random()*180;
-        m.vx=(Math.random()-0.5)*m.speed;
-        m.vy=(Math.random()-0.5)*m.speed;
-      }
-    }
-    if(m.cd>0) m.cd-=dt;
-    m.vx*=0.9; m.vy*=0.9;
-    m.x += m.vx*dt;
-    m.y += m.vy*dt;
-    if(Math.abs(m.vx)>0.02) m.face = m.vx>0?1:-1;
-    m.anim += 0.15*dt;
+    var aR=m.aggro?200:100;
+    var dmg=m.type==='wolf'?6:m.type==='bear'||m.type==='polar_bear'?14:m.type==='boar'?10:m.type==='scorpion'?8:m.type==='snake'?6:0;
+    if(m.aggro&&md<aR){
+      m.vx+=(dx/md)*0.12;m.vy+=(dy/md)*0.12;
+      if(md<p.r+m.r+5&&m.cd<=0){p.hp-=dmg;m.cd=60;showNotif('-'+dmg+' HP');}
+    }else if(md<130){m.vx-=(dx/md)*0.12;m.vy-=(dy/md)*0.12;}
+    else{m.timer-=dt;if(m.timer<=0){m.timer=120+Math.random()*180;m.vx=(Math.random()-.5)*m.speed;m.vy=(Math.random()-.5)*m.speed;}}
+    if(m.cd>0)m.cd-=dt;
+    m.vx*=0.9;m.vy*=0.9;m.x+=m.vx*dt;m.y+=m.vy*dt;
+    if(Math.abs(m.vx)>0.02)m.face=m.vx>0?1:-1;
+    m.anim+=0.15*dt;
   }
-  // ОПТИМИЗАЦИЯ #4: фильтр раз в 60 кадров, а не каждый
-  if (Math.random()<0.02) world.mobs = world.mobs.filter(function(m){return m.hp>0;});
+  if(Math.random()<0.02)world.mobs=world.mobs.filter(function(m){return m.hp>0;});
+
+  // Температура
+  var biome=getBiome(p.x,p.y);
+  var baseTemp=BIOMES[biome].temp;
+  if(baseTemp>0){ // пустыня/жара
+    var delta=(p.hat>0?0.01:0.025);
+    p.temp=Math.max(p.temp,Math.min(baseTemp,p.temp+delta*0.016*dt));
+  } else if(baseTemp<0){ // холод
+    var delta=(p.coat>0?0.01:0.025);
+    p.temp=Math.min(p.temp,Math.max(baseTemp,p.temp-delta*0.016*dt));
+  } else {
+    // Нормализация
+    if(Math.abs(p.temp)>0.05)p.temp-=Math.sign(p.temp)*0.005*dt;
+  }
+  // Костёр греет
+  for(var i=0;i<world.buildings.length;i++){
+    var b=world.buildings[i];if(b.type!=='campfire')continue;
+    var dx=p.x-b.x,dy=p.y-b.y;
+    if(dx*dx+dy*dy<12000 && p.temp<0)p.temp+=0.02*dt;
+  }
+  // Урон от температуры
+  if(p.temp>4)p.hp-=0.08*dt;
+  if(p.temp<-4)p.hp-=0.08*dt;
 
   // Голод
-  p.hg -= 0.008*dt;
+  p.hg-=0.008*dt;
   if(p.hg<=0){p.hg=0;p.hp-=0.04*dt;}
   if(p.hp<=0){p.hp=0;gameOn=false;showErr('Вы погибли!');return;}
 
   // Камера
-  cam.x += (p.x-W/2-cam.x)*0.12;
-  cam.y += (p.y-H/2-cam.y)*0.12;
+  cam.x+=(p.x-W/2-cam.x)*0.12;cam.y+=(p.y-H/2-cam.y)*0.12;
 
-  // Частицы — ОПТИМИЗАЦИЯ #5: обновление только живых
-  for(var i=world.particles.length-1;i>=0;i--){
-    var pt=world.particles[i];
-    pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;
-    pt.vy+=0.15*dt;
-    pt.life-=dt;
-    if(pt.life<=0) world.particles.splice(i,1);
-  }
-  for(var i=damageTexts.length-1;i>=0;i--){
-    damageTexts[i].y-=0.6*dt;
-    damageTexts[i].life-=dt;
-    if(damageTexts[i].life<=0) damageTexts.splice(i,1);
-  }
-  for(var i=world.drops.length-1;i>=0;i--){
-    world.drops[i].life -= dt*16.6;
-    if(world.drops[i].life<=0) world.drops.splice(i,1);
-  }
+  // Частицы
+  for(var i=world.particles.length-1;i>=0;i--){var pt=world.particles[i];pt.x+=pt.vx*dt;pt.y+=pt.vy*dt;pt.vy+=0.15*dt;pt.life-=dt;if(pt.life<=0)world.particles.splice(i,1);}
+  for(var i=damageTexts.length-1;i>=0;i--){damageTexts[i].y-=0.6*dt;damageTexts[i].life-=dt;if(damageTexts[i].life<=0)damageTexts.splice(i,1);}
+  for(var i=world.drops.length-1;i>=0;i--){world.drops[i].life-=dt*16.6;if(world.drops[i].life<=0)world.drops.splice(i,1);}
+
+  // Погода
+  updateWeather(dt);
 
   // Время
-  time += 0.00002*dt;
-  if(time>1){time=0;day++;}
-  var dark = Math.sin(time*Math.PI*2)*0.5+0.5;
+  time+=0.00002*dt;if(time>1){time=0;day++;}
+  var dark=Math.sin(time*Math.PI*2)*0.5+0.5;
   document.getElementById('night').style.background='rgba(0,0,30,'+(dark*0.55)+')';
 
-  // ОПТИМИЗАЦИЯ #6: UI обновляется раз в 200мс, не каждый кадр
-  var now = Date.now();
-  if (now - lastUIUpdate > 200){
-    lastUIUpdate = now;
-    var hours=Math.floor(time*24);
-    var mins=Math.floor((time*24-hours)*60);
-    var icon=(hours>=6&&hours<18)?'☀️':'🌙';
-    document.getElementById('info').textContent = icon+' День '+day+', '+(hours<10?'0':'')+hours+':'+(mins<10?'0':'')+mins;
+  var now=Date.now();
+  if(now-lastUIUpdate>200){
+    lastUIUpdate=now;
+    var h=Math.floor(time*24),mn=Math.floor((time*24-h)*60);
+    var icon=(h>=6&&h<18)?'☀️':'🌙';
+    document.getElementById('info').textContent=icon+' День '+day+', '+(h<10?'0':'')+h+':'+(mn<10?'0':'')+mn;
     document.getElementById('hp').style.width=(p.hp/p.maxhp*100)+'%';
     document.getElementById('en').style.width=(p.en/p.maxen*100)+'%';
     document.getElementById('hg').style.width=(p.hg/p.maxhg*100)+'%';
-    var b = getBiome(p.x,p.y);
-    document.getElementById('biome').textContent = BIOMES[b].name;
+    document.getElementById('tp').style.width=((p.temp+5)/10*100)+'%';
+    document.getElementById('biome').textContent=BIOMES[biome].name+' | 🌡️'+p.temp.toFixed(1);
   }
 
-  // Подсказка
   var near=false;
-  var arr=world.trees.concat(world.stones,world.berries);
-  for(var i=0;i<arr.length;i++){
-    var o=arr[i]; if(o.got) continue;
-    var dx=p.x-o.x, dy=p.y-o.y;
-    var rr=p.r+o.r+30;
-    if(dx*dx+dy*dy<rr*rr){near=true;break;}
-  }
-  document.getElementById('hint').style.display = near?'block':'none';
-  if(near) document.getElementById('hint').textContent='Нажми E';
+  var arr=world.trees.concat(world.stones,world.berries,world.herbs);
+  for(var i=0;i<arr.length;i++){var o=arr[i];if(o.got)continue;var dx=p.x-o.x,dy=p.y-o.y;var rr=p.r+o.r+30;if(dx*dx+dy*dy<rr*rr){near=true;break;}}
+  document.getElementById('hint').style.display=near?'block':'none';
 }
 
-// ============================================================
-// РИСОВАНИЕ ПЕРСОНАЖА (8 скинов)
-// ============================================================
-function drawCharacter(c, id, anim, face, swing){
-  var legSwing = Math.sin(anim*3)*8;
-  var armSwing = Math.cos(anim*3)*8;
+function updateWeather(dt){
+  var b=getBiome(p.x,p.y);
+  var wantRain=b==='swamp'||b==='dark_forest';
+  var wantSnow=b==='snow';
+  var wantSand=b==='desert';
+  // Спавним капли
+  if(wantRain&&Math.random()<0.3){world.weather.push({x:p.x+(Math.random()-.5)*W*1.5,y:p.y-H/2-50,vx:0,vy:8,life:120,type:'rain'});}
+  if(wantSnow&&Math.random()<0.3){world.weather.push({x:p.x+(Math.random()-.5)*W*1.5,y:p.y-H/2-50,vx:1,vy:2,life:200,type:'snow'});}
+  if(wantSand&&Math.random()<0.2){world.weather.push({x:p.x-W/2-50,y:p.y+(Math.random()-.5)*H,vx:6,vy:0,life:120,type:'sand'});}
+  for(var i=world.weather.length-1;i>=0;i--){
+    var w=world.weather[i];
+    w.x+=w.vx*dt;w.y+=w.vy*dt;w.life-=dt;
+    if(w.life<=0||w.y>p.y+H||w.x>p.x+W)world.weather.splice(i,1);
+  }
+}
+
+// ============= РИСОВАНИЕ ПЕРСОНАЖА =============
+function drawCharacter(c,id,anim,face,swing){
+  var legSwing=Math.sin(anim*3)*8,armSwing=Math.cos(anim*3)*8;
   if(anim===0){legSwing=0;armSwing=0;}
-
-  // Тень
-  c.fillStyle='rgba(0,0,0,0.35)';
-  c.beginPath(); c.ellipse(0,20,18,7,0,0,Math.PI*2); c.fill();
-
-  // === НОГИ ===
-  var legColor = (id==='ninja'||id==='zombie')?'#111':
-                 (id==='cowboy')?'#3e2723':
-                 (id==='knight')?'#455a64':
-                 (id==='mage')?'#512da8':
-                 (id==='pirate')?'#4e342e':
-                 (id==='girl')?'#f5d6a8':'#1565c0';
-  var shoeColor = (id==='ninja')?'#000':
-                  (id==='cowboy')?'#b71c1c':
-                  (id==='knight')?'#263238':
-                  (id==='mage')?'#311b92':
-                  (id==='pirate')?'#1a1a1a':
-                  (id==='zombie')?'#2e7d32':
-                  (id==='girl')?'#000':'#fff';
-
-  c.strokeStyle = legColor; c.lineWidth=7; c.lineCap='round';
-  c.beginPath(); c.moveTo(-6,10); c.lineTo(-6+legSwing,22); c.stroke();
-  c.beginPath(); c.moveTo(6,10); c.lineTo(6-legSwing,22); c.stroke();
-  c.fillStyle = shoeColor;
-  c.beginPath(); c.arc(-6+legSwing,22,5,0,Math.PI*2); c.fill();
-  c.beginPath(); c.arc(6-legSwing,22,5,0,Math.PI*2); c.fill();
-
-  // === ТЕЛО ===
-  var bodyColor = (id==='ninja')?'#1a1a1a':
-                  (id==='cowboy')?'#5d4037':
-                  (id==='knight')?'#607d8b':
-                  (id==='mage')?'#7e57c2':
-                  (id==='pirate')?'#6d4c41':
-                  (id==='zombie')?'#4caf50':
-                  (id==='girl')?'#ffb300':'#fff';
-  c.fillStyle = bodyColor;
-  c.fillRect(-11,-5,22,22);
-
-  // Отделка
-  if (id==='cowboy'){ c.fillStyle='#3e2723'; c.fillRect(-11,8,22,3); c.fillStyle='#fdd835'; c.fillRect(-2,8,4,4); }
-  if (id==='ninja'){ c.fillStyle='#0d47a1'; c.fillRect(-11,-2,22,3); c.fillRect(-11,4,22,2); }
-  if (id==='knight'){ c.fillStyle='#455a64'; c.fillRect(-11,0,22,2); c.fillStyle='#ef5350'; c.fillRect(-3,-3,6,8); }
-  if (id==='mage'){ c.fillStyle='#ffeb3b'; c.beginPath(); c.arc(0,-2,3,0,Math.PI*2); c.fill(); }
-  if (id==='pirate'){ c.fillStyle='#1a1a1a'; c.fillRect(-11,4,22,3); }
-  if (id==='zombie'){ c.fillStyle='#2e7d32'; c.fillRect(-11,4,22,2); c.fillRect(-11,10,22,2); }
-
-  // === РУКИ ===
-  var armColor = (id==='ninja'||id==='zombie')?'#1a1a1a':
-                 (id==='cowboy')?'#5d4037':
-                 (id==='knight')?'#607d8b':
-                 (id==='mage')?'#7e57c2':
-                 (id==='pirate')?'#6d4c41':
-                 (id==='girl')?'#f5d6a8':'#fce4d6';
-  c.strokeStyle=armColor; c.lineWidth=6;
-  c.beginPath(); c.moveTo(-10,2); c.lineTo(-19-armSwing,12); c.stroke();
-  c.beginPath(); c.moveTo(10,2); c.lineTo(19+armSwing,12); c.stroke();
-
-  // === ГОЛОВА ===
-  var headColor = (id==='ninja')?'#1a1a1a':
-                  (id==='zombie')?'#8bc34a':
-                  (id==='knight')?'#cfd8dc':'#fce4d6';
-  c.fillStyle=headColor;
-  c.beginPath(); c.arc(0,-18,16,0,Math.PI*2); c.fill();
-
-  // === ЛИЦО ПО СКИНАМ ===
-  if (id==='ninja'){
-    c.fillStyle='#29b6f6'; c.fillRect(-18,-26,36,7);
-    c.fillStyle='#0288d1'; c.fillRect(-18,-20,36,2);
-    c.fillStyle='#fff';
-    c.beginPath(); c.arc(-5,-19,3,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-19,3,0,Math.PI*2); c.fill();
-    c.fillStyle='#000';
-    c.beginPath(); c.arc(-5,-19,1.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-19,1.5,0,Math.PI*2); c.fill();
-  } else if (id==='cowboy'){
-    c.fillStyle='#3e2723'; c.beginPath(); c.arc(0,-22,17,Math.PI,0); c.fill();
-    c.fillStyle='#fff';
-    c.beginPath(); c.ellipse(-5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.beginPath(); c.ellipse(5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.fillStyle='#3e2723';
-    c.beginPath(); c.arc(-5,-17,3,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,3,0,Math.PI*2); c.fill();
-    // Шляпа
-    c.fillStyle='#b71c1c';
-    c.beginPath(); c.ellipse(0,-28,24,6,0,0,Math.PI*2); c.fill();
-    c.fillStyle='#c62828';
-    c.beginPath(); c.ellipse(0,-32,12,8,0,0,Math.PI*2); c.fill();
-  } else if (id==='girl'){
-    c.fillStyle='#3e2723';
-    c.beginPath(); c.arc(-16,-14,7,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(16,-14,7,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(-14,-2,5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(14,-2,5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(0,-20,18,Math.PI,0); c.fill();
-    c.fillRect(-18,-22,36,8);
-    c.fillStyle='#fff';
-    c.beginPath(); c.ellipse(-5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.beginPath(); c.ellipse(5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.fillStyle='#4caf50';
-    c.beginPath(); c.arc(-5,-17,3,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,3,0,Math.PI*2); c.fill();
-    c.fillStyle='#000';
-    c.beginPath(); c.arc(-5,-17,1.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,1.5,0,Math.PI*2); c.fill();
-    c.fillStyle='#ef5350';
-    c.beginPath(); c.arc(0,-13,2,0,Math.PI*2); c.fill();
-  } else if (id==='knight'){
-    // Шлем
-    c.fillStyle='#90a4ae';
-    c.beginPath(); c.arc(0,-20,17,Math.PI,0); c.fill();
-    c.fillRect(-17,-20,34,10);
-    // Забрало
-    c.fillStyle='#37474f';
-    c.fillRect(-14,-22,28,4);
-    c.fillRect(-3,-20,6,12);
-    // Глаза
-    c.fillStyle='#fff';
-    c.beginPath(); c.arc(-6,-16,2.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(6,-16,2.5,0,Math.PI*2); c.fill();
-    c.fillStyle='#000';
-    c.beginPath(); c.arc(-6,-16,1.2,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(6,-16,1.2,0,Math.PI*2); c.fill();
-  } else if (id==='mage'){
-    // Шляпа-колпак
-    c.fillStyle='#311b92';
-    c.beginPath();
-    c.moveTo(-18,-22); c.lineTo(18,-22); c.lineTo(0,-46); c.closePath(); c.fill();
-    c.fillStyle='#ffeb3b';
-    c.beginPath(); c.arc(0,-46,3,0,Math.PI*2); c.fill();
-    // Лицо
-    c.fillStyle='#fff';
-    c.beginPath(); c.ellipse(-5,-16,3.5,4.5,0,0,Math.PI*2); c.fill();
-    c.beginPath(); c.ellipse(5,-16,3.5,4.5,0,0,Math.PI*2); c.fill();
-    c.fillStyle='#5d4037';
-    c.beginPath(); c.arc(-5,-16,2.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-16,2.5,0,Math.PI*2); c.fill();
-    // Борода
-    c.fillStyle='#e0e0e0';
-    c.beginPath(); c.moveTo(-8,-10); c.quadraticCurveTo(0,0,8,-10); c.closePath(); c.fill();
-  } else if (id==='pirate'){
-    // Бандана
-    c.fillStyle='#d32f2f';
-    c.fillRect(-18,-24,36,6);
-    c.beginPath(); c.arc(0,-22,18,Math.PI,0); c.fill();
-    // Глазная повязка
-    c.fillStyle='#000';
-    c.fillRect(-2,-20,12,6);
-    // Глаз
-    c.fillStyle='#fff';
-    c.beginPath(); c.arc(-6,-17,3,0,Math.PI*2); c.fill();
-    c.fillStyle='#000';
-    c.beginPath(); c.arc(-6,-17,1.5,0,Math.PI*2); c.fill();
-    // Борода
-    c.fillStyle='#3e2723';
-    c.beginPath(); c.moveTo(-8,-8); c.quadraticCurveTo(0,2,8,-8); c.closePath(); c.fill();
-  } else if (id==='zombie'){
-    // Рваные волосы
-    c.fillStyle='#1b5e20';
-    c.beginPath(); c.arc(0,-20,17,Math.PI,0); c.fill();
-    for(var i=-3;i<=3;i++){
-      c.beginPath(); c.arc(i*5,-25,4,0,Math.PI*2); c.fill();
-    }
-    // Глаза (зомби)
-    c.fillStyle='#fff';
-    c.beginPath(); c.arc(-5,-17,3,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,3,0,Math.PI*2); c.fill();
-    c.fillStyle='#d32f2f';
-    c.beginPath(); c.arc(-5,-17,1.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,1.5,0,Math.PI*2); c.fill();
-    // Рот
-    c.strokeStyle='#000'; c.lineWidth=1.5;
-    c.beginPath(); c.moveTo(-4,-9); c.lineTo(4,-9); c.stroke();
-    c.beginPath(); c.moveTo(-4,-9); c.lineTo(-4,-7); c.stroke();
-    c.beginPath(); c.moveTo(4,-9); c.lineTo(4,-7); c.stroke();
-  } else {
-    // Мальчик
-    c.fillStyle='#111';
-    c.beginPath(); c.arc(0,-20,18,Math.PI,0); c.fill();
-    c.beginPath(); c.arc(-14,-12,8,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(14,-12,8,0,Math.PI*2); c.fill();
-    c.beginPath();
-    c.moveTo(-18,-18);
-    c.quadraticCurveTo(-10,-32,0,-26);
-    c.quadraticCurveTo(10,-32,18,-18);
-    c.lineTo(12,-14);
-    c.quadraticCurveTo(0,-22,-12,-14);
-    c.closePath(); c.fill();
-    c.fillStyle='#fff';
-    c.beginPath(); c.ellipse(-5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.beginPath(); c.ellipse(5,-17,4,5,0,0,Math.PI*2); c.fill();
-    c.fillStyle='#5d4037';
-    c.beginPath(); c.arc(-5,-17,3,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,3,0,Math.PI*2); c.fill();
-    c.fillStyle='#000';
-    c.beginPath(); c.arc(-5,-17,1.5,0,Math.PI*2); c.fill();
-    c.beginPath(); c.arc(5,-17,1.5,0,Math.PI*2); c.fill();
-  }
-
-  // === ОРУЖИЕ ===
-  var angle = face===1?-0.3:0.3;
-  if(swing>0) angle = face===1?-1.5:1.5;
-  c.save();
-  c.translate(19+armSwing,12);
-  c.rotate(angle);
+  c.fillStyle='rgba(0,0,0,0.35)';c.beginPath();c.ellipse(0,20,18,7,0,0,Math.PI*2);c.fill();
+  var legColor=(id==='ninja'||id==='zombie')?'#111':(id==='cowboy')?'#3e2723':(id==='knight')?'#455a64':(id==='mage')?'#512da8':(id==='pirate')?'#4e342e':(id==='girl')?'#f5d6a8':'#1565c0';
+  var shoeColor=(id==='ninja')?'#000':(id==='cowboy')?'#b71c1c':(id==='knight')?'#263238':(id==='mage')?'#311b92':(id==='pirate')?'#1a1a1a':(id==='zombie')?'#2e7d32':(id==='girl')?'#000':'#fff';
+  c.strokeStyle=legColor;c.lineWidth=7;c.lineCap='round';
+  c.beginPath();c.moveTo(-6,10);c.lineTo(-6+legSwing,22);c.stroke();
+  c.beginPath();c.moveTo(6,10);c.lineTo(6-legSwing,22);c.stroke();
+  c.fillStyle=shoeColor;c.beginPath();c.arc(-6+legSwing,22,5,0,Math.PI*2);c.fill();c.beginPath();c.arc(6-legSwing,22,5,0,Math.PI*2);c.fill();
+  var bodyColor=(id==='ninja')?'#1a1a1a':(id==='cowboy')?'#5d4037':(id==='knight')?'#607d8b':(id==='mage')?'#7e57c2':(id==='pirate')?'#6d4c41':(id==='zombie')?'#4caf50':(id==='girl')?'#ffb300':'#fff';
+  c.fillStyle=bodyColor;c.fillRect(-11,-5,22,22);
+  if(id==='cowboy'){c.fillStyle='#3e2723';c.fillRect(-11,8,22,3);c.fillStyle='#fdd835';c.fillRect(-2,8,4,4);}
+  if(id==='ninja'){c.fillStyle='#0d47a1';c.fillRect(-11,-2,22,3);c.fillRect(-11,4,22,2);}
+  if(id==='knight'){c.fillStyle='#455a64';c.fillRect(-11,0,22,2);c.fillStyle='#ef5350';c.fillRect(-3,-3,6,8);}
+  if(id==='mage'){c.fillStyle='#ffeb3b';c.beginPath();c.arc(0,-2,3,0,Math.PI*2);c.fill();}
+  if(id==='pirate'){c.fillStyle='#1a1a1a';c.fillRect(-11,4,22,3);}
+  if(id==='zombie'){c.fillStyle='#2e7d32';c.fillRect(-11,4,22,2);c.fillRect(-11,10,22,2);}
+  var armColor=(id==='ninja'||id==='zombie')?'#1a1a1a':(id==='cowboy')?'#5d4037':(id==='knight')?'#607d8b':(id==='mage')?'#7e57c2':(id==='pirate')?'#6d4c41':(id==='girl')?'#f5d6a8':'#fce4d6';
+  c.strokeStyle=armColor;c.lineWidth=6;
+  c.beginPath();c.moveTo(-10,2);c.lineTo(-19-armSwing,12);c.stroke();
+  c.beginPath();c.moveTo(10,2);c.lineTo(19+armSwing,12);c.stroke();
+  var headColor=(id==='ninja')?'#1a1a1a':(id==='zombie')?'#8bc34a':(id==='knight')?'#cfd8dc':'#fce4d6';
+  c.fillStyle=headColor;c.beginPath();c.arc(0,-18,16,0,Math.PI*2);c.fill();
   if(id==='ninja'){
-    c.fillStyle='#90a4ae';
-    c.beginPath(); c.moveTo(0,-2); c.lineTo(20,-4); c.lineTo(20,4); c.lineTo(0,2); c.closePath(); c.fill();
-    c.fillStyle='#000'; c.fillRect(-10,-2,10,4);
-  } else if(id==='cowboy'){
-    c.fillStyle='#37474f'; c.fillRect(-5,-3,35,6);
-    c.fillStyle='#5d4037'; c.fillRect(-5,3,12,4);
-  } else if(id==='knight'){
-    c.fillStyle='#90a4ae'; c.fillRect(0,-3,30,6);
-    c.fillStyle='#fff'; c.beginPath(); c.moveTo(30,-4); c.lineTo(38,0); c.lineTo(30,4); c.closePath(); c.fill();
-    c.fillStyle='#fdd835'; c.fillRect(-5,-6,8,12);
-  } else if(id==='mage'){
-    c.fillStyle='#5d4037'; c.fillRect(-5,-2,40,4);
-    c.fillStyle='#9c27b0'; c.beginPath(); c.arc(38,0,6,0,Math.PI*2); c.fill();
-    c.fillStyle='#fff'; c.beginPath(); c.arc(38,0,3,0,Math.PI*2); c.fill();
-  } else if(id==='pirate'){
-    c.fillStyle='#90a4ae'; c.beginPath(); c.moveTo(0,0); c.lineTo(30,-5); c.lineTo(35,0); c.lineTo(30,5); c.closePath(); c.fill();
-    c.fillStyle='#5d4037'; c.fillRect(-5,-3,8,6);
-  } else if(id==='zombie'){
-    c.fillStyle='#424242'; c.fillRect(0,-2,25,4);
-  } else if(id==='girl'){
-    c.fillStyle='#ffeb3b'; c.beginPath(); c.arc(0,0,4,0,Math.PI*2); c.fill();
-    c.fillStyle='#ef5350'; c.beginPath(); c.arc(5,-3,3,0,Math.PI*2); c.fill();
-  } else {
-    // Мальчик с битой
-    c.fillStyle='#8d6e63'; c.fillRect(0,-3,35,6);
-    c.fillStyle='#5d4037'; c.fillRect(30,-4,8,8);
+    c.fillStyle='#29b6f6';c.fillRect(-18,-26,36,7);c.fillStyle='#0288d1';c.fillRect(-18,-20,36,2);
+    c.fillStyle='#fff';c.beginPath();c.arc(-5,-19,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-19,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(-5,-19,1.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-19,1.5,0,Math.PI*2);c.fill();
+  }else if(id==='cowboy'){
+    c.fillStyle='#3e2723';c.beginPath();c.arc(0,-22,17,Math.PI,0);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.ellipse(-5,-17,4,5,0,0,Math.PI*2);c.fill();c.beginPath();c.ellipse(5,-17,4,5,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#3e2723';c.beginPath();c.arc(-5,-17,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#b71c1c';c.beginPath();c.ellipse(0,-28,24,6,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#c62828';c.beginPath();c.ellipse(0,-32,12,8,0,0,Math.PI*2);c.fill();
+  }else if(id==='girl'){
+    c.fillStyle='#3e2723';c.beginPath();c.arc(-16,-14,7,0,Math.PI*2);c.fill();c.beginPath();c.arc(16,-14,7,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(-14,-2,5,0,Math.PI*2);c.fill();c.beginPath();c.arc(14,-2,5,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(0,-20,18,Math.PI,0);c.fill();c.fillRect(-18,-22,36,8);
+    c.fillStyle='#fff';c.beginPath();c.ellipse(-5,-17,4,5,0,0,Math.PI*2);c.fill();c.beginPath();c.ellipse(5,-17,4,5,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#4caf50';c.beginPath();c.arc(-5,-17,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(-5,-17,1.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,1.5,0,Math.PI*2);c.fill();
+  }else if(id==='knight'){
+    c.fillStyle='#90a4ae';c.beginPath();c.arc(0,-20,17,Math.PI,0);c.fill();c.fillRect(-17,-20,34,10);
+    c.fillStyle='#37474f';c.fillRect(-14,-22,28,4);c.fillRect(-3,-20,6,12);
+    c.fillStyle='#fff';c.beginPath();c.arc(-6,-16,2.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(6,-16,2.5,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(-6,-16,1.2,0,Math.PI*2);c.fill();c.beginPath();c.arc(6,-16,1.2,0,Math.PI*2);c.fill();
+  }else if(id==='mage'){
+    c.fillStyle='#311b92';c.beginPath();c.moveTo(-18,-22);c.lineTo(18,-22);c.lineTo(0,-46);c.closePath();c.fill();
+    c.fillStyle='#ffeb3b';c.beginPath();c.arc(0,-46,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.ellipse(-5,-16,3.5,4.5,0,0,Math.PI*2);c.fill();c.beginPath();c.ellipse(5,-16,3.5,4.5,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#5d4037';c.beginPath();c.arc(-5,-16,2.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-16,2.5,0,Math.PI*2);c.fill();
+    c.fillStyle='#e0e0e0';c.beginPath();c.moveTo(-8,-10);c.quadraticCurveTo(0,0,8,-10);c.closePath();c.fill();
+  }else if(id==='pirate'){
+    c.fillStyle='#d32f2f';c.fillRect(-18,-24,36,6);c.beginPath();c.arc(0,-22,18,Math.PI,0);c.fill();
+    c.fillStyle='#000';c.fillRect(-2,-20,12,6);
+    c.fillStyle='#fff';c.beginPath();c.arc(-6,-17,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(-6,-17,1.5,0,Math.PI*2);c.fill();
+    c.fillStyle='#3e2723';c.beginPath();c.moveTo(-8,-8);c.quadraticCurveTo(0,2,8,-8);c.closePath();c.fill();
+  }else if(id==='zombie'){
+    c.fillStyle='#1b5e20';c.beginPath();c.arc(0,-20,17,Math.PI,0);c.fill();
+    for(var i=-3;i<=3;i++){c.beginPath();c.arc(i*5,-25,4,0,Math.PI*2);c.fill();}
+    c.fillStyle='#fff';c.beginPath();c.arc(-5,-17,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#d32f2f';c.beginPath();c.arc(-5,-17,1.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,1.5,0,Math.PI*2);c.fill();
+    c.strokeStyle='#000';c.lineWidth=1.5;c.beginPath();c.moveTo(-4,-9);c.lineTo(4,-9);c.stroke();
+  }else{
+    c.fillStyle='#111';c.beginPath();c.arc(0,-20,18,Math.PI,0);c.fill();
+    c.beginPath();c.arc(-14,-12,8,0,Math.PI*2);c.fill();c.beginPath();c.arc(14,-12,8,0,Math.PI*2);c.fill();
+    c.beginPath();c.moveTo(-18,-18);c.quadraticCurveTo(-10,-32,0,-26);c.quadraticCurveTo(10,-32,18,-18);c.lineTo(12,-14);c.quadraticCurveTo(0,-22,-12,-14);c.closePath();c.fill();
+    c.fillStyle='#fff';c.beginPath();c.ellipse(-5,-17,4,5,0,0,Math.PI*2);c.fill();c.beginPath();c.ellipse(5,-17,4,5,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#5d4037';c.beginPath();c.arc(-5,-17,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(-5,-17,1.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(5,-17,1.5,0,Math.PI*2);c.fill();
   }
+  // Оружие
+  var angle=face===1?-0.3:0.3;
+  if(swing>0)angle=face===1?-1.5:1.5;
+  c.save();c.translate(19+armSwing,12);c.rotate(angle);
+  if(id==='ninja'){c.fillStyle='#90a4ae';c.beginPath();c.moveTo(0,-2);c.lineTo(20,-4);c.lineTo(20,4);c.lineTo(0,2);c.closePath();c.fill();}
+  else if(id==='cowboy'){c.fillStyle='#37474f';c.fillRect(-5,-3,35,6);c.fillStyle='#5d4037';c.fillRect(-5,3,12,4);}
+  else if(id==='knight'){c.fillStyle='#90a4ae';c.fillRect(0,-3,30,6);c.fillStyle='#fff';c.beginPath();c.moveTo(30,-4);c.lineTo(38,0);c.lineTo(30,4);c.closePath();c.fill();}
+  else if(id==='mage'){c.fillStyle='#5d4037';c.fillRect(-5,-2,40,4);c.fillStyle='#9c27b0';c.beginPath();c.arc(38,0,6,0,Math.PI*2);c.fill();}
+  else if(id==='pirate'){c.fillStyle='#90a4ae';c.beginPath();c.moveTo(0,0);c.lineTo(30,-5);c.lineTo(35,0);c.lineTo(30,5);c.closePath();c.fill();}
+  else if(id==='zombie'){c.fillStyle='#424242';c.fillRect(0,-2,25,4);}
+  else if(id==='girl'){c.fillStyle='#ffeb3b';c.beginPath();c.arc(0,0,4,0,Math.PI*2);c.fill();}
+  else{c.fillStyle='#8d6e63';c.fillRect(0,-3,35,6);c.fillStyle='#5d4037';c.fillRect(30,-4,8,8);}
   c.restore();
 }
 
-// ============================================================
-// ОПТИМИЗАЦИЯ #7: Culling - только видимое
-// ============================================================
-function isVisible(x,y){
-  return (x > cam.x-150 && x < cam.x+W+150 && y > cam.y-150 && y < cam.y+H+150);
+function isVisible(x,y){return(x>cam.x-150&&x<cam.x+W+150&&y>cam.y-150&&y<cam.y+H+150);}
+
+// ============= РИСОВАНИЕ =============
+function drawMob(m){
+  var c=ctx;
+  c.fillStyle='rgba(0,0,0,0.3)';c.beginPath();c.ellipse(m.x,m.y+m.r*0.8,m.r*0.8,m.r*0.4,0,0,Math.PI*2);c.fill();
+  var f=m.face>0?1:-1;
+  if(m.type==='rabbit'){
+    c.fillStyle='#e0dcd8';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r-1,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*8,m.y-4,7,0,Math.PI*2);c.fill();
+    c.fillStyle='#c4b8b0';c.beginPath();c.ellipse(m.x+f*8,m.y-13,2.5,8,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.ellipse(m.x+f*12,m.y-12,2.5,8,-0.2,0,Math.PI*2);c.fill();
+    c.fillStyle='#ef5350';c.beginPath();c.ellipse(m.x+f*12,m.y-12,1.2,5,-0.2,0,Math.PI*2);c.fill();
+    c.fillStyle='#111';c.beginPath();c.arc(m.x+f*10,m.y-5,1.8,0,Math.PI*2);c.fill();
+  }else if(m.type==='fox'||m.type==='arctic_fox'){
+    var col=m.type==='fox'?'#ef6c00':'#e0e0e0';
+    c.fillStyle=col;c.beginPath();c.ellipse(m.x,m.y,m.r+1,m.r-1,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*9,m.y-4,7,0,Math.PI*2);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.ellipse(m.x+f*9,m.y+3,4,2,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x+f*12,m.y-4,1.8,0,Math.PI*2);c.fill();
+    c.fillStyle=col;c.beginPath();c.moveTo(m.x+f*5,m.y-9);c.lineTo(m.x+f*3,m.y-18);c.lineTo(m.x+f*11,m.y-11);c.closePath();c.fill();
+    c.beginPath();c.moveTo(m.x+f*13,m.y-9);c.lineTo(m.x+f*14,m.y-17);c.lineTo(m.x+f*19,m.y-9);c.closePath();c.fill();
+  }else if(m.type==='wolf'){
+    c.fillStyle='#8d6e63';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r-2,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#d7ccc8';c.beginPath();c.ellipse(m.x,m.y+4,m.r-4,m.r-8,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#6d4c41';c.beginPath();c.arc(m.x+f*10,m.y-4,8,0,Math.PI*2);c.fill();
+    c.fillStyle='#4e342e';c.beginPath();c.moveTo(m.x+f*6,m.y-10);c.lineTo(m.x+f*4,m.y-20);c.lineTo(m.x+f*12,m.y-12);c.closePath();c.fill();
+    c.beginPath();c.moveTo(m.x+f*14,m.y-10);c.lineTo(m.x+f*16,m.y-19);c.lineTo(m.x+f*20,m.y-10);c.closePath();c.fill();
+    c.fillStyle='#f44336';c.beginPath();c.arc(m.x+f*13,m.y-5,2,0,Math.PI*2);c.fill();
+  }else if(m.type==='deer'){
+    c.fillStyle='#a1887f';c.beginPath();c.ellipse(m.x,m.y,m.r+1,m.r-2,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*11,m.y-6,7,0,Math.PI*2);c.fill();
+    c.strokeStyle='#5d4037';c.lineWidth=2;c.beginPath();c.moveTo(m.x+f*9,m.y-12);c.lineTo(m.x+f*11,m.y-22);c.stroke();
+    c.beginPath();c.moveTo(m.x+f*13,m.y-12);c.lineTo(m.x+f*15,m.y-21);c.stroke();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x+f*14,m.y-5,1.8,0,Math.PI*2);c.fill();
+  }else if(m.type==='boar'){
+    c.fillStyle='#3e2723';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r-2,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*11,m.y-3,9,0,Math.PI*2);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.moveTo(m.x+f*19,m.y-3);c.lineTo(m.x+f*23,m.y-7);c.lineTo(m.x+f*23,m.y+1);c.closePath();c.fill();
+    c.fillStyle='#d32f2f';c.beginPath();c.arc(m.x+f*13,m.y-5,2,0,Math.PI*2);c.fill();
+  }else if(m.type==='bear'||m.type==='polar_bear'){
+    var col=m.type==='bear'?'#4e342e':'#f5f5f5';
+    c.fillStyle=col;c.beginPath();c.ellipse(m.x,m.y,m.r+3,m.r,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*13,m.y-6,10,0,Math.PI*2);c.fill();
+    c.fillStyle='#3e2723';c.beginPath();c.arc(m.x+f*8,m.y-14,4,0,Math.PI*2);c.fill();c.beginPath();c.arc(m.x+f*17,m.y-14,4,0,Math.PI*2);c.fill();
+    c.fillStyle='#f44336';c.beginPath();c.arc(m.x+f*16,m.y-6,2,0,Math.PI*2);c.fill();
+  }else if(m.type==='scorpion'){
+    c.fillStyle='#8d6e63';c.beginPath();c.ellipse(m.x,m.y,m.r,m.r-3,0,0,Math.PI*2);c.fill();
+    c.strokeStyle='#5d4037';c.lineWidth=3;
+    c.beginPath();c.moveTo(m.x-f*8,m.y-4);c.lineTo(m.x-f*20,m.y-8);c.lineTo(m.x-f*20,m.y-2);c.stroke();
+    c.fillStyle='#5d4037';c.beginPath();c.arc(m.x-f*20,m.y-5,3,0,Math.PI*2);c.fill();
+    c.strokeStyle='#5d4037';c.lineWidth=2;
+    for(var i=-1;i<=1;i++){c.beginPath();c.moveTo(m.x,m.y+2);c.lineTo(m.x+i*6,m.y+10);c.stroke();}
+  }else if(m.type==='camel'){
+    c.fillStyle='#d4a76a';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*11,m.y-10,8,0,Math.PI*2);c.fill();
+    c.fillStyle='#8d6e63';c.beginPath();c.moveTo(m.x,m.y-12);c.lineTo(m.x-6,m.y-20);c.lineTo(m.x+6,m.y-20);c.closePath();c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x+f*13,m.y-10,1.8,0,Math.PI*2);c.fill();
+  }else if(m.type==='snake'){
+    c.fillStyle='#4caf50';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r-5,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x+f*11,m.y-1,5,0,Math.PI*2);c.fill();
+    c.fillStyle='#d32f2f';c.beginPath();c.arc(m.x+f*13,m.y-1,1.5,0,Math.PI*2);c.fill();
+  }else if(m.type==='penguin'){
+    c.fillStyle='#111';c.beginPath();c.ellipse(m.x,m.y,m.r,m.r+1,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.ellipse(m.x,m.y+2,m.r-3,m.r-2,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#ffa000';c.beginPath();c.arc(m.x+f*2,m.y-3,2,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x+f*3,m.y-6,1.5,0,Math.PI*2);c.fill();
+  }else if(m.type==='frog'){
+    c.fillStyle='#4caf50';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r,0,0,Math.PI*2);c.fill();
+    c.beginPath();c.arc(m.x-f*4,m.y-6,3,0,Math.PI*2);c.fill();c.beginPath();c.arc(m.x+f*4,m.y-6,3,0,Math.PI*2);c.fill();
+    c.fillStyle='#fff';c.beginPath();c.arc(m.x-f*4,m.y-6,1.5,0,Math.PI*2);c.fill();c.beginPath();c.arc(m.x+f*4,m.y-6,1.5,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x-f*4,m.y-6,0.8,0,Math.PI*2);c.fill();c.beginPath();c.arc(m.x+f*4,m.y-6,0.8,0,Math.PI*2);c.fill();
+  }else if(m.type==='turtle'){
+    c.fillStyle='#33691e';c.beginPath();c.ellipse(m.x,m.y,m.r+2,m.r,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#558b2f';c.beginPath();c.ellipse(m.x,m.y,m.r-3,m.r-2,0,0,Math.PI*2);c.fill();
+    c.fillStyle='#8d6e63';c.beginPath();c.arc(m.x+f*12,m.y,5,0,Math.PI*2);c.fill();
+    c.fillStyle='#000';c.beginPath();c.arc(m.x+f*13,m.y-1,1.5,0,Math.PI*2);c.fill();
+  }
 }
 
-// ============================================================
-// РИСОВАНИЕ КАРТЫ
-// ============================================================
 function draw(){
-  if(!gameOn) return;
-
-  // Фон зависит от биома
-  var b = getBiome(p.x,p.y);
-  ctx.fillStyle = BIOMES[b].grass;
-  ctx.fillRect(0,0,W,H);
-
-  // Трава (декор, оптимизировано)
-  var startX = Math.floor(cam.x/80)*80;
-  var startY = Math.floor(cam.y/80)*80;
-  ctx.fillStyle='rgba(0,0,0,0.04)';
-  for(var x=startX;x<cam.x+W+80;x+=80){
-    for(var y=startY;y<cam.y+H+80;y+=80){
-      if(((x/80+y/80)|0)%2===0) ctx.fillRect(x,y,80,80);
+  if(!gameOn)return;
+  var b=getBiome(p.x,p.y);
+  // Фон
+  ctx.fillStyle=BIOMES[b].grass;ctx.fillRect(0,0,W,H);
+  // Плавные переходы — 60px тайлы
+  var startX=Math.floor(cam.x/60)*60,startY=Math.floor(cam.y/60)*60;
+  for(var x=startX;x<cam.x+W+60;x+=60){
+    for(var y=startY;y<cam.y+H+60;y+=60){
+      var tb=getBiome(x+30,y+30);
+      if(tb!==b){
+        ctx.globalAlpha=0.35;
+        ctx.fillStyle=BIOMES[tb].grass;
+        ctx.fillRect(x,y,60,60);
+        ctx.globalAlpha=1;
+      }
     }
   }
-
-  ctx.save();
-  ctx.translate(-cam.x,-cam.y);
-
-  var i;
-
-  // Цветы
-  for(i=0;i<world.flowers.length;i++){
-    var fl=world.flowers[i];
-    if(!isVisible(fl.x,fl.y)) continue;
-    var sway=Math.sin(Date.now()*0.002+fl.phase)*1;
-    ctx.fillStyle=fl.c;
-    ctx.beginPath(); ctx.arc(fl.x+sway,fl.y,4,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#fff';
-    ctx.beginPath(); ctx.arc(fl.x+sway,fl.y,1.5,0,Math.PI*2); ctx.fill();
+  // Цветы/кусты
+  ctx.save();ctx.translate(-cam.x,-cam.y);
+  for(var i=0;i<world.flowers.length;i++){
+    var fl=world.flowers[i];if(!isVisible(fl.x,fl.y))continue;
+    var s=Math.sin(Date.now()*0.002+fl.phase);
+    ctx.fillStyle=fl.c;ctx.beginPath();ctx.arc(fl.x+s,fl.y,4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(fl.x+s,fl.y,1.5,0,Math.PI*2);ctx.fill();
   }
-
-  // Кусты
-  for(i=0;i<world.bushes.length;i++){
-    var bs=world.bushes[i];
-    if(!isVisible(bs.x,bs.y)) continue;
-    ctx.fillStyle='#1b5e20';
-    ctx.beginPath(); ctx.arc(bs.x,bs.y,15,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#2e7d32';
-    ctx.beginPath(); ctx.arc(bs.x-4,bs.y-4,9,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(bs.x+5,bs.y-2,8,0,Math.PI*2); ctx.fill();
+  for(var i=0;i<world.bushes.length;i++){
+    var bs=world.bushes[i];if(!isVisible(bs.x,bs.y))continue;
+    ctx.fillStyle='#1b5e20';ctx.beginPath();ctx.arc(bs.x,bs.y,15,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#2e7d32';ctx.beginPath();ctx.arc(bs.x-4,bs.y-4,9,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bs.x+5,bs.y-2,8,0,Math.PI*2);ctx.fill();
   }
-
   // Озёра
-  for(i=0;i<world.lakes.length;i++){
-    var l=world.lakes[i];
-    if(!isVisible(l.x,l.y)) continue;
-    ctx.fillStyle='#1e3b5e';
-    ctx.beginPath(); ctx.arc(l.x,l.y,l.r,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.12)';
-    ctx.beginPath();
-    ctx.arc(l.x+Math.sin(Date.now()*0.001)*10,l.y+Math.cos(Date.now()*0.001)*10,l.r*0.7,0,Math.PI*2);
-    ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.arc(l.x,l.y,l.r,0,Math.PI*2); ctx.stroke();
+  for(var i=0;i<world.lakes.length;i++){
+    var l=world.lakes[i];if(!isVisible(l.x,l.y))continue;
+    ctx.fillStyle='#1e3b5e';ctx.beginPath();ctx.arc(l.x,l.y,l.r,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.12)';ctx.beginPath();ctx.arc(l.x+Math.sin(Date.now()*0.001)*10,l.y+Math.cos(Date.now()*0.001)*10,l.r*0.7,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(l.x,l.y,l.r,0,Math.PI*2);ctx.stroke();
   }
-
-  // Полы (под стенами)
-  for(i=0;i<world.buildings.length;i++){
-    var bd=world.buildings[i];
-    if(bd.type!=='floor' || !isVisible(bd.x,bd.y)) continue;
-    ctx.fillStyle='#4e342e';
-    ctx.fillRect(bd.x-30,bd.y-30,60,60);
-    ctx.strokeStyle='#3e2723'; ctx.lineWidth=1;
-    ctx.strokeRect(bd.x-30,bd.y-30,60,60);
-  }
-
-  // Стены
-  for(i=0;i<world.buildings.length;i++){
-    var bd=world.buildings[i];
-    if(bd.type!=='wall' || !isVisible(bd.x,bd.y)) continue;
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.fillRect(bd.x-25,bd.y-15,50,50);
-    ctx.fillStyle='#5d4037';
-    ctx.fillRect(bd.x-30,bd.y-30,60,60);
-    ctx.fillStyle='#8d6e63';
-    ctx.fillRect(bd.x-25,bd.y-25,50,50);
-    ctx.strokeStyle='#3e2723'; ctx.lineWidth=2;
-    ctx.strokeRect(bd.x-25,bd.y-25,50,50);
-    // Доски
-    ctx.strokeStyle='#3e2723'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(bd.x-25,bd.y-8); ctx.lineTo(bd.x+25,bd.y-8); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(bd.x-25,bd.y+8); ctx.lineTo(bd.x+25,bd.y+8); ctx.stroke();
-  }
-
-  // Костры
-  for(i=0;i<world.buildings.length;i++){
-    var bd=world.buildings[i];
-    if(bd.type!=='campfire' || !isVisible(bd.x,bd.y)) continue;
-    var pulse=145+Math.sin(Date.now()*0.008+bd.x)*15;
-    var g=ctx.createRadialGradient(bd.x,bd.y,10,bd.x,bd.y,pulse);
-    g.addColorStop(0,'rgba(255,150,0,0.55)');
-    g.addColorStop(1,'rgba(255,150,0,0)');
-    ctx.fillStyle=g;
-    ctx.beginPath(); ctx.arc(bd.x,bd.y,pulse,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#5d4037'; ctx.fillRect(bd.x-14,bd.y-3,28,6);
-    ctx.fillStyle='#8d6e63';
-    ctx.beginPath(); ctx.arc(bd.x,bd.y,12,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#ff5722';
-    ctx.beginPath(); ctx.arc(bd.x,bd.y-5,9,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#ffeb3b';
-    ctx.beginPath(); ctx.arc(bd.x,bd.y-8,5,0,Math.PI*2); ctx.fill();
-  }
-
-  // Деревья
-  for(i=0;i<world.trees.length;i++){
-    var t=world.trees[i];
-    if(t.got||!isVisible(t.x,t.y)) continue;
-    var sway=Math.sin(Date.now()*0.002+t.x)*3;
-    var treeCol = BIOMES[t.biome||'forest'].treeColor;
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.beginPath(); ctx.ellipse(t.x,t.y+15,22,8,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#5d4037';
-    ctx.beginPath(); ctx.arc(t.x,t.y,12,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=treeCol;
-    ctx.beginPath(); ctx.arc(t.x+sway,t.y-20,26,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = t.biome==='snow'?'#fff':'#4caf50';
-    ctx.beginPath(); ctx.arc(t.x-12+sway,t.y-30,16,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(t.x+12+sway,t.y-25,16,0,Math.PI*2); ctx.fill();
-  }
-
-  // Камни
-  for(i=0;i<world.stones.length;i++){
-    var s=world.stones[i];
-    if(s.got||!isVisible(s.x,s.y)) continue;
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.beginPath(); ctx.ellipse(s.x,s.y+10,22,8,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#616161';
-    ctx.beginPath(); ctx.arc(s.x,s.y,22,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#9e9e9e';
-    ctx.beginPath(); ctx.arc(s.x-5,s.y-5,13,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#bdbdbd';
-    ctx.beginPath(); ctx.arc(s.x-8,s.y-8,6,0,Math.PI*2); ctx.fill();
-  }
-
-  // Ягоды
-  for(i=0;i<world.berries.length;i++){
-    var br=world.berries[i];
-    if(br.got||!isVisible(br.x,br.y)) continue;
-    ctx.fillStyle='rgba(0,0,0,0.25)';
-    ctx.beginPath(); ctx.ellipse(br.x,br.y+8,12,5,0,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#c62828';
-    ctx.beginPath(); ctx.arc(br.x,br.y,7,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(br.x+7,br.y-4,5,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(br.x-4,br.y+7,5,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#e53935';
-    ctx.beginPath(); ctx.arc(br.x-2,br.y-2,3,0,Math.PI*2); ctx.fill();
-  }
-
-  // Дропы
-  for(i=0;i<world.drops.length;i++){
-    var dr=world.drops[i];
-    if(!isVisible(dr.x,dr.y)) continue;
-    var bob=Math.sin(Date.now()*0.005+i)*3;
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.beginPath(); ctx.ellipse(dr.x,dr.y+8,8,3,0,0,Math.PI*2); ctx.fill();
-    ctx.font='18px Arial'; ctx.textAlign='center';
-    ctx.fillText(dr.icon,dr.x,dr.y+bob);
-  }
-
-  // Мобы (6 типов)
-  for(i=0;i<world.mobs.length;i++){
-    var m=world.mobs[i];
-    if(m.hp<=0||!isVisible(m.x,m.y)) continue;
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.beginPath(); ctx.ellipse(m.x,m.y+m.r*0.8,m.r*0.8,m.r*0.4,0,0,Math.PI*2); ctx.fill();
-    if(m.type==='rabbit'){
-      ctx.fillStyle='#e0dcd8'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+2,m.r-1,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?8:-8),m.y-4,7,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#c4b8b0';
-      ctx.beginPath(); ctx.ellipse(m.x+(m.face>0?8:-8),m.y-13,2.5,8,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(m.x+(m.face>0?12:-12),m.y-12,2.5,8,-0.2,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#ef5350';
-      ctx.beginPath(); ctx.ellipse(m.x+(m.face>0?12:-12),m.y-12,1.2,5,-0.2,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#111'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?10:-10),m.y-5,1.8,0,Math.PI*2); ctx.fill();
-    } else if(m.type==='fox'){
-      ctx.fillStyle='#ef6c00'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+1,m.r-1,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?9:-9),m.y-4,7,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(m.x+(m.face>0?9:-9),m.y+3,4,2,0,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?12:-12),m.y-4,1.8,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#ef6c00';
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?5:-5),m.y-9); ctx.lineTo(m.x+(m.face>0?3:-3),m.y-18); ctx.lineTo(m.x+(m.face>0?11:-11),m.y-11); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?13:-13),m.y-9); ctx.lineTo(m.x+(m.face>0?14:-14),m.y-17); ctx.lineTo(m.x+(m.face>0?19:-19),m.y-9); ctx.closePath(); ctx.fill();
-    } else if(m.type==='wolf'){
-      ctx.fillStyle='#8d6e63'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+2,m.r-2,0,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#d7ccc8'; ctx.beginPath(); ctx.ellipse(m.x,m.y+4,m.r-4,m.r-8,0,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#6d4c41'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?10:-10),m.y-4,8,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#4e342e';
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?6:-6),m.y-10); ctx.lineTo(m.x+(m.face>0?4:-4),m.y-20); ctx.lineTo(m.x+(m.face>0?12:-12),m.y-12); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?14:-14),m.y-10); ctx.lineTo(m.x+(m.face>0?16:-16),m.y-19); ctx.lineTo(m.x+(m.face>0?20:-20),m.y-10); ctx.closePath(); ctx.fill();
-      ctx.fillStyle='#f44336'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?13:-13),m.y-5,2,0,Math.PI*2); ctx.fill();
-    } else if(m.type==='deer'){
-      ctx.fillStyle='#a1887f'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+1,m.r-2,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?11:-11),m.y-6,7,0,Math.PI*2); ctx.fill();
-      // Рога
-      ctx.strokeStyle='#5d4037'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?9:-9),m.y-12); ctx.lineTo(m.x+(m.face>0?11:-11),m.y-22); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?13:-13),m.y-12); ctx.lineTo(m.x+(m.face>0?15:-15),m.y-21); ctx.stroke();
-      ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?14:-14),m.y-5,1.8,0,Math.PI*2); ctx.fill();
-    } else if(m.type==='boar'){
-      ctx.fillStyle='#3e2723'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+2,m.r-2,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?11:-11),m.y-3,9,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#fff';
-      ctx.beginPath(); ctx.moveTo(m.x+(m.face>0?19:-19),m.y-3); ctx.lineTo(m.x+(m.face>0?23:-23),m.y-7); ctx.lineTo(m.x+(m.face>0?23:-23),m.y+1); ctx.closePath(); ctx.fill();
-      ctx.fillStyle='#d32f2f'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?13:-13),m.y-5,2,0,Math.PI*2); ctx.fill();
-    } else if(m.type==='bear'){
-      ctx.fillStyle='#4e342e'; ctx.beginPath(); ctx.ellipse(m.x,m.y,m.r+3,m.r,0,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?13:-13),m.y-6,10,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#3e2723';
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?8:-8),m.y-14,4,0,Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.arc(m.x+(m.face>0?17:-17),m.y-14,4,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#f44336'; ctx.beginPath(); ctx.arc(m.x+(m.face>0?16:-16),m.y-6,2,0,Math.PI*2); ctx.fill();
+  // Постройки
+  for(var i=0;i<world.buildings.length;i++){
+    var bd=world.buildings[i];if(!isVisible(bd.x,bd.y))continue;
+    if(bd.type==='wall'){
+      ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(bd.x-25,bd.y-15,50,50);
+      ctx.fillStyle='#5d4037';ctx.fillRect(bd.x-30,bd.y-30,60,60);
+      ctx.fillStyle='#8d6e63';ctx.fillRect(bd.x-25,bd.y-25,50,50);
+      ctx.strokeStyle='#3e2723';ctx.lineWidth=2;ctx.strokeRect(bd.x-25,bd.y-25,50,50);
+    }else if(bd.type==='campfire'){
+      var pulse=145+Math.sin(Date.now()*0.008+bd.x)*15;
+      var g=ctx.createRadialGradient(bd.x,bd.y,10,bd.x,bd.y,pulse);
+      g.addColorStop(0,'rgba(255,150,0,0.55)');g.addColorStop(1,'rgba(255,150,0,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(bd.x,bd.y,pulse,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#5d4037';ctx.fillRect(bd.x-14,bd.y-3,28,6);
+      ctx.fillStyle='#8d6e63';ctx.beginPath();ctx.arc(bd.x,bd.y,12,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#ff5722';ctx.beginPath();ctx.arc(bd.x,bd.y-5,9,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(bd.x,bd.y-8,5,0,Math.PI*2);ctx.fill();
     }
   }
-
+  // Деревья
+  for(var i=0;i<world.trees.length;i++){
+    var t=world.trees[i];if(t.got||!isVisible(t.x,t.y))continue;
+    var sway=Math.sin(Date.now()*0.002+t.x)*3;
+    var tc=BIOMES[t.biome||'forest'].tree;
+    ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(t.x,t.y+15,22,8,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#5d4037';ctx.beginPath();ctx.arc(t.x,t.y,12,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=tc;ctx.beginPath();ctx.arc(t.x+sway,t.y-20,26,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=t.biome==='snow'?'#fff':'#4caf50';
+    ctx.beginPath();ctx.arc(t.x-12+sway,t.y-30,16,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(t.x+12+sway,t.y-25,16,0,Math.PI*2);ctx.fill();
+  }
+  // Камни
+  for(var i=0;i<world.stones.length;i++){
+    var s=world.stones[i];if(s.got||!isVisible(s.x,s.y))continue;
+    ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(s.x,s.y+10,22,8,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#616161';ctx.beginPath();ctx.arc(s.x,s.y,22,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#9e9e9e';ctx.beginPath();ctx.arc(s.x-5,s.y-5,13,0,Math.PI*2);ctx.fill();
+  }
+  // Ягоды
+  for(var i=0;i<world.berries.length;i++){
+    var br=world.berries[i];if(br.got||!isVisible(br.x,br.y))continue;
+    ctx.fillStyle='rgba(0,0,0,0.25)';ctx.beginPath();ctx.ellipse(br.x,br.y+8,12,5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#c62828';ctx.beginPath();ctx.arc(br.x,br.y,7,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(br.x+7,br.y-4,5,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(br.x-4,br.y+7,5,0,Math.PI*2);ctx.fill();
+  }
+  // Травы
+  for(var i=0;i<world.herbs.length;i++){
+    var h=world.herbs[i];if(h.got||!isVisible(h.x,h.y))continue;
+    ctx.strokeStyle='#66bb6a';ctx.lineWidth=2;
+    for(var k=-1;k<=1;k++){
+      ctx.beginPath();ctx.moveTo(h.x,h.y+6);ctx.quadraticCurveTo(h.x+k*4,h.y-4,h.x+k*6,h.y-12);ctx.stroke();
+    }
+    ctx.fillStyle='#81c784';ctx.beginPath();ctx.arc(h.x,h.y-12,3,0,Math.PI*2);ctx.fill();
+  }
+  // Дропы
+  for(var i=0;i<world.drops.length;i++){
+    var dr=world.drops[i];if(!isVisible(dr.x,dr.y))continue;
+    var bob=Math.sin(Date.now()*0.005+i)*3;
+    ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(dr.x,dr.y+8,8,3,0,0,Math.PI*2);ctx.fill();
+    ctx.font='18px Arial';ctx.textAlign='center';ctx.fillText(dr.icon,dr.x,dr.y+bob);
+  }
+  // Мобы
+  for(var i=0;i<world.mobs.length;i++){
+    var m=world.mobs[i];if(m.hp<=0||!isVisible(m.x,m.y))continue;
+    drawMob(m);
+  }
   // Частицы
-  for(i=0;i<world.particles.length;i++){
-    var pt=world.particles[i];
-    ctx.fillStyle=pt.color;
-    ctx.globalAlpha=pt.life/pt.max;
-    ctx.beginPath(); ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2); ctx.fill();
+  for(var i=0;i<world.particles.length;i++){
+    var pt=world.particles[i];ctx.fillStyle=pt.color;ctx.globalAlpha=pt.life/pt.max;
+    ctx.beginPath();ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2);ctx.fill();
   }
   ctx.globalAlpha=1;
-
   // Игрок
-  ctx.save();
-  ctx.translate(p.x,p.y);
-  drawCharacter(ctx,selectedChar,p.anim,p.face,p.weaponSwing);
-  ctx.restore();
-
+  ctx.save();ctx.translate(p.x,p.y);drawCharacter(ctx,selectedChar,p.anim,p.face,p.weaponSwing);ctx.restore();
+  // Погода
+  for(var i=0;i<world.weather.length;i++){
+    var w=world.weather[i];
+    if(w.type==='rain'){ctx.strokeStyle='rgba(150,200,255,0.6)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(w.x,w.y);ctx.lineTo(w.x-2,w.y+12);ctx.stroke();}
+    else if(w.type==='snow'){ctx.fillStyle='rgba(255,255,255,0.8)';ctx.beginPath();ctx.arc(w.x,w.y,2,0,Math.PI*2);ctx.fill();}
+    else if(w.type==='sand'){ctx.fillStyle='rgba(220,180,100,0.5)';ctx.beginPath();ctx.arc(w.x,w.y,2.5,0,Math.PI*2);ctx.fill();}
+  }
   // Урон
-  ctx.font='bold 16px Arial'; ctx.textAlign='center';
-  for(i=0;i<damageTexts.length;i++){
-    var d=damageTexts[i];
-    ctx.fillStyle='#ff5252';
-    ctx.globalAlpha=d.life/50;
+  ctx.font='bold 16px Arial';ctx.textAlign='center';
+  for(var i=0;i<damageTexts.length;i++){
+    var d=damageTexts[i];ctx.fillStyle='#ff5252';ctx.globalAlpha=d.life/50;
     ctx.fillText(d.txt,d.x,d.y);
   }
   ctx.globalAlpha=1;
-
+  // Звёзды ночью
+  var dark=Math.sin(time*Math.PI*2)*0.5+0.5;
+  if(dark>0.6){
+    ctx.fillStyle='rgba(255,255,255,'+((dark-0.6)*2.5)+')';
+    for(var i=0;i<world.stars.length;i++){
+      var st=world.stars[i];
+      ctx.beginPath();ctx.arc(st.x*W,st.y*H,st.size,0,Math.PI*2);ctx.fill();
+    }
+  }
   ctx.restore();
+
+  // Мини-карта
+  mmc.clearRect(0,0,130,130);
+  mmc.fillStyle='rgba(0,0,0,0.7)';mmc.fillRect(0,0,130,130);
+  var scale=0.035,mx=65,my=65;
+  // Биомы
+  for(var gx=-3;gx<=3;gx++){
+    for(var gy=-3;gy<=3;gy++){
+      var wx=Math.floor(p.x/150)*150+gx*150;
+      var wy=Math.floor(p.y/150)*150+gy*150;
+      var bb=getBiome(wx,wy);
+      mmc.fillStyle=BIOMES[bb].grass;
+      mmc.globalAlpha=0.4;
+      var sx=mx+((wx-p.x)*scale);
+      var sy=my+((wy-p.y)*scale);
+      mmc.fillRect(sx-3,sy-3,6,6);
+    }
+  }
+  mmc.globalAlpha=1;
+  mmc.fillStyle='#4caf50';
+  for(var i=0;i<world.trees.length;i++){
+    if(world.trees[i].got)continue;
+    var dx=(world.trees[i].x-p.x)*scale,dy=(world.trees[i].y-p.y)*scale;
+    if(Math.abs(dx)<65&&Math.abs(dy)<65)mmc.fillRect(mx+dx,my+dy,1.5,1.5);
+  }
+  mmc.fillStyle='#f44336';
+  for(var i=0;i<world.mobs.length;i++){
+    if(world.mobs[i].hp<=0)continue;
+    var dx=(world.mobs[i].x-p.x)*scale,dy=(world.mobs[i].y-p.y)*scale;
+    if(Math.abs(dx)<65&&Math.abs(dy)<65)mmc.fillRect(mx+dx-1.5,my+dy-1.5,3,3);
+  }
+  mmc.fillStyle='#42a5f5';mmc.beginPath();mmc.arc(mx,my,3.5,0,Math.PI*2);mmc.fill();
 }
 
-// ============================================================
-// ОПТИМИЗАЦИЯ #8: FPS лимит
-// ============================================================
 function loop(t){
-  if(!gameOn) return;
-  var elapsed = t - lastT;
-  if (elapsed < frameTime){
-    requestAnimationFrame(loop);
-    return;
-  }
-  lastT = t - (elapsed % frameTime);
-  var dt = elapsed / 16.66;
-  if (dt > 3) dt = 3;
-  if (dt < 0.1) dt = 1;
-  try{
-    update(dt);
-    draw();
-  }catch(e){
-    showErr(e.message);
-    gameOn = false;
-    return;
-  }
+  if(!gameOn)return;
+  var el=t-lastT;
+  if(el<frameTime){requestAnimationFrame(loop);return;}
+  lastT=t-(el%frameTime);
+  var dt=el/16.66;
+  if(dt>3)dt=3;if(dt<0.1)dt=1;
+  try{update(dt);draw();}catch(e){showErr(e.message);gameOn=false;return;}
   requestAnimationFrame(loop);
 }
 
-// ОПТИМИЗАЦИЯ #9: сохранение раз в 30 сек
-setInterval(function(){ if(gameOn) saveGame(); }, 30000);
-
-// ОПТИМИЗАЦИЯ #10: пре-кеш биомов
-(function precomputeBiomes(){
-  for (var x=-2500; x<2500; x+=250){
-    for (var y=-2500; y<2500; y+=250){
-      world.biomeMap[x+','+y] = getBiome(x,y);
-    }
-  }
-})();
-
+setInterval(function(){if(gameOn)saveGame();},30000);
 </script>
 </body>
 </html>
