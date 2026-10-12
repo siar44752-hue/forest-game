@@ -7,162 +7,184 @@
 <title>Study Navigator · ОГЭ-2027</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{width:100%;min-height:100vh;background:#0f0520;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;color:#fff;overflow-x:hidden;overscroll-behavior:none}
-body{padding-bottom:env(safe-area-inset-bottom)}
+html,body{width:100%;min-height:100%;background:#0f0520;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;color:#fff;overscroll-behavior-y:none}
+body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:100px}
 
-/* ============ BACKGROUND GRADIENT ============ */
+/* ============ АНИМИРОВАННЫЙ ФОН ============ */
 body::before{content:'';position:fixed;inset:0;background:
-  radial-gradient(circle at 20% 0%,#3d1e6d 0%,transparent 45%),
-  radial-gradient(circle at 80% 100%,#1b5e20 0%,transparent 45%),
-  radial-gradient(circle at 50% 50%,#1a0f2e 0%,#0f0520 100%);
-  z-index:-1}
+  radial-gradient(circle at 15% 0%,#4a1e7d 0%,transparent 45%),
+  radial-gradient(circle at 85% 100%,#1b5e20 0%,transparent 50%),
+  radial-gradient(circle at 50% 50%,#1a0f2e 0%,#0a0318 100%);
+  z-index:-2}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(198,255,0,.06) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(76,175,80,.06) 0%, transparent 30%);
+  animation:bgFloat 20s ease-in-out infinite alternate}
+@keyframes bgFloat{0%{transform:translate(0,0)}100%{transform:translate(-30px,-20px)}}
 
 /* ============ TOP HEADER ============ */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(26,15,46,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(198,255,0,.15);padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
-.topbar-inner{display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#c6ff00,#4caf50);display:flex;justify-content:center;align-items:center;font-size:20px;font-weight:900;color:#000;flex-shrink:0;box-shadow:0 0 15px rgba(198,255,0,.4)}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(20,10,40,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(198,255,0,.18);padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top))}
+.topbar-inner{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto}
+
+/* АВАТАР - SVG ИКОНКА ГРАДУИРОВАННЫЙ */
+.avatar{width:44px;height:44px;border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative;background:linear-gradient(135deg,#7e3ff2,#c6ff00);box-shadow:0 6px 20px rgba(126,63,242,.5),0 0 0 2px rgba(198,255,0,.3);overflow:hidden}
+.avatar::before{content:'';position:absolute;inset:2px;border-radius:12px;background:linear-gradient(135deg,#2a1a55,#1a0f2e);z-index:1}
+.avatar svg{position:relative;z-index:2;width:26px;height:26px}
+.avatar.big{width:88px;height:88px;border-radius:24px;box-shadow:0 10px 40px rgba(126,63,242,.6),0 0 0 3px rgba(198,255,0,.4)}
+.avatar.big::before{inset:3px;border-radius:21px}
+.avatar.big svg{width:52px;height:52px}
+
 .user-info{flex:1;min-width:0}
-.user-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.user-sub{font-size:11px;color:#a8a8c8;margin-top:1px}
+.user-name{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#fff,#c6ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.user-sub{font-size:11px;color:#a8a8c8;margin-top:2px;font-weight:600}
 .top-stats{display:flex;gap:8px}
-.stat-pill{background:rgba(198,255,0,.12);border:1px solid rgba(198,255,0,.35);border-radius:16px;padding:5px 10px;font-size:12px;font-weight:800;color:#c6ff00;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.stat-pill{background:linear-gradient(135deg,rgba(198,255,0,.18),rgba(76,175,80,.12));border:1.5px solid rgba(198,255,0,.45);border-radius:18px;padding:6px 12px;font-size:13px;font-weight:900;color:#c6ff00;display:flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 0 15px rgba(198,255,0,.15)}
 
 /* ============ PAGES ============ */
-.page{display:none;padding:16px 14px;max-width:900px;margin:0 auto;animation:pageIn .3s ease}
+.page{display:none;padding:18px 14px;max-width:900px;margin:0 auto;animation:pageIn .35s cubic-bezier(.4,0,.2,1)}
 .page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-.page-title{font-size:24px;font-weight:900;margin-bottom:16px;letter-spacing:1px;background:linear-gradient(90deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.section-title{font-size:14px;font-weight:800;color:#a8a8c8;text-transform:uppercase;letter-spacing:2px;margin:20px 0 10px}
+.page-title{font-size:26px;font-weight:900;margin-bottom:18px;letter-spacing:.5px;background:linear-gradient(135deg,#c6ff00,#4caf50,#7e3ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:10px}
+.section-title{font-size:12px;font-weight:900;color:#a8a8c8;text-transform:uppercase;letter-spacing:2px;margin:22px 0 12px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:14px;background:linear-gradient(180deg,#c6ff00,#4caf50);border-radius:2px}
 
 /* ============ CARDS ============ */
-.card{background:rgba(30,20,55,.7);border:1px solid rgba(198,255,0,.15);border-radius:16px;padding:16px;margin-bottom:12px;backdrop-filter:blur(10px);transition:.2s}
-.card:active{transform:scale(.98)}
-.card-glow{background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.1));border-color:rgba(198,255,0,.4);box-shadow:0 8px 30px rgba(198,255,0,.1)}
+.card{background:linear-gradient(135deg,rgba(42,26,85,.75),rgba(26,15,46,.75));border:1.5px solid rgba(198,255,0,.18);border-radius:18px;padding:18px;margin-bottom:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(198,255,0,.4),transparent)}
+.card-glow{background:linear-gradient(135deg,rgba(198,255,0,.12),rgba(126,63,242,.1));border-color:rgba(198,255,0,.4);box-shadow:0 10px 40px rgba(198,255,0,.12),inset 0 1px 0 rgba(255,255,255,.05)}
 
-.hero-card{background:linear-gradient(135deg,#2e1a5c 0%,#1b3b24 100%);border:2px solid rgba(198,255,0,.3);border-radius:20px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden}
-.hero-card::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,rgba(198,255,0,.3),transparent 70%);border-radius:50%}
-.hero-title{font-size:20px;font-weight:900;margin-bottom:6px;position:relative}
-.hero-sub{font-size:13px;color:#d0d0e8;margin-bottom:14px;position:relative}
+/* ГЛАВНАЯ HERO КАРТОЧКА */
+.hero-card{background:linear-gradient(135deg,#3d1e6d 0%,#1b3b24 100%);border:2px solid rgba(198,255,0,.35);border-radius:24px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 15px 50px rgba(126,63,242,.25)}
+.hero-card::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle,rgba(198,255,0,.35),transparent 70%);border-radius:50%;animation:pulseGlow 3s ease-in-out infinite alternate}
+.hero-card::after{content:'';position:absolute;bottom:-100px;left:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(126,63,242,.35),transparent 70%);border-radius:50%}
+@keyframes pulseGlow{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.15);opacity:1}}
+.hero-title{font-size:22px;font-weight:900;margin-bottom:8px;position:relative;letter-spacing:.3px}
+.hero-sub{font-size:13px;color:#d0d0e8;margin-bottom:18px;position:relative;line-height:1.5}
 .hero-stats{display:flex;gap:10px;position:relative}
-.hero-stat{flex:1;background:rgba(0,0,0,.3);border-radius:12px;padding:10px;text-align:center}
-.hero-stat .num{font-size:20px;font-weight:900;color:#c6ff00;display:block}
-.hero-stat .lbl{font-size:10px;color:#a8a8c8;margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+.hero-stat{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(198,255,0,.15);border-radius:14px;padding:12px 6px;text-align:center;backdrop-filter:blur(5px)}
+.hero-stat .num{font-size:22px;font-weight:900;color:#c6ff00;display:block;text-shadow:0 0 20px rgba(198,255,0,.5)}
+.hero-stat .lbl{font-size:9px;color:#a8a8c8;margin-top:3px;text-transform:uppercase;letter-spacing:1px;font-weight:800}
 
 /* ============ BUTTONS ============ */
-.btn{background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#000;font-size:14px;font-weight:900;padding:14px 22px;border:none;border-radius:14px;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;width:100%;transition:.15s;box-shadow:0 6px 20px rgba(198,255,0,.35);display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(.97);box-shadow:0 3px 10px rgba(198,255,0,.5)}
-.btn-outline{background:rgba(198,255,0,.1);color:#c6ff00;border:2px solid rgba(198,255,0,.5);box-shadow:none}
-.btn-danger{background:linear-gradient(135deg,#ef5350,#c62828);color:#fff;box-shadow:0 6px 20px rgba(239,83,80,.35)}
-.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.15);box-shadow:none}
-.btn-sm{padding:10px 16px;font-size:12px}
+.btn{background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(198,255,0,.35),inset 0 1px 0 rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transition:.5s}
+.btn:active{transform:scale(.97);box-shadow:0 4px 12px rgba(198,255,0,.5)}
+.btn:active::before{left:100%}
+.btn-outline{background:rgba(198,255,0,.08);color:#c6ff00;border:2px solid rgba(198,255,0,.5);box-shadow:0 0 20px rgba(198,255,0,.1)}
+.btn-danger{background:linear-gradient(135deg,#ef5350,#c62828);color:#fff;box-shadow:0 8px 24px rgba(239,83,80,.35)}
+.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.15);box-shadow:none}
+.btn-sm{padding:11px 16px;font-size:12px;border-radius:12px}
 .btn-row{display:flex;gap:8px;margin-top:10px}
 .btn-row .btn{flex:1}
 
-/* ============ SUBJECTS GRID ============ */
-.subjects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.subject-card{background:linear-gradient(135deg,rgba(46,26,92,.9),rgba(27,59,36,.9));border:1px solid rgba(198,255,0,.25);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
-.subject-card:active{transform:scale(.96)}
-.subject-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:radial-gradient(circle,rgba(198,255,0,.2),transparent 70%);border-radius:50%}
-.subject-emoji{font-size:26px;margin-bottom:6px;display:block;position:relative}
-.subject-name{font-size:12px;font-weight:800;line-height:1.3;position:relative}
-.subject-time{font-size:10px;color:#c6ff00;margin-top:4px;font-weight:700;position:relative}
+/* ============ SUBJECTS ============ */
+.subjects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.subject-card{background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(30,60,40,.9));border:1.5px solid rgba(198,255,0,.28);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.subject-card::before{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;background:radial-gradient(circle,rgba(198,255,0,.25),transparent 70%);border-radius:50%;transition:.3s}
+.subject-card:active{transform:scale(.96);border-color:#c6ff00;box-shadow:0 8px 30px rgba(198,255,0,.25)}
+.subject-card:active::before{transform:scale(1.3)}
+.subject-emoji{font-size:30px;margin-bottom:8px;display:block;position:relative;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.subject-name{font-size:13px;font-weight:900;line-height:1.3;position:relative;margin-bottom:4px}
+.subject-time{font-size:10px;color:#c6ff00;font-weight:800;position:relative;letter-spacing:.5px}
 
 /* ============ ONBOARDING ============ */
 .onboard-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-.onboard-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s}
-.onboard-item:active{transform:scale(.98)}
-.onboard-item.selected{border-color:#c6ff00;background:rgba(198,255,0,.1)}
-.onboard-item.required{opacity:.6;cursor:default}
-.checkbox{width:22px;height:22px;border-radius:6px;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;font-size:14px;flex-shrink:0}
-.onboard-item.selected .checkbox{background:#c6ff00;border-color:#c6ff00;color:#000}
-.onboard-name{flex:1;font-size:13px;font-weight:700}
-.onboard-info{font-size:10px;color:#a8a8c8}
+.onboard-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;cursor:pointer;transition:.15s}
+.onboard-item.selected{border-color:#c6ff00;background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.08));box-shadow:0 0 20px rgba(198,255,0,.15)}
+.onboard-item.required{opacity:.55;cursor:default}
+.checkbox{width:24px;height:24px;border-radius:8px;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;font-size:15px;flex-shrink:0;transition:.15s}
+.onboard-item.selected .checkbox{background:#c6ff00;border-color:#c6ff00;color:#000;box-shadow:0 0 12px rgba(198,255,0,.5)}
+.onboard-name{flex:1;font-size:14px;font-weight:800}
+.onboard-info{font-size:11px;color:#a8a8c8;font-weight:700}
 
 /* ============ TIMER ============ */
-.timer-display{font-size:56px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums;color:#c6ff00;text-shadow:0 0 30px rgba(198,255,0,.5);margin:20px 0;letter-spacing:2px}
-.timer-bar{height:8px;background:rgba(0,0,0,.4);border-radius:4px;overflow:hidden;margin-bottom:20px}
-.timer-bar-fill{height:100%;background:linear-gradient(90deg,#4caf50,#c6ff00);transition:width 1s linear;border-radius:4px}
+.timer-display{font-size:64px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(198,255,0,.5));margin:20px 0;letter-spacing:2px}
+.timer-bar{height:10px;background:rgba(0,0,0,.5);border-radius:5px;overflow:hidden;margin-bottom:20px;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.timer-bar-fill{height:100%;background:linear-gradient(90deg,#4caf50,#c6ff00);transition:width 1s linear;border-radius:5px;box-shadow:0 0 15px rgba(198,255,0,.5)}
 
 /* ============ AI CHAT ============ */
-.chat-container{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:400px}
-.chat-messages{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
-.msg{max-width:85%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.5;animation:msgIn .25s ease;word-wrap:break-word}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg-user{align-self:flex-end;background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#000;border-bottom-right-radius:4px}
-.msg-ai{align-self:flex-start;background:rgba(46,26,92,.9);border:1px solid rgba(198,255,0,.25);border-bottom-left-radius:4px;color:#fff}
+.chat-container{display:flex;flex-direction:column;height:calc(100vh - 260px);min-height:400px}
+.chat-messages{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.msg{max-width:88%;padding:14px 16px;border-radius:18px;font-size:14px;line-height:1.55;animation:msgIn .3s cubic-bezier(.4,0,.2,1);word-wrap:break-word}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;border-bottom-right-radius:4px;font-weight:600;box-shadow:0 6px 20px rgba(198,255,0,.3)}
+.msg-ai{align-self:flex-start;background:linear-gradient(135deg,rgba(60,30,110,.95),rgba(42,26,85,.95));border:1.5px solid rgba(198,255,0,.3);border-bottom-left-radius:4px;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .msg-ai b{color:#c6ff00}
-.msg-ai code{background:rgba(0,0,0,.4);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px}
-.chat-input-area{display:flex;gap:8px;padding:10px 0;border-top:1px solid rgba(198,255,0,.15)}
-.chat-input{flex:1;background:rgba(0,0,0,.4);border:2px solid rgba(198,255,0,.3);border-radius:14px;padding:12px 14px;font-size:14px;color:#fff;outline:none;font-family:inherit;resize:none}
-.chat-input:focus{border-color:#c6ff00}
-.chat-send{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#c6ff00,#9ccc00);border:none;cursor:pointer;font-size:22px;display:flex;justify-content:center;align-items:center;flex-shrink:0;transition:.15s}
+.msg-ai code{background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;font-family:monospace;font-size:13px;color:#c6ff00}
+.chat-input-area{display:flex;gap:8px;padding:10px 0;border-top:1.5px solid rgba(198,255,0,.18)}
+.chat-input{flex:1;background:rgba(0,0,0,.45);border:2px solid rgba(198,255,0,.25);border-radius:16px;padding:14px 16px;font-size:15px;color:#fff;outline:none;font-family:inherit;resize:none;transition:.15s}
+.chat-input:focus{border-color:#c6ff00;box-shadow:0 0 20px rgba(198,255,0,.2)}
+.chat-input::placeholder{color:#666}
+.chat-send{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#c6ff00,#9ccc00);border:none;cursor:pointer;font-size:22px;display:flex;justify-content:center;align-items:center;flex-shrink:0;transition:.15s;box-shadow:0 6px 20px rgba(198,255,0,.4)}
 .chat-send:active{transform:scale(.9)}
-.quick-questions{display:flex;gap:6px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
+.quick-questions{display:flex;gap:6px;overflow-x:auto;padding:8px 0;scrollbar-width:none}
 .quick-questions::-webkit-scrollbar{display:none}
-.quick-q{background:rgba(198,255,0,.1);border:1px solid rgba(198,255,0,.3);color:#c6ff00;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;flex-shrink:0}
-.quick-q:active{background:rgba(198,255,0,.25)}
+.quick-q{background:linear-gradient(135deg,rgba(198,255,0,.12),rgba(126,63,242,.08));border:1.5px solid rgba(198,255,0,.3);color:#c6ff00;padding:9px 15px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:.15s}
+.quick-q:active{background:rgba(198,255,0,.3);transform:scale(.95)}
 
 /* ============ ACHIEVEMENTS ============ */
-.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
-.ach-card{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 8px;text-align:center;transition:.2s}
-.ach-card.unlocked{background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.1));border-color:rgba(198,255,0,.4);box-shadow:0 0 15px rgba(198,255,0,.15)}
-.ach-card.locked{opacity:.4}
-.ach-emoji{font-size:28px;margin-bottom:4px;display:block}
-.ach-title{font-size:10px;font-weight:800;line-height:1.2}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
+.ach-card{background:rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 8px;text-align:center;transition:.2s}
+.ach-card.unlocked{background:linear-gradient(135deg,rgba(198,255,0,.18),rgba(76,175,80,.1));border-color:rgba(198,255,0,.5);box-shadow:0 0 20px rgba(198,255,0,.18)}
+.ach-card.locked{opacity:.35}
+.ach-emoji{font-size:30px;margin-bottom:5px;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.ach-title{font-size:10px;font-weight:900;line-height:1.25;letter-spacing:.3px}
 
 /* ============ CALENDAR ============ */
-.calendar-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:10px 0}
-.cal-day{aspect-ratio:1;border-radius:6px;background:rgba(255,255,255,.08);display:flex;justify-content:center;align-items:center;font-size:10px;font-weight:700;color:#888}
-.cal-day.active{background:linear-gradient(135deg,#c6ff00,#4caf50);color:#000;box-shadow:0 0 10px rgba(198,255,0,.4)}
+.calendar-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:10px 0}
+.cal-day{aspect-ratio:1;border-radius:7px;background:rgba(255,255,255,.06);display:flex;justify-content:center;align-items:center;font-size:10px;font-weight:800;color:#666;transition:.15s}
+.cal-day.active{background:linear-gradient(135deg,#c6ff00,#4caf50);color:#000;box-shadow:0 0 12px rgba(198,255,0,.5);font-weight:900}
 .cal-day.today{border:2px solid #c6ff00}
 
 /* ============ NOTES ============ */
-.note-item{background:rgba(0,0,0,.3);border-left:3px solid #c6ff00;border-radius:10px;padding:12px 14px;margin-bottom:8px}
-.note-subject{font-size:10px;color:#c6ff00;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.note-text{font-size:13px;line-height:1.4}
-.note-date{font-size:10px;color:#888;margin-top:6px}
+.note-item{background:linear-gradient(135deg,rgba(60,30,110,.7),rgba(42,26,85,.7));border-left:4px solid #c6ff00;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:.15s}
+.note-subject{font-size:10px;color:#c6ff00;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.note-text{font-size:14px;line-height:1.5;color:#e8e8f0}
+.note-date{font-size:10px;color:#888;margin-top:8px;font-weight:700}
 
 /* ============ FORECAST ============ */
-.grade-display{text-align:center;padding:20px 0}
-.grade-num{font-size:80px;font-weight:900;line-height:1;background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.grade-verdict{font-size:14px;color:#d0d0e8;margin-top:8px}
+.grade-display{text-align:center;padding:22px 0}
+.grade-num{font-size:96px;font-weight:900;line-height:1;filter:drop-shadow(0 0 40px currentColor)}
+.grade-verdict{font-size:15px;color:#d0d0e8;margin-top:12px;font-weight:700}
 
 /* ============ GAME XO ============ */
-.xo-board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:20px auto}
-.xo-cell{aspect-ratio:1;background:rgba(30,20,55,.9);border:2px solid rgba(198,255,0,.3);border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:44px;cursor:pointer;transition:.15s}
-.xo-cell:active{transform:scale(.95)}
-.xo-cell.win{background:rgba(198,255,0,.2);border-color:#c6ff00}
+.xo-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:24px auto}
+.xo-cell{aspect-ratio:1;background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(42,26,85,.9));border:2.5px solid rgba(198,255,0,.35);border-radius:16px;display:flex;justify-content:center;align-items:center;font-size:48px;cursor:pointer;transition:.15s;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.xo-cell:active{transform:scale(.94);border-color:#c6ff00}
+.xo-cell.win{background:rgba(198,255,0,.25);border-color:#c6ff00;box-shadow:0 0 30px rgba(198,255,0,.6)}
 
 /* ============ BOTTOM NAV ============ */
-.bottomnav{position:fixed;bottom:0;left:0;right:0;background:rgba(20,10,40,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(198,255,0,.15);display:flex;justify-content:space-around;padding:8px 4px;padding-bottom:calc(8px + env(safe-area-inset-bottom));z-index:50}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;border-radius:12px;transition:.15s;color:#888}
-.nav-item.active{color:#c6ff00;background:rgba(198,255,0,.1)}
-.nav-icon{font-size:22px;line-height:1}
-.nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,5,32,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1.5px solid rgba(198,255,0,.18);display:flex;justify-content:space-around;padding:10px 4px;padding-bottom:calc(10px + env(safe-area-inset-bottom));z-index:50;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;cursor:pointer;border-radius:14px;transition:.2s;color:#888;position:relative}
+.nav-item.active{color:#c6ff00;background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.08));box-shadow:0 0 20px rgba(198,255,0,.15)}
+.nav-item.active::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:30px;height:3px;background:linear-gradient(90deg,#c6ff00,#4caf50);border-radius:0 0 3px 3px}
+.nav-icon{font-size:23px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.nav-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.6px}
 
 /* ============ TOAST ============ */
-#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(198,255,0,.95);color:#000;padding:12px 22px;border-radius:14px;font-weight:800;font-size:13px;z-index:999;transition:.3s;box-shadow:0 10px 40px rgba(0,0,0,.5);max-width:90vw;text-align:center;pointer-events:none}
+#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;padding:14px 24px;border-radius:16px;font-weight:900;font-size:14px;z-index:999;transition:.35s cubic-bezier(.4,0,.2,1);box-shadow:0 15px 50px rgba(0,0,0,.6),0 0 0 2px rgba(198,255,0,.5);max-width:90vw;text-align:center;pointer-events:none}
 #toast.show{transform:translateX(-50%) translateY(0)}
 
 /* ============ MODAL ============ */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:flex-end;z-index:100;backdrop-filter:blur(5px)}
-.modal.show{display:flex;animation:fadeIn .2s}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;justify-content:center;align-items:flex-end;z-index:100;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.modal.show{display:flex;animation:fadeIn .25s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-inner{background:linear-gradient(180deg,#2a1a55 0%,#1a0f2e 100%);border-radius:24px 24px 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom));width:100%;max-width:600px;max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;border-top:2px solid rgba(198,255,0,.4)}
+.modal-inner{background:linear-gradient(180deg,#2a1a55 0%,#1a0f2e 100%);border-radius:28px 28px 0 0;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%;max-width:600px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .35s cubic-bezier(.4,0,.2,1);border-top:2px solid rgba(198,255,0,.5);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-title{font-size:20px;font-weight:900;margin-bottom:16px;text-align:center;color:#c6ff00}
-.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+.modal-title{font-size:22px;font-weight:900;margin-bottom:18px;text-align:center;background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;justify-content:center;align-items:center}
 
-/* ============ LOADING ============ */
-.typing-indicator{display:flex;gap:4px;align-items:center;padding:12px 14px;background:rgba(46,26,92,.9);border:1px solid rgba(198,255,0,.25);border-radius:16px;border-bottom-left-radius:4px;align-self:flex-start}
-.typing-dot{width:8px;height:8px;border-radius:50%;background:#c6ff00;animation:typing 1.4s infinite ease-in-out both}
+/* ============ TYPING ============ */
+.typing-indicator{display:flex;gap:5px;align-items:center;padding:14px 18px;background:linear-gradient(135deg,rgba(60,30,110,.95),rgba(42,26,85,.95));border:1.5px solid rgba(198,255,0,.3);border-radius:18px;border-bottom-left-radius:4px;align-self:flex-start}
+.typing-dot{width:8px;height:8px;border-radius:50%;background:#c6ff00;animation:typing 1.4s infinite ease-in-out both;box-shadow:0 0 8px rgba(198,255,0,.6)}
 .typing-dot:nth-child(2){animation-delay:.2s}
 .typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes typing{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1.1)}}
+@keyframes typing{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1.15)}}
 
 /* ============ RESPONSIVE ============ */
-@media (min-width:768px){
+@media (min-width:600px){
   .subjects-grid{grid-template-columns:repeat(3,1fr)}
   .ach-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
 }
@@ -172,7 +194,18 @@ body::before{content:'';position:fixed;inset:0;background:
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="avatar" id="avatar">A</div>
+    <div class="avatar" id="avatar">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c6ff00"/>
+            <stop offset="100%" stop-color="#4caf50"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 2L3 6V12C3 16.5 6.8 20.7 12 22C17.2 20.7 21 16.5 21 12V6L12 2Z" stroke="url(#grad1)" stroke-width="1.5" stroke-linejoin="round" fill="rgba(198,255,0,0.1)"/>
+        <path d="M9 11L11 13L15 9" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
     <div class="user-info">
       <div class="user-name" id="userName">Гость</div>
       <div class="user-sub" id="userSub">Начни заниматься 🔥</div>
@@ -186,11 +219,11 @@ body::before{content:'';position:fixed;inset:0;background:
 <!-- ============ ONBOARDING ============ -->
 <div class="page active" id="page-onboard">
   <div class="hero-card">
-    <div class="hero-title">👋 Привет!</div>
+    <div class="hero-title">👋 Привет, будущий отличник!</div>
     <div class="hero-sub">Я помогу подготовиться к ОГЭ-2027. Настроимся за 30 секунд.</div>
   </div>
 
-  <div class="card" id="nameCard">
+  <div class="card">
     <div class="section-title" style="margin-top:0">Как тебя зовут?</div>
     <input type="text" class="chat-input" id="nameInput" placeholder="Твоё имя" maxlength="30" style="width:100%">
   </div>
@@ -239,13 +272,13 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ SUBJECT SESSION ============ -->
+<!-- ============ SESSION ============ -->
 <div class="page" id="page-session">
   <button class="btn btn-ghost btn-sm" onclick="go('home')" style="width:auto;margin-bottom:14px">← Назад</button>
   <div class="card card-glow" style="text-align:center">
-    <div class="subject-emoji" style="font-size:48px" id="sessionEmoji">📚</div>
-    <div class="section-title" style="margin:8px 0 4px" id="sessionName">Русский язык</div>
-    <div style="font-size:11px;color:#a8a8c8" id="sessionInfo">ОГЭ · 235 минут</div>
+    <div class="subject-emoji" style="font-size:56px" id="sessionEmoji">📚</div>
+    <div class="section-title" style="margin:8px 0 4px;justify-content:center" id="sessionName">Русский язык</div>
+    <div style="font-size:12px;color:#a8a8c8;font-weight:700" id="sessionInfo">ОГЭ · 235 минут</div>
     <div class="timer-display" id="timerDisplay">00:00</div>
     <div class="timer-bar"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
     <button class="btn" id="solveBtn">✅ Я решил вариант</button>
@@ -253,15 +286,15 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
   <div class="card">
     <div class="section-title" style="margin-top:0">💡 Совет</div>
-    <div style="font-size:13px;line-height:1.5;color:#d0d0e8" id="sessionTip">Открой вариант, реши за отведённое время, не подсматривай. После — отметь результат.</div>
+    <div style="font-size:14px;line-height:1.6;color:#d0d0e8" id="sessionTip">Открой вариант, реши за отведённое время, не подсматривай.</div>
   </div>
 </div>
 
-<!-- ============ AI CHAT ============ -->
-<div class="page" id="page-ai" style="padding-bottom:80px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<!-- ============ AI ============ -->
+<div class="page" id="page-ai" style="padding-bottom:120px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <div class="page-title" style="margin:0">🤖 AI-помощник</div>
-    <button class="btn btn-ghost btn-sm" style="width:auto" onclick="resetChat()">🔄 Сброс</button>
+    <button class="btn btn-ghost btn-sm" style="width:auto" onclick="resetChat()">🔄</button>
   </div>
   <div class="chat-container">
     <div class="chat-messages" id="chatMessages"></div>
@@ -299,9 +332,9 @@ body::before{content:'';position:fixed;inset:0;background:
   <div class="page-title">🎯 Прогноз ОГЭ</div>
   <div class="card">
     <div class="section-title" style="margin-top:0">Выбери предмет</div>
-    <select class="chat-input" id="forecastSubject" style="width:100%;margin-bottom:10px"></select>
+    <select class="chat-input" id="forecastSubject" style="width:100%;margin-bottom:12px"></select>
     <div class="section-title">Введи балл</div>
-    <input type="number" class="chat-input" id="forecastScore" placeholder="Например: 25" style="width:100%;margin-bottom:10px">
+    <input type="number" class="chat-input" id="forecastScore" placeholder="Например: 25" style="width:100%;margin-bottom:12px">
     <button class="btn" onclick="calcForecast()">Рассчитать оценку</button>
     <div id="forecastResult"></div>
   </div>
@@ -311,44 +344,47 @@ body::before{content:'';position:fixed;inset:0;background:
 <div class="page" id="page-profile">
   <div class="page-title">👤 Профиль</div>
   <div class="card card-glow" style="text-align:center">
-    <div class="avatar" id="profileAvatar" style="width:70px;height:70px;font-size:32px;margin:0 auto 12px"></div>
-    <div style="font-size:20px;font-weight:900" id="profileName">Гость</div>
-    <div style="font-size:12px;color:#a8a8c8;margin-top:4px" id="profileEmail">Ученик 9 класса</div>
+    <div class="avatar big" id="profileAvatar" style="margin:0 auto 14px">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L3 6V12C3 16.5 6.8 20.7 12 22C17.2 20.7 21 16.5 21 12V6L12 2Z" stroke="url(#grad1)" stroke-width="1.5" stroke-linejoin="round" fill="rgba(198,255,0,0.12)"/>
+        <path d="M9 11L11 13L15 9" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 7L12 9" stroke="url(#grad1)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div style="font-size:22px;font-weight:900" id="profileName">Гость</div>
+    <div style="font-size:12px;color:#a8a8c8;margin-top:6px;font-weight:700" id="profileEmail">Ученик 9 класса</div>
   </div>
   <div class="card">
     <div class="section-title" style="margin-top:0">📊 Статистика</div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.3);border-radius:10px">
-        <div style="font-size:26px;font-weight:900;color:#c6ff00" id="prStreak">0</div>
-        <div style="font-size:10px;color:#a8a8c8">🔥 Серия дней</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
+        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prStreak">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">🔥 СЕРИЯ</div>
       </div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.3);border-radius:10px">
-        <div style="font-size:26px;font-weight:900;color:#c6ff00" id="prSolved">0</div>
-        <div style="font-size:10px;color:#a8a8c8">📚 Решено</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
+        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prSolved">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">📚 РЕШЕНО</div>
       </div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.3);border-radius:10px">
-        <div style="font-size:26px;font-weight:900;color:#c6ff00" id="prAch">0</div>
-        <div style="font-size:10px;color:#a8a8c8">🏆 Достижения</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
+        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prAch">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">🏆 НАГРАД</div>
       </div>
-      <div style="text-align:center;padding:10px;background:rgba(0,0,0,.3);border-radius:10px">
-        <div style="font-size:26px;font-weight:900;color:#c6ff00" id="prDays">0</div>
-        <div style="font-size:10px;color:#a8a8c8">📅 Дней активно</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
+        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prDays">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">📅 ДНЕЙ</div>
       </div>
     </div>
   </div>
-
   <div class="section-title">🏆 Достижения</div>
   <div class="ach-grid" id="achGrid"></div>
-
   <div class="section-title">📅 Активность за 30 дней</div>
   <div class="card">
     <div class="calendar-grid" id="calendarGrid"></div>
-    <div style="text-align:center;font-size:12px;color:#a8a8c8;margin-top:8px" id="calStats"></div>
+    <div style="text-align:center;font-size:13px;color:#a8a8c8;margin-top:10px;font-weight:700" id="calStats"></div>
   </div>
-
   <div class="section-title">⚙️ Настройки</div>
   <div class="card">
-    <button class="btn btn-ghost" onclick="changeSubjects()" style="margin-bottom:8px">🔄 Сменить предметы</button>
+    <button class="btn btn-ghost" onclick="changeSubjects()" style="margin-bottom:10px">🔄 Сменить предметы</button>
     <button class="btn btn-danger" onclick="resetAll()">🗑️ Сбросить всё</button>
   </div>
 </div>
@@ -358,13 +394,13 @@ body::before{content:'';position:fixed;inset:0;background:
   <button class="btn btn-ghost btn-sm" onclick="go('home')" style="width:auto;margin-bottom:14px">← Назад</button>
   <div class="page-title">🎮 Крестики-нолики</div>
   <div class="card card-glow">
-    <div style="text-align:center;margin-bottom:8px;font-size:14px" id="gameStatus">Твой ход! Ты — ❌</div>
+    <div style="text-align:center;margin-bottom:8px;font-size:15px;font-weight:800" id="gameStatus">Твой ход! Ты — ❌</div>
     <div class="xo-board" id="xoBoard"></div>
     <button class="btn btn-outline" onclick="newGame()" style="margin-top:14px">🔄 Новая игра</button>
   </div>
 </div>
 
-<!-- ============ SUBJECT PICKER MODAL ============ -->
+<!-- ============ MODAL ============ -->
 <div class="modal" id="pickerModal">
   <div class="modal-inner" style="position:relative">
     <button class="modal-close" onclick="closePicker()">✕</button>
@@ -441,13 +477,13 @@ const TIPS = [
 ];
 
 // ============================================================
-// AI MOCK (готовые ответы на частые вопросы)
+// AI ANSWERS
 // ============================================================
 const AI_ANSWERS = {
   "дискриминант": "📖 <b>Что это</b>\nДискриминант — число, которое показывает, сколько корней у квадратного уравнения.\n\n💡 <b>Формула</b>\nD = b² − 4ac для уравнения ax² + bx + c = 0\n\n✏️ <b>Пример</b>\nx² − 5x + 6 = 0 → D = 25 − 24 = 1\nD > 0 → 2 корня\n\n🔑 <b>Подсказка</b>\nD > 0 — два корня, D = 0 — один, D < 0 — нет.\n\nСпрашивай ещё 😉",
   "вероятность": "📖 <b>Что это</b>\nВероятность — число от 0 до 1, показывающее шанс события.\n\n💡 <b>Формула</b>\nP = (благоприятные) / (всего)\n\n✏️ <b>Пример</b>\nВ корзине 3 красных и 7 синих шаров.\nP(красный) = 3/10 = 0,3\n\n🔑 <b>Подсказка</b>\nПосчитай ВСЕ исходы сначала, потом нужные.\n\nСпрашивай ещё 😉",
-  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление (толкование понятия)\n2. Аргумент из текста\n3. Аргумент из жизни/литературы\n4. Вывод\n\n✏️ <b>Пример</b>\nТема «Дружба» → вступление о ценности друга → пример из текста → пример из книги/фильма → вывод.\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов. Пиши от себя, честно.\n\nСпрашивай ещё 😉",
-  "задание 1": "📖 <b>Что это</b>\nВ ОГЭ по математике задание 1 — практическая задача (шины, печь, дача, квартира).\n\n💡 <b>Алгоритм</b>\n1. Прочитай условие 2 раза\n2. Выпиши все числа\n3. Нарисуй схему\n4. Реши по действиям\n\n✏️ <b>Пример</b>\nШины: найди диаметр → переведи в мм → подставь в формулу.\n\n🔑 <b>Подсказка</b>\nНе спеши, проверяй единицы измерения.\n\nСпрашивай ещё 😉",
+  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление (толкование понятия)\n2. Аргумент из текста\n3. Аргумент из жизни/литературы\n4. Вывод\n\n✏️ <b>Пример</b>\nТема «Дружба» → вступление → пример из текста → пример из книги → вывод.\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов. Пиши от себя, честно.\n\nСпрашивай ещё 😉",
+  "задание 1": "📖 <b>Что это</b>\nВ ОГЭ по математике задание 1 — практическая задача (шины, печь, дача).\n\n💡 <b>Алгоритм</b>\n1. Прочитай условие 2 раза\n2. Выпиши все числа\n3. Нарисуй схему\n4. Реши по действиям\n\n✏️ <b>Пример</b>\nШины: найди диаметр → переведи в мм → подставь в формулу.\n\n🔑 <b>Подсказка</b>\nНе спеши, проверяй единицы измерения.\n\nСпрашивай ещё 😉",
   "пунктуация": "📖 <b>Что это</b>\nПунктуация — расстановка знаков препинания.\n\n💡 <b>Главное правило</b>\nЗапятая ставится между частями сложного предложения и при однородных членах.\n\n✏️ <b>Пример</b>\n«Я пришёл, чтобы учиться» — запятая перед «чтобы».\n\n🔑 <b>Подсказка</b>\nНайди грамматические основы — это ключ.\n\nСпрашивай ещё 😉"
 };
 
@@ -456,7 +492,7 @@ const DEFAULT_AI = "📖 <b>Что это</b>\nХороший вопрос! Да
 // ============================================================
 // STATE
 // ============================================================
-const STORAGE_KEY = 'study_navigator_v1';
+const STORAGE_KEY = 'study_navigator_v2';
 let state = {
   name:'',
   subjects:['rus','math'],
@@ -471,16 +507,10 @@ let state = {
   chatHistory:[]
 };
 
-// ============================================================
-// STORAGE
-// ============================================================
 function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
 function load(){ try{ const s=localStorage.getItem(STORAGE_KEY); if(s){ state={...state,...JSON.parse(s)}; } }catch(e){} }
 function resetAll(){ if(!confirm('Удалить весь прогресс?')) return; try{localStorage.removeItem(STORAGE_KEY);}catch(e){} location.reload(); }
 
-// ============================================================
-// UTILS
-// ============================================================
 function todayISO(){ return new Date().toISOString().slice(0,10); }
 function toast(text){ const t=document.getElementById('toast'); t.textContent=text; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 function fireEmoji(n){ if(n===0) return '⚫'; if(n<3) return '🔥'.repeat(n); if(n<7) return '🔥🔥🔥'; if(n<30) return '🔥🔥🔥🔥'; return '🔥🔥🔥🔥🔥'; }
@@ -535,7 +565,7 @@ function go(page){
   const target=document.getElementById('page-'+page);
   if(target) target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
-  window.scrollTo(0,0);
+  window.scrollTo({top:0,behavior:'smooth'});
   if(page==='profile') renderProfile();
   if(page==='notes') renderNotes();
   if(page==='home') renderHome();
@@ -614,7 +644,6 @@ document.getElementById('solveBtn').onclick=()=>{
   const k=sessionData.key;
   state.solved.push({subject:k,date:todayISO(),ts:Date.now()});
   state.totalSolved++;
-  // Streak
   const today=todayISO();
   if(state.lastActive!==today){
     if(state.lastActive){
@@ -662,7 +691,7 @@ function checkAchievements(){
 }
 
 // ============================================================
-// SUBJECT PICKER (MODAL)
+// SUBJECT PICKER
 // ============================================================
 function openSubjectPicker(){
   const grid=document.getElementById('pickerGrid');
@@ -711,7 +740,6 @@ function sendMessage(){
   addMessage('user',text);
   state.chatHistory.push({role:'user',text});
   save();
-  // Typing indicator
   const box=document.getElementById('chatMessages');
   const typing=document.createElement('div');
   typing.className='typing-indicator';
@@ -737,10 +765,9 @@ function getAIAnswer(q){
   for(const key in AI_ANSWERS){
     if(low.includes(key)) return AI_ANSWERS[key];
   }
-  // Простой анализ по ключевым словам
   if(low.includes('привет')||low.includes('здравств')) return "Привет! 👋 Готов помочь с ОГЭ. Спрашивай что угодно по предметам!";
   if(low.includes('спасибо')) return "Всегда рад помочь! 💪 Продолжай в том же духе!\n\nСпрашивай ещё 😉";
-  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 <b>Что важно</b>\n• Задания 1-5: практические (шины, дача)\n• 6-14: алгебра и геометрия\n• 15-19: повышенная сложность\n\n✏️ <b>Совет</b>\nНачни с 1-5 — они дают 5 баллов при простом подходе.\n\n🔑 <b>Что конкретно нужно?</b>\nНапиши номер задания или тему.\n\nСпрашивай ещё 😉";
+  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 <b>Что важно</b>\n• Задания 1-5: практические\n• 6-14: алгебра и геометрия\n• 15-19: повышенная сложность\n\n✏️ <b>Совет</b>\nНачни с 1-5 — они дают 5 баллов при простом подходе.\n\n🔑 <b>Что конкретно нужно?</b>\nНапиши номер задания или тему.\n\nСпрашивай ещё 😉";
   if(low.includes('русск')||low.includes('орфограф')||low.includes('синтакс')) return "📖 <b>Русский язык ОГЭ</b>\n\n💡 <b>Структура</b>\n• Изложение (задание 1)\n• 7 тестовых заданий\n• Сочинение 9.3\n\n✏️ <b>Совет</b>\nИзложение = главное + детали. Сочинение = 70+ слов.\n\n🔑 <b>Что разобрать?</b>\nНапиши конкретную тему.\n\nСпрашивай ещё 😉";
   return DEFAULT_AI;
 }
@@ -771,8 +798,8 @@ function renderNotes(){
   });
   const list=document.getElementById('notesList');
   list.innerHTML='';
-  if(state.notes.length===0){ list.innerHTML='<div class="card" style="text-align:center;color:#a8a8c8;font-size:13px">Пока нет заметок. Добавь первую!</div>'; return; }
-  state.notes.slice().reverse().forEach((n,i)=>{
+  if(state.notes.length===0){ list.innerHTML='<div class="card" style="text-align:center;color:#a8a8c8;font-size:14px;font-weight:700">Пока нет заметок. Добавь первую!</div>'; return; }
+  state.notes.slice().reverse().forEach((n)=>{
     const s=getSubjKey(n.subject);
     const div=document.createElement('div');
     div.className='note-item';
@@ -819,7 +846,7 @@ function calcForecast(){
   else if(pct<80){ grade=4; verdict='👍 Хорошо! Ты на верном пути.'; color='#4caf50'; }
   else { grade=5; verdict='🏆 Отлично! Так держать!'; color='#c6ff00'; }
   const res=document.getElementById('forecastResult');
-  res.innerHTML=`<div class="grade-display"><div class="grade-num" style="color:${color};background:none;-webkit-text-fill-color:${color}">${grade}</div><div class="grade-verdict">${verdict}</div><div style="margin-top:10px;font-size:12px;color:#a8a8c8">${score} из ${s.max} баллов (${Math.round(pct)}%)</div></div>`;
+  res.innerHTML=`<div class="grade-display"><div class="grade-num" style="color:${color}">${grade}</div><div class="grade-verdict">${verdict}</div><div style="margin-top:12px;font-size:13px;color:#a8a8c8;font-weight:700">${score} из ${s.max} баллов (${Math.round(pct)}%)</div></div>`;
   unlock('forecast_master');
   save();
 }
@@ -828,7 +855,6 @@ function calcForecast(){
 // PROFILE
 // ============================================================
 function renderProfile(){
-  document.getElementById('profileAvatar').textContent=(state.name||'A')[0].toUpperCase();
   document.getElementById('profileName').textContent=state.name||'Гость';
   document.getElementById('prStreak').textContent=state.streak;
   document.getElementById('prSolved').textContent=state.totalSolved;
@@ -836,7 +862,6 @@ function renderProfile(){
   const days=new Set(state.solved.map(s=>s.date)).size;
   document.getElementById('prDays').textContent=days;
 
-  // Achievements
   const grid=document.getElementById('achGrid');
   grid.innerHTML='';
   Object.keys(ACHIEVEMENTS).forEach(code=>{
@@ -848,7 +873,6 @@ function renderProfile(){
     grid.appendChild(div);
   });
 
-  // Calendar
   const cal=document.getElementById('calendarGrid');
   cal.innerHTML='';
   const today=new Date();
@@ -905,20 +929,16 @@ function xoMove(i){
 }
 
 function aiMove(){
-  // Простой ИИ: блокирует и пытается выиграть
   const empty=xoBoard.map((c,i)=>c===' '?i:-1).filter(i=>i>=0);
   if(empty.length===0) return;
-  // Попытка выиграть
   for(const i of empty){
     const test=[...xoBoard]; test[i]='O';
     if(checkWin(test,'O')){ xoBoard[i]='O'; renderXO(); endXO('O'); return; }
   }
-  // Блокировка
   for(const i of empty){
     const test=[...xoBoard]; test[i]='X';
     if(checkWin(test,'X')){ xoBoard[i]='O'; renderXO(); xoTurn='X'; document.getElementById('gameStatus').textContent='Твой ход! Ты — ❌'; return; }
   }
-  // Центр
   if(xoBoard[4]===' '){ xoBoard[4]='O'; }
   else { const i=empty[Math.floor(Math.random()*empty.length)]; xoBoard[i]='O'; }
   renderXO();
@@ -960,7 +980,6 @@ function newGame(){
 // ============================================================
 function initApp(){
   document.getElementById('bottomnav').style.display='flex';
-  document.getElementById('avatar').textContent=(state.name||'A')[0].toUpperCase();
   document.getElementById('userName').textContent=state.name||'Гость';
   document.getElementById('userSub').textContent=state.subjects.length>2?'Готов к ОГЭ 🔥':'Выбери предметы';
   document.getElementById('streakPill').textContent='🔥 '+state.streak;
@@ -971,7 +990,6 @@ function initApp(){
   newGame();
 }
 
-// Запуск
 load();
 if(state.onboarded){
   renderOnboard();
