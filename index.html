@@ -8,9 +8,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{width:100%;min-height:100%;background:#0f0520;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;color:#fff;overscroll-behavior-y:none}
-body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:110px}
+body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:110px;position:relative}
 
-/* ============ ПЕРЕМЕННЫЕ ТЕМЫ ============ */
+/* ============ CANVAS ДЛЯ БРЫЗГ ============ */
+#splashCanvas{position:fixed;inset:0;pointer-events:none;z-index:9000}
+
+/* ============ ПЕРЕМЕННЫЕ ============ */
 :root{
   --accent:#c6ff00;
   --accent2:#4caf50;
@@ -19,43 +22,41 @@ body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-
   --bg2:#1b5e20;
   --bg3:#1a0f2e;
   --bg4:#0a0318;
-  --card1:rgba(42,26,85,.75);
-  --card2:rgba(26,15,46,.75);
 }
 body.theme-neon{--accent:#00e5ff;--accent2:#2979ff;--accent3:#ff00e5;--bg1:#00356e;--bg2:#1a0033}
 body.theme-sunset{--accent:#ffab00;--accent2:#ff5252;--accent3:#e91e63;--bg1:#7a1a3d;--bg2:#4a1e28}
 body.theme-mint{--accent:#69f0ae;--accent2:#00bcd4;--accent3:#26c6da;--bg1:#004d40;--bg2:#00695c}
 
-/* ============ ФОН + ЧАСТИЦЫ ============ */
+/* ============ ФОН ============ */
 body::before{content:'';position:fixed;inset:0;background:
   radial-gradient(circle at 15% 0%,var(--bg1) 0%,transparent 45%),
   radial-gradient(circle at 85% 100%,var(--bg2) 0%,transparent 50%),
   radial-gradient(circle at 50% 50%,var(--bg3) 0%,var(--bg4) 100%);
   z-index:-3;transition:1s}
-#particles{position:fixed;inset:0;z-index:-2;pointer-events:none}
+body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(198,255,0,.08) 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, rgba(126,63,242,.08) 0%, transparent 30%);
+  animation:bgFloat 20s ease-in-out infinite alternate}
+@keyframes bgFloat{0%{transform:translate(0,0)}100%{transform:translate(-30px,-20px)}}
+
+#particles{position:fixed;inset:0;z-index:-1;pointer-events:none}
 #particles div{position:absolute;background:var(--accent);border-radius:50%;opacity:.3;animation:float linear infinite;box-shadow:0 0 8px var(--accent)}
 @keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}
   10%{opacity:.4}90%{opacity:.4}
   100%{transform:translateY(-100vh) translateX(30px);opacity:0}}
 
 /* ============ TOP HEADER ============ */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(20,10,40,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top))}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(20,10,40,.72);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top))}
 .topbar-inner{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto}
-
-/* АВАТАРЫ (SVG) */
-.avatar{width:44px;height:44px;border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative;background:linear-gradient(135deg,var(--accent3),var(--accent));box-shadow:0 6px 20px rgba(126,63,242,.5),0 0 0 2px rgba(255,255,255,.15);overflow:hidden;cursor:pointer;transition:.2s}
+.avatar{width:44px;height:44px;border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative;background:linear-gradient(135deg,var(--accent3),var(--accent));box-shadow:0 6px 20px rgba(126,63,242,.5),0 0 0 2px rgba(255,255,255,.15);overflow:hidden;cursor:pointer;transition:.2s;font-size:22px}
 .avatar:active{transform:scale(.92)}
-.avatar::before{content:'';position:absolute;inset:2px;border-radius:12px;background:linear-gradient(135deg,rgba(30,15,60,.95),rgba(15,5,32,.95));z-index:1}
-.avatar svg{position:relative;z-index:2;width:26px;height:26px}
-.avatar.big{width:96px;height:96px;border-radius:28px;box-shadow:0 10px 40px rgba(126,63,242,.6),0 0 0 3px rgba(255,255,255,.15)}
-.avatar.big::before{inset:3px;border-radius:25px}
-.avatar.big svg{width:56px;height:56px}
-
+.avatar.big{width:96px;height:96px;border-radius:28px;font-size:52px}
 .user-info{flex:1;min-width:0}
 .user-name{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .user-sub{font-size:11px;color:#a8a8c8;margin-top:2px;font-weight:600}
 .top-stats{display:flex;gap:6px}
-.stat-pill{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));border:1.5px solid rgba(255,255,255,.15);border-radius:18px;padding:6px 10px;font-size:12px;font-weight:900;color:#fff;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:.2s}
+.stat-pill{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));border:1.5px solid rgba(255,255,255,.15);border-radius:18px;padding:6px 10px;font-size:12px;font-weight:900;color:#fff;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:.2s;cursor:pointer}
 .stat-pill.accent{color:var(--accent);border-color:rgba(198,255,0,.4);background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.1))}
 .stat-pill.gold{color:#ffd700;border-color:rgba(255,215,0,.4);background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,152,0,.1))}
 .stat-pill:active{transform:scale(.95)}
@@ -70,7 +71,7 @@ body::before{content:'';position:fixed;inset:0;background:
 .section-title::before{content:'';width:4px;height:14px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px}
 
 /* ============ CARDS ============ */
-.card{background:linear-gradient(135deg,var(--card1),var(--card2));border:1.5px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;margin-bottom:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s;position:relative;overflow:hidden}
+.card{background:linear-gradient(135deg,rgba(42,26,85,.75),rgba(26,15,46,.75));border:1.5px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;margin-bottom:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
 .card-glow{background:linear-gradient(135deg,rgba(198,255,0,.1),rgba(126,63,242,.08));border-color:rgba(198,255,0,.35);box-shadow:0 10px 40px rgba(198,255,0,.1),inset 0 1px 0 rgba(255,255,255,.05)}
 
@@ -98,6 +99,19 @@ body::before{content:'';position:fixed;inset:0;background:
 .btn-row{display:flex;gap:8px;margin-top:10px}
 .btn-row .btn{flex:1}
 
+/* ============ ОНБОРДИНГ - ИСПРАВЛЕНО ============ */
+.onboard-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.onboard-item{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(60,30,110,.6),rgba(30,20,55,.6));border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 16px;cursor:pointer;transition:.2s;position:relative}
+.onboard-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;border-radius:14px 0 0 14px;transition:.2s}
+.onboard-item:active{transform:scale(.98)}
+.onboard-item.selected{border-color:var(--accent);background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.08));box-shadow:0 0 20px rgba(198,255,0,.2)}
+.onboard-item.selected::before{background:var(--accent)}
+.onboard-item.required{opacity:.7;cursor:default;border-color:rgba(198,255,0,.3)}
+.checkbox{width:26px;height:26px;border-radius:8px;border:2.5px solid rgba(255,255,255,.4);display:flex;justify-content:center;align-items:center;font-size:16px;flex-shrink:0;transition:.2s;background:rgba(0,0,0,.3);color:transparent;font-weight:900}
+.onboard-item.selected .checkbox{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:var(--accent);color:#0a1c10;box-shadow:0 0 15px rgba(198,255,0,.6);transform:scale(1.05)}
+.onboard-name{flex:1;font-size:14px;font-weight:800;line-height:1.3}
+.onboard-info{font-size:11px;color:var(--accent);font-weight:800;background:rgba(198,255,0,.1);padding:4px 10px;border-radius:10px;border:1px solid rgba(198,255,0,.2)}
+
 /* ============ SUBJECTS ============ */
 .subjects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .subject-card{background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(30,60,40,.9));border:1.5px solid rgba(255,255,255,.1);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
@@ -113,10 +127,9 @@ body::before{content:'';position:fixed;inset:0;background:
 .timer-display{font-size:64px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(198,255,0,.5));margin:20px 0;letter-spacing:2px}
 .timer-bar{height:10px;background:rgba(0,0,0,.5);border-radius:5px;overflow:hidden;margin-bottom:20px}
 .timer-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 1s linear;border-radius:5px;box-shadow:0 0 15px rgba(198,255,0,.5)}
-
 .subject-icon-big{width:70px;height:70px;margin:0 auto 8px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
 
-.link-btn{background:linear-gradient(135deg,#2979ff,#00e5ff);color:#fff;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.2px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(41,121,255,.4);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;text-decoration:none}
+.link-btn{background:linear-gradient(135deg,#2979ff,#00e5ff);color:#fff;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.2px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(41,121,255,.4);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;text-decoration:none;position:relative;overflow:hidden}
 .link-btn:active{transform:scale(.97)}
 .link-btn svg{width:20px;height:20px}
 
@@ -162,19 +175,21 @@ body::before{content:'';position:fixed;inset:0;background:
 
 /* ============ FORECAST ============ */
 .grade-display{text-align:center;padding:22px 0}
-.grade-num{font-size:96px;font-weight:900;line-height:1;filter:drop-shadow(0 0 40px currentColor)}
+.grade-num{font-size:96px;font-weight:900;line-height:1;filter:drop-shadow(0 0 40px currentColor);animation:gradeIn .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes gradeIn{from{transform:scale(0) rotate(-180deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 .grade-verdict{font-size:15px;color:#d0d0e8;margin-top:12px;font-weight:700}
 
-/* ============ XO GAME ============ */
+/* ============ XO ============ */
 .xo-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:24px auto}
 .xo-cell{aspect-ratio:1;background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(42,26,85,.9));border:2.5px solid rgba(255,255,255,.15);border-radius:16px;display:flex;justify-content:center;align-items:center;font-size:48px;cursor:pointer;transition:.15s}
 .xo-cell:active{transform:scale(.94);border-color:var(--accent)}
-.xo-cell.win{background:rgba(198,255,0,.25);border-color:var(--accent);box-shadow:0 0 30px rgba(198,255,0,.6)}
+.xo-cell.win{background:rgba(198,255,0,.25);border-color:var(--accent);box-shadow:0 0 30px rgba(198,255,0,.6);animation:pulseWin .5s infinite alternate}
+@keyframes pulseWin{from{transform:scale(1)}to{transform:scale(1.05)}}
 
 /* ============ QUESTS ============ */
 .quest-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 14px;margin-bottom:8px}
 .quest-item.done{border-color:var(--accent);background:rgba(198,255,0,.08);opacity:.7}
-.quest-check{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;flex-shrink:0;font-size:14px}
+.quest-check{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;flex-shrink:0;font-size:14px;background:rgba(0,0,0,.2)}
 .quest-item.done .quest-check{background:var(--accent);border-color:var(--accent);color:#000}
 .quest-info{flex:1}
 .quest-name{font-size:13px;font-weight:800;margin-bottom:3px}
@@ -218,7 +233,6 @@ body::before{content:'';position:fixed;inset:0;background:
 .typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes typing{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1.15)}}
 
-/* Level bar */
 .level-bar{height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;margin-top:6px}
 .level-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.4s;border-radius:4px}
 
@@ -230,11 +244,12 @@ body::before{content:'';position:fixed;inset:0;background:
 </head>
 <body>
 
+<canvas id="splashCanvas"></canvas>
 <div id="particles"></div>
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="avatar" id="avatar" onclick="go('profile')"></div>
+    <div class="avatar" id="avatar" onclick="go('profile')">🦊</div>
     <div class="user-info">
       <div class="user-name" id="userName">Гость</div>
       <div class="user-sub" id="userSub">Начни заниматься 🔥</div>
@@ -246,7 +261,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ ONBOARDING ============ -->
 <div class="page active" id="page-onboard">
   <div class="hero-card">
     <div class="hero-title">👋 Привет, будущий отличник!</div>
@@ -261,8 +275,8 @@ body::before{content:'';position:fixed;inset:0;background:
   <div class="card">
     <div class="section-title" style="margin-top:0">📚 Обязательные предметы</div>
     <div class="onboard-list">
-      <div class="onboard-item required selected"><div class="checkbox">✓</div><div class="onboard-name">📚 Русский язык</div></div>
-      <div class="onboard-item required selected"><div class="checkbox">✓</div><div class="onboard-name">📐 Математика</div></div>
+      <div class="onboard-item required selected"><div class="checkbox">✓</div><div class="onboard-name">📚 Русский язык</div><div class="onboard-info">235 мин</div></div>
+      <div class="onboard-item required selected"><div class="checkbox">✓</div><div class="onboard-name">📐 Математика</div><div class="onboard-info">235 мин</div></div>
     </div>
   </div>
 
@@ -274,7 +288,6 @@ body::before{content:'';position:fixed;inset:0;background:
   <button class="btn" id="startBtn" style="margin-top:14px" disabled>✅ Продолжить</button>
 </div>
 
-<!-- ============ HOME ============ -->
 <div class="page" id="page-home">
   <div class="hero-card">
     <div class="hero-title" id="homeGreet">Привет!</div>
@@ -307,7 +320,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ SESSION ============ -->
 <div class="page" id="page-session">
   <button class="btn btn-ghost btn-sm" onclick="go('home')" style="width:auto;margin-bottom:14px">← Назад</button>
   <div class="card card-glow" style="text-align:center">
@@ -316,12 +328,10 @@ body::before{content:'';position:fixed;inset:0;background:
     <div style="font-size:12px;color:#a8a8c8;font-weight:700" id="sessionInfo">ОГЭ · 235 минут</div>
     <div class="timer-display" id="timerDisplay">00:00</div>
     <div class="timer-bar"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
-
     <a class="link-btn" id="reshuLink" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       Открыть вариант на Решу ОГЭ
     </a>
-
     <button class="btn" id="solveBtn">✅ Я решил вариант</button>
     <button class="btn btn-ghost btn-sm" onclick="cancelSession()" style="margin-top:8px">Отменить</button>
   </div>
@@ -331,7 +341,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ AI ============ -->
 <div class="page" id="page-ai" style="padding-bottom:130px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <div class="page-title" style="margin:0">🤖 AI-помощник</div>
@@ -353,7 +362,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ NOTES ============ -->
 <div class="page" id="page-notes">
   <div class="page-title">📝 Заметки</div>
   <div class="card">
@@ -368,7 +376,6 @@ body::before{content:'';position:fixed;inset:0;background:
   <div id="notesList"></div>
 </div>
 
-<!-- ============ FORECAST ============ -->
 <div class="page" id="page-forecast">
   <div class="page-title">🎯 Прогноз ОГЭ</div>
   <div class="card">
@@ -381,11 +388,10 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ PROFILE ============ -->
 <div class="page" id="page-profile">
   <div class="page-title">👤 Профиль</div>
   <div class="card card-glow" style="text-align:center">
-    <div class="avatar big" id="profileAvatar" style="margin:0 auto 14px" onclick="openAvatarPicker()"></div>
+    <div class="avatar big" id="profileAvatar" style="margin:0 auto 14px" onclick="openAvatarPicker()">🦊</div>
     <div style="font-size:22px;font-weight:900" id="profileName">Гость</div>
     <div style="font-size:12px;color:#a8a8c8;margin-top:6px;font-weight:700" id="profileEmail">Ученик 9 класса</div>
     <div style="font-size:11px;color:var(--accent);margin-top:8px;font-weight:800">Нажми на аватар чтобы сменить 🎨</div>
@@ -440,7 +446,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ GAME ============ -->
 <div class="page" id="page-game">
   <button class="btn btn-ghost btn-sm" onclick="go('home')" style="width:auto;margin-bottom:14px">← Назад</button>
   <div class="page-title">🎮 Крестики-нолики</div>
@@ -451,7 +456,6 @@ body::before{content:'';position:fixed;inset:0;background:
   </div>
 </div>
 
-<!-- ============ MODALS ============ -->
 <div class="modal" id="pickerModal">
   <div class="modal-inner" style="position:relative">
     <button class="modal-close" onclick="closePicker()">✕</button>
@@ -485,6 +489,156 @@ body::before{content:'';position:fixed;inset:0;background:
 
 <script>
 // ============================================================
+// 🎨 СИСТЕМА БРЫЗГ КРАСКИ (CANVAS)
+// ============================================================
+const splashCanvas = document.getElementById('splashCanvas');
+const sctx = splashCanvas.getContext('2d');
+let splashes = [];
+
+function resizeCanvas(){
+  splashCanvas.width = window.innerWidth;
+  splashCanvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const PALETTES = {
+  lime:   ['#c6ff00','#9ccc00','#4caf50','#66bb6a','#ffeb3b','#fff59d'],
+  neon:   ['#00e5ff','#2979ff','#ff00e5','#7c4dff','#18ffff','#fff'],
+  sunset: ['#ffab00','#ff5252','#e91e63','#ff8a65','#ffd54f','#fff'],
+  mint:   ['#69f0ae','#00bcd4','#26c6da','#80cbc4','#b2dfdb','#fff'],
+  gold:   ['#ffd700','#ffb300','#ff8f00','#ffeb3b','#fff59d','#fff'],
+  party:  ['#ff1744','#00e676','#2979ff','#ffea00','#d500f9','#00e5ff']
+};
+
+function getPalette(){
+  const theme = state.theme||'default';
+  if(theme==='neon') return PALETTES.neon;
+  if(theme==='sunset') return PALETTES.sunset;
+  if(theme==='mint') return PALETTES.mint;
+  return PALETTES.lime;
+}
+
+/**
+ * Брызги краски — реалистичные брызги с гравитацией и оставляющие след
+ */
+function splash(x, y, palette, count=25, power=1){
+  if(!palette) palette = getPalette();
+  for(let i=0;i<count;i++){
+    const angle = Math.random()*Math.PI*2;
+    const speed = (2 + Math.random()*6) * power;
+    splashes.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - 2,
+      size: 3 + Math.random()*8,
+      color: palette[Math.floor(Math.random()*palette.length)],
+      life: 1,
+      decay: 0.012 + Math.random()*0.015,
+      gravity: 0.25,
+      rotation: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-.5)*0.3,
+      trail: [],
+      shape: Math.random()<0.3?'star':(Math.random()<0.5?'blob':'dot')
+    });
+  }
+  // Крупная капля-вспышка
+  splashes.push({
+    x, y,
+    vx: 0, vy: 0,
+    size: 15 + Math.random()*20,
+    color: palette[Math.floor(Math.random()*palette.length)],
+    life: 1, decay: 0.08,
+    gravity: 0, rotation: 0, rotSpeed: 0.05,
+    trail: [], shape: 'ring'
+  });
+  if(!animating) animateSplash();
+}
+
+let animating = false;
+function animateSplash(){
+  animating = true;
+  sctx.clearRect(0, 0, splashCanvas.width, splashCanvas.height);
+  let hasAlive = false;
+  for(let i=splashes.length-1;i>=0;i--){
+    const p = splashes[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.vx *= 0.97;
+    p.vy *= 0.97;
+    p.rotation += p.rotSpeed;
+    p.life -= p.decay;
+    if(p.life <= 0){ splashes.splice(i,1); continue; }
+    hasAlive = true;
+    sctx.save();
+    sctx.globalAlpha = Math.max(0, p.life);
+    sctx.translate(p.x, p.y);
+    sctx.rotate(p.rotation);
+    sctx.fillStyle = p.color;
+    sctx.shadowColor = p.color;
+    sctx.shadowBlur = 12;
+    if(p.shape === 'star'){
+      const s = p.size * p.life;
+      for(let k=0;k<5;k++){
+        const a = (Math.PI*2/5)*k;
+        sctx.beginPath();
+        sctx.arc(Math.cos(a)*s*0.5, Math.sin(a)*s*0.5, s*0.2, 0, Math.PI*2);
+        sctx.fill();
+      }
+      sctx.beginPath();
+      sctx.arc(0, 0, s*0.4, 0, Math.PI*2);
+      sctx.fill();
+    } else if(p.shape === 'ring'){
+      sctx.strokeStyle = p.color;
+      sctx.lineWidth = 3;
+      sctx.beginPath();
+      sctx.arc(0, 0, p.size*(1.5-p.life), 0, Math.PI*2);
+      sctx.stroke();
+    } else if(p.shape === 'blob'){
+      sctx.beginPath();
+      sctx.ellipse(0, 0, p.size*1.2, p.size*0.7, 0, 0, Math.PI*2);
+      sctx.fill();
+    } else {
+      sctx.beginPath();
+      sctx.arc(0, 0, p.size*p.life, 0, Math.PI*2);
+      sctx.fill();
+    }
+    sctx.restore();
+  }
+  if(hasAlive){
+    requestAnimationFrame(animateSplash);
+  } else {
+    animating = false;
+    sctx.clearRect(0, 0, splashCanvas.width, splashCanvas.height);
+  }
+}
+
+// Глобальный клик — брызги везде
+document.addEventListener('click', function(e){
+  const x = e.clientX;
+  const y = e.clientY;
+  // Если это кнопка достижения/награды — золотые брызги
+  const target = e.target.closest('.btn,.subject-card,.nav-item,.onboard-item,.qbtn,.stat-pill,.quick-q,.xo-cell,.link-btn,.mini-q,.card');
+  let pal = getPalette();
+  if(target){
+    if(target.classList.contains('btn') && (target.textContent.includes('💰')||target.textContent.includes('🏆'))){
+      pal = PALETTES.gold;
+    } else if(target.classList.contains('xo-cell')){
+      pal = PALETTES.party;
+    }
+  }
+  splash(x, y, pal, 22, 1);
+}, true);
+
+// Брызги при переключении экрана — из центра вверх
+function pageSplash(){
+  const x = window.innerWidth/2;
+  const y = window.innerHeight * 0.3;
+  splash(x, y, getPalette(), 30, 1.4);
+}
+
+// ============================================================
 // SUBJECTS
 // ============================================================
 const SUBJECTS = {
@@ -502,7 +656,6 @@ const SUBJECTS = {
 };
 const REQUIRED = ['rus','math'];
 
-// SVG иконки
 const ICONS = {
   book:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><path d="M18 20a2 2 0 0 0 2-2V6"/></svg>`,
   calc:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><circle cx="8" cy="11" r="1" fill="url(#ag)"/><circle cx="12" cy="11" r="1" fill="url(#ag)"/><circle cx="16" cy="11" r="1" fill="url(#ag)"/><circle cx="8" cy="15" r="1" fill="url(#ag)"/><circle cx="12" cy="15" r="1" fill="url(#ag)"/><circle cx="16" cy="15" r="1" fill="url(#ag)"/><circle cx="8" cy="19" r="1" fill="url(#ag)"/><circle cx="12" cy="19" r="1" fill="url(#ag)"/><circle cx="16" cy="19" r="1" fill="url(#ag)"/></svg>`,
@@ -517,9 +670,7 @@ const ICONS = {
   flag:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>`
 };
 
-// Аватары (SVG символы)
-const AVATARS = ['🦊','🐺','🐻','🦁','🐯','🐨','🐼','🦉','🦅','🐲','🦄','👑','⚔️','🛡️','🏆','💎','🚀','🌟','⚡','🔥','🎓','✨','🌟','🎯'];
-// Префикс для градиента SVG
+const AVATARS = ['🦊','🐺','🐻','🦁','🐯','🐨','🐼','🦉','🦅','🐲','🦄','👑','⚔️','🛡️','🏆','💎','🚀','🌟','⚡','🔥','🎓','✨','🎯','🌈','🦈','🐉'];
 const SVG_DEFS = `<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c6ff00"/><stop offset="100%" stop-color="#4caf50"/></linearGradient></defs></svg>`;
 
 const ACHIEVEMENTS = {
@@ -571,15 +722,14 @@ const QUESTS_POOL = [
   {id:"forecast1",name:"Проверить прогноз",goal:1,reward:20}
 ];
 
-// AI
 const AI_ANSWERS = {
   "дискриминант": "📖 <b>Что это</b>\nДискриминант — число, которое показывает, сколько корней у квадратного уравнения.\n\n💡 <b>Формула</b>\nD = b² − 4ac\n\n✏️ <b>Пример</b>\nx² − 5x + 6 = 0 → D = 25 − 24 = 1\nD > 0 → 2 корня\n\n🔑 <b>Подсказка</b>\nD > 0 — два корня, D = 0 — один, D < 0 — нет.\n\nСпрашивай ещё 😉",
   "вероятность": "📖 <b>Что это</b>\nВероятность — число от 0 до 1, шанс события.\n\n💡 <b>Формула</b>\nP = (благоприятные) / (всего)\n\n✏️ <b>Пример</b>\n3 красных и 7 синих шаров.\nP(красный) = 3/10 = 0,3\n\n🔑 <b>Подсказка</b>\nПосчитай ВСЕ исходы сначала.\n\nСпрашивай ещё 😉",
-  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление\n2. Аргумент из текста\n3. Аргумент из жизни\n4. Вывод\n\n✏️ <b>Пример</b>\nТема «Дружба» → вступление → пример → вывод.\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов.\n\nСпрашивай ещё 😉",
+  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление\n2. Аргумент из текста\n3. Аргумент из жизни\n4. Вывод\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов.\n\nСпрашивай ещё 😉",
   "задание 1": "📖 <b>Что это</b>\nПрактическая задача (шины, печь, дача).\n\n💡 <b>Алгоритм</b>\n1. Прочитай 2 раза\n2. Выпиши числа\n3. Нарисуй схему\n4. Реши по действиям\n\n🔑 <b>Подсказка</b>\nПроверяй единицы измерения.\n\nСпрашивай ещё 😉",
-  "пунктуация": "📖 <b>Что это</b>\nРасстановка знаков препинания.\n\n💡 <b>Главное правило</b>\nЗапятая между частями сложного предложения и при однородных членах.\n\n✏️ <b>Пример</b>\n«Я пришёл, чтобы учиться».\n\n🔑 <b>Подсказка</b>\nНайди грамматические основы.\n\nСпрашивай ещё 😉"
+  "пунктуация": "📖 <b>Что это</b>\nРасстановка знаков препинания.\n\n💡 <b>Главное правило</b>\nЗапятая между частями сложного предложения и при однородных членах.\n\n🔑 <b>Подсказка</b>\nНайди грамматические основы.\n\nСпрашивай ещё 😉"
 };
-const DEFAULT_AI = "📖 <b>Что это</b>\nХороший вопрос! Дай подумать...\n\n💡 <b>Правило</b>\nРазбей задачу на шаги: пойми условие → выпиши данные → найди формулу → подставь.\n\n✏️ <b>Пример</b>\nРешай по одному действию.\n\n🔑 <b>Подсказка</b>\nПереформулируй вопрос конкретнее.\n\nСпрашивай ещё 😉";
+const DEFAULT_AI = "📖 <b>Что это</b>\nХороший вопрос! Дай подумать...\n\n💡 <b>Правило</b>\nРазбей задачу на шаги.\n\n🔑 <b>Подсказка</b>\nПереформулируй вопрос конкретнее.\n\nСпрашивай ещё 😉";
 
 // ============================================================
 // STATE
@@ -590,7 +740,7 @@ let state = {
   streak:0, lastActive:null, totalSolved:0, freeDay:false,
   solved:[], achievements:{}, notes:[], chatHistory:[],
   coins:0, xp:0, level:1, theme:'default', avatar:'🦊',
-  quests:{date:null,list:[],done:{},claimed:{}}
+  quests:{date:null,list:[],progress:{},claimed:{}}
 };
 
 function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
@@ -600,40 +750,34 @@ function todayISO(){ return new Date().toISOString().slice(0,10); }
 function toast(text,gold){ const t=document.getElementById('toast'); t.textContent=text; t.className=gold?'gold':''; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 function fireEmoji(n){ if(n===0) return '⚫'; if(n<3) return '🔥'.repeat(n); if(n<7) return '🔥🔥🔥'; if(n<30) return '🔥🔥🔥🔥'; return '🔥🔥🔥🔥🔥'; }
 function getSubjKey(k){ return SUBJECTS[k]||{name:k,time:180,max:30,url:'#',icon:'book'}; }
-function getSubjIcon(k){ return ICONS[SUBJECTS[k]?.icon]||ICONS.book; }
+function getSubjIcon(k){ return ICONS[(SUBJECTS[k]||{}).icon]||ICONS.book; }
 
-// ============================================================
-// LEVELS
-// ============================================================
 function xpForLevel(lvl){ return lvl * 100 + (lvl-1) * 50; }
 function addXP(amount){
   state.xp += amount;
+  let leveledUp = false;
   while(state.xp >= xpForLevel(state.level)){
     state.xp -= xpForLevel(state.level);
     state.level++;
-    toast(`⭐ Уровень ${state.level}!`,true);
+    leveledUp = true;
     if(state.level===5) unlock('level5');
     if(state.level===10) unlock('level10');
   }
+  if(leveledUp){ toast(`⭐ Уровень ${state.level}!`,true); splash(window.innerWidth/2, window.innerHeight/2, PALETTES.gold, 40, 1.5); }
   updateTopStats();
 }
 
-// ============================================================
-// THEMES
-// ============================================================
 function setTheme(t){
   state.theme = t;
   document.body.className = t==='default'?'':'theme-'+t;
   save();
   toast('🎨 Тема изменена');
+  splash(window.innerWidth/2, window.innerHeight/3, getPalette(), 40, 1.5);
 }
 
-// ============================================================
-// AVATARS
-// ============================================================
 function renderAvatar(){
-  document.getElementById('avatar').innerHTML = `<span style="font-size:22px">${state.avatar}</span>`;
-  document.getElementById('profileAvatar').innerHTML = `<span style="font-size:44px">${state.avatar}</span>`;
+  document.getElementById('avatar').textContent = state.avatar;
+  document.getElementById('profileAvatar').textContent = state.avatar;
 }
 function openAvatarPicker(){
   const cont = document.getElementById('avatarOptions');
@@ -642,16 +786,20 @@ function openAvatarPicker(){
     const div = document.createElement('div');
     div.style.cssText = 'aspect-ratio:1;background:rgba(0,0,0,.35);border:2px solid ' + (state.avatar===a?'var(--accent)':'rgba(255,255,255,.1)') + ';border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:32px;cursor:pointer;transition:.15s';
     div.textContent = a;
-    div.onclick = () => { state.avatar = a; save(); renderAvatar(); closeAvatarPicker(); toast('🎨 Аватар обновлён'); };
+    div.onclick = (e) => {
+      state.avatar = a;
+      save();
+      renderAvatar();
+      closeAvatarPicker();
+      toast('🎨 Аватар обновлён');
+      splash(e.clientX, e.clientY, PALETTES.party, 30, 1.2);
+    };
     cont.appendChild(div);
   });
   document.getElementById('avatarModal').classList.add('show');
 }
 function closeAvatarPicker(){ document.getElementById('avatarModal').classList.remove('show'); }
 
-// ============================================================
-// QUESTS
-// ============================================================
 function ensureQuests(){
   const today = todayISO();
   if(state.quests.date === today && state.quests.list.length) return;
@@ -659,9 +807,7 @@ function ensureQuests(){
   state.quests = { date:today, list:shuffled, progress:{}, claimed:{} };
   save();
 }
-function questProgress(id){
-  return state.quests.progress?.[id] || 0;
-}
+function questProgress(id){ return (state.quests.progress||{})[id] || 0; }
 function incQuest(id, amount=1){
   ensureQuests();
   state.quests.progress = state.quests.progress || {};
@@ -678,7 +824,8 @@ function checkQuestComplete(id){
     state.coins += q.reward;
     addXP(q.reward);
     save();
-    toast(`🎉 Квест выполнен! +${q.reward} 💰`,true);
+    toast(`🎉 Квест! +${q.reward} 💰 +${q.reward} XP`,true);
+    splash(window.innerWidth/2, window.innerHeight/2, PALETTES.gold, 45, 1.6);
     updateTopStats();
   }
 }
@@ -702,9 +849,6 @@ function renderQuests(){
   });
 }
 
-// ============================================================
-// PARTICLES
-// ============================================================
 function spawnParticles(){
   const cont = document.getElementById('particles');
   cont.innerHTML = '';
@@ -729,33 +873,35 @@ function renderOnboard(){
     const div = document.createElement('div');
     div.className = 'onboard-item' + (sel?' selected':'');
     div.innerHTML = `<div class="checkbox">${sel?'✓':''}</div><div class="onboard-name">${s.name}</div><div class="onboard-info">${s.time} мин</div>`;
-    div.onclick = () => toggleOnboard(k);
+    div.onclick = (e) => toggleOnboard(k, e);
     list.appendChild(div);
   });
   const extra = state.subjects.filter(k=>!REQUIRED.includes(k)).length;
   document.getElementById('startBtn').disabled = extra!==2 || !state.name.trim();
 }
-function toggleOnboard(k){
+function toggleOnboard(k, e){
   const idx = state.subjects.indexOf(k);
   if(idx>=0) state.subjects.splice(idx,1);
   else {
     const extra = state.subjects.filter(x=>!REQUIRED.includes(x)).length;
     if(extra>=2){ toast('Можно выбрать только 2'); return; }
     state.subjects.push(k);
+    if(e) splash(e.clientX, e.clientY, getPalette(), 25, 1);
   }
   renderOnboard();
 }
 document.getElementById('nameInput').addEventListener('input',(e)=>{ state.name = e.target.value.trim(); renderOnboard(); });
-document.getElementById('startBtn').onclick = () => {
+document.getElementById('startBtn').onclick = (e) => {
   if(state.subjects.filter(k=>!REQUIRED.includes(k)).length!==2){ toast('Выбери 2 предмета'); return; }
   if(!state.name.trim()){ toast('Введи имя'); return; }
   state.onboarded = true;
   save();
-  initApp();
+  splash(e.clientX, e.clientY, PALETTES.gold, 60, 1.8);
+  setTimeout(() => { initApp(); }, 200);
 };
 
 // ============================================================
-// NAVIGATION
+// NAV
 // ============================================================
 function go(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -763,6 +909,7 @@ function go(page){
   if(target) target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   window.scrollTo({top:0,behavior:'smooth'});
+  pageSplash();
   if(page==='profile') renderProfile();
   if(page==='notes') renderNotes();
   if(page==='home'){ renderHome(); renderQuests(); }
@@ -794,7 +941,7 @@ function renderHome(){
     const div = document.createElement('div');
     div.className = 'subject-card';
     div.innerHTML = `<div class="subject-icon">${getSubjIcon(k)}</div><div class="subject-name">${s.name}</div><div class="subject-time">⏱ ${s.time} мин</div>`;
-    div.onclick = () => startSession(k);
+    div.onclick = (e) => startSession(k, e);
     grid.appendChild(div);
   });
 }
@@ -805,7 +952,7 @@ function renderHome(){
 let sessionInterval = null;
 let sessionData = null;
 
-function startSession(k){
+function startSession(k, e){
   const s = getSubjKey(k);
   sessionData = {key:k, name:s.name, duration:s.time*60, remaining:s.time*60, started:Date.now()};
   document.getElementById('sessionIcon').innerHTML = SVG_DEFS + getSubjIcon(k);
@@ -814,6 +961,7 @@ function startSession(k){
   document.getElementById('sessionTip').textContent = TIPS[Math.floor(Math.random()*TIPS.length)];
   const link = document.getElementById('reshuLink');
   link.href = s.url;
+  if(e) splash(e.clientX, e.clientY, getPalette(), 30, 1.3);
   go('session');
   updateTimer();
   if(sessionInterval) clearInterval(sessionInterval);
@@ -838,7 +986,7 @@ function cancelSession(){
   go('home');
 }
 
-document.getElementById('solveBtn').onclick = () => {
+document.getElementById('solveBtn').onclick = (e) => {
   if(!sessionData) return;
   if(sessionInterval) clearInterval(sessionInterval);
   const k = sessionData.key;
@@ -854,8 +1002,7 @@ document.getElementById('solveBtn').onclick = () => {
     } else state.streak = 1;
     state.lastActive = today;
   }
-  const earnedCoins = 50;
-  state.coins += earnedCoins;
+  state.coins += 50;
   addXP(50);
   incQuest('solve1');
   incQuest('solve2');
@@ -864,6 +1011,7 @@ document.getElementById('solveBtn').onclick = () => {
   save();
   const motivation = MOTIVATION[Math.floor(Math.random()*MOTIVATION.length)];
   const fire = fireEmoji(state.streak);
+  splash(window.innerWidth/2, window.innerHeight/2, PALETTES.gold, 60, 1.8);
   toast(`${fire} +50 💰 +50 XP`,true);
   setTimeout(()=>toast(motivation),900);
   sessionData = null;
@@ -871,7 +1019,7 @@ document.getElementById('solveBtn').onclick = () => {
 };
 
 // ============================================================
-// ACHIEVEMENTS
+// ACH
 // ============================================================
 function unlock(code){
   if(state.achievements[code]) return false;
@@ -886,6 +1034,7 @@ function showAchPopup(a){
   document.getElementById('achCircle').textContent = a.emoji;
   document.getElementById('achName').textContent = a.title;
   popup.classList.add('show');
+  splash(window.innerWidth/2, window.innerHeight/2, PALETTES.gold, 80, 2);
   setTimeout(()=>popup.classList.remove('show'),2200);
 }
 function checkAchievements(){
@@ -905,9 +1054,6 @@ function checkAchievements(){
   if(state.coins>=500) unlock('rich');
 }
 
-// ============================================================
-// SUBJECT PICKER
-// ============================================================
 function openSubjectPicker(){
   const grid = document.getElementById('pickerGrid');
   grid.innerHTML = SVG_DEFS;
@@ -916,7 +1062,7 @@ function openSubjectPicker(){
     const div = document.createElement('div');
     div.className = 'subject-card';
     div.innerHTML = `<div class="subject-icon">${getSubjIcon(k)}</div><div class="subject-name">${s.name}</div><div class="subject-time">⏱ ${s.time} мин</div>`;
-    div.onclick = () => { closePicker(); startSession(k); };
+    div.onclick = (e) => { closePicker(); startSession(k, e); };
     grid.appendChild(div);
   });
   document.getElementById('pickerModal').classList.add('show');
@@ -945,7 +1091,7 @@ function addMessage(role,text,animate=true){
 }
 function scrollChatBottom(){ const b = document.getElementById('chatMessages'); if(b) b.scrollTop = b.scrollHeight; }
 
-function sendMessage(){
+function sendMessage(e){
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if(!text) return;
@@ -971,14 +1117,14 @@ function sendMessage(){
     if(state.chatHistory.length>=10) unlock('chatty');
   },900);
 }
-function quickAsk(q){ document.getElementById('chatInput').value = q; sendMessage(); }
+function quickAsk(q, e){ document.getElementById('chatInput').value = q; sendMessage(e); }
 function getAIAnswer(q){
   const low = q.toLowerCase();
   for(const key in AI_ANSWERS){ if(low.includes(key)) return AI_ANSWERS[key]; }
   if(low.includes('привет')||low.includes('здравств')) return "Привет! 👋 Готов помочь с ОГЭ!";
-  if(low.includes('спасибо')) return "Всегда рад помочь! 💪 Продолжай в том же духе!\n\nСпрашивай ещё 😉";
-  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 <b>Что важно</b>\n• Задания 1-5: практические\n• 6-14: алгебра и геометрия\n• 15-19: повышенная сложность\n\n🔑 <b>Что разобрать?</b>\nНапиши номер задания.\n\nСпрашивай ещё 😉";
-  if(low.includes('русск')||low.includes('орфограф')||low.includes('синтакс')) return "📖 <b>Русский ОГЭ</b>\n\n💡 <b>Структура</b>\n• Изложение (задание 1)\n• 7 тестовых\n• Сочинение 9.3\n\n🔑 <b>Что разобрать?</b>\nНапиши тему.\n\nСпрашивай ещё 😉";
+  if(low.includes('спасибо')) return "Всегда рад помочь! 💪\n\nСпрашивай ещё 😉";
+  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 Задания 1-5: практические, 6-14: алгебра, 15-19: сложные.\n\n🔑 Что конкретно разобрать?\n\nСпрашивай ещё 😉";
+  if(low.includes('русск')||low.includes('орфограф')||low.includes('синтакс')) return "📖 <b>Русский ОГЭ</b>\n\n💡 Изложение + 7 тестов + сочинение 9.3.\n\n🔑 Что разобрать?\n\nСпрашивай ещё 😉";
   return DEFAULT_AI;
 }
 function resetChat(){
@@ -989,7 +1135,7 @@ function resetChat(){
   toast('🔄 Диалог очищен');
 }
 document.getElementById('chatInput').addEventListener('keydown',(e)=>{
-  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(e); }
 });
 
 // ============================================================
@@ -1015,7 +1161,7 @@ function renderNotes(){
     list.appendChild(div);
   });
 }
-function addNote(){
+function addNote(e){
   const text = document.getElementById('noteInput').value.trim();
   const subject = document.getElementById('noteSubject').value;
   if(!text){ toast('Введи текст'); return; }
@@ -1025,6 +1171,7 @@ function addNote(){
   renderNotes();
   incQuest('note1');
   unlock('note_taker');
+  if(e) splash(e.clientX, e.clientY, getPalette(), 30, 1.2);
   toast('✅ Заметка добавлена');
 }
 
@@ -1041,22 +1188,23 @@ function initForecastSelect(){
     sel.appendChild(opt);
   });
 }
-function calcForecast(){
+function calcForecast(e){
   const k = document.getElementById('forecastSubject').value;
   const score = parseInt(document.getElementById('forecastScore').value);
   const s = getSubjKey(k);
   if(isNaN(score)||score<0||score>s.max){ toast('Введи балл от 0 до '+s.max); return; }
   const pct = score/s.max*100;
-  let grade,verdict,color;
-  if(pct<30){ grade=2; verdict='😢 Слабо.'; color='#ef5350'; }
-  else if(pct<55){ grade=3; verdict='😐 Удовлетворительно.'; color='#ff9800'; }
-  else if(pct<80){ grade=4; verdict='👍 Хорошо!'; color='#4caf50'; }
-  else { grade=5; verdict='🏆 Отлично!'; color='#c6ff00'; }
+  let grade,verdict,color,pal;
+  if(pct<30){ grade=2; verdict='😢 Слабо.'; color='#ef5350'; pal=['#ef5350','#c62828','#b71c1c','#8b0000']; }
+  else if(pct<55){ grade=3; verdict='😐 Удовлетворительно.'; color='#ff9800'; pal=['#ff9800','#f57c00','#ffb74d','#ffcc80']; }
+  else if(pct<80){ grade=4; verdict='👍 Хорошо!'; color='#4caf50'; pal=['#4caf50','#66bb6a','#81c784','#a5d6a7']; }
+  else { grade=5; verdict='🏆 Отлично!'; color='#c6ff00'; pal=PALETTES.gold; }
   const res = document.getElementById('forecastResult');
   res.innerHTML = `<div class="grade-display"><div class="grade-num" style="color:${color}">${grade}</div><div class="grade-verdict">${verdict}</div><div style="margin-top:12px;font-size:13px;color:#a8a8c8;font-weight:700">${score} из ${s.max} (${Math.round(pct)}%)</div></div>`;
   unlock('forecast_master');
   incQuest('forecast1');
   save();
+  splash(window.innerWidth/2, window.innerHeight/2, pal, 60, 1.6);
 }
 
 // ============================================================
@@ -1116,11 +1264,11 @@ function renderXO(){
     const div = document.createElement('div');
     div.className = 'xo-cell';
     div.textContent = c==='X'?'❌':c==='O'?'⭕':'';
-    div.onclick = () => xoMove(i);
+    div.onclick = (e) => xoMove(i, e);
     board.appendChild(div);
   });
 }
-function xoMove(i){
+function xoMove(i, e){
   if(xoBoard[i]!==' '||xoTurn!=='X') return;
   xoBoard[i] = 'X';
   renderXO();
@@ -1155,7 +1303,14 @@ function checkXO(){
 }
 function endXO(w){
   const st = document.getElementById('gameStatus');
-  if(w==='X'){ st.textContent = '🏆 Ты победил!'; unlock('xo_win'); state.coins+=20; addXP(20); updateTopStats(); }
+  if(w==='X'){
+    st.textContent = '🏆 Ты победил!';
+    unlock('xo_win');
+    state.coins+=20;
+    addXP(20);
+    updateTopStats();
+    splash(window.innerWidth/2, window.innerHeight/2, PALETTES.party, 80, 2);
+  }
   else if(w==='O'){ st.textContent = '😔 Компьютер победил'; }
   else st.textContent = '🤝 Ничья!';
   save();
@@ -1167,9 +1322,6 @@ function newGame(){
   renderXO();
 }
 
-// ============================================================
-// TOP STATS
-// ============================================================
 function updateTopStats(){
   document.getElementById('streakPill').textContent = '🔥 ' + state.streak;
   document.getElementById('coinPill').textContent = '💰 ' + state.coins;
@@ -1192,6 +1344,10 @@ function initApp(){
   renderChat();
   initForecastSelect();
   newGame();
+  // Приветственный салют
+  setTimeout(() => {
+    splash(window.innerWidth/2, window.innerHeight/3, getPalette(), 60, 1.8);
+  }, 400);
 }
 
 load();
@@ -1202,6 +1358,8 @@ if(state.onboarded){
   document.getElementById('nameInput').value = state.name || '';
   renderOnboard();
   spawnParticles();
+  // Салют на онбординге
+  setTimeout(() => splash(window.innerWidth/2, 200, getPalette(), 40, 1.4), 500);
 }
 </script>
 </body>
