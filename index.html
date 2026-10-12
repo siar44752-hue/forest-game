@@ -8,71 +8,90 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{width:100%;min-height:100%;background:#0f0520;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;color:#fff;overscroll-behavior-y:none}
-body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:100px}
+body{overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:110px}
 
-/* ============ АНИМИРОВАННЫЙ ФОН ============ */
+/* ============ ПЕРЕМЕННЫЕ ТЕМЫ ============ */
+:root{
+  --accent:#c6ff00;
+  --accent2:#4caf50;
+  --accent3:#7e3ff2;
+  --bg1:#4a1e7d;
+  --bg2:#1b5e20;
+  --bg3:#1a0f2e;
+  --bg4:#0a0318;
+  --card1:rgba(42,26,85,.75);
+  --card2:rgba(26,15,46,.75);
+}
+body.theme-neon{--accent:#00e5ff;--accent2:#2979ff;--accent3:#ff00e5;--bg1:#00356e;--bg2:#1a0033}
+body.theme-sunset{--accent:#ffab00;--accent2:#ff5252;--accent3:#e91e63;--bg1:#7a1a3d;--bg2:#4a1e28}
+body.theme-mint{--accent:#69f0ae;--accent2:#00bcd4;--accent3:#26c6da;--bg1:#004d40;--bg2:#00695c}
+
+/* ============ ФОН + ЧАСТИЦЫ ============ */
 body::before{content:'';position:fixed;inset:0;background:
-  radial-gradient(circle at 15% 0%,#4a1e7d 0%,transparent 45%),
-  radial-gradient(circle at 85% 100%,#1b5e20 0%,transparent 50%),
-  radial-gradient(circle at 50% 50%,#1a0f2e 0%,#0a0318 100%);
-  z-index:-2}
-body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(198,255,0,.06) 0%, transparent 30%),
-    radial-gradient(circle at 80% 70%, rgba(76,175,80,.06) 0%, transparent 30%);
-  animation:bgFloat 20s ease-in-out infinite alternate}
-@keyframes bgFloat{0%{transform:translate(0,0)}100%{transform:translate(-30px,-20px)}}
+  radial-gradient(circle at 15% 0%,var(--bg1) 0%,transparent 45%),
+  radial-gradient(circle at 85% 100%,var(--bg2) 0%,transparent 50%),
+  radial-gradient(circle at 50% 50%,var(--bg3) 0%,var(--bg4) 100%);
+  z-index:-3;transition:1s}
+#particles{position:fixed;inset:0;z-index:-2;pointer-events:none}
+#particles div{position:absolute;background:var(--accent);border-radius:50%;opacity:.3;animation:float linear infinite;box-shadow:0 0 8px var(--accent)}
+@keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}
+  10%{opacity:.4}90%{opacity:.4}
+  100%{transform:translateY(-100vh) translateX(30px);opacity:0}}
 
 /* ============ TOP HEADER ============ */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(20,10,40,.75);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(198,255,0,.18);padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top))}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(20,10,40,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.06);padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top))}
 .topbar-inner{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto}
 
-/* АВАТАР - SVG ИКОНКА ГРАДУИРОВАННЫЙ */
-.avatar{width:44px;height:44px;border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative;background:linear-gradient(135deg,#7e3ff2,#c6ff00);box-shadow:0 6px 20px rgba(126,63,242,.5),0 0 0 2px rgba(198,255,0,.3);overflow:hidden}
-.avatar::before{content:'';position:absolute;inset:2px;border-radius:12px;background:linear-gradient(135deg,#2a1a55,#1a0f2e);z-index:1}
+/* АВАТАРЫ (SVG) */
+.avatar{width:44px;height:44px;border-radius:14px;display:flex;justify-content:center;align-items:center;flex-shrink:0;position:relative;background:linear-gradient(135deg,var(--accent3),var(--accent));box-shadow:0 6px 20px rgba(126,63,242,.5),0 0 0 2px rgba(255,255,255,.15);overflow:hidden;cursor:pointer;transition:.2s}
+.avatar:active{transform:scale(.92)}
+.avatar::before{content:'';position:absolute;inset:2px;border-radius:12px;background:linear-gradient(135deg,rgba(30,15,60,.95),rgba(15,5,32,.95));z-index:1}
 .avatar svg{position:relative;z-index:2;width:26px;height:26px}
-.avatar.big{width:88px;height:88px;border-radius:24px;box-shadow:0 10px 40px rgba(126,63,242,.6),0 0 0 3px rgba(198,255,0,.4)}
-.avatar.big::before{inset:3px;border-radius:21px}
-.avatar.big svg{width:52px;height:52px}
+.avatar.big{width:96px;height:96px;border-radius:28px;box-shadow:0 10px 40px rgba(126,63,242,.6),0 0 0 3px rgba(255,255,255,.15)}
+.avatar.big::before{inset:3px;border-radius:25px}
+.avatar.big svg{width:56px;height:56px}
 
 .user-info{flex:1;min-width:0}
-.user-name{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#fff,#c6ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.user-name{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .user-sub{font-size:11px;color:#a8a8c8;margin-top:2px;font-weight:600}
-.top-stats{display:flex;gap:8px}
-.stat-pill{background:linear-gradient(135deg,rgba(198,255,0,.18),rgba(76,175,80,.12));border:1.5px solid rgba(198,255,0,.45);border-radius:18px;padding:6px 12px;font-size:13px;font-weight:900;color:#c6ff00;display:flex;align-items:center;gap:4px;white-space:nowrap;box-shadow:0 0 15px rgba(198,255,0,.15)}
+.top-stats{display:flex;gap:6px}
+.stat-pill{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));border:1.5px solid rgba(255,255,255,.15);border-radius:18px;padding:6px 10px;font-size:12px;font-weight:900;color:#fff;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:.2s}
+.stat-pill.accent{color:var(--accent);border-color:rgba(198,255,0,.4);background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.1))}
+.stat-pill.gold{color:#ffd700;border-color:rgba(255,215,0,.4);background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,152,0,.1))}
+.stat-pill:active{transform:scale(.95)}
 
 /* ============ PAGES ============ */
 .page{display:none;padding:18px 14px;max-width:900px;margin:0 auto;animation:pageIn .35s cubic-bezier(.4,0,.2,1)}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-.page-title{font-size:26px;font-weight:900;margin-bottom:18px;letter-spacing:.5px;background:linear-gradient(135deg,#c6ff00,#4caf50,#7e3ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:10px}
+.page-title{font-size:26px;font-weight:900;margin-bottom:18px;letter-spacing:.5px;background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:flex;align-items:center;gap:10px}
 .section-title{font-size:12px;font-weight:900;color:#a8a8c8;text-transform:uppercase;letter-spacing:2px;margin:22px 0 12px;display:flex;align-items:center;gap:8px}
-.section-title::before{content:'';width:4px;height:14px;background:linear-gradient(180deg,#c6ff00,#4caf50);border-radius:2px}
+.section-title::before{content:'';width:4px;height:14px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:2px}
 
 /* ============ CARDS ============ */
-.card{background:linear-gradient(135deg,rgba(42,26,85,.75),rgba(26,15,46,.75));border:1.5px solid rgba(198,255,0,.18);border-radius:18px;padding:18px;margin-bottom:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(198,255,0,.4),transparent)}
-.card-glow{background:linear-gradient(135deg,rgba(198,255,0,.12),rgba(126,63,242,.1));border-color:rgba(198,255,0,.4);box-shadow:0 10px 40px rgba(198,255,0,.12),inset 0 1px 0 rgba(255,255,255,.05)}
+.card{background:linear-gradient(135deg,var(--card1),var(--card2));border:1.5px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;margin-bottom:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
+.card-glow{background:linear-gradient(135deg,rgba(198,255,0,.1),rgba(126,63,242,.08));border-color:rgba(198,255,0,.35);box-shadow:0 10px 40px rgba(198,255,0,.1),inset 0 1px 0 rgba(255,255,255,.05)}
 
-/* ГЛАВНАЯ HERO КАРТОЧКА */
-.hero-card{background:linear-gradient(135deg,#3d1e6d 0%,#1b3b24 100%);border:2px solid rgba(198,255,0,.35);border-radius:24px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 15px 50px rgba(126,63,242,.25)}
+/* HERO */
+.hero-card{background:linear-gradient(135deg,#3d1e6d 0%,#1b3b24 100%);border:2px solid rgba(255,255,255,.1);border-radius:24px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 15px 50px rgba(126,63,242,.25)}
 .hero-card::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle,rgba(198,255,0,.35),transparent 70%);border-radius:50%;animation:pulseGlow 3s ease-in-out infinite alternate}
 .hero-card::after{content:'';position:absolute;bottom:-100px;left:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(126,63,242,.35),transparent 70%);border-radius:50%}
 @keyframes pulseGlow{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.15);opacity:1}}
 .hero-title{font-size:22px;font-weight:900;margin-bottom:8px;position:relative;letter-spacing:.3px}
 .hero-sub{font-size:13px;color:#d0d0e8;margin-bottom:18px;position:relative;line-height:1.5}
 .hero-stats{display:flex;gap:10px;position:relative}
-.hero-stat{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(198,255,0,.15);border-radius:14px;padding:12px 6px;text-align:center;backdrop-filter:blur(5px)}
-.hero-stat .num{font-size:22px;font-weight:900;color:#c6ff00;display:block;text-shadow:0 0 20px rgba(198,255,0,.5)}
+.hero-stat{flex:1;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 6px;text-align:center}
+.hero-stat .num{font-size:22px;font-weight:900;color:var(--accent);display:block;text-shadow:0 0 20px rgba(198,255,0,.5)}
 .hero-stat .lbl{font-size:9px;color:#a8a8c8;margin-top:3px;text-transform:uppercase;letter-spacing:1px;font-weight:800}
 
 /* ============ BUTTONS ============ */
-.btn{background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(198,255,0,.35),inset 0 1px 0 rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.btn{background:linear-gradient(135deg,var(--accent),#9ccc00);color:#0a1c10;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.5px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(198,255,0,.35),inset 0 1px 0 rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
 .btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transition:.5s}
-.btn:active{transform:scale(.97);box-shadow:0 4px 12px rgba(198,255,0,.5)}
+.btn:active{transform:scale(.97)}
 .btn:active::before{left:100%}
-.btn-outline{background:rgba(198,255,0,.08);color:#c6ff00;border:2px solid rgba(198,255,0,.5);box-shadow:0 0 20px rgba(198,255,0,.1)}
+.btn-outline{background:rgba(255,255,255,.06);color:var(--accent);border:2px solid var(--accent);box-shadow:0 0 20px rgba(198,255,0,.15)}
 .btn-danger{background:linear-gradient(135deg,#ef5350,#c62828);color:#fff;box-shadow:0 8px 24px rgba(239,83,80,.35)}
 .btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.15);box-shadow:none}
 .btn-sm{padding:11px 16px;font-size:12px;border-radius:12px}
@@ -81,48 +100,45 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 
 /* ============ SUBJECTS ============ */
 .subjects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.subject-card{background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(30,60,40,.9));border:1.5px solid rgba(198,255,0,.28);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.subject-card{background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(30,60,40,.9));border:1.5px solid rgba(255,255,255,.1);border-radius:18px;padding:16px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .subject-card::before{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;background:radial-gradient(circle,rgba(198,255,0,.25),transparent 70%);border-radius:50%;transition:.3s}
-.subject-card:active{transform:scale(.96);border-color:#c6ff00;box-shadow:0 8px 30px rgba(198,255,0,.25)}
+.subject-card:active{transform:scale(.96);border-color:var(--accent);box-shadow:0 8px 30px rgba(198,255,0,.25)}
 .subject-card:active::before{transform:scale(1.3)}
-.subject-emoji{font-size:30px;margin-bottom:8px;display:block;position:relative;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.subject-icon{width:44px;height:44px;margin-bottom:10px;position:relative;filter:drop-shadow(0 3px 10px rgba(0,0,0,.5))}
+.subject-icon svg{width:100%;height:100%}
 .subject-name{font-size:13px;font-weight:900;line-height:1.3;position:relative;margin-bottom:4px}
-.subject-time{font-size:10px;color:#c6ff00;font-weight:800;position:relative;letter-spacing:.5px}
+.subject-time{font-size:10px;color:var(--accent);font-weight:800;position:relative;letter-spacing:.5px}
 
-/* ============ ONBOARDING ============ */
-.onboard-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
-.onboard-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;cursor:pointer;transition:.15s}
-.onboard-item.selected{border-color:#c6ff00;background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.08));box-shadow:0 0 20px rgba(198,255,0,.15)}
-.onboard-item.required{opacity:.55;cursor:default}
-.checkbox{width:24px;height:24px;border-radius:8px;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;font-size:15px;flex-shrink:0;transition:.15s}
-.onboard-item.selected .checkbox{background:#c6ff00;border-color:#c6ff00;color:#000;box-shadow:0 0 12px rgba(198,255,0,.5)}
-.onboard-name{flex:1;font-size:14px;font-weight:800}
-.onboard-info{font-size:11px;color:#a8a8c8;font-weight:700}
+/* ============ SESSION ============ */
+.timer-display{font-size:64px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(198,255,0,.5));margin:20px 0;letter-spacing:2px}
+.timer-bar{height:10px;background:rgba(0,0,0,.5);border-radius:5px;overflow:hidden;margin-bottom:20px}
+.timer-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 1s linear;border-radius:5px;box-shadow:0 0 15px rgba(198,255,0,.5)}
 
-/* ============ TIMER ============ */
-.timer-display{font-size:64px;font-weight:900;text-align:center;font-variant-numeric:tabular-nums;background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(198,255,0,.5));margin:20px 0;letter-spacing:2px}
-.timer-bar{height:10px;background:rgba(0,0,0,.5);border-radius:5px;overflow:hidden;margin-bottom:20px;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
-.timer-bar-fill{height:100%;background:linear-gradient(90deg,#4caf50,#c6ff00);transition:width 1s linear;border-radius:5px;box-shadow:0 0 15px rgba(198,255,0,.5)}
+.subject-icon-big{width:70px;height:70px;margin:0 auto 8px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+
+.link-btn{background:linear-gradient(135deg,#2979ff,#00e5ff);color:#fff;font-size:14px;font-weight:900;padding:15px 24px;border:none;border-radius:16px;cursor:pointer;text-transform:uppercase;letter-spacing:1.2px;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(41,121,255,.4);display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;text-decoration:none}
+.link-btn:active{transform:scale(.97)}
+.link-btn svg{width:20px;height:20px}
 
 /* ============ AI CHAT ============ */
-.chat-container{display:flex;flex-direction:column;height:calc(100vh - 260px);min-height:400px}
-.chat-messages{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.chat-container{display:flex;flex-direction:column;height:calc(100vh - 270px);min-height:400px}
+.chat-messages{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
 .msg{max-width:88%;padding:14px 16px;border-radius:18px;font-size:14px;line-height:1.55;animation:msgIn .3s cubic-bezier(.4,0,.2,1);word-wrap:break-word}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.msg-user{align-self:flex-end;background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;border-bottom-right-radius:4px;font-weight:600;box-shadow:0 6px 20px rgba(198,255,0,.3)}
-.msg-ai{align-self:flex-start;background:linear-gradient(135deg,rgba(60,30,110,.95),rgba(42,26,85,.95));border:1.5px solid rgba(198,255,0,.3);border-bottom-left-radius:4px;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.3)}
-.msg-ai b{color:#c6ff00}
-.msg-ai code{background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;font-family:monospace;font-size:13px;color:#c6ff00}
-.chat-input-area{display:flex;gap:8px;padding:10px 0;border-top:1.5px solid rgba(198,255,0,.18)}
-.chat-input{flex:1;background:rgba(0,0,0,.45);border:2px solid rgba(198,255,0,.25);border-radius:16px;padding:14px 16px;font-size:15px;color:#fff;outline:none;font-family:inherit;resize:none;transition:.15s}
-.chat-input:focus{border-color:#c6ff00;box-shadow:0 0 20px rgba(198,255,0,.2)}
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#9ccc00);color:#0a1c10;border-bottom-right-radius:4px;font-weight:600;box-shadow:0 6px 20px rgba(198,255,0,.3)}
+.msg-ai{align-self:flex-start;background:linear-gradient(135deg,rgba(60,30,110,.95),rgba(42,26,85,.95));border:1.5px solid rgba(255,255,255,.1);border-bottom-left-radius:4px;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.msg-ai b{color:var(--accent)}
+.msg-ai code{background:rgba(0,0,0,.5);padding:2px 8px;border-radius:6px;font-family:monospace;font-size:13px;color:var(--accent)}
+.chat-input-area{display:flex;gap:8px;padding:10px 0;border-top:1.5px solid rgba(255,255,255,.1)}
+.chat-input{flex:1;background:rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:14px 16px;font-size:15px;color:#fff;outline:none;font-family:inherit;resize:none;transition:.15s}
+.chat-input:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(198,255,0,.2)}
 .chat-input::placeholder{color:#666}
-.chat-send{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#c6ff00,#9ccc00);border:none;cursor:pointer;font-size:22px;display:flex;justify-content:center;align-items:center;flex-shrink:0;transition:.15s;box-shadow:0 6px 20px rgba(198,255,0,.4)}
+.chat-send{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),#9ccc00);border:none;cursor:pointer;font-size:22px;display:flex;justify-content:center;align-items:center;flex-shrink:0;transition:.15s;box-shadow:0 6px 20px rgba(198,255,0,.4)}
 .chat-send:active{transform:scale(.9)}
 .quick-questions{display:flex;gap:6px;overflow-x:auto;padding:8px 0;scrollbar-width:none}
 .quick-questions::-webkit-scrollbar{display:none}
-.quick-q{background:linear-gradient(135deg,rgba(198,255,0,.12),rgba(126,63,242,.08));border:1.5px solid rgba(198,255,0,.3);color:#c6ff00;padding:9px 15px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:.15s}
-.quick-q:active{background:rgba(198,255,0,.3);transform:scale(.95)}
+.quick-q{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);color:var(--accent);padding:9px 15px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:.15s}
+.quick-q:active{background:rgba(198,255,0,.2);transform:scale(.95)}
 
 /* ============ ACHIEVEMENTS ============ */
 .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
@@ -135,12 +151,12 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 /* ============ CALENDAR ============ */
 .calendar-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:10px 0}
 .cal-day{aspect-ratio:1;border-radius:7px;background:rgba(255,255,255,.06);display:flex;justify-content:center;align-items:center;font-size:10px;font-weight:800;color:#666;transition:.15s}
-.cal-day.active{background:linear-gradient(135deg,#c6ff00,#4caf50);color:#000;box-shadow:0 0 12px rgba(198,255,0,.5);font-weight:900}
-.cal-day.today{border:2px solid #c6ff00}
+.cal-day.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000;box-shadow:0 0 12px rgba(198,255,0,.5);font-weight:900}
+.cal-day.today{border:2px solid var(--accent)}
 
 /* ============ NOTES ============ */
-.note-item{background:linear-gradient(135deg,rgba(60,30,110,.7),rgba(42,26,85,.7));border-left:4px solid #c6ff00;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:.15s}
-.note-subject{font-size:10px;color:#c6ff00;font-weight:900;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.note-item{background:linear-gradient(135deg,rgba(60,30,110,.7),rgba(42,26,85,.7));border-left:4px solid var(--accent);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.note-subject{font-size:10px;color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
 .note-text{font-size:14px;line-height:1.5;color:#e8e8f0}
 .note-date{font-size:10px;color:#888;margin-top:8px;font-weight:700}
 
@@ -149,41 +165,63 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 .grade-num{font-size:96px;font-weight:900;line-height:1;filter:drop-shadow(0 0 40px currentColor)}
 .grade-verdict{font-size:15px;color:#d0d0e8;margin-top:12px;font-weight:700}
 
-/* ============ GAME XO ============ */
+/* ============ XO GAME ============ */
 .xo-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:24px auto}
-.xo-cell{aspect-ratio:1;background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(42,26,85,.9));border:2.5px solid rgba(198,255,0,.35);border-radius:16px;display:flex;justify-content:center;align-items:center;font-size:48px;cursor:pointer;transition:.15s;box-shadow:0 4px 15px rgba(0,0,0,.3)}
-.xo-cell:active{transform:scale(.94);border-color:#c6ff00}
-.xo-cell.win{background:rgba(198,255,0,.25);border-color:#c6ff00;box-shadow:0 0 30px rgba(198,255,0,.6)}
+.xo-cell{aspect-ratio:1;background:linear-gradient(135deg,rgba(60,30,110,.9),rgba(42,26,85,.9));border:2.5px solid rgba(255,255,255,.15);border-radius:16px;display:flex;justify-content:center;align-items:center;font-size:48px;cursor:pointer;transition:.15s}
+.xo-cell:active{transform:scale(.94);border-color:var(--accent)}
+.xo-cell.win{background:rgba(198,255,0,.25);border-color:var(--accent);box-shadow:0 0 30px rgba(198,255,0,.6)}
+
+/* ============ QUESTS ============ */
+.quest-item{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.quest-item.done{border-color:var(--accent);background:rgba(198,255,0,.08);opacity:.7}
+.quest-check{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.3);display:flex;justify-content:center;align-items:center;flex-shrink:0;font-size:14px}
+.quest-item.done .quest-check{background:var(--accent);border-color:var(--accent);color:#000}
+.quest-info{flex:1}
+.quest-name{font-size:13px;font-weight:800;margin-bottom:3px}
+.quest-reward{font-size:11px;color:var(--accent);font-weight:800}
+.quest-progress{font-size:10px;color:#a8a8c8;font-weight:700;margin-top:3px}
 
 /* ============ BOTTOM NAV ============ */
-.bottomnav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,5,32,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1.5px solid rgba(198,255,0,.18);display:flex;justify-content:space-around;padding:10px 4px;padding-bottom:calc(10px + env(safe-area-inset-bottom));z-index:50;box-shadow:0 -10px 40px rgba(0,0,0,.5)}
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,5,32,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1.5px solid rgba(255,255,255,.08);display:flex;justify-content:space-around;padding:10px 4px;padding-bottom:calc(10px + env(safe-area-inset-bottom));z-index:50}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;cursor:pointer;border-radius:14px;transition:.2s;color:#888;position:relative}
-.nav-item.active{color:#c6ff00;background:linear-gradient(135deg,rgba(198,255,0,.15),rgba(76,175,80,.08));box-shadow:0 0 20px rgba(198,255,0,.15)}
-.nav-item.active::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:30px;height:3px;background:linear-gradient(90deg,#c6ff00,#4caf50);border-radius:0 0 3px 3px}
-.nav-icon{font-size:23px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.nav-item.active{color:var(--accent);background:rgba(255,255,255,.05)}
+.nav-item.active::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:30px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:0 0 3px 3px}
+.nav-icon{font-size:23px;line-height:1}
 .nav-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.6px}
 
 /* ============ TOAST ============ */
-#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,#c6ff00,#9ccc00);color:#0a1c10;padding:14px 24px;border-radius:16px;font-weight:900;font-size:14px;z-index:999;transition:.35s cubic-bezier(.4,0,.2,1);box-shadow:0 15px 50px rgba(0,0,0,.6),0 0 0 2px rgba(198,255,0,.5);max-width:90vw;text-align:center;pointer-events:none}
+#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-120px);background:linear-gradient(135deg,var(--accent),#9ccc00);color:#0a1c10;padding:14px 24px;border-radius:16px;font-weight:900;font-size:14px;z-index:999;transition:.35s cubic-bezier(.4,0,.2,1);box-shadow:0 15px 50px rgba(0,0,0,.6);max-width:90vw;text-align:center;pointer-events:none}
 #toast.show{transform:translateX(-50%) translateY(0)}
+#toast.gold{background:linear-gradient(135deg,#ffd700,#ff9800);color:#1a0f2e}
+
+/* ============ ACH POPUP ============ */
+#achPopup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.5);z-index:1000;text-align:center;opacity:0;pointer-events:none;transition:.4s cubic-bezier(.34,1.56,.64,1)}
+#achPopup.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#achPopup .circle{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,#c6ff00,#4caf50);display:flex;justify-content:center;align-items:center;font-size:64px;margin:0 auto 16px;box-shadow:0 0 60px rgba(198,255,0,.8),0 20px 60px rgba(0,0,0,.6);animation:pulseAch 1s infinite alternate}
+@keyframes pulseAch{0%{transform:scale(1)}100%{transform:scale(1.05)}}
+#achPopup .title{background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:26px;font-weight:900;letter-spacing:2px}
+#achPopup .sub{color:#fff;font-size:15px;margin-top:6px;font-weight:700}
 
 /* ============ MODAL ============ */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;justify-content:center;align-items:flex-end;z-index:100;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;justify-content:center;align-items:flex-end;z-index:100;backdrop-filter:blur(8px)}
 .modal.show{display:flex;animation:fadeIn .25s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-inner{background:linear-gradient(180deg,#2a1a55 0%,#1a0f2e 100%);border-radius:28px 28px 0 0;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%;max-width:600px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .35s cubic-bezier(.4,0,.2,1);border-top:2px solid rgba(198,255,0,.5);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.modal-inner{background:linear-gradient(180deg,#2a1a55 0%,#1a0f2e 100%);border-radius:28px 28px 0 0;padding:24px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%;max-width:600px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:slideUp .35s cubic-bezier(.4,0,.2,1);border-top:2px solid rgba(255,255,255,.15);box-shadow:0 -20px 60px rgba(0,0,0,.5)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-title{font-size:22px;font-weight:900;margin-bottom:18px;text-align:center;background:linear-gradient(135deg,#c6ff00,#4caf50);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.modal-title{font-size:22px;font-weight:900;margin-bottom:18px;text-align:center;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;justify-content:center;align-items:center}
 
-/* ============ TYPING ============ */
-.typing-indicator{display:flex;gap:5px;align-items:center;padding:14px 18px;background:linear-gradient(135deg,rgba(60,30,110,.95),rgba(42,26,85,.95));border:1.5px solid rgba(198,255,0,.3);border-radius:18px;border-bottom-left-radius:4px;align-self:flex-start}
-.typing-dot{width:8px;height:8px;border-radius:50%;background:#c6ff00;animation:typing 1.4s infinite ease-in-out both;box-shadow:0 0 8px rgba(198,255,0,.6)}
+/* Typing */
+.typing-indicator{display:flex;gap:5px;align-items:center;padding:14px 18px;background:rgba(60,30,110,.95);border:1.5px solid rgba(255,255,255,.1);border-radius:18px;border-bottom-left-radius:4px;align-self:flex-start}
+.typing-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:typing 1.4s infinite ease-in-out both}
 .typing-dot:nth-child(2){animation-delay:.2s}
 .typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes typing{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1.15)}}
 
-/* ============ RESPONSIVE ============ */
+/* Level bar */
+.level-bar{height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden;margin-top:6px}
+.level-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:.4s;border-radius:4px}
+
 @media (min-width:600px){
   .subjects-grid{grid-template-columns:repeat(3,1fr)}
   .ach-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
@@ -192,26 +230,18 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 </head>
 <body>
 
+<div id="particles"></div>
+
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="avatar" id="avatar">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#c6ff00"/>
-            <stop offset="100%" stop-color="#4caf50"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 2L3 6V12C3 16.5 6.8 20.7 12 22C17.2 20.7 21 16.5 21 12V6L12 2Z" stroke="url(#grad1)" stroke-width="1.5" stroke-linejoin="round" fill="rgba(198,255,0,0.1)"/>
-        <path d="M9 11L11 13L15 9" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+    <div class="avatar" id="avatar" onclick="go('profile')"></div>
     <div class="user-info">
       <div class="user-name" id="userName">Гость</div>
       <div class="user-sub" id="userSub">Начни заниматься 🔥</div>
     </div>
     <div class="top-stats">
-      <div class="stat-pill" id="streakPill">🔥 0</div>
+      <div class="stat-pill accent" id="streakPill" onclick="go('home')">🔥 0</div>
+      <div class="stat-pill gold" id="coinPill" onclick="go('profile')">💰 0</div>
     </div>
   </div>
 </div>
@@ -252,8 +282,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
     <div class="hero-stats">
       <div class="hero-stat"><span class="num" id="statStreak">0</span><span class="lbl">🔥 Серия</span></div>
       <div class="hero-stat"><span class="num" id="statSolved">0</span><span class="lbl">📚 Решено</span></div>
-      <div class="hero-stat"><span class="num" id="statToday">0</span><span class="lbl">📅 Сегодня</span></div>
+      <div class="hero-stat"><span class="num" id="statLevel">1</span><span class="lbl">⭐ Уровень</span></div>
     </div>
+    <div class="level-bar"><div class="level-fill" id="levelFill" style="width:0%"></div></div>
+    <div style="font-size:10px;color:#a8a8c8;text-align:center;margin-top:6px;font-weight:700" id="xpText">0/100 XP</div>
   </div>
 
   <button class="btn" onclick="openSubjectPicker()" style="margin-bottom:16px">🚀 Начать занятие</button>
@@ -261,7 +293,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   <div class="section-title">📖 Мои предметы</div>
   <div class="subjects-grid" id="subjectsGrid"></div>
 
-  <div class="section-title">⚡ Быстрые действия</div>
+  <div class="section-title">⚡ Ежедневные квесты</div>
+  <div id="questsList"></div>
+
+  <div class="section-title">🎯 Быстрые действия</div>
   <div class="btn-row">
     <button class="btn btn-outline btn-sm" onclick="go('ai')">🤖 AI-помощник</button>
     <button class="btn btn-outline btn-sm" onclick="go('game')">🎮 Играть</button>
@@ -276,11 +311,17 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 <div class="page" id="page-session">
   <button class="btn btn-ghost btn-sm" onclick="go('home')" style="width:auto;margin-bottom:14px">← Назад</button>
   <div class="card card-glow" style="text-align:center">
-    <div class="subject-emoji" style="font-size:56px" id="sessionEmoji">📚</div>
+    <div class="subject-icon-big" id="sessionIcon"></div>
     <div class="section-title" style="margin:8px 0 4px;justify-content:center" id="sessionName">Русский язык</div>
     <div style="font-size:12px;color:#a8a8c8;font-weight:700" id="sessionInfo">ОГЭ · 235 минут</div>
     <div class="timer-display" id="timerDisplay">00:00</div>
     <div class="timer-bar"><div class="timer-bar-fill" id="timerBar" style="width:100%"></div></div>
+
+    <a class="link-btn" id="reshuLink" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      Открыть вариант на Решу ОГЭ
+    </a>
+
     <button class="btn" id="solveBtn">✅ Я решил вариант</button>
     <button class="btn btn-ghost btn-sm" onclick="cancelSession()" style="margin-top:8px">Отменить</button>
   </div>
@@ -291,7 +332,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 </div>
 
 <!-- ============ AI ============ -->
-<div class="page" id="page-ai" style="padding-bottom:120px">
+<div class="page" id="page-ai" style="padding-bottom:130px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
     <div class="page-title" style="margin:0">🤖 AI-помощник</div>
     <button class="btn btn-ghost btn-sm" style="width:auto" onclick="resetChat()">🔄</button>
@@ -344,44 +385,54 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 <div class="page" id="page-profile">
   <div class="page-title">👤 Профиль</div>
   <div class="card card-glow" style="text-align:center">
-    <div class="avatar big" id="profileAvatar" style="margin:0 auto 14px">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L3 6V12C3 16.5 6.8 20.7 12 22C17.2 20.7 21 16.5 21 12V6L12 2Z" stroke="url(#grad1)" stroke-width="1.5" stroke-linejoin="round" fill="rgba(198,255,0,0.12)"/>
-        <path d="M9 11L11 13L15 9" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 7L12 9" stroke="url(#grad1)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <div class="avatar big" id="profileAvatar" style="margin:0 auto 14px" onclick="openAvatarPicker()"></div>
     <div style="font-size:22px;font-weight:900" id="profileName">Гость</div>
     <div style="font-size:12px;color:#a8a8c8;margin-top:6px;font-weight:700" id="profileEmail">Ученик 9 класса</div>
+    <div style="font-size:11px;color:var(--accent);margin-top:8px;font-weight:800">Нажми на аватар чтобы сменить 🎨</div>
   </div>
   <div class="card">
     <div class="section-title" style="margin-top:0">📊 Статистика</div>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
-      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
-        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prStreak">0</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(255,255,255,.1)">
+        <div style="font-size:28px;font-weight:900;color:var(--accent)" id="prStreak">0</div>
         <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">🔥 СЕРИЯ</div>
       </div>
-      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
-        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prSolved">0</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(255,255,255,.1)">
+        <div style="font-size:28px;font-weight:900;color:var(--accent)" id="prSolved">0</div>
         <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">📚 РЕШЕНО</div>
       </div>
-      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
-        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prAch">0</div>
-        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">🏆 НАГРАД</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(255,255,255,.1)">
+        <div style="font-size:28px;font-weight:900;color:#ffd700" id="prCoins">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">💰 МОНЕТ</div>
       </div>
-      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(198,255,0,.15)">
-        <div style="font-size:28px;font-weight:900;color:#c6ff00;text-shadow:0 0 20px rgba(198,255,0,.5)" id="prDays">0</div>
-        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">📅 ДНЕЙ</div>
+      <div style="text-align:center;padding:14px;background:rgba(0,0,0,.35);border-radius:14px;border:1.5px solid rgba(255,255,255,.1)">
+        <div style="font-size:28px;font-weight:900;color:var(--accent)" id="prAch">0</div>
+        <div style="font-size:10px;color:#a8a8c8;font-weight:800;letter-spacing:1px;margin-top:3px">🏆 НАГРАД</div>
       </div>
     </div>
   </div>
+
+  <div class="section-title">🎨 Тема оформления</div>
+  <div class="card">
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" onclick="setTheme('default')">🌿 Лайм</button>
+      <button class="btn btn-ghost btn-sm" onclick="setTheme('neon')">💙 Неон</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" onclick="setTheme('sunset')">🌅 Закат</button>
+      <button class="btn btn-ghost btn-sm" onclick="setTheme('mint')">🌊 Мята</button>
+    </div>
+  </div>
+
   <div class="section-title">🏆 Достижения</div>
   <div class="ach-grid" id="achGrid"></div>
+
   <div class="section-title">📅 Активность за 30 дней</div>
   <div class="card">
     <div class="calendar-grid" id="calendarGrid"></div>
     <div style="text-align:center;font-size:13px;color:#a8a8c8;margin-top:10px;font-weight:700" id="calStats"></div>
   </div>
+
   <div class="section-title">⚙️ Настройки</div>
   <div class="card">
     <button class="btn btn-ghost" onclick="changeSubjects()" style="margin-bottom:10px">🔄 Сменить предметы</button>
@@ -400,7 +451,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   </div>
 </div>
 
-<!-- ============ MODAL ============ -->
+<!-- ============ MODALS ============ -->
 <div class="modal" id="pickerModal">
   <div class="modal-inner" style="position:relative">
     <button class="modal-close" onclick="closePicker()">✕</button>
@@ -409,7 +460,14 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
   </div>
 </div>
 
-<!-- ============ BOTTOM NAV ============ -->
+<div class="modal" id="avatarModal">
+  <div class="modal-inner" style="position:relative">
+    <button class="modal-close" onclick="closeAvatarPicker()">✕</button>
+    <div class="modal-title">🎨 Выбери аватар</div>
+    <div id="avatarOptions" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>
+  </div>
+</div>
+
 <div class="bottomnav" id="bottomnav" style="display:none">
   <div class="nav-item active" data-page="home" onclick="go('home')"><div class="nav-icon">🏠</div><div class="nav-label">Главная</div></div>
   <div class="nav-item" data-page="ai" onclick="go('ai')"><div class="nav-icon">🤖</div><div class="nav-label">AI</div></div>
@@ -419,25 +477,50 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
 </div>
 
 <div id="toast"></div>
+<div id="achPopup">
+  <div class="circle" id="achCircle">🏆</div>
+  <div class="title">ДОСТИЖЕНИЕ!</div>
+  <div class="sub" id="achName">Название</div>
+</div>
 
 <script>
 // ============================================================
 // SUBJECTS
 // ============================================================
 const SUBJECTS = {
-  rus:  {name:"Русский язык",   emoji:"📚", time:235, max:39, url:"https://rus-oge.sdamgia.ru/"},
-  math: {name:"Математика",     emoji:"📐", time:235, max:31, url:"https://oge.sdamgia.ru/"},
-  bio:  {name:"Биология",       emoji:"🧬", time:180, max:48, url:"https://bio-oge.sdamgia.ru/"},
-  chem: {name:"Химия",          emoji:"🧪", time:180, max:40, url:"https://chem-oge.sdamgia.ru/"},
-  inf:  {name:"Информатика",    emoji:"💻", time:150, max:19, url:"https://inf-oge.sdamgia.ru/"},
-  phys: {name:"Физика",         emoji:"⚛️", time:180, max:45, url:"https://phys-oge.sdamgia.ru/"},
-  hist: {name:"История",        emoji:"🏛", time:180, max:37, url:"https://hist-oge.sdamgia.ru/"},
-  soc:  {name:"Обществознание", emoji:"🤝", time:180, max:37, url:"https://soc-oge.sdamgia.ru/"},
-  geo:  {name:"География",      emoji:"🌍", time:150, max:31, url:"https://geo-oge.sdamgia.ru/"},
-  lit:  {name:"Литература",     emoji:"📖", time:235, max:42, url:"https://lit-oge.sdamgia.ru/"},
-  eng:  {name:"Английский",     emoji:"🇬🇧", time:120, max:70, url:"https://en-oge.sdamgia.ru/"}
+  rus:  {name:"Русский язык",   time:235, max:39, url:"https://rus-oge.sdamgia.ru/",  icon:"book"},
+  math: {name:"Математика",     time:235, max:31, url:"https://oge.sdamgia.ru/",      icon:"calc"},
+  bio:  {name:"Биология",       time:180, max:48, url:"https://bio-oge.sdamgia.ru/",  icon:"dna"},
+  chem: {name:"Химия",          time:180, max:40, url:"https://chem-oge.sdamgia.ru/", icon:"flask"},
+  inf:  {name:"Информатика",    time:150, max:19, url:"https://inf-oge.sdamgia.ru/",  icon:"code"},
+  phys: {name:"Физика",         time:180, max:45, url:"https://phys-oge.sdamgia.ru/", icon:"atom"},
+  hist: {name:"История",        time:180, max:37, url:"https://hist-oge.sdamgia.ru/", icon:"column"},
+  soc:  {name:"Обществознание", time:180, max:37, url:"https://soc-oge.sdamgia.ru/",  icon:"people"},
+  geo:  {name:"География",      time:150, max:31, url:"https://geo-oge.sdamgia.ru/",  icon:"globe"},
+  lit:  {name:"Литература",     time:235, max:42, url:"https://lit-oge.sdamgia.ru/",  icon:"bookmark"},
+  eng:  {name:"Английский",     time:120, max:70, url:"https://en-oge.sdamgia.ru/",   icon:"flag"}
 };
 const REQUIRED = ['rus','math'];
+
+// SVG иконки
+const ICONS = {
+  book:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4z"/><path d="M18 20a2 2 0 0 0 2-2V6"/></svg>`,
+  calc:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><circle cx="8" cy="11" r="1" fill="url(#ag)"/><circle cx="12" cy="11" r="1" fill="url(#ag)"/><circle cx="16" cy="11" r="1" fill="url(#ag)"/><circle cx="8" cy="15" r="1" fill="url(#ag)"/><circle cx="12" cy="15" r="1" fill="url(#ag)"/><circle cx="16" cy="15" r="1" fill="url(#ag)"/><circle cx="8" cy="19" r="1" fill="url(#ag)"/><circle cx="12" cy="19" r="1" fill="url(#ag)"/><circle cx="16" cy="19" r="1" fill="url(#ag)"/></svg>`,
+  dna:      `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M4 4c0 6 16 8 16 16"/><path d="M20 4c0 6-16 8-16 16"/><line x1="6" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="18" y2="16"/></svg>`,
+  flask:    `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M9 3v6L4 20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2L15 9V3"/><line x1="8" y1="3" x2="16" y2="3"/><circle cx="12" cy="16" r="1" fill="url(#ag)"/></svg>`,
+  code:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  atom:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2"><circle cx="12" cy="12" r="2" fill="url(#ag)"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-60 12 12)"/></svg>`,
+  column:   `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="4"/><line x1="6" y1="8" x2="6" y2="18"/><line x1="12" y1="8" x2="12" y2="18"/><line x1="18" y1="8" x2="18" y2="18"/><rect x="2" y="18" width="20" height="3"/></svg>`,
+  people:   `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v2"/></svg>`,
+  globe:    `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>`,
+  bookmark: `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`,
+  flag:     `<svg viewBox="0 0 24 24" fill="none" stroke="url(#ag)" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>`
+};
+
+// Аватары (SVG символы)
+const AVATARS = ['🦊','🐺','🐻','🦁','🐯','🐨','🐼','🦉','🦅','🐲','🦄','👑','⚔️','🛡️','🏆','💎','🚀','🌟','⚡','🔥','🎓','✨','🌟','🎯'];
+// Префикс для градиента SVG
+const SVG_DEFS = `<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c6ff00"/><stop offset="100%" stop-color="#4caf50"/></linearGradient></defs></svg>`;
 
 const ACHIEVEMENTS = {
   first_flame:{emoji:"🔥",title:"Первый огонёк"},
@@ -454,7 +537,10 @@ const ACHIEVEMENTS = {
   chatty:{emoji:"💬",title:"Болтун"},
   note_taker:{emoji:"📝",title:"Заметочник"},
   forecast_master:{emoji:"🎯",title:"Прогнозист"},
-  perfect_day:{emoji:"🌟",title:"Идеальный день"}
+  perfect_day:{emoji:"🌟",title:"Идеальный день"},
+  rich:{emoji:"💰",title:"Богач (500 монет)"},
+  level5:{emoji:"⭐",title:"Уровень 5"},
+  level10:{emoji:"👑",title:"Уровень 10"}
 };
 
 const MOTIVATION = [
@@ -476,83 +562,194 @@ const TIPS = [
   "Следи за временем. Не сиди на одном задании дольше 10 минут."
 ];
 
-// ============================================================
-// AI ANSWERS
-// ============================================================
-const AI_ANSWERS = {
-  "дискриминант": "📖 <b>Что это</b>\nДискриминант — число, которое показывает, сколько корней у квадратного уравнения.\n\n💡 <b>Формула</b>\nD = b² − 4ac для уравнения ax² + bx + c = 0\n\n✏️ <b>Пример</b>\nx² − 5x + 6 = 0 → D = 25 − 24 = 1\nD > 0 → 2 корня\n\n🔑 <b>Подсказка</b>\nD > 0 — два корня, D = 0 — один, D < 0 — нет.\n\nСпрашивай ещё 😉",
-  "вероятность": "📖 <b>Что это</b>\nВероятность — число от 0 до 1, показывающее шанс события.\n\n💡 <b>Формула</b>\nP = (благоприятные) / (всего)\n\n✏️ <b>Пример</b>\nВ корзине 3 красных и 7 синих шаров.\nP(красный) = 3/10 = 0,3\n\n🔑 <b>Подсказка</b>\nПосчитай ВСЕ исходы сначала, потом нужные.\n\nСпрашивай ещё 😉",
-  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление (толкование понятия)\n2. Аргумент из текста\n3. Аргумент из жизни/литературы\n4. Вывод\n\n✏️ <b>Пример</b>\nТема «Дружба» → вступление → пример из текста → пример из книги → вывод.\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов. Пиши от себя, честно.\n\nСпрашивай ещё 😉",
-  "задание 1": "📖 <b>Что это</b>\nВ ОГЭ по математике задание 1 — практическая задача (шины, печь, дача).\n\n💡 <b>Алгоритм</b>\n1. Прочитай условие 2 раза\n2. Выпиши все числа\n3. Нарисуй схему\n4. Реши по действиям\n\n✏️ <b>Пример</b>\nШины: найди диаметр → переведи в мм → подставь в формулу.\n\n🔑 <b>Подсказка</b>\nНе спеши, проверяй единицы измерения.\n\nСпрашивай ещё 😉",
-  "пунктуация": "📖 <b>Что это</b>\nПунктуация — расстановка знаков препинания.\n\n💡 <b>Главное правило</b>\nЗапятая ставится между частями сложного предложения и при однородных членах.\n\n✏️ <b>Пример</b>\n«Я пришёл, чтобы учиться» — запятая перед «чтобы».\n\n🔑 <b>Подсказка</b>\nНайди грамматические основы — это ключ.\n\nСпрашивай ещё 😉"
-};
+const QUESTS_POOL = [
+  {id:"solve1",name:"Решить 1 вариант",goal:1,reward:30},
+  {id:"solve2",name:"Решить 2 варианта",goal:2,reward:60},
+  {id:"solve3",name:"Решить 3 варианта",goal:3,reward:100},
+  {id:"ai_ask",name:"Задать вопрос AI",goal:1,reward:15},
+  {id:"note1",name:"Создать заметку",goal:1,reward:20},
+  {id:"forecast1",name:"Проверить прогноз",goal:1,reward:20}
+];
 
-const DEFAULT_AI = "📖 <b>Что это</b>\nХороший вопрос! Дай мне подумать над темой...\n\n💡 <b>Правило</b>\nОбычно такие задания решаются по алгоритму: пойми условие → выпиши данные → найди формулу → подставь.\n\n✏️ <b>Пример</b>\nПопробуй разбить задачу на шаги, решай по одному.\n\n🔑 <b>Подсказка</b>\nПереформулируй вопрос конкретнее: «как решить задание N по теме X».\n\nСпрашивай ещё 😉";
+// AI
+const AI_ANSWERS = {
+  "дискриминант": "📖 <b>Что это</b>\nДискриминант — число, которое показывает, сколько корней у квадратного уравнения.\n\n💡 <b>Формула</b>\nD = b² − 4ac\n\n✏️ <b>Пример</b>\nx² − 5x + 6 = 0 → D = 25 − 24 = 1\nD > 0 → 2 корня\n\n🔑 <b>Подсказка</b>\nD > 0 — два корня, D = 0 — один, D < 0 — нет.\n\nСпрашивай ещё 😉",
+  "вероятность": "📖 <b>Что это</b>\nВероятность — число от 0 до 1, шанс события.\n\n💡 <b>Формула</b>\nP = (благоприятные) / (всего)\n\n✏️ <b>Пример</b>\n3 красных и 7 синих шаров.\nP(красный) = 3/10 = 0,3\n\n🔑 <b>Подсказка</b>\nПосчитай ВСЕ исходы сначала.\n\nСпрашивай ещё 😉",
+  "сочинение": "📖 <b>Что это</b>\nСочинение 9.3 — рассуждение на морально-этическую тему.\n\n💡 <b>Структура</b>\n1. Вступление\n2. Аргумент из текста\n3. Аргумент из жизни\n4. Вывод\n\n✏️ <b>Пример</b>\nТема «Дружба» → вступление → пример → вывод.\n\n🔑 <b>Подсказка</b>\nМинимум 70 слов.\n\nСпрашивай ещё 😉",
+  "задание 1": "📖 <b>Что это</b>\nПрактическая задача (шины, печь, дача).\n\n💡 <b>Алгоритм</b>\n1. Прочитай 2 раза\n2. Выпиши числа\n3. Нарисуй схему\n4. Реши по действиям\n\n🔑 <b>Подсказка</b>\nПроверяй единицы измерения.\n\nСпрашивай ещё 😉",
+  "пунктуация": "📖 <b>Что это</b>\nРасстановка знаков препинания.\n\n💡 <b>Главное правило</b>\nЗапятая между частями сложного предложения и при однородных членах.\n\n✏️ <b>Пример</b>\n«Я пришёл, чтобы учиться».\n\n🔑 <b>Подсказка</b>\nНайди грамматические основы.\n\nСпрашивай ещё 😉"
+};
+const DEFAULT_AI = "📖 <b>Что это</b>\nХороший вопрос! Дай подумать...\n\n💡 <b>Правило</b>\nРазбей задачу на шаги: пойми условие → выпиши данные → найди формулу → подставь.\n\n✏️ <b>Пример</b>\nРешай по одному действию.\n\n🔑 <b>Подсказка</b>\nПереформулируй вопрос конкретнее.\n\nСпрашивай ещё 😉";
 
 // ============================================================
 // STATE
 // ============================================================
-const STORAGE_KEY = 'study_navigator_v2';
+const STORAGE_KEY = 'study_navigator_v3';
 let state = {
-  name:'',
-  subjects:['rus','math'],
-  onboarded:false,
-  streak:0,
-  lastActive:null,
-  totalSolved:0,
-  freeDay:false,
-  solved:[],
-  achievements:{},
-  notes:[],
-  chatHistory:[]
+  name:'', subjects:['rus','math'], onboarded:false,
+  streak:0, lastActive:null, totalSolved:0, freeDay:false,
+  solved:[], achievements:{}, notes:[], chatHistory:[],
+  coins:0, xp:0, level:1, theme:'default', avatar:'🦊',
+  quests:{date:null,list:[],done:{},claimed:{}}
 };
 
 function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
 function load(){ try{ const s=localStorage.getItem(STORAGE_KEY); if(s){ state={...state,...JSON.parse(s)}; } }catch(e){} }
 function resetAll(){ if(!confirm('Удалить весь прогресс?')) return; try{localStorage.removeItem(STORAGE_KEY);}catch(e){} location.reload(); }
-
 function todayISO(){ return new Date().toISOString().slice(0,10); }
-function toast(text){ const t=document.getElementById('toast'); t.textContent=text; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function toast(text,gold){ const t=document.getElementById('toast'); t.textContent=text; t.className=gold?'gold':''; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 function fireEmoji(n){ if(n===0) return '⚫'; if(n<3) return '🔥'.repeat(n); if(n<7) return '🔥🔥🔥'; if(n<30) return '🔥🔥🔥🔥'; return '🔥🔥🔥🔥🔥'; }
-function getSubjKey(k){ return SUBJECTS[k]||{name:k,emoji:'📚',time:180,max:30,url:'#'}; }
+function getSubjKey(k){ return SUBJECTS[k]||{name:k,time:180,max:30,url:'#',icon:'book'}; }
+function getSubjIcon(k){ return ICONS[SUBJECTS[k]?.icon]||ICONS.book; }
+
+// ============================================================
+// LEVELS
+// ============================================================
+function xpForLevel(lvl){ return lvl * 100 + (lvl-1) * 50; }
+function addXP(amount){
+  state.xp += amount;
+  while(state.xp >= xpForLevel(state.level)){
+    state.xp -= xpForLevel(state.level);
+    state.level++;
+    toast(`⭐ Уровень ${state.level}!`,true);
+    if(state.level===5) unlock('level5');
+    if(state.level===10) unlock('level10');
+  }
+  updateTopStats();
+}
+
+// ============================================================
+// THEMES
+// ============================================================
+function setTheme(t){
+  state.theme = t;
+  document.body.className = t==='default'?'':'theme-'+t;
+  save();
+  toast('🎨 Тема изменена');
+}
+
+// ============================================================
+// AVATARS
+// ============================================================
+function renderAvatar(){
+  document.getElementById('avatar').innerHTML = `<span style="font-size:22px">${state.avatar}</span>`;
+  document.getElementById('profileAvatar').innerHTML = `<span style="font-size:44px">${state.avatar}</span>`;
+}
+function openAvatarPicker(){
+  const cont = document.getElementById('avatarOptions');
+  cont.innerHTML = '';
+  AVATARS.forEach(a=>{
+    const div = document.createElement('div');
+    div.style.cssText = 'aspect-ratio:1;background:rgba(0,0,0,.35);border:2px solid ' + (state.avatar===a?'var(--accent)':'rgba(255,255,255,.1)') + ';border-radius:14px;display:flex;justify-content:center;align-items:center;font-size:32px;cursor:pointer;transition:.15s';
+    div.textContent = a;
+    div.onclick = () => { state.avatar = a; save(); renderAvatar(); closeAvatarPicker(); toast('🎨 Аватар обновлён'); };
+    cont.appendChild(div);
+  });
+  document.getElementById('avatarModal').classList.add('show');
+}
+function closeAvatarPicker(){ document.getElementById('avatarModal').classList.remove('show'); }
+
+// ============================================================
+// QUESTS
+// ============================================================
+function ensureQuests(){
+  const today = todayISO();
+  if(state.quests.date === today && state.quests.list.length) return;
+  const shuffled = [...QUESTS_POOL].sort(()=>Math.random()-.5).slice(0,3);
+  state.quests = { date:today, list:shuffled, progress:{}, claimed:{} };
+  save();
+}
+function questProgress(id){
+  return state.quests.progress?.[id] || 0;
+}
+function incQuest(id, amount=1){
+  ensureQuests();
+  state.quests.progress = state.quests.progress || {};
+  state.quests.progress[id] = (state.quests.progress[id]||0) + amount;
+  save();
+  checkQuestComplete(id);
+  renderQuests();
+}
+function checkQuestComplete(id){
+  const q = state.quests.list.find(x=>x.id===id);
+  if(!q) return;
+  if(questProgress(id) >= q.goal && !state.quests.claimed[id]){
+    state.quests.claimed[id] = true;
+    state.coins += q.reward;
+    addXP(q.reward);
+    save();
+    toast(`🎉 Квест выполнен! +${q.reward} 💰`,true);
+    updateTopStats();
+  }
+}
+function renderQuests(){
+  ensureQuests();
+  const list = document.getElementById('questsList');
+  list.innerHTML = '';
+  state.quests.list.forEach(q=>{
+    const prog = questProgress(q.id);
+    const done = state.quests.claimed[q.id];
+    const div = document.createElement('div');
+    div.className = 'quest-item' + (done?' done':'');
+    div.innerHTML = `
+      <div class="quest-check">${done?'✓':''}</div>
+      <div class="quest-info">
+        <div class="quest-name">${q.name}</div>
+        <div class="quest-reward">+${q.reward} 💰 + ${q.reward} XP</div>
+        <div class="quest-progress">${Math.min(prog,q.goal)} / ${q.goal}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ============================================================
+// PARTICLES
+// ============================================================
+function spawnParticles(){
+  const cont = document.getElementById('particles');
+  cont.innerHTML = '';
+  for(let i=0;i<25;i++){
+    const p = document.createElement('div');
+    const size = Math.random()*4 + 2;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;bottom:-20px;animation-duration:${12+Math.random()*15}s;animation-delay:${Math.random()*10}s`;
+    cont.appendChild(p);
+  }
+}
 
 // ============================================================
 // ONBOARDING
 // ============================================================
 function renderOnboard(){
-  const list=document.getElementById('onboardList');
-  const optional=Object.keys(SUBJECTS).filter(k=>!REQUIRED.includes(k));
-  list.innerHTML='';
+  const list = document.getElementById('onboardList');
+  const optional = Object.keys(SUBJECTS).filter(k=>!REQUIRED.includes(k));
+  list.innerHTML = '';
   optional.forEach(k=>{
-    const s=SUBJECTS[k];
-    const sel=state.subjects.includes(k);
-    const div=document.createElement('div');
-    div.className='onboard-item'+(sel?' selected':'');
-    div.innerHTML=`<div class="checkbox">${sel?'✓':''}</div><div class="onboard-name">${s.emoji} ${s.name}</div><div class="onboard-info">${s.time} мин</div>`;
-    div.onclick=()=>toggleOnboard(k);
+    const s = SUBJECTS[k];
+    const sel = state.subjects.includes(k);
+    const div = document.createElement('div');
+    div.className = 'onboard-item' + (sel?' selected':'');
+    div.innerHTML = `<div class="checkbox">${sel?'✓':''}</div><div class="onboard-name">${s.name}</div><div class="onboard-info">${s.time} мин</div>`;
+    div.onclick = () => toggleOnboard(k);
     list.appendChild(div);
   });
-  const extra=state.subjects.filter(k=>!REQUIRED.includes(k)).length;
-  document.getElementById('startBtn').disabled=extra!==2 || !state.name.trim();
+  const extra = state.subjects.filter(k=>!REQUIRED.includes(k)).length;
+  document.getElementById('startBtn').disabled = extra!==2 || !state.name.trim();
 }
-
 function toggleOnboard(k){
-  const idx=state.subjects.indexOf(k);
+  const idx = state.subjects.indexOf(k);
   if(idx>=0) state.subjects.splice(idx,1);
-  else{
-    const extra=state.subjects.filter(x=>!REQUIRED.includes(x)).length;
+  else {
+    const extra = state.subjects.filter(x=>!REQUIRED.includes(x)).length;
     if(extra>=2){ toast('Можно выбрать только 2'); return; }
     state.subjects.push(k);
   }
   renderOnboard();
 }
-
-document.getElementById('nameInput').addEventListener('input',(e)=>{ state.name=e.target.value.trim(); renderOnboard(); });
-
-document.getElementById('startBtn').onclick=()=>{
+document.getElementById('nameInput').addEventListener('input',(e)=>{ state.name = e.target.value.trim(); renderOnboard(); });
+document.getElementById('startBtn').onclick = () => {
   if(state.subjects.filter(k=>!REQUIRED.includes(k)).length!==2){ toast('Выбери 2 предмета'); return; }
   if(!state.name.trim()){ toast('Введи имя'); return; }
-  state.onboarded=true;
+  state.onboarded = true;
   save();
   initApp();
 };
@@ -562,13 +759,13 @@ document.getElementById('startBtn').onclick=()=>{
 // ============================================================
 function go(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const target=document.getElementById('page-'+page);
+  const target = document.getElementById('page-'+page);
   if(target) target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   window.scrollTo({top:0,behavior:'smooth'});
   if(page==='profile') renderProfile();
   if(page==='notes') renderNotes();
-  if(page==='home') renderHome();
+  if(page==='home'){ renderHome(); renderQuests(); }
   if(page==='ai') setTimeout(scrollChatBottom,100);
   if(page==='game') renderXO();
 }
@@ -577,23 +774,27 @@ function go(page){
 // HOME
 // ============================================================
 function renderHome(){
-  const h=new Date().getHours();
+  const h = new Date().getHours();
   const greet = h<6?'Доброй ночи': h<12?'Доброе утро': h<18?'Добрый день':'Добрый вечер';
-  document.getElementById('homeGreet').textContent=`${greet}, ${state.name}!`;
-  document.getElementById('statStreak').textContent=state.streak;
-  document.getElementById('statSolved').textContent=state.totalSolved;
-  const todaySolved=state.solved.filter(s=>s.date===todayISO()).length;
-  document.getElementById('statToday').textContent=todaySolved;
-  document.getElementById('homeSub').textContent=todaySolved>0?`Сегодня уже ${todaySolved} вариант(а) 💪`:'Начни первое занятие сегодня';
+  document.getElementById('homeGreet').textContent = `${greet}, ${state.name}!`;
+  document.getElementById('statStreak').textContent = state.streak;
+  document.getElementById('statSolved').textContent = state.totalSolved;
+  document.getElementById('statLevel').textContent = state.level;
+  const needed = xpForLevel(state.level);
+  const pct = Math.min(100, (state.xp/needed)*100);
+  document.getElementById('levelFill').style.width = pct + '%';
+  document.getElementById('xpText').textContent = `${state.xp}/${needed} XP`;
+  const todaySolved = state.solved.filter(s=>s.date===todayISO()).length;
+  document.getElementById('homeSub').textContent = todaySolved>0 ? `Сегодня уже ${todaySolved} вариант(а) 💪` : 'Начни первое занятие сегодня';
 
-  const grid=document.getElementById('subjectsGrid');
-  grid.innerHTML='';
+  const grid = document.getElementById('subjectsGrid');
+  grid.innerHTML = SVG_DEFS;
   state.subjects.forEach(k=>{
-    const s=getSubjKey(k);
-    const div=document.createElement('div');
-    div.className='subject-card';
-    div.innerHTML=`<span class="subject-emoji">${s.emoji}</span><div class="subject-name">${s.name}</div><div class="subject-time">⏱ ${s.time} мин</div>`;
-    div.onclick=()=>startSession(k);
+    const s = getSubjKey(k);
+    const div = document.createElement('div');
+    div.className = 'subject-card';
+    div.innerHTML = `<div class="subject-icon">${getSubjIcon(k)}</div><div class="subject-name">${s.name}</div><div class="subject-time">⏱ ${s.time} мин</div>`;
+    div.onclick = () => startSession(k);
     grid.appendChild(div);
   });
 }
@@ -601,65 +802,71 @@ function renderHome(){
 // ============================================================
 // SESSION
 // ============================================================
-let sessionInterval=null;
-let sessionData=null;
+let sessionInterval = null;
+let sessionData = null;
 
 function startSession(k){
-  const s=getSubjKey(k);
-  sessionData={key:k,name:s.name,emoji:s.emoji,duration:s.time*60,remaining:s.time*60,started:Date.now()};
-  document.getElementById('sessionEmoji').textContent=s.emoji;
-  document.getElementById('sessionName').textContent=s.name;
-  document.getElementById('sessionInfo').textContent=`ОГЭ · ${s.time} минут`;
-  document.getElementById('sessionTip').textContent=TIPS[Math.floor(Math.random()*TIPS.length)];
+  const s = getSubjKey(k);
+  sessionData = {key:k, name:s.name, duration:s.time*60, remaining:s.time*60, started:Date.now()};
+  document.getElementById('sessionIcon').innerHTML = SVG_DEFS + getSubjIcon(k);
+  document.getElementById('sessionName').textContent = s.name;
+  document.getElementById('sessionInfo').textContent = `ОГЭ · ${s.time} минут · макс ${s.max} баллов`;
+  document.getElementById('sessionTip').textContent = TIPS[Math.floor(Math.random()*TIPS.length)];
+  const link = document.getElementById('reshuLink');
+  link.href = s.url;
   go('session');
   updateTimer();
   if(sessionInterval) clearInterval(sessionInterval);
-  sessionInterval=setInterval(updateTimer,1000);
+  sessionInterval = setInterval(updateTimer,1000);
 }
 
 function updateTimer(){
   if(!sessionData) return;
-  const elapsed=Math.floor((Date.now()-sessionData.started)/1000);
-  sessionData.remaining=Math.max(0,sessionData.duration-elapsed);
-  const m=Math.floor(sessionData.remaining/60);
-  const sec=sessionData.remaining%60;
-  document.getElementById('timerDisplay').textContent=`${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-  const pct=(sessionData.remaining/sessionData.duration)*100;
-  document.getElementById('timerBar').style.width=pct+'%';
-  if(sessionData.remaining<=0){
-    clearInterval(sessionInterval);
-    toast('⏰ Время вышло!');
-  }
+  const elapsed = Math.floor((Date.now() - sessionData.started)/1000);
+  sessionData.remaining = Math.max(0, sessionData.duration - elapsed);
+  const m = Math.floor(sessionData.remaining/60);
+  const sec = sessionData.remaining % 60;
+  document.getElementById('timerDisplay').textContent = `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  const pct = (sessionData.remaining/sessionData.duration)*100;
+  document.getElementById('timerBar').style.width = pct + '%';
+  if(sessionData.remaining<=0){ clearInterval(sessionInterval); toast('⏰ Время вышло!'); }
 }
 
 function cancelSession(){
   if(sessionInterval) clearInterval(sessionInterval);
-  sessionData=null;
+  sessionData = null;
   go('home');
 }
 
-document.getElementById('solveBtn').onclick=()=>{
+document.getElementById('solveBtn').onclick = () => {
   if(!sessionData) return;
   if(sessionInterval) clearInterval(sessionInterval);
-  const k=sessionData.key;
-  state.solved.push({subject:k,date:todayISO(),ts:Date.now()});
+  const k = sessionData.key;
+  state.solved.push({subject:k, date:todayISO(), ts:Date.now()});
   state.totalSolved++;
-  const today=todayISO();
-  if(state.lastActive!==today){
+  const today = todayISO();
+  if(state.lastActive !== today){
     if(state.lastActive){
-      const diff=Math.floor((new Date(today)-new Date(state.lastActive))/(1000*60*60*24));
+      const diff = Math.floor((new Date(today) - new Date(state.lastActive))/(1000*60*60*24));
       if(diff===1) state.streak++;
-      else if(diff===2 && state.freeDay){ state.streak++; state.freeDay=false; }
-      else state.streak=1;
-    } else state.streak=1;
-    state.lastActive=today;
+      else if(diff===2 && state.freeDay){ state.streak++; state.freeDay = false; }
+      else state.streak = 1;
+    } else state.streak = 1;
+    state.lastActive = today;
   }
+  const earnedCoins = 50;
+  state.coins += earnedCoins;
+  addXP(50);
+  incQuest('solve1');
+  incQuest('solve2');
+  incQuest('solve3');
   checkAchievements();
   save();
-  const motivation=MOTIVATION[Math.floor(Math.random()*MOTIVATION.length)];
-  const fire=fireEmoji(state.streak);
-  toast(`${fire} ${motivation}`);
-  sessionData=null;
+  const motivation = MOTIVATION[Math.floor(Math.random()*MOTIVATION.length)];
+  const fire = fireEmoji(state.streak);
+  toast(`${fire} +50 💰 +50 XP`,true);
+  setTimeout(()=>toast(motivation),900);
+  sessionData = null;
   go('home');
 };
 
@@ -668,40 +875,48 @@ document.getElementById('solveBtn').onclick=()=>{
 // ============================================================
 function unlock(code){
   if(state.achievements[code]) return false;
-  state.achievements[code]=Date.now();
-  const a=ACHIEVEMENTS[code];
-  if(a) toast(`🏆 ${a.emoji} ${a.title}`);
+  state.achievements[code] = Date.now();
+  const a = ACHIEVEMENTS[code];
+  if(a) showAchPopup(a);
+  save();
   return true;
 }
-
+function showAchPopup(a){
+  const popup = document.getElementById('achPopup');
+  document.getElementById('achCircle').textContent = a.emoji;
+  document.getElementById('achName').textContent = a.title;
+  popup.classList.add('show');
+  setTimeout(()=>popup.classList.remove('show'),2200);
+}
 function checkAchievements(){
   if(state.totalSolved>=1) unlock('first_flame');
   if(state.totalSolved>=10) unlock('ten_solved');
   if(state.totalSolved>=50) unlock('fifty_solved');
   if(state.streak>=7) unlock('week_streak');
   if(state.streak>=30) unlock('month_streak');
-  const uniq=new Set(state.solved.map(s=>s.subject));
+  const uniq = new Set(state.solved.map(s=>s.subject));
   if(uniq.size>=Object.keys(SUBJECTS).length) unlock('all_subjects');
-  const today=state.solved.filter(s=>s.date===todayISO()).length;
+  const today = state.solved.filter(s=>s.date===todayISO()).length;
   if(today>=3) unlock('triple_subj');
-  const h=new Date().getHours();
+  const h = new Date().getHours();
   if(h<8) unlock('early_bird');
   if(h>=22) unlock('night_owl');
   if(state.notes.length>=1) unlock('note_taker');
+  if(state.coins>=500) unlock('rich');
 }
 
 // ============================================================
 // SUBJECT PICKER
 // ============================================================
 function openSubjectPicker(){
-  const grid=document.getElementById('pickerGrid');
-  grid.innerHTML='';
+  const grid = document.getElementById('pickerGrid');
+  grid.innerHTML = SVG_DEFS;
   state.subjects.forEach(k=>{
-    const s=getSubjKey(k);
-    const div=document.createElement('div');
-    div.className='subject-card';
-    div.innerHTML=`<span class="subject-emoji">${s.emoji}</span><div class="subject-name">${s.name}</div>`;
-    div.onclick=()=>{ closePicker(); startSession(k); };
+    const s = getSubjKey(k);
+    const div = document.createElement('div');
+    div.className = 'subject-card';
+    div.innerHTML = `<div class="subject-icon">${getSubjIcon(k)}</div><div class="subject-name">${s.name}</div><div class="subject-time">⏱ ${s.time} мин</div>`;
+    div.onclick = () => { closePicker(); startSession(k); };
     grid.appendChild(div);
   });
   document.getElementById('pickerModal').classList.add('show');
@@ -709,47 +924,46 @@ function openSubjectPicker(){
 function closePicker(){ document.getElementById('pickerModal').classList.remove('show'); }
 
 // ============================================================
-// AI CHAT
+// AI
 // ============================================================
 function renderChat(){
-  const box=document.getElementById('chatMessages');
-  box.innerHTML='';
+  const box = document.getElementById('chatMessages');
+  box.innerHTML = '';
   if(state.chatHistory.length===0){
-    addMessage('ai','Привет! Я твой AI-помощник по учёбе. 🤖\n\nЗадай вопрос по любому предмету ОГЭ, и я объясню простыми словами.\n\n<b>Примеры:</b>\n• Как решить задание 1 по математике?\n• Что такое дискриминант?\n• Как писать сочинение 9.3?');
+    addMessage('ai','Привет! Я твой AI-помощник по учёбе. 🤖\n\nЗадай вопрос по любому предмету ОГЭ.\n\n<b>Примеры:</b>\n• Как решить задание 1 по математике?\n• Что такое дискриминант?\n• Как писать сочинение 9.3?');
   } else {
     state.chatHistory.forEach(m=>addMessage(m.role,m.text,false));
   }
 }
-
 function addMessage(role,text,animate=true){
-  const box=document.getElementById('chatMessages');
-  const div=document.createElement('div');
-  div.className='msg msg-'+role;
-  div.innerHTML=text.replace(/\n/g,'<br>');
+  const box = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg msg-'+role;
+  div.innerHTML = text.replace(/\n/g,'<br>');
   box.appendChild(div);
-  if(animate) box.scrollTop=box.scrollHeight;
+  if(animate) box.scrollTop = box.scrollHeight;
 }
-
-function scrollChatBottom(){ const b=document.getElementById('chatMessages'); if(b) b.scrollTop=b.scrollHeight; }
+function scrollChatBottom(){ const b = document.getElementById('chatMessages'); if(b) b.scrollTop = b.scrollHeight; }
 
 function sendMessage(){
-  const input=document.getElementById('chatInput');
-  const text=input.value.trim();
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
   if(!text) return;
-  input.value='';
+  input.value = '';
   addMessage('user',text);
   state.chatHistory.push({role:'user',text});
   save();
-  const box=document.getElementById('chatMessages');
-  const typing=document.createElement('div');
-  typing.className='typing-indicator';
-  typing.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  incQuest('ai_ask');
+  const box = document.getElementById('chatMessages');
+  const typing = document.createElement('div');
+  typing.className = 'typing-indicator';
+  typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
   box.appendChild(typing);
   scrollChatBottom();
 
   setTimeout(()=>{
     typing.remove();
-    const answer=getAIAnswer(text);
+    const answer = getAIAnswer(text);
     addMessage('ai',answer);
     state.chatHistory.push({role:'ai',text:answer});
     save();
@@ -757,29 +971,23 @@ function sendMessage(){
     if(state.chatHistory.length>=10) unlock('chatty');
   },900);
 }
-
-function quickAsk(q){ document.getElementById('chatInput').value=q; sendMessage(); }
-
+function quickAsk(q){ document.getElementById('chatInput').value = q; sendMessage(); }
 function getAIAnswer(q){
-  const low=q.toLowerCase();
-  for(const key in AI_ANSWERS){
-    if(low.includes(key)) return AI_ANSWERS[key];
-  }
-  if(low.includes('привет')||low.includes('здравств')) return "Привет! 👋 Готов помочь с ОГЭ. Спрашивай что угодно по предметам!";
+  const low = q.toLowerCase();
+  for(const key in AI_ANSWERS){ if(low.includes(key)) return AI_ANSWERS[key]; }
+  if(low.includes('привет')||low.includes('здравств')) return "Привет! 👋 Готов помочь с ОГЭ!";
   if(low.includes('спасибо')) return "Всегда рад помочь! 💪 Продолжай в том же духе!\n\nСпрашивай ещё 😉";
-  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 <b>Что важно</b>\n• Задания 1-5: практические\n• 6-14: алгебра и геометрия\n• 15-19: повышенная сложность\n\n✏️ <b>Совет</b>\nНачни с 1-5 — они дают 5 баллов при простом подходе.\n\n🔑 <b>Что конкретно нужно?</b>\nНапиши номер задания или тему.\n\nСпрашивай ещё 😉";
-  if(low.includes('русск')||low.includes('орфограф')||low.includes('синтакс')) return "📖 <b>Русский язык ОГЭ</b>\n\n💡 <b>Структура</b>\n• Изложение (задание 1)\n• 7 тестовых заданий\n• Сочинение 9.3\n\n✏️ <b>Совет</b>\nИзложение = главное + детали. Сочинение = 70+ слов.\n\n🔑 <b>Что разобрать?</b>\nНапиши конкретную тему.\n\nСпрашивай ещё 😉";
+  if(low.includes('математик')||low.includes('алгебр')||low.includes('геометр')) return "📖 <b>Математика ОГЭ</b>\n\n💡 <b>Что важно</b>\n• Задания 1-5: практические\n• 6-14: алгебра и геометрия\n• 15-19: повышенная сложность\n\n🔑 <b>Что разобрать?</b>\nНапиши номер задания.\n\nСпрашивай ещё 😉";
+  if(low.includes('русск')||low.includes('орфограф')||low.includes('синтакс')) return "📖 <b>Русский ОГЭ</b>\n\n💡 <b>Структура</b>\n• Изложение (задание 1)\n• 7 тестовых\n• Сочинение 9.3\n\n🔑 <b>Что разобрать?</b>\nНапиши тему.\n\nСпрашивай ещё 😉";
   return DEFAULT_AI;
 }
-
 function resetChat(){
-  if(!confirm('Очистить историю диалога?')) return;
-  state.chatHistory=[];
+  if(!confirm('Очистить историю?')) return;
+  state.chatHistory = [];
   save();
   renderChat();
   toast('🔄 Диалог очищен');
 }
-
 document.getElementById('chatInput').addEventListener('keydown',(e)=>{
   if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
 });
@@ -788,35 +996,35 @@ document.getElementById('chatInput').addEventListener('keydown',(e)=>{
 // NOTES
 // ============================================================
 function renderNotes(){
-  const sel=document.getElementById('noteSubject');
-  sel.innerHTML='';
+  const sel = document.getElementById('noteSubject');
+  sel.innerHTML = '';
   state.subjects.forEach(k=>{
-    const opt=document.createElement('option');
-    opt.value=k;
-    opt.textContent=getSubjKey(k).name;
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = getSubjKey(k).name;
     sel.appendChild(opt);
   });
-  const list=document.getElementById('notesList');
-  list.innerHTML='';
-  if(state.notes.length===0){ list.innerHTML='<div class="card" style="text-align:center;color:#a8a8c8;font-size:14px;font-weight:700">Пока нет заметок. Добавь первую!</div>'; return; }
-  state.notes.slice().reverse().forEach((n)=>{
-    const s=getSubjKey(n.subject);
-    const div=document.createElement('div');
-    div.className='note-item';
-    div.innerHTML=`<div class="note-subject">${s.emoji} ${s.name}</div><div class="note-text">${n.text}</div><div class="note-date">${new Date(n.ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>`;
+  const list = document.getElementById('notesList');
+  list.innerHTML = '';
+  if(state.notes.length===0){ list.innerHTML = '<div class="card" style="text-align:center;color:#a8a8c8;font-size:14px;font-weight:700">Пока нет заметок.</div>'; return; }
+  state.notes.slice().reverse().forEach(n=>{
+    const s = getSubjKey(n.subject);
+    const div = document.createElement('div');
+    div.className = 'note-item';
+    div.innerHTML = `<div class="note-subject">${s.name}</div><div class="note-text">${n.text}</div><div class="note-date">${new Date(n.ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>`;
     list.appendChild(div);
   });
 }
-
 function addNote(){
-  const text=document.getElementById('noteInput').value.trim();
-  const subject=document.getElementById('noteSubject').value;
+  const text = document.getElementById('noteInput').value.trim();
+  const subject = document.getElementById('noteSubject').value;
   if(!text){ toast('Введи текст'); return; }
   state.notes.push({subject,text,ts:Date.now()});
-  document.getElementById('noteInput').value='';
+  document.getElementById('noteInput').value = '';
   save();
   renderNotes();
-  checkAchievements();
+  incQuest('note1');
+  unlock('note_taker');
   toast('✅ Заметка добавлена');
 }
 
@@ -824,30 +1032,30 @@ function addNote(){
 // FORECAST
 // ============================================================
 function initForecastSelect(){
-  const sel=document.getElementById('forecastSubject');
-  sel.innerHTML='';
+  const sel = document.getElementById('forecastSubject');
+  sel.innerHTML = '';
   state.subjects.forEach(k=>{
-    const opt=document.createElement('option');
-    opt.value=k;
-    opt.textContent=getSubjKey(k).name;
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = getSubjKey(k).name;
     sel.appendChild(opt);
   });
 }
-
 function calcForecast(){
-  const k=document.getElementById('forecastSubject').value;
-  const score=parseInt(document.getElementById('forecastScore').value);
-  const s=getSubjKey(k);
+  const k = document.getElementById('forecastSubject').value;
+  const score = parseInt(document.getElementById('forecastScore').value);
+  const s = getSubjKey(k);
   if(isNaN(score)||score<0||score>s.max){ toast('Введи балл от 0 до '+s.max); return; }
-  const pct=score/s.max*100;
+  const pct = score/s.max*100;
   let grade,verdict,color;
-  if(pct<30){ grade=2; verdict='😢 Слабо. Есть над чем работать.'; color='#ef5350'; }
-  else if(pct<55){ grade=3; verdict='😐 Удовлетворительно. Можно лучше!'; color='#ff9800'; }
-  else if(pct<80){ grade=4; verdict='👍 Хорошо! Ты на верном пути.'; color='#4caf50'; }
-  else { grade=5; verdict='🏆 Отлично! Так держать!'; color='#c6ff00'; }
-  const res=document.getElementById('forecastResult');
-  res.innerHTML=`<div class="grade-display"><div class="grade-num" style="color:${color}">${grade}</div><div class="grade-verdict">${verdict}</div><div style="margin-top:12px;font-size:13px;color:#a8a8c8;font-weight:700">${score} из ${s.max} баллов (${Math.round(pct)}%)</div></div>`;
+  if(pct<30){ grade=2; verdict='😢 Слабо.'; color='#ef5350'; }
+  else if(pct<55){ grade=3; verdict='😐 Удовлетворительно.'; color='#ff9800'; }
+  else if(pct<80){ grade=4; verdict='👍 Хорошо!'; color='#4caf50'; }
+  else { grade=5; verdict='🏆 Отлично!'; color='#c6ff00'; }
+  const res = document.getElementById('forecastResult');
+  res.innerHTML = `<div class="grade-display"><div class="grade-num" style="color:${color}">${grade}</div><div class="grade-verdict">${verdict}</div><div style="margin-top:12px;font-size:13px;color:#a8a8c8;font-weight:700">${score} из ${s.max} (${Math.round(pct)}%)</div></div>`;
   unlock('forecast_master');
+  incQuest('forecast1');
   save();
 }
 
@@ -855,135 +1063,131 @@ function calcForecast(){
 // PROFILE
 // ============================================================
 function renderProfile(){
-  document.getElementById('profileName').textContent=state.name||'Гость';
-  document.getElementById('prStreak').textContent=state.streak;
-  document.getElementById('prSolved').textContent=state.totalSolved;
-  document.getElementById('prAch').textContent=Object.keys(state.achievements).length;
-  const days=new Set(state.solved.map(s=>s.date)).size;
-  document.getElementById('prDays').textContent=days;
+  document.getElementById('profileName').textContent = state.name || 'Гость';
+  document.getElementById('prStreak').textContent = state.streak;
+  document.getElementById('prSolved').textContent = state.totalSolved;
+  document.getElementById('prAch').textContent = Object.keys(state.achievements).length;
+  document.getElementById('prCoins').textContent = state.coins;
 
-  const grid=document.getElementById('achGrid');
-  grid.innerHTML='';
+  const grid = document.getElementById('achGrid');
+  grid.innerHTML = '';
   Object.keys(ACHIEVEMENTS).forEach(code=>{
-    const a=ACHIEVEMENTS[code];
-    const unlocked=!!state.achievements[code];
-    const div=document.createElement('div');
-    div.className='ach-card '+(unlocked?'unlocked':'locked');
-    div.innerHTML=`<span class="ach-emoji">${unlocked?a.emoji:'🔒'}</span><div class="ach-title">${a.title}</div>`;
+    const a = ACHIEVEMENTS[code];
+    const unlocked = !!state.achievements[code];
+    const div = document.createElement('div');
+    div.className = 'ach-card ' + (unlocked?'unlocked':'locked');
+    div.innerHTML = `<span class="ach-emoji">${unlocked?a.emoji:'🔒'}</span><div class="ach-title">${a.title}</div>`;
     grid.appendChild(div);
   });
 
-  const cal=document.getElementById('calendarGrid');
-  cal.innerHTML='';
-  const today=new Date();
-  const solvedDays=new Set(state.solved.map(s=>s.date));
-  let activeCount=0;
+  const cal = document.getElementById('calendarGrid');
+  cal.innerHTML = '';
+  const today = new Date();
+  const solvedDays = new Set(state.solved.map(s=>s.date));
+  let activeCount = 0;
   for(let i=29;i>=0;i--){
-    const d=new Date(today);
+    const d = new Date(today);
     d.setDate(d.getDate()-i);
-    const iso=d.toISOString().slice(0,10);
-    const active=solvedDays.has(iso);
+    const iso = d.toISOString().slice(0,10);
+    const active = solvedDays.has(iso);
     if(active) activeCount++;
-    const div=document.createElement('div');
-    div.className='cal-day'+(active?' active':'')+(i===0?' today':'');
-    div.textContent=d.getDate();
+    const div = document.createElement('div');
+    div.className = 'cal-day' + (active?' active':'') + (i===0?' today':'');
+    div.textContent = d.getDate();
     cal.appendChild(div);
   }
-  document.getElementById('calStats').textContent=`Занимался ${activeCount}/30 дней`;
+  document.getElementById('calStats').textContent = `Занимался ${activeCount}/30 дней`;
 }
-
 function changeSubjects(){
-  state.onboarded=false;
+  state.onboarded = false;
   save();
   location.reload();
 }
 
 // ============================================================
-// XO GAME
+// XO
 // ============================================================
-let xoBoard=[' ',' ',' ',' ',' ',' ',' ',' ',' '];
-let xoTurn='X';
-
+let xoBoard = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
+let xoTurn = 'X';
 function renderXO(){
-  const board=document.getElementById('xoBoard');
-  board.innerHTML='';
+  const board = document.getElementById('xoBoard');
+  board.innerHTML = '';
   xoBoard.forEach((c,i)=>{
-    const div=document.createElement('div');
-    div.className='xo-cell';
-    div.textContent=c==='X'?'❌':c==='O'?'⭕':'';
-    div.onclick=()=>xoMove(i);
+    const div = document.createElement('div');
+    div.className = 'xo-cell';
+    div.textContent = c==='X'?'❌':c==='O'?'⭕':'';
+    div.onclick = () => xoMove(i);
     board.appendChild(div);
   });
 }
-
 function xoMove(i){
   if(xoBoard[i]!==' '||xoTurn!=='X') return;
-  xoBoard[i]='X';
+  xoBoard[i] = 'X';
   renderXO();
-  const w=checkXO();
+  const w = checkXO();
   if(w){ endXO(w); return; }
   if(xoBoard.every(c=>c!==' ')){ endXO('draw'); return; }
-  xoTurn='O';
-  document.getElementById('gameStatus').textContent='Ход компьютера... 🤔';
+  xoTurn = 'O';
+  document.getElementById('gameStatus').textContent = 'Ход компьютера... 🤔';
   setTimeout(aiMove,500);
 }
-
 function aiMove(){
-  const empty=xoBoard.map((c,i)=>c===' '?i:-1).filter(i=>i>=0);
+  const empty = xoBoard.map((c,i)=>c===' '?i:-1).filter(i=>i>=0);
   if(empty.length===0) return;
-  for(const i of empty){
-    const test=[...xoBoard]; test[i]='O';
-    if(checkWin(test,'O')){ xoBoard[i]='O'; renderXO(); endXO('O'); return; }
-  }
-  for(const i of empty){
-    const test=[...xoBoard]; test[i]='X';
-    if(checkWin(test,'X')){ xoBoard[i]='O'; renderXO(); xoTurn='X'; document.getElementById('gameStatus').textContent='Твой ход! Ты — ❌'; return; }
-  }
-  if(xoBoard[4]===' '){ xoBoard[4]='O'; }
-  else { const i=empty[Math.floor(Math.random()*empty.length)]; xoBoard[i]='O'; }
+  for(const i of empty){ const t=[...xoBoard]; t[i]='O'; if(checkWin(t,'O')){ xoBoard[i]='O'; renderXO(); endXO('O'); return; } }
+  for(const i of empty){ const t=[...xoBoard]; t[i]='X'; if(checkWin(t,'X')){ xoBoard[i]='O'; renderXO(); xoTurn='X'; document.getElementById('gameStatus').textContent='Твой ход! Ты — ❌'; return; } }
+  if(xoBoard[4]===' '){ xoBoard[4]='O'; } else { const i=empty[Math.floor(Math.random()*empty.length)]; xoBoard[i]='O'; }
   renderXO();
-  const w=checkXO();
+  const w = checkXO();
   if(w){ endXO(w); return; }
-  xoTurn='X';
-  document.getElementById('gameStatus').textContent='Твой ход! Ты — ❌';
+  xoTurn = 'X';
+  document.getElementById('gameStatus').textContent = 'Твой ход! Ты — ❌';
 }
-
 function checkWin(b,p){
-  const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
   return lines.some(([a,b2,c])=>b[a]===p&&b[b2]===p&&b[c]===p);
 }
-
 function checkXO(){
   if(checkWin(xoBoard,'X')) return 'X';
   if(checkWin(xoBoard,'O')) return 'O';
   if(xoBoard.every(c=>c!==' ')) return 'draw';
   return null;
 }
-
 function endXO(w){
-  const status=document.getElementById('gameStatus');
-  if(w==='X'){ status.textContent='🏆 Ты победил!'; unlock('xo_win'); }
-  else if(w==='O'){ status.textContent='😔 Компьютер победил'; }
-  else status.textContent='🤝 Ничья!';
+  const st = document.getElementById('gameStatus');
+  if(w==='X'){ st.textContent = '🏆 Ты победил!'; unlock('xo_win'); state.coins+=20; addXP(20); updateTopStats(); }
+  else if(w==='O'){ st.textContent = '😔 Компьютер победил'; }
+  else st.textContent = '🤝 Ничья!';
   save();
 }
-
 function newGame(){
-  xoBoard=[' ',' ',' ',' ',' ',' ',' ',' ',' '];
-  xoTurn='X';
-  document.getElementById('gameStatus').textContent='Твой ход! Ты — ❌';
+  xoBoard = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
+  xoTurn = 'X';
+  document.getElementById('gameStatus').textContent = 'Твой ход! Ты — ❌';
   renderXO();
+}
+
+// ============================================================
+// TOP STATS
+// ============================================================
+function updateTopStats(){
+  document.getElementById('streakPill').textContent = '🔥 ' + state.streak;
+  document.getElementById('coinPill').textContent = '💰 ' + state.coins;
 }
 
 // ============================================================
 // INIT
 // ============================================================
 function initApp(){
-  document.getElementById('bottomnav').style.display='flex';
-  document.getElementById('userName').textContent=state.name||'Гость';
-  document.getElementById('userSub').textContent=state.subjects.length>2?'Готов к ОГЭ 🔥':'Выбери предметы';
-  document.getElementById('streakPill').textContent='🔥 '+state.streak;
+  document.getElementById('bottomnav').style.display = 'flex';
+  document.getElementById('userName').textContent = state.name || 'Гость';
+  document.getElementById('userSub').textContent = state.subjects.length>2 ? 'Готов к ОГЭ 🔥' : 'Выбери предметы';
   document.getElementById('page-onboard').classList.remove('active');
+  if(state.theme && state.theme!=='default') document.body.className = 'theme-'+state.theme;
+  renderAvatar();
+  updateTopStats();
+  spawnParticles();
+  ensureQuests();
   go('home');
   renderChat();
   initForecastSelect();
@@ -995,8 +1199,9 @@ if(state.onboarded){
   renderOnboard();
   initApp();
 } else {
-  document.getElementById('nameInput').value=state.name||'';
+  document.getElementById('nameInput').value = state.name || '';
   renderOnboard();
+  spawnParticles();
 }
 </script>
 </body>
