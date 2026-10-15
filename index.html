@@ -1,1679 +1,375 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Forest Kingdom .io</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>ROADBOUND — Fixed Core</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:#1a2f1a;font-family:'Segoe UI',Arial,sans-serif;color:#fff;touch-action:none}
-#game{display:block;position:absolute;inset:0;cursor:crosshair}
-
-/* HUD ОБЩИЙ */
-#hud{position:absolute;inset:0;pointer-events:none;z-index:10}
-
-/* МИНИКАРТА */
-#minimap{position:absolute;top:10px;left:10px;width:180px;height:180px;background:#050a05;border:3px solid #c9a96c;border-radius:8px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.7)}
-#minimap canvas{width:100%;height:100%;display:block}
-
-/* ЛИДЕРБОРД */
-#leaderboard{position:absolute;top:10px;right:10px;background:linear-gradient(180deg,rgba(15,25,15,.85),rgba(5,15,5,.9));border:2px solid #4a6b3a;border-radius:8px;padding:8px 10px;min-width:200px;font-size:13px;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,.5)}
-#leaderboard .row{display:flex;justify-content:space-between;padding:3px 4px;border-radius:4px;color:#d8e8c8}
-#leaderboard .row.me{background:linear-gradient(90deg,rgba(120,180,80,.4),rgba(60,120,40,.2));color:#fff;box-shadow:inset 0 0 0 1px #9ec76e}
-#leaderboard .rank{color:#f4d47a;font-weight:800;margin-right:8px;min-width:18px}
-#leaderboard .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#leaderboard .score{color:#c9e3a9;margin-left:8px}
-
-/* МОНЕТЫ */
-#coins{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:linear-gradient(180deg,rgba(30,50,20,.9),rgba(10,25,10,.9));border:2px solid #c9a96c;border-radius:20px;padding:6px 16px;font-size:15px;font-weight:900;color:#ffd95a;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(0,0,0,.5)}
-#coins::before{content:'🪙';font-size:18px}
-
-/* XP ПОЛОСКА СНИЗУ */
-#xpWrap{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:min(420px,70vw);text-align:center}
-#xpText{font-size:11px;color:#c9e3a9;font-weight:700;text-shadow:1px 1px 2px #000;margin-bottom:2px}
-#xpBar{height:14px;background:#0b180b;border:2px solid #2a4a2a;border-radius:8px;overflow:hidden;position:relative;box-shadow:inset 0 2px 5px #000}
-#xpFill{height:100%;background:linear-gradient(180deg,#7fd44a,#4c9a2a);width:0%;transition:width .3s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
-#xpBar::after{content:attr(data-lvl);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;text-shadow:1px 1px 2px #000;letter-spacing:.5px}
-
-/* СЛОТЫ СНАРУЖИ */
-#hotbar{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:5px;pointer-events:auto}
-.slot{width:52px;height:52px;background:rgba(5,15,5,.85);border:2px solid #4a6b3a;border-radius:6px;display:flex;justify-content:center;align-items:center;font-size:24px;position:relative;cursor:pointer;transition:.1s}
-.slot.active{border-color:#f4d47a;box-shadow:0 0 15px rgba(244,212,122,.6)}
-.slot .key{position:absolute;top:2px;left:4px;font-size:9px;color:#9ec76e;font-weight:800}
-.slot .cnt{position:absolute;bottom:1px;right:3px;font-size:11px;color:#fff;font-weight:800;text-shadow:1px 1px 2px #000}
-
-/* ЛЕВАЯ ПАНЕЛЬ КНОПОК */
-#sidePanel{position:absolute;left:10px;top:200px;display:flex;flex-direction:column;gap:6px;pointer-events:auto}
-.sideBtn{width:52px;height:52px;background:linear-gradient(180deg,#2a4a2a,#0a1a0a);border:2px solid #4a6b3a;border-radius:6px;color:#fff;font-size:22px;cursor:pointer;display:flex;justify-content:center;align-items:center;position:relative;transition:.1s}
-.sideBtn:hover{border-color:#f4d47a;background:linear-gradient(180deg,#3a6a3a,#1a3a1a)}
-.sideBtn:active{transform:scale(.95)}
-.sideBtn .key{position:absolute;top:2px;left:4px;font-size:9px;color:#f4d47a;font-weight:800}
-
-/* МОДАЛКИ */
-.modal{position:absolute;inset:0;background:rgba(0,0,0,.75);display:none;justify-content:center;align-items:center;z-index:50;pointer-events:auto}
-.modal.show{display:flex}
-.modalBox{background:linear-gradient(180deg,#1a3a5c,#0a1a2c);border:3px solid #4a90c8;border-radius:12px;padding:0;min-width:min(520px,92vw);max-height:90vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.1)}
-.modalHead{background:linear-gradient(180deg,#2a5a8c,#1a3a5c);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #4a90c8}
-.modalHead h3{margin:0;font-size:15px;letter-spacing:1px;font-weight:900}
-.modalClose{background:#b03838;border:none;color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:900}
-.modalClose:hover{background:#d04848}
-.modalBody{padding:12px;overflow-y:auto;max-height:calc(90vh - 50px)}
-.listItem{display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;margin-bottom:6px;cursor:pointer;transition:.1s}
-.listItem:hover{background:rgba(255,255,255,.12);border-color:#7fc9ff}
-.listItem.selected{background:linear-gradient(90deg,rgba(120,180,80,.35),rgba(60,120,40,.15));border-color:#9ec76e}
-.listItem .ico{font-size:22px;width:28px;text-align:center;flex-shrink:0}
-.listItem .info{flex:1}
-.listItem .info b{display:block;font-size:13px;color:#fff}
-.listItem .info small{font-size:11px;color:#a4b8c8}
-.listItem .cost{font-size:12px;color:#ffd95a;font-weight:900;margin-right:6px}
-.listItem button{padding:6px 12px;background:linear-gradient(180deg,#5a9c3a,#3a6c1a);border:1px solid #7fc94a;color:#fff;font-weight:900;font-size:11px;border-radius:5px;cursor:pointer;letter-spacing:.5px}
-.listItem button:hover{filter:brightness(1.15)}
-.listItem button:disabled{opacity:.4;cursor:not-allowed}
-.section-title{font-size:11px;color:#7fa8c9;font-weight:800;letter-spacing:1.5px;margin:10px 0 5px;text-transform:uppercase}
-
-/* МЕНЮ СТАРТА */
-#menu{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#2a4a1a 0%,#0a1a0a 60%,#030803 100%);display:flex;justify-content:center;align-items:center;z-index:100}
-.menuBox{text-align:center;padding:30px}
-.menuLogo{font-size:64px;font-weight:900;letter-spacing:4px;background:linear-gradient(180deg,#c9e76e,#4a8a2a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 8px 20px rgba(0,0,0,.5);margin-bottom:8px;line-height:1}
-.menuSub{font-size:14px;color:#9ec76e;letter-spacing:3px;margin-bottom:30px}
-.menuInput{background:rgba(0,0,0,.5);border:2px solid #4a6b3a;color:#fff;font-size:16px;font-weight:700;padding:14px 20px;border-radius:8px;text-align:center;width:min(360px,80vw);outline:none;font-family:inherit;margin-bottom:12px}
-.menuInput:focus{border-color:#f4d47a}
-.menuPlay{background:linear-gradient(180deg,#7fc94a,#3a8a1a);border:2px solid #a9e87a;color:#fff;font-size:20px;font-weight:900;letter-spacing:2px;padding:18px 60px;border-radius:10px;cursor:pointer;margin-top:10px;box-shadow:0 8px 25px rgba(80,180,40,.4);transition:.15s}
-.menuPlay:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(80,180,40,.6);filter:brightness(1.1)}
-.menuPlay:active{transform:translateY(0)}
-.menuHint{margin-top:24px;font-size:12px;color:#8a9a7a;line-height:1.8;max-width:500px}
-
-/* ПОДСКАЗКИ */
-#hint{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);padding:8px 18px;border-radius:20px;font-size:13px;color:#e8f4d8;border:1px solid #4a6b3a;display:none;pointer-events:none;white-space:nowrap}
-#notif{position:absolute;top:80px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:5px;align-items:center;pointer-events:none}
-.nf{background:rgba(0,0,0,.85);padding:8px 18px;border-radius:8px;border:1px solid #4a6b3a;font-size:13px;font-weight:700;color:#fff;animation:nfFade 2.5s forwards}
-.nf.gold{border-color:#f4d47a;color:#ffd95a}
-.nf.warn{border-color:#d04848;color:#ff8080}
-@keyframes nfFade{0%{opacity:1;transform:translateY(0)}80%{opacity:1}100%{opacity:0;transform:translateY(-15px)}}
-
-@media (max-width:700px){
-  #minimap{width:120px;height:120px}
-  #leaderboard{font-size:11px;padding:6px 8px;min-width:150px}
-  .slot{width:44px;height:44px;font-size:20px}
-  #hotbar{bottom:60px}
-  .sideBtn{width:44px;height:44px;font-size:18px}
-  .menuLogo{font-size:42px}
-}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8eb8d0;color:white;font-family:Arial,sans-serif}
+canvas{display:block;width:100%;height:100%}
+#menu,#error{position:fixed;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(130deg,#101d27f5,#173747d9);padding:24px}
+#card{width:min(560px,100%);padding:30px;border:1px solid #ffffff25;border-radius:24px;background:#10212beF;box-shadow:0 25px 90px #0005}
+h1{font-size:clamp(44px,9vw,76px);letter-spacing:-4px;margin:12px 0}
+h1 span{color:#d9ff65}
+p{line-height:1.65;color:#d3e1e8}
+button{padding:13px 18px;border:0;border-radius:11px;font-weight:bold;cursor:pointer}
+#start{background:#d9ff65;color:#15232a}
+#hud{position:fixed;z-index:3;top:12px;left:12px;display:none;gap:10px;pointer-events:none}
+.stat{background:#10212beF;border:1px solid #ffffff20;border-radius:13px;padding:14px;min-width:120px}
+.small{font-size:10px;letter-spacing:1.5px;color:#aabec7}
+.value{font-size:22px;font-weight:800;margin:6px 0}
+#hint{position:fixed;z-index:3;bottom:14px;left:50%;transform:translateX(-50%);background:#10212beF;border-radius:10px;padding:10px 14px;font-size:12px;white-space:nowrap}
+#error{display:none;align-items:flex-start;justify-content:flex-start;background:#150e10f5;overflow:auto}
+#error pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#ffc3b8}
+@media(max-width:600px){#hud{top:5px;left:5px;gap:5px}.stat{min-width:88px;padding:8px}.value{font-size:17px}#hint{white-space:normal;width:94%;text-align:center}}
 </style>
 </head>
 <body>
-
-<canvas id="game"></canvas>
-
-<div id="hud">
-  <div id="minimap"><canvas id="mm" width="360" height="360"></canvas></div>
-  <div id="leaderboard"></div>
-  <div id="coins">0</div>
-  
-  <div id="xpWrap">
-    <div id="xpText">Уровень 1</div>
-    <div id="xpBar" data-lvl="0 / 100"></div>
-  </div>
-  
-  <div id="sidePanel">
-    <button class="sideBtn" onclick="openShop()"><span class="key">H</span>🛒</button>
-    <button class="sideBtn" onclick="openClans()"><span class="key">K</span>⚔️</button>
-    <button class="sideBtn" onclick="openCraft()"><span class="key">C</span>🔨</button>
-    <button class="sideBtn" onclick="openBuild()"><span class="key">B</span>🏠</button>
-    <button class="sideBtn" onclick="openInventory()"><span class="key">I</span>🎒</button>
-  </div>
-  
-  <div id="hotbar"></div>
-  
-  <div id="hint">Нажми <b>E</b> чтобы собрать</div>
-  <div id="notif"></div>
-</div>
-
 <div id="menu">
-  <div class="menuBox">
-    <div class="menuLogo">FOREST KINGDOM</div>
-    <div class="menuSub">.IO · ВЫЖИВАЙ · СТРОЙ · СРАЖАЙСЯ</div>
-    <input id="nickInput" class="menuInput" placeholder="Введи свой ник" maxlength="16" value="гарилка">
-    <br>
-    <button class="menuPlay" onclick="startGame()">▶ ИГРАТЬ</button>
-    <div class="menuHint">
-      <b>WASD</b> — движение · <b>Мышь</b> — прицел · <b>ЛКМ</b> — атака/собрать<br>
-      <b>E</b> — взаимодействие · <b>1-6</b> — слоты · <b>C</b> — крафт · <b>B</b> — стройка<br>
-      <b>K</b> — клан · <b>H</b> — магазин · <b>I</b> — инвентарь
-    </div>
-  </div>
+ <div id="card">
+  <div style="color:#d9ff65;letter-spacing:3px;font-size:11px">DRIVING ADVENTURE</div>
+  <h1>ROAD<span>BOUND</span></h1>
+  <p>Исправленная основа: 3D-сцена, салон автомобиля, камера от первого лица, управление и стабильный цикл отрисовки.</p>
+  <button id="start">НАЧАТЬ ПОЕЗДКУ</button>
+  <p style="font-size:12px">W/S — движение · A/D — поворот · V — камера · F — фары · Q — коробка</p>
+ </div>
 </div>
-
-<!-- МОДАЛКА КРАФТА -->
-<div class="modal" id="craftModal">
-  <div class="modalBox">
-    <div class="modalHead"><h3>⚒️ ВЕРСТАК</h3><button class="modalClose" onclick="closeModal('craftModal')">✕</button></div>
-    <div class="modalBody" id="craftBody"></div>
-  </div>
+<div id="hud">
+ <div class="stat"><div class="small">СКОРОСТЬ</div><div class="value" id="speed">0 км/ч</div><div class="small">ПЕРЕДАЧА</div><div class="value" id="gear">1</div></div>
+ <div class="stat"><div class="small">СОСТОЯНИЕ</div><div class="value" id="health">100%</div><div class="small">ТОПЛИВО</div><div class="value" id="fuel">100%</div></div>
 </div>
+<div id="hint" style="display:none">W/S — движение · A/D — поворот · V — камера · F — фары</div>
+<div id="error"><div><h2>Не удалось запустить игру</h2><p>Скопируй сообщение ниже, чтобы определить причину.</p><pre id="errorText"></pre><button onclick="location.reload()">ПОВТОРИТЬ</button></div></div>
 
-<!-- МОДАЛКА СТРОЙКИ -->
-<div class="modal" id="buildModal">
-  <div class="modalBox">
-    <div class="modalHead"><h3>🏠 СТРОИТЕЛЬСТВО</h3><button class="modalClose" onclick="closeModal('buildModal')">✕</button></div>
-    <div class="modalBody" id="buildBody"></div>
-  </div>
-</div>
-
-<!-- МОДАЛКА КЛАНА -->
-<div class="modal" id="clanModal">
-  <div class="modalBox">
-    <div class="modalHead"><h3>⚔️ КЛАНЫ</h3><button class="modalClose" onclick="closeModal('clanModal')">✕</button></div>
-    <div class="modalBody">
-      <div class="section-title">Создать клан</div>
-      <input id="clanName" class="menuInput" placeholder="Название клана" style="width:100%;margin-bottom:8px">
-      <button style="width:100%;padding:10px;background:linear-gradient(180deg,#5a9c3a,#3a6c1a);border:1px solid #7fc94a;color:#fff;font-weight:900;border-radius:6px;cursor:pointer" onclick="createClan()">СОЗДАТЬ КЛАН</button>
-      <div class="section-title">Доступные кланы</div>
-      <div id="clanList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- МОДАЛКА МАГАЗИНА -->
-<div class="modal" id="shopModal">
-  <div class="modalBox">
-    <div class="modalHead"><h3>🛒 МАГАЗИН</h3><button class="modalClose" onclick="closeModal('shopModal')">✕</button></div>
-    <div class="modalBody" id="shopBody"></div>
-  </div>
-</div>
-
-<!-- МОДАЛКА ИНВЕНТАРЯ -->
-<div class="modal" id="invModal">
-  <div class="modalBox">
-    <div class="modalHead"><h3>🎒 ИНВЕНТАРЬ</h3><button class="modalClose" onclick="closeModal('invModal')">✕</button></div>
-    <div class="modalBody" id="invBody"></div>
-  </div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-// ============================================================
-// FOREST KINGDOM .IO — top-down survival
-// ============================================================
-var canvas = document.getElementById('game');
-var ctx = canvas.getContext('2d');
-var mm = document.getElementById('mm');
-var mmc = mm.getContext('2d');
-var W, H;
-function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
-resize(); window.addEventListener('resize', resize);
+(function(){
+"use strict";
 
-var keys = {};
-var mouse = { x: 0, y: 0, wx: 0, wy: 0 };
-var gameOn = false;
-var cam = { x: 0, y: 0 };
-var time = 0.3;
-var day = 1;
+const $=id=>document.getElementById(id);
+const keys=new Set();
+let THREE,scene,camera,renderer,car,clock;
+let started=false,firstPerson=true,lightsOn=false;
+let speed=0,heading=0,steering=0,health=100,fuel=100,gear=1;
+let lookYaw=0,lookPitch=0,driverEye;
+let headlamps=[];
+let lastTime=0;
 
-// ============================================================
-// ЗВУК
-// ============================================================
-var audioCtx = null;
-function beep(freq, dur, type, vol){
-  try {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    var o = audioCtx.createOscillator(), g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = type || 'sine';
-    o.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(freq * 0.6, audioCtx.currentTime + dur);
-    g.gain.setValueAtTime(vol || 0.1, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-    o.start(); o.stop(audioCtx.currentTime + dur);
-  } catch(e){}
+function showError(err){
+ console.error(err);
+ $("errorText").textContent=String(err && (err.stack||err.message) || err);
+ $("error").style.display="flex";
+ $("menu").style.display="none";
 }
 
-// ============================================================
-// ИГРОК
-// ============================================================
-var player = {
-  x: 0, y: 0, vx: 0, vy: 0,
-  r: 20,
-  hp: 100, maxHp: 100,
-  level: 1, xp: 0, xpNext: 100,
-  coins: 0,
-  angle: 0,
-  nick: 'гарилка',
-  clan: null,
-  // Инвентарь слотов
-  hotbar: [
-    { type: 'empty', icon: '✋', name: 'Руки' },     // 0
-    { type: 'empty', icon: '✋', name: 'Пусто' },     // 1
-    { type: 'empty', icon: '✋', name: 'Пусто' },     // 2
-    { type: 'empty', icon: '✋', name: 'Пусто' },     // 3
-    { type: 'empty', icon: '✋', name: 'Пусто' },     // 4
-    { type: 'empty', icon: '✋', name: 'Пусто' }      // 5
-  ],
-  activeSlot: 0,
-  // Ресурсы (отдельно от оружия)
-  wood: 0, stone: 0, meat: 0, leather: 0,
-  // Атака
-  attackCd: 0,
-  // Урон от атаки
-  hurtFlash: 0,
-  // Скорость
-  speed: 3.2,
-  // Текущее оружие (по индексу)
-  weapon: null
-};
-
-// Все виды оружия и инструментов
-var WEAPONS = {
-  fist:   { dmg: 5,  reach: 32, cd: 30, slot: 'weapon', name: 'Кулак', icon: '✊', speedMod: 1.0 },
-  club:   { dmg: 10, reach: 48, cd: 40, slot: 'weapon', name: 'Дубина', icon: '🏏', speedMod: 0.95 },
-  stone_axe: { dmg: 12, reach: 45, cd: 38, slot: 'tool', name: 'Каменный топор', icon: '🪓', speedMod: 0.9 },
-  sword:  { dmg: 18, reach: 52, cd: 35, slot: 'weapon', name: 'Меч', icon: '⚔️', speedMod: 1.0 },
-  spear:  { dmg: 22, reach: 68, cd: 45, slot: 'weapon', name: 'Копьё', icon: '🗡️', speedMod: 1.05 },
-  katana: { dmg: 26, reach: 55, cd: 30, slot: 'weapon', name: 'Катана', icon: '🗡️', speedMod: 1.1 },
-  bow:    { dmg: 8,  reach: 400, cd: 50, slot: 'weapon', name: 'Лук', icon: '🏹', speedMod: 0.95, ranged: true }
-};
-
-// Ресурсы и предметы (стаки)
-var ITEMS = {
-  wood:    { icon: '🪵', name: 'Дерево' },
-  stone:   { icon: '🪨', name: 'Камень' },
-  meat:    { icon: '🍖', name: 'Мясо' },
-  leather: { icon: '🧵', name: 'Кожа' }
-};
-
-// ============================================================
-// МИР
-// ============================================================
-var world = {
-  size: 4000,
-  trees: [],
-  stones: [],
-  bushes: [],
-  animals: [],
-  bots: [],
-  buildings: [],
-  arrows: [],
-  particles: [],
-  drops: []
-};
-
-var BIOME_COLORS = {
-  forest: '#4a7a3a',
-  meadow: '#6a9a4a',
-  darkforest: '#2e4e2e',
-  sand: '#c9b378'
-};
-
-function biomeAt(x, y){
-  var n = Math.sin(x * 0.0008) * Math.cos(y * 0.0008) + Math.sin(x * 0.002 + 3) * Math.cos(y * 0.002) * 0.5;
-  if(n > 0.6) return 'sand';
-  if(n > 0.2) return 'meadow';
-  if(n < -0.4) return 'darkforest';
-  return 'forest';
+function material(color,roughness=0.8,metalness=0){
+ return new THREE.MeshStandardMaterial({color,roughness,metalness});
 }
 
-function generateWorld(){
-  world.trees = []; world.stones = []; world.bushes = []; world.animals = []; world.bots = []; world.buildings = []; world.arrows = []; world.particles = []; world.drops = [];
-  
-  // Деревья
-  for(var i = 0; i < 400; i++){
-    var x = (Math.random() - 0.5) * world.size;
-    var y = (Math.random() - 0.5) * world.size;
-    if(Math.hypot(x, y) < 120) continue;
-    world.trees.push({ x: x, y: y, r: 26, hp: 3, maxHp: 3, alive: true });
+function addBox(parent,w,h,d,mat,x,y,z){
+ const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+ mesh.position.set(x,y,z);
+ mesh.castShadow=true;
+ mesh.receiveShadow=true;
+ parent.add(mesh);
+ return mesh;
+}
+
+function createScene(){
+ if(!window.THREE)throw new Error("Three.js не загрузилась. Проверь интернет и обнови страницу.");
+ THREE=window.THREE;
+
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x8ebbd3);
+ scene.fog=new THREE.Fog(0x9bbcc7,100,550);
+
+ camera=new THREE.PerspectiveCamera(76,innerWidth/innerHeight,.1,1000);
+
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+ renderer.setSize(innerWidth,innerHeight);
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.1;
+ renderer.shadowMap.enabled=true;
+ renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ document.body.appendChild(renderer.domElement);
+
+ scene.add(new THREE.HemisphereLight(0xe4f3ff,0x76614b,2.1));
+
+ const sun=new THREE.DirectionalLight(0xffe8c5,2.7);
+ sun.position.set(-35,65,35);
+ sun.castShadow=true;
+ sun.shadow.mapSize.set(1024,1024);
+ scene.add(sun);
+
+ const sand=material(0xc9b68f);
+ const asphalt=material(0x303638,.96);
+ const stripe=material(0xf1e6c8);
+ const rock=material(0x727b7b);
+ const treeMat=material(0x315b43);
+ const trunkMat=material(0x5a4030);
+
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(500,1600),sand);
+ ground.rotation.x=-Math.PI/2;
+ ground.position.set(0,-.22,500);
+ ground.receiveShadow=true;
+ scene.add(ground);
+
+ // Все дорожные поверхности находятся выше земли.
+ const road=new THREE.Mesh(new THREE.PlaneGeometry(12,1600),asphalt);
+ road.rotation.x=-Math.PI/2;
+ road.position.set(0,-.08,500);
+ road.receiveShadow=true;
+ scene.add(road);
+
+ for(const x of [-6,6]){
+  const edge=new THREE.Mesh(new THREE.PlaneGeometry(.13,1600),stripe);
+  edge.rotation.x=-Math.PI/2;
+  edge.position.set(x,-.06,500);
+  scene.add(edge);
+ }
+
+ for(let z=-290;z<1300;z+=12){
+  const dash=new THREE.Mesh(new THREE.PlaneGeometry(.12,4.5),stripe);
+  dash.rotation.x=-Math.PI/2;
+  dash.position.set(0,-.05,z);
+  scene.add(dash);
+ }
+
+ for(let i=0;i<60;i++){
+  const side=i%2?1:-1;
+  const z=-280+i*27;
+  const h=8+Math.random()*18;
+  const mountain=new THREE.Mesh(new THREE.ConeGeometry(7+Math.random()*9,h,6),rock);
+  mountain.position.set(side*(20+Math.random()*35),h/2-1,z);
+  mountain.castShadow=true;
+  scene.add(mountain);
+ }
+
+ for(let i=0;i<70;i++){
+  const side=i%2?1:-1;
+  const group=new THREE.Group();
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.2,1.5,7),trunkMat);
+  trunk.position.y=.75;
+  group.add(trunk);
+  const crown=new THREE.Mesh(new THREE.ConeGeometry(1.2,3,7),treeMat);
+  crown.position.y=2.5;
+  group.add(crown);
+  group.position.set(side*(10+Math.random()*14),0,-260+i*24);
+  scene.add(group);
+ }
+
+ createCar();
+ clock=new THREE.Clock();
+}
+
+function createCar(){
+ car=new THREE.Group();
+ scene.add(car);
+
+ const blue=material(0x087ba9,.32,.25);
+ const dark=material(0x182126,.65,.1);
+ const glass=material(0x173e4a,.22,.2);
+ const rubber=material(0x111416);
+ const silver=material(0x9aa8ad,.35,.55);
+ const lampMat=material(0xffedba,.25);
+
+ addBox(car,2.05,.58,4.1,blue,0,.68,0);
+ addBox(car,1.75,.66,1.7,blue,0,1.12,-.42);
+ addBox(car,1.5,.46,1.35,glass,0,1.2,-.42);
+ addBox(car,1.9,.15,.3,dark,0,.44,2.05);
+ addBox(car,1.9,.15,.3,dark,0,.44,-2.05);
+
+ for(const side of [-1,1]){
+  addBox(car,.12,.18,.12,lampMat,side*.82,.76,2.08);
+  addBox(car,.12,.16,.12,material(0xa82020),side*.82,.75,-2.08);
+  for(const z of [-1.35,1.35]){
+   const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.38,.38,.25,20),rubber);
+   wheel.rotation.z=Math.PI/2;
+   wheel.position.set(side*1.02,.4,z);
+   wheel.castShadow=true;
+   car.add(wheel);
   }
-  // Камни
-  for(var i = 0; i < 200; i++){
-    var x = (Math.random() - 0.5) * world.size;
-    var y = (Math.random() - 0.5) * world.size;
-    if(Math.hypot(x, y) < 120) continue;
-    world.stones.push({ x: x, y: y, r: 20, hp: 2, maxHp: 2, alive: true });
-  }
-  // Кусты
-  for(var i = 0; i < 150; i++){
-    var x = (Math.random() - 0.5) * world.size;
-    var y = (Math.random() - 0.5) * world.size;
-    world.bushes.push({ x: x, y: y, r: 16, hp: 1, alive: true });
-  }
-  // Животные
-  for(var i = 0; i < 50; i++){
-    spawnAnimal();
-  }
-  // Боты (виртуальные игроки)
-  for(var i = 0; i < 15; i++){
-    spawnBot();
-  }
+ }
+
+ // Dashboard and steering wheel are inside the cabin.
+ addBox(car,1.6,.14,.55,dark,0,1.05,.75);
+ addBox(car,.12,.85,.12,dark,-.82,1.65,.02);
+ addBox(car,.12,.85,.12,dark,.82,1.65,.02);
+ addBox(car,1.55,.1,.1,dark,0,2.08,.02);
+ addBox(car,.45,.52,.4,material(0x34414a),-.45,.75,-.55);
+
+ const steeringWheel=new THREE.Mesh(new THREE.TorusGeometry(.24,.035,8,24),dark);
+ steeringWheel.position.set(-.43,1.15,.48);
+ car.add(steeringWheel);
+
+ // Driver's visible forearms make the camera read as a human view.
+ const sleeve=material(0x283f52);
+ const skin=material(0xc9916e);
+ addBox(car,.12,.33,.12,sleeve,-.64,.98,.3).rotation.x=-.4;
+ addBox(car,.12,.33,.12,sleeve,-.23,.98,.3).rotation.x=-.4;
+ const hand1=new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),skin);
+ hand1.position.set(-.56,1.03,.45);car.add(hand1);
+ const hand2=hand1.clone();
+ hand2.position.set(-.32,1.03,.45);car.add(hand2);
+
+ driverEye=new THREE.Object3D();
+ driverEye.position.set(-.45,1.47,.3);
+ car.add(driverEye);
+
+ for(const side of [-1,1]){
+  const lamp=new THREE.SpotLight(0xffe7b4,0,55,Math.PI/7,.4,1.5);
+  lamp.position.set(side*.65,.8,2.05);
+  lamp.target.position.set(side*.65,.2,18);
+  car.add(lamp);
+  car.add(lamp.target);
+  headlamps.push(lamp);
+ }
 }
 
-function spawnAnimal(){
-  var types = [
-    { name: 'Кабан', color: '#8b5a2b', hp: 30, dmg: 6, speed: 1.2, aggressive: true, icon: '🐗', meat: 3 },
-    { name: 'Бык',   color: '#6b3b1b', hp: 45, dmg: 8, speed: 1.1, aggressive: true, icon: '🐂', meat: 4 },
-    { name: 'Собака', color: '#b08858', hp: 20, dmg: 4, speed: 1.6, aggressive: true, icon: '🐕', meat: 2 },
-    { name: 'Олень', color: '#a67c52', hp: 35, dmg: 0, speed: 1.5, aggressive: false, icon: '🦌', meat: 3 },
-    { name: 'Кролик', color: '#c9b7a0', hp: 10, dmg: 0, speed: 2.0, aggressive: false, icon: '🐰', meat: 1 }
-  ];
-  var t = types[Math.floor(Math.random() * types.length)];
-  var x, y;
-  do {
-    x = (Math.random() - 0.5) * world.size;
-    y = (Math.random() - 0.5) * world.size;
-  } while(Math.hypot(x - player.x, y - player.y) < 200);
-  
-  world.animals.push({
-    x: x, y: y, vx: 0, vy: 0,
-    type: t, hp: t.hp, maxHp: t.hp,
-    r: 18, angle: Math.random() * 6.28,
-    wanderTimer: 0, state: 'wander',
-    attackCd: 0
-  });
-}
+function updateCamera(){
+ if(firstPerson){
+  const eye=new THREE.Vector3();
+  driverEye.getWorldPosition(eye);
+  camera.position.copy(eye);
 
-function spawnBot(){
-  var names = ['RIZE ezzz', 'Хочешь объедим', 'moribonka', 'crosional', 'Wolf', 'Hunter', 'DarkKnight', 'Frost', 'Zephyr', 'Blaze', 'Shadow', 'Storm'];
-  var x, y;
-  do {
-    x = (Math.random() - 0.5) * world.size;
-    y = (Math.random() - 0.5) * world.size;
-  } while(Math.hypot(x - player.x, y - player.y) < 400);
-  
-  world.bots.push({
-    x: x, y: y, vx: 0, vy: 0,
-    r: 20,
-    hp: 100, maxHp: 100,
-    angle: 0,
-    nick: names[Math.floor(Math.random() * names.length)] + (Math.floor(Math.random() * 99)),
-    score: Math.floor(Math.random() * 30000),
-    color: ['#4a7ab8', '#b84a4a', '#4ab87a', '#b8b84a'][Math.floor(Math.random() * 4)],
-    target: null,
-    wanderTimer: 0,
-    attackCd: 0,
-    alive: true
-  });
-}
+  const yaw=heading+lookYaw;
+  const pitch=lookPitch;
+  const direction=new THREE.Vector3(
+   Math.sin(yaw)*Math.cos(pitch),
+   Math.sin(pitch),
+   Math.cos(yaw)*Math.cos(pitch)
+  );
 
-// ============================================================
-// УПРАВЛЕНИЕ
-// ============================================================
-document.addEventListener('keydown', function(e){
-  var k = e.key.toLowerCase();
-  keys[k] = true;
-  if(!gameOn) return;
-  if(k === 'e' || k === 'у') interact();
-  if(k === 'c' || k === 'с') openCraft();
-  if(k === 'b' || k === 'и') openBuild();
-  if(k === 'k' || k === 'л') openClans();
-  if(k === 'h' || k === 'р') openShop();
-  if(k === 'i' || k === 'ш') openInventory();
-  if(e.key >= '1' && e.key <= '6') setSlot(parseInt(e.key) - 1);
-  if(k === 'escape'){ closeAll(); }
-  if(e.key === ' '){ e.preventDefault(); }
-});
-document.addEventListener('keyup', function(e){ keys[e.key.toLowerCase()] = false; });
-
-canvas.addEventListener('mousemove', function(e){
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
-canvas.addEventListener('mousedown', function(e){
-  if(!gameOn) return;
-  if(e.button === 0) attack();
-});
-canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-
-// ============================================================
-// СТАРТ
-// ============================================================
-function startGame(){
-  var nick = document.getElementById('nickInput').value.trim();
-  if(!nick) nick = 'Игрок' + Math.floor(Math.random() * 999);
-  player.nick = nick;
-  
-  player.x = 0; player.y = 0;
-  player.hp = player.maxHp;
-  player.level = 1; player.xp = 0; player.xpNext = 100;
-  player.coins = 0;
-  player.wood = 0; player.stone = 0; player.meat = 0; player.leather = 0;
-  player.hotbar = [
-    { type: 'empty', icon: '✋', name: 'Руки' },
-    { type: 'empty', icon: '✋', name: 'Пусто' },
-    { type: 'empty', icon: '✋', name: 'Пусто' },
-    { type: 'empty', icon: '✋', name: 'Пусто' },
-    { type: 'empty', icon: '✋', name: 'Пусто' },
-    { type: 'empty', icon: '✋', name: 'Пусто' }
-  ];
-  player.activeSlot = 0;
-  player.weapon = 'fist';
-  
-  generateWorld();
-  buildHotbarUI();
-  updateHUD();
-  
-  document.getElementById('menu').style.display = 'none';
-  gameOn = true;
-  requestAnimationFrame(loop);
-  showNotif('Добро пожаловать в лес, ' + nick + '!', 'gold');
-}
-
-// ============================================================
-// ХОТБАР
-// ============================================================
-function buildHotbarUI(){
-  var bar = document.getElementById('hotbar');
-  bar.innerHTML = '';
-  for(var i = 0; i < 6; i++){
-    var s = player.hotbar[i];
-    var d = document.createElement('div');
-    d.className = 'slot' + (i === player.activeSlot ? ' active' : '');
-    var cnt = '';
-    if(s.count && s.count > 1) cnt = '<span class="cnt">' + s.count + '</span>';
-    d.innerHTML = '<span class="key">' + (i+1) + '</span>' + s.icon + cnt;
-    (function(idx){
-      d.onclick = function(){ setSlot(idx); };
-    })(i);
-    bar.appendChild(d);
-  }
-}
-
-function setSlot(i){
-  player.activeSlot = i;
-  var s = player.hotbar[i];
-  if(s.type === 'weapon'){
-    player.weapon = s.id;
-  } else {
-    player.weapon = 'fist';
-  }
-  buildHotbarUI();
-}
-
-function addItemToHotbar(id, count){
-  // Ищем такой же стак
-  for(var i = 0; i < 6; i++){
-    var s = player.hotbar[i];
-    if(s.type === 'weapon' && s.id === id){
-      s.count = (s.count || 1) + count;
-      buildHotbarUI();
-      return;
-    }
-  }
-  // Пустой слот
-  for(var i = 0; i < 6; i++){
-    var s = player.hotbar[i];
-    if(s.type === 'empty'){
-      player.hotbar[i] = {
-        type: 'weapon',
-        id: id,
-        icon: WEAPONS[id].icon,
-        name: WEAPONS[id].name,
-        count: count
-      };
-      buildHotbarUI();
-      return;
-    }
-  }
-  showNotif('Нет места в хотбаре!', 'warn');
-}
-
-// ============================================================
-// АТАКА
-// ============================================================
-function attack(){
-  if(player.attackCd > 0) return;
-  var w = WEAPONS[player.weapon] || WEAPONS.fist;
-  player.attackCd = w.cd;
-  
-  var dx = mouse.wx - player.x;
-  var dy = mouse.wy - player.y;
-  var dist = Math.hypot(dx, dy);
-  var ang = Math.atan2(dy, dx);
-  player.angle = ang;
-  
-  // Взмах / выстрел
-  beep(w.ranged ? 600 : 400, 0.08, 'square', 0.08);
-  spawnParticles(player.x + Math.cos(ang) * 25, player.y + Math.sin(ang) * 25, 5, '#ffffff', 2, 0.3);
-  
-  if(w.ranged){
-    // Стрела
-    world.arrows.push({
-      x: player.x + Math.cos(ang) * 25,
-      y: player.y + Math.sin(ang) * 25,
-      vx: Math.cos(ang) * 12,
-      vy: Math.sin(ang) * 12,
-      life: 60,
-      dmg: w.dmg,
-      owner: 'player'
-    });
-    return;
-  }
-  
-  // Ближний бой
-  // Животные
-  for(var i = 0; i < world.animals.length; i++){
-    var a = world.animals[i];
-    var d = Math.hypot(a.x - player.x, a.y - player.y);
-    if(d < w.reach + a.r){
-      var da = Math.abs(normAng(Math.atan2(a.y - player.y, a.x - player.x) - ang));
-      if(da < 1.2){
-        a.hp -= w.dmg;
-        spawnParticles(a.x, a.y, 8, '#ff5555', 4, 0.4);
-        beep(200, 0.05, 'sawtooth', 0.1);
-        if(a.hp <= 0) killAnimal(a);
-      }
-    }
-  }
-  
-  // Боты
-  for(var i = 0; i < world.bots.length; i++){
-    var b = world.bots[i];
-    if(!b.alive) continue;
-    var d = Math.hypot(b.x - player.x, b.y - player.y);
-    if(d < w.reach + b.r){
-      var da = Math.abs(normAng(Math.atan2(b.y - player.y, b.x - player.x) - ang));
-      if(da < 1.2){
-        b.hp -= w.dmg;
-        spawnParticles(b.x, b.y, 10, '#ff5555', 5, 0.4);
-        beep(220, 0.06, 'sawtooth', 0.12);
-        if(b.hp <= 0) killBot(b);
-      }
-    }
-  }
-}
-
-function normAng(a){
-  while(a > Math.PI) a -= Math.PI * 2;
-  while(a < -Math.PI) a += Math.PI * 2;
-  return a;
-}
-
-function killAnimal(a){
-  a.dead = true;
-  var idx = world.animals.indexOf(a);
-  if(idx >= 0) world.animals.splice(idx, 1);
-  
-  // Дроп
-  player.meat += a.type.meat;
-  if(Math.random() < 0.5) player.leather += 1;
-  var xpGain = Math.floor(a.type.hp / 3);
-  gainXP(xpGain);
-  
-  spawnParticles(a.x, a.y, 20, '#8b2020', 6, 0.7);
-  showNotif('+' + a.type.meat + ' мяса, +' + xpGain + ' XP', 'gold');
-  
-  // Респавн
-  setTimeout(function(){
-    if(gameOn) spawnAnimal();
-  }, 3000);
-}
-
-function killBot(b){
-  b.alive = false;
-  var idx = world.bots.indexOf(b);
-  if(idx >= 0) world.bots.splice(idx, 1);
-  
-  // Забираем очки бота
-  var gained = Math.floor(b.score * 0.1) + 100;
-  player.coins += Math.floor(gained / 10);
-  gainXP(gained);
-  
-  spawnParticles(b.x, b.y, 30, '#ffd700', 8, 1);
-  showNotif('Побеждён ' + b.nick + '! +' + gained + ' XP', 'gold');
-  
-  setTimeout(function(){
-    if(gameOn) spawnBot();
-  }, 5000);
-}
-
-function gainXP(amount){
-  player.xp += amount;
-  while(player.xp >= player.xpNext){
-    player.xp -= player.xpNext;
-    player.level++;
-    player.xpNext = Math.floor(player.xpNext * 1.35);
-    player.maxHp += 10;
-    player.hp = player.maxHp;
-    showNotif('⭐ Уровень ' + player.level + '!', 'gold');
-    beep(660, 0.15, 'sine', 0.15);
-    spawnParticles(player.x, player.y, 40, '#ffd95a', 8, 1.5);
-  }
-  updateHUD();
-}
-
-// ============================================================
-// ВЗАИМОДЕЙСТВИЕ
-// ============================================================
-function nearestResource(){
-  var best = null, bd = 60;
-  var all = [];
-  for(var i = 0; i < world.trees.length; i++) if(world.trees[i].alive) all.push({ o: world.trees[i], t: 'tree' });
-  for(var i = 0; i < world.stones.length; i++) if(world.stones[i].alive) all.push({ o: world.stones[i], t: 'stone' });
-  for(var i = 0; i < world.bushes.length; i++) if(world.bushes[i].alive) all.push({ o: world.bushes[i], t: 'bush' });
-  
-  for(var i = 0; i < all.length; i++){
-    var d = Math.hypot(all[i].o.x - player.x, all[i].o.y - player.y);
-    if(d < bd){ bd = d; best = all[i]; }
-  }
-  return best;
-}
-
-function interact(){
-  var r = nearestResource();
-  if(!r){ showNotif('Рядом ничего нет'); return; }
-  
-  var o = r.o;
-  if(r.t === 'tree'){
-    o.hp--;
-    player.wood += 2;
-    beep(300, 0.08, 'triangle', 0.1);
-    spawnParticles(o.x, o.y, 6, '#8b6f47', 3, 0.4);
-    if(o.hp <= 0){
-      o.alive = false;
-      spawnParticles(o.x, o.y, 15, '#6b4f2b', 5, 0.6);
-    }
-    showNotif('+2 дерева');
-  } else if(r.t === 'stone'){
-    o.hp--;
-    player.stone += 2;
-    beep(250, 0.08, 'triangle', 0.1);
-    spawnParticles(o.x, o.y, 6, '#9a9a9a', 3, 0.4);
-    if(o.hp <= 0) o.alive = false;
-    showNotif('+2 камня');
-  } else if(r.t === 'bush'){
-    o.alive = false;
-    player.wood += 1;
-    spawnParticles(o.x, o.y, 10, '#4a8a3a', 4, 0.5);
-    showNotif('+1 дерева');
-  }
-  updateHUD();
-}
-
-// ============================================================
-// ЧАСТИЦЫ
-// ============================================================
-function spawnParticles(x, y, count, color, speed, life){
-  for(var i = 0; i < count; i++){
-    var a = Math.random() * 6.28;
-    world.particles.push({
-      x: x, y: y,
-      vx: Math.cos(a) * speed * (0.5 + Math.random()),
-      vy: Math.sin(a) * speed * (0.5 + Math.random()),
-      life: life, maxLife: life,
-      color: color,
-      size: 2 + Math.random() * 3
-    });
-  }
-}
-
-// ============================================================
-// ГЛАВНЫЙ ЦИКЛ
-// ============================================================
-var lastT = 0;
-function loop(t){
-  if(!gameOn) return;
-  var dt = Math.min((t - lastT) / 16.66, 3);
-  lastT = t;
-  update(dt);
-  draw();
-  requestAnimationFrame(loop);
+  camera.lookAt(eye.clone().add(direction.multiplyScalar(30)));
+  camera.fov=76;
+ }else{
+  const offset=new THREE.Vector3(0,4.5,-9).applyAxisAngle(new THREE.Vector3(0,1,0),heading);
+  camera.position.set(car.position.x+offset.x,car.position.y+offset.y,car.position.z+offset.z);
+  camera.lookAt(car.position.x,1,car.position.z+2);
+  camera.fov=65;
+ }
+ camera.updateProjectionMatrix();
 }
 
 function update(dt){
-  // Движение игрока
-  var ax = 0, ay = 0;
-  if(keys['w'] || keys['ц'] || keys['arrowup']) ay -= 1;
-  if(keys['s'] || keys['ы'] || keys['arrowdown']) ay += 1;
-  if(keys['a'] || keys['ф'] || keys['arrowleft']) ax -= 1;
-  if(keys['d'] || keys['в'] || keys['arrowright']) ax += 1;
-  var len = Math.hypot(ax, ay);
-  if(len > 0){ ax /= len; ay /= len; }
-  
-  var w = WEAPONS[player.weapon] || WEAPONS.fist;
-  var spd = player.speed * (w.speedMod || 1);
-  if(keys['shift']) spd *= 1.5;
-  
-  player.vx += ax * spd * 0.5;
-  player.vy += ay * spd * 0.5;
-  player.vx *= 0.82;
-  player.vy *= 0.82;
-  player.x += player.vx * dt;
-  player.y += player.vy * dt;
-  
-  // Ограничение мира
-  var lim = world.size / 2 - 50;
-  if(player.x < -lim) player.x = -lim;
-  if(player.x > lim) player.x = lim;
-  if(player.y < -lim) player.y = -lim;
-  if(player.y > lim) player.y = lim;
-  
-  // Мировые координаты мыши
-  mouse.wx = mouse.x + cam.x;
-  mouse.wy = mouse.y + cam.y;
-  
-  // Угол игрока — к мыши
-  player.angle = Math.atan2(mouse.wy - player.y, mouse.wx - player.x);
-  
-  // Кулдаун атаки
-  if(player.attackCd > 0) player.attackCd -= dt;
-  if(player.hurtFlash > 0) player.hurtFlash -= dt;
-  
-  // Камера
-  cam.x += (player.x - W / 2 - cam.x) * 0.14;
-  cam.y += (player.y - H / 2 - cam.y) * 0.14;
-  
-  // Время суток
-  time += 0.00015 * dt;
-  if(time > 1){ time = 0; day++; }
-  
-  // Животные
-  for(var i = 0; i < world.animals.length; i++){
-    var a = world.animals[i];
-    var dPlayer = Math.hypot(player.x - a.x, player.y - a.y);
-    
-    if(a.type.aggressive && dPlayer < 220){
-      // Атака игрока
-      a.angle = Math.atan2(player.y - a.y, player.x - a.x);
-      a.vx += Math.cos(a.angle) * a.type.speed * 0.4;
-      a.vy += Math.sin(a.angle) * a.type.speed * 0.4;
-      
-      if(dPlayer < player.r + a.r + 5 && a.attackCd <= 0){
-        player.hp -= a.type.dmg;
-        player.hurtFlash = 10;
-        a.attackCd = 60;
-        beep(150, 0.1, 'sawtooth', 0.12);
-        spawnParticles(player.x, player.y, 8, '#ff4444', 4, 0.4);
-        showNotif('-' + a.type.dmg + ' HP', 'warn');
-        if(player.hp <= 0) die();
-      }
-    } else {
-      // Блуждание
-      a.wanderTimer -= dt;
-      if(a.wanderTimer <= 0){
-        a.wanderTimer = 60 + Math.random() * 120;
-        a.angle = Math.random() * 6.28;
-      }
-      a.vx += Math.cos(a.angle) * a.type.speed * 0.15;
-      a.vy += Math.sin(a.angle) * a.type.speed * 0.15;
-    }
-    
-    a.vx *= 0.9;
-    a.vy *= 0.9;
-    a.x += a.vx * dt;
-    a.y += a.vy * dt;
-    if(a.attackCd > 0) a.attackCd -= dt;
-  }
-  
-  // Боты
-  for(var i = 0; i < world.bots.length; i++){
-    var b = world.bots[i];
-    var dPlayer = Math.hypot(player.x - b.x, player.y - b.y);
-    
-    if(dPlayer < 350){
-      // Идут к игроку
-      b.angle = Math.atan2(player.y - b.y, player.x - b.x);
-      b.vx += Math.cos(b.angle) * 1.4;
-      b.vy += Math.sin(b.angle) * 1.4;
-      
-      if(dPlayer < player.r + b.r + 15 && b.attackCd <= 0){
-        player.hp -= 4;
-        player.hurtFlash = 10;
-        b.attackCd = 70;
-        spawnParticles(player.x, player.y, 6, '#ff4444', 4, 0.4);
-        if(player.hp <= 0) die();
-      }
-    } else {
-      b.wanderTimer -= dt;
-      if(b.wanderTimer <= 0){
-        b.wanderTimer = 80 + Math.random() * 120;
-        b.angle = Math.random() * 6.28;
-      }
-      b.vx += Math.cos(b.angle) * 0.6;
-      b.vy += Math.sin(b.angle) * 0.6;
-    }
-    
-    b.vx *= 0.9;
-    b.vy *= 0.9;
-    b.x += b.vx * dt;
-    b.y += b.vy * dt;
-    b.x = Math.max(-world.size/2, Math.min(world.size/2, b.x));
-    b.y = Math.max(-world.size/2, Math.min(world.size/2, b.y));
-    if(b.attackCd > 0) b.attackCd -= dt;
-    
-    // Затухание очков
-    b.score = Math.max(0, b.score - 0.05 * dt);
-  }
-  
-  // Стрелы
-  for(var i = world.arrows.length - 1; i >= 0; i--){
-    var ar = world.arrows[i];
-    ar.x += ar.vx * dt;
-    ar.y += ar.vy * dt;
-    ar.life -= dt;
-    if(ar.life <= 0){ world.arrows.splice(i, 1); continue; }
-    
-    // Попадание в животных
-    for(var j = 0; j < world.animals.length; j++){
-      var a = world.animals[j];
-      if(Math.hypot(a.x - ar.x, a.y - ar.y) < a.r + 5){
-        a.hp -= ar.dmg;
-        spawnParticles(a.x, a.y, 6, '#ff5555', 3, 0.4);
-        if(a.hp <= 0) killAnimal(a);
-        world.arrows.splice(i, 1);
-        break;
-      }
-    }
-    // Попадание в ботов
-    for(var j = 0; j < world.bots.length; j++){
-      var b = world.bots[j];
-      if(b.alive && Math.hypot(b.x - ar.x, b.y - ar.y) < b.r + 5){
-        b.hp -= ar.dmg;
-        if(b.hp <= 0) killBot(b);
-        world.arrows.splice(i, 1);
-        break;
-      }
-    }
-  }
-  
-  // Частицы
-  for(var i = world.particles.length - 1; i >= 0; i--){
-    var p = world.particles[i];
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
-    p.vx *= 0.93;
-    p.vy *= 0.93;
-    p.life -= dt;
-    if(p.life <= 0) world.particles.splice(i, 1);
-  }
-  
-  // Подсказка
-  var r = nearestResource();
-  var hintEl = document.getElementById('hint');
-  if(r){
-    hintEl.style.display = 'block';
-    hintEl.innerHTML = 'Нажми <b>E</b> чтобы собрать';
-  } else {
-    hintEl.style.display = 'none';
-  }
+ if(!started)return;
+
+ const gas=keys.has("w")||keys.has("arrowup");
+ const brake=keys.has("s")||keys.has("arrowdown");
+ const left=keys.has("a")||keys.has("arrowleft");
+ const right=keys.has("d")||keys.has("arrowright");
+ const handbrake=keys.has(" ");
+
+ const maxSpeed=gear===1?10:gear===2?17:gear===3?24:gear===4?32:gear===5?40:6;
+
+ if(gas&&fuel>0&&health>0){
+  speed+=dt*(gear===1?4.5:gear===2?4:3.3);
+  fuel=Math.max(0,fuel-dt*.018);
+ }
+ if(brake){
+  speed-=Math.sign(speed||1)*Math.min(Math.abs(speed),dt*(handbrake?13:8));
+ }
+ if(!gas&&!brake)speed*=Math.max(0,1-dt*(handbrake?2.5:.2));
+ speed=Math.max(gear===0?-maxSpeed:0,Math.min(maxSpeed,speed));
+
+ const steeringInput=(right?1:0)-(left?1:0);
+ steering+=(steeringInput-steering)*Math.min(1,dt*4);
+ const grip=Math.abs(car.position.x)>5.5?.55:1;
+ heading+=steering*dt*(.25+Math.abs(speed)*.035)*grip*Math.sign(speed||1);
+
+ car.position.x+=Math.sin(heading)*speed*dt;
+ car.position.z+=Math.cos(heading)*speed*dt;
+ car.position.x=Math.max(-14,Math.min(14,car.position.x));
+ car.rotation.y=heading;
+
+ if(Math.abs(car.position.x)>5.6){
+  speed*=Math.max(0,1-dt*.8);
+  health=Math.max(0,health-dt*.1);
+ }
+
+ updateCamera();
+ $("speed").textContent=Math.round(Math.abs(speed)*3.6)+" км/ч";
+ $("health").textContent=Math.round(health)+"%";
+ $("fuel").textContent=Math.round(fuel)+"%";
+ $("gear").textContent=gear===0?"R":String(gear);
 }
 
-function die(){
-  gameOn = false;
-  showNotif('💀 Ты погиб! Возвращайся в меню', 'warn');
-  setTimeout(function(){
-    document.getElementById('menu').style.display = 'flex';
-  }, 2000);
+function frame(){
+ const dt=Math.min(clock.getDelta(),.04);
+ update(dt);
+ renderer.render(scene,camera);
 }
 
-// ============================================================
-// РИСОВАНИЕ
-// ============================================================
-function draw(){
-  // Фон — биомы
-  ctx.fillStyle = biomeAt(player.x, player.y) === 'sand' ? '#c9b378' : '#4a7a3a';
-  ctx.fillRect(0, 0, W, H);
-  
-  // Тайлы с текстурой
-  var tileSize = 64;
-  var startX = Math.floor(cam.x / tileSize) * tileSize;
-  var startY = Math.floor(cam.y / tileSize) * tileSize;
-  for(var x = startX; x < cam.x + W + tileSize; x += tileSize){
-    for(var y = startY; y < cam.y + H + tileSize; y += tileSize){
-      var bio = biomeAt(x + 32, y + 32);
-      if(bio !== biomeAt(player.x, player.y)){
-        ctx.fillStyle = BIOME_COLORS[bio];
-        ctx.fillRect(x - cam.x, y - cam.y, tileSize, tileSize);
-      }
-    }
-  }
-  
-  // Лёгкая текстура травы
-  ctx.fillStyle = 'rgba(0,0,0,0.04)';
-  for(var x = startX; x < cam.x + W + tileSize; x += tileSize){
-    for(var y = startY; y < cam.y + H + tileSize; y += tileSize){
-      if(((x / tileSize + y / tileSize) | 0) % 2 === 0){
-        ctx.fillRect(x - cam.x, y - cam.y, tileSize, tileSize);
-      }
-    }
-  }
-  
-  ctx.save();
-  ctx.translate(-cam.x, -cam.y);
-  
-  // Кусты
-  for(var i = 0; i < world.bushes.length; i++){
-    var b = world.bushes[i];
-    if(!b.alive) continue;
-    if(b.x < cam.x - 50 || b.x > cam.x + W + 50 || b.y < cam.y - 50 || b.y > cam.y + H + 50) continue;
-    drawBush(b.x, b.y, b.r);
-  }
-  
-  // Деревья
-  for(var i = 0; i < world.trees.length; i++){
-    var t = world.trees[i];
-    if(!t.alive) continue;
-    if(t.x < cam.x - 100 || t.x > cam.x + W + 100 || t.y < cam.y - 100 || t.y > cam.y + H + 100) continue;
-    drawTree(t.x, t.y, t.r);
-  }
-  
-  // Камни
-  for(var i = 0; i < world.stones.length; i++){
-    var s = world.stones[i];
-    if(!s.alive) continue;
-    if(s.x < cam.x - 50 || s.x > cam.x + W + 50 || s.y < cam.y - 50 || s.y > cam.y + H + 50) continue;
-    drawRock(s.x, s.y, s.r);
-  }
-  
-  // Животные
-  for(var i = 0; i < world.animals.length; i++){
-    drawAnimal(world.animals[i]);
-  }
-  
-  // Боты
-  for(var i = 0; i < world.bots.length; i++){
-    var b = world.bots[i];
-    if(!b.alive) continue;
-    if(b.x < cam.x - 100 || b.x > cam.x + W + 100 || b.y < cam.y - 100 || b.y > cam.y + H + 100) continue;
-    drawBot(b);
-  }
-  
-  // Стрелы
-  for(var i = 0; i < world.arrows.length; i++){
-    var ar = world.arrows[i];
-    ctx.save();
-    ctx.translate(ar.x, ar.y);
-    ctx.rotate(Math.atan2(ar.vy, ar.vx));
-    ctx.fillStyle = '#8b6f47';
-    ctx.fillRect(-10, -2, 20, 4);
-    ctx.fillStyle = '#e8e8e8';
-    ctx.beginPath();
-    ctx.moveTo(10, 0);
-    ctx.lineTo(6, -4);
-    ctx.lineTo(6, 4);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-  
-  // Игрок
-  drawPlayer();
-  
-  // Частицы
-  for(var i = 0; i < world.particles.length; i++){
-    var p = world.particles[i];
-    ctx.globalAlpha = p.life / p.maxLife;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, 6.28);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-  
-  ctx.restore();
-  
-  // Ночь
-  var dark = Math.sin(time * 6.28) * 0.5 + 0.5;
-  if(dark > 0.55){
-    ctx.fillStyle = 'rgba(10,20,40,' + ((dark - 0.55) * 0.9) + ')';
-    ctx.fillRect(0, 0, W, H);
-  }
-  
-  drawMinimap();
-  drawLeaderboard();
+function start(){
+ started=true;
+ $("menu").style.display="none";
+ $("hud").style.display="flex";
+ $("hint").style.display="block";
 }
 
-// ============================================================
-// РИСОВАНИЕ ОБЪЕКТОВ
-// ============================================================
-function drawTree(x, y, r){
-  // Тень
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath();
-  ctx.ellipse(x + 3, y + r * 0.7, r * 0.9, r * 0.35, 0, 0, 6.28);
-  ctx.fill();
-  // Крона
-  ctx.fillStyle = '#2a5a1e';
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#3a7a2a';
-  ctx.beginPath();
-  ctx.arc(x - r * 0.25, y - r * 0.25, r * 0.75, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#4a8a3a';
-  ctx.beginPath();
-  ctx.arc(x - r * 0.35, y - r * 0.4, r * 0.4, 0, 6.28);
-  ctx.fill();
-  // HP-полоска
-  if(world.trees.length && arguments[2]){
-    // (если битое)
+function setupControls(){
+ $("start").addEventListener("click",start);
+
+ window.addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+  if([" ","arrowup","arrowdown","arrowleft","arrowright"].includes(k))e.preventDefault();
+  keys.add(k);
+  if(e.repeat)return;
+
+  if(k==="v"){
+   firstPerson=!firstPerson;
+  }else if(k==="f"){
+   lightsOn=!lightsOn;
+   headlamps.forEach(l=>l.intensity=lightsOn?3:0);
+  }else if(k==="q"){
+   gear=gear===5?0:gear+1;
+   if(Math.abs(speed)>1.2){
+    gear=1;
+   }
+  }else if(k==="r"){
+   if(Math.abs(speed)<1.2)gear=0;
+  }else if(k>="1"&&k<="5"){
+   if(Math.abs(speed)<1.2)gear=Number(k);
+  }else if(k==="escape"){
+   if(started){
+    started=false;
+    $("menu").style.display="flex";
+    $("hud").style.display="none";
+    $("hint").style.display="none";
+   }
   }
+ });
+ window.addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
+ window.addEventListener("blur",()=>keys.clear());
+
+ renderer.domElement.addEventListener("click",()=>{
+  if(started&&firstPerson)renderer.domElement.requestPointerLock?.();
+ });
+ document.addEventListener("mousemove",e=>{
+  if(!started||!firstPerson||document.pointerLockElement!==renderer.domElement)return;
+  lookYaw-=e.movementX*.002;
+  lookPitch=Math.max(-.4,Math.min(.3,lookPitch-e.movementY*.002));
+ });
+
+ window.addEventListener("resize",()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+ });
 }
 
-function drawRock(x, y, r){
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath();
-  ctx.ellipse(x + 3, y + r * 0.6, r * 0.9, r * 0.35, 0, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#6a7078';
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#8a9098';
-  ctx.beginPath();
-  ctx.arc(x - r * 0.3, y - r * 0.3, r * 0.6, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#a0a8b0';
-  ctx.beginPath();
-  ctx.arc(x - r * 0.4, y - r * 0.4, r * 0.25, 0, 6.28);
-  ctx.fill();
+try{
+ createScene();
+ setupControls();
+ renderer.setAnimationLoop(frame);
+}catch(err){
+ showError(err);
 }
-
-function drawBush(x, y, r){
-  ctx.fillStyle = '#2a5a1e';
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, 6.28);
-  ctx.fill();
-  ctx.fillStyle = '#3a7a2a';
-  ctx.beginPath();
-  ctx.arc(x - r * 0.3, y - r * 0.3, r * 0.6, 0, 6.28);
-  ctx.fill();
-}
-
-function drawAnimal(a){
-  ctx.save();
-  ctx.translate(a.x, a.y);
-  
-  // Тень
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath();
-  ctx.ellipse(3, a.r * 0.8, a.r * 0.9, a.r * 0.35, 0, 0, 6.28);
-  ctx.fill();
-  
-  ctx.rotate(a.angle);
-  
-  // Тело
-  ctx.fillStyle = a.type.color;
-  ctx.beginPath();
-  ctx.ellipse(0, 0, a.r * 1.2, a.r * 0.85, 0, 0, 6.28);
-  ctx.fill();
-  
-  // Голова
-  ctx.fillStyle = a.type.color;
-  ctx.beginPath();
-  ctx.arc(a.r * 0.9, 0, a.r * 0.6, 0, 6.28);
-  ctx.fill();
-  
-  // Морда (у кабанов и быков)
-  if(a.type.name === 'Кабан' || a.type.name === 'Бык'){
-    ctx.fillStyle = '#2a1a0a';
-    ctx.beginPath();
-    ctx.arc(a.r * 1.2, 0, a.r * 0.3, 0, 6.28);
-    ctx.fill();
-    // Рога
-    ctx.strokeStyle = '#e8d8a8';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(a.r * 0.9, -a.r * 0.5);
-    ctx.lineTo(a.r * 1.3, -a.r * 0.9);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(a.r * 0.9, a.r * 0.5);
-    ctx.lineTo(a.r * 1.3, a.r * 0.9);
-    ctx.stroke();
-  }
-  
-  // Глаза
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(a.r * 1.0, -a.r * 0.2, 2, 0, 6.28);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(a.r * 1.0, a.r * 0.2, 2, 0, 6.28);
-  ctx.fill();
-  
-  ctx.restore();
-  
-  // HP-полоска
-  if(a.hp < a.maxHp){
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(a.x - 20, a.y - a.r - 12, 40, 5);
-    ctx.fillStyle = '#d04848';
-    ctx.fillRect(a.x - 20, a.y - a.r - 12, 40 * (a.hp / a.maxHp), 5);
-  }
-}
-
-function drawBot(b){
-  ctx.save();
-  ctx.translate(b.x, b.y);
-  
-  // Тень
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath();
-  ctx.ellipse(3, b.r * 0.9, b.r * 0.9, b.r * 0.35, 0, 0, 6.28);
-  ctx.fill();
-  
-  ctx.rotate(b.angle + Math.PI / 2);
-  
-  // Тело (куртка)
-  ctx.fillStyle = b.color;
-  ctx.beginPath();
-  ctx.arc(0, 0, b.r, 0, 6.28);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  
-  // Руки
-  ctx.fillStyle = b.color;
-  ctx.beginPath();
-  ctx.arc(-b.r * 0.9, -b.r * 0.3, b.r * 0.35, 0, 6.28);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(b.r * 0.9, -b.r * 0.3, b.r * 0.35, 0, 6.28);
-  ctx.fill();
-  
-  // Голова
-  ctx.fillStyle = '#e8c9a0';
-  ctx.beginPath();
-  ctx.arc(0, -b.r * 0.3, b.r * 0.7, 0, 6.28);
-  ctx.fill();
-  
-  // Глаза
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(-b.r * 0.25, -b.r * 0.4, 2.5, 0, 6.28);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(b.r * 0.25, -b.r * 0.4, 2.5, 0, 6.28);
-  ctx.fill();
-  
-  // Оружие в руке
-  ctx.fillStyle = '#8b6f47';
-  ctx.fillRect(b.r * 0.5, -b.r * 0.6, 4, 20);
-  
-  ctx.restore();
-  
-  // Ник над головой
-  ctx.font = 'bold 12px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(0,0,0,0.7)';
-  var nameWidth = ctx.measureText(b.nick).width;
-  ctx.fillRect(b.x - nameWidth / 2 - 4, b.y - b.r - 30, nameWidth + 8, 16);
-  ctx.fillStyle = b.color === '#4a7ab8' ? '#7fc9ff' : '#fff';
-  ctx.fillText(b.nick, b.x, b.y - b.r - 18);
-  
-  // HP-полоска
-  ctx.fillStyle = 'rgba(0,0,0,0.6)';
-  ctx.fillRect(b.x - 24, b.y - b.r - 12, 48, 6);
-  ctx.fillStyle = '#3ac83a';
-  ctx.fillRect(b.x - 24, b.y - b.r - 12, 48 * (b.hp / b.maxHp), 6);
-}
-
-function drawPlayer(){
-  ctx.save();
-  ctx.translate(player.x, player.y);
-  
-  // Тень
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
-  ctx.beginPath();
-  ctx.ellipse(3, player.r * 0.9, player.r * 0.9, player.r * 0.35, 0, 0, 6.28);
-  ctx.fill();
-  
-  ctx.rotate(player.angle + Math.PI / 2);
-  
-  // Оружие (за телом если сзади)
-  var w = WEAPONS[player.weapon] || WEAPONS.fist;
-  ctx.save();
-  ctx.rotate(-Math.PI / 2);
-  // Взмах при атаке
-  var swing = player.attackCd > 0 ? Math.sin((w.cd - player.attackCd) / w.cd * Math.PI) * 0.6 : 0;
-  ctx.rotate(-swing);
-  
-  if(player.weapon === 'bow'){
-    // Лук
-    ctx.strokeStyle = '#8b6f47';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(player.r * 1.3, 0, 15, -1.2, 1.2);
-    ctx.stroke();
-  } else if(player.weapon !== 'fist'){
-    // Древко
-    ctx.fillStyle = '#8b6f47';
-    ctx.fillRect(player.r * 0.9, -3, 22, 6);
-    // Лезвие
-    if(player.weapon === 'sword' || player.weapon === 'katana'){
-      ctx.fillStyle = '#d0d8e0';
-      ctx.fillRect(player.r * 0.9 + 20, -5, 14, 10);
-    } else if(player.weapon === 'spear'){
-      ctx.fillStyle = '#d0d8e0';
-      ctx.beginPath();
-      ctx.moveTo(player.r * 0.9 + 25, 0);
-      ctx.lineTo(player.r * 0.9 + 35, -4);
-      ctx.lineTo(player.r * 0.9 + 35, 4);
-      ctx.closePath();
-      ctx.fill();
-    } else if(player.weapon === 'stone_axe'){
-      ctx.fillStyle = '#8a8a8a';
-      ctx.beginPath();
-      ctx.moveTo(player.r * 0.9 + 18, -8);
-      ctx.lineTo(player.r * 0.9 + 26, -2);
-      ctx.lineTo(player.r * 0.9 + 26, 6);
-      ctx.lineTo(player.r * 0.9 + 18, 4);
-      ctx.closePath();
-      ctx.fill();
-    } else if(player.weapon === 'club'){
-      ctx.fillStyle = '#5a3a1a';
-      ctx.beginPath();
-      ctx.arc(player.r * 0.9 + 22, 0, 8, 0, 6.28);
-      ctx.fill();
-    }
-  }
-  ctx.restore();
-  
-  // Тело (куртка)
-  ctx.fillStyle = player.hurtFlash > 0 ? '#d04848' : '#4a7a3a';
-  ctx.beginPath();
-  ctx.arc(0, 0, player.r, 0, 6.28);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  
-  // Руки
-  ctx.fillStyle = '#4a7a3a';
-  ctx.beginPath();
-  ctx.arc(-player.r * 0.9, -player.r * 0.3, player.r * 0.35, 0, 6.28);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(player.r * 0.9, -player.r * 0.3, player.r * 0.35, 0, 6.28);
-  ctx.fill();
-  
-  // Голова
-  ctx.fillStyle = '#e8c9a0';
-  ctx.beginPath();
-  ctx.arc(0, -player.r * 0.3, player.r * 0.72, 0, 6.28);
-  ctx.fill();
-  
-  // Волосы
-  ctx.fillStyle = '#3a2a1a';
-  ctx.beginPath();
-  ctx.arc(0, -player.r * 0.35, player.r * 0.72, Math.PI, 6.28);
-  ctx.fill();
-  
-  // Глаза
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(-player.r * 0.25, -player.r * 0.4, 2.5, 0, 6.28);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(player.r * 0.25, -player.r * 0.4, 2.5, 0, 6.28);
-  ctx.fill();
-  
-  ctx.restore();
-  
-  // Ник над игроком
-  ctx.font = 'bold 13px Arial';
-  ctx.textAlign = 'center';
-  var nickText = (player.clan ? '[' + player.clan + '] ' : '') + player.nick;
-  var nw = ctx.measureText(nickText).width;
-  ctx.fillStyle = 'rgba(0,0,0,0.7)';
-  ctx.fillRect(player.x - nw / 2 - 5, player.y - player.r - 32, nw + 10, 17);
-  ctx.fillStyle = player.clan ? '#7fc9ff' : '#fff';
-  ctx.fillText(nickText, player.x, player.y - player.r - 19);
-  
-  // HP-полоска над игроком
-  ctx.fillStyle = 'rgba(0,0,0,0.6)';
-  ctx.fillRect(player.x - 26, player.y - player.r - 12, 52, 7);
-  ctx.fillStyle = '#3ac83a';
-  ctx.fillRect(player.x - 26, player.y - player.r - 12, 52 * (player.hp / player.maxHp), 7);
-  ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(player.x - 26, player.y - player.r - 12, 52, 7);
-}
-
-// ============================================================
-// МИНИКАРТА
-// ============================================================
-function drawMinimap(){
-  mmc.clearRect(0, 0, 360, 360);
-  mmc.fillStyle = '#050a05';
-  mmc.fillRect(0, 0, 360, 360);
-  
-  var scale = 360 / 1200;
-  var cx = 180, cy = 180;
-  
-  // Ресурсы
-  for(var i = 0; i < world.trees.length; i++){
-    var t = world.trees[i];
-    if(!t.alive) continue;
-    var dx = (t.x - player.x) * scale;
-    var dy = (t.y - player.y) * scale;
-    if(Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
-    mmc.fillStyle = '#2a5a1e';
-    mmc.fillRect(cx + dx - 1.5, cy + dy - 1.5, 3, 3);
-  }
-  for(var i = 0; i < world.stones.length; i++){
-    var s = world.stones[i];
-    if(!s.alive) continue;
-    var dx = (s.x - player.x) * scale;
-    var dy = (s.y - player.y) * scale;
-    if(Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
-    mmc.fillStyle = '#7a8088';
-    mmc.fillRect(cx + dx - 1.5, cy + dy - 1.5, 3, 3);
-  }
-  // Животные
-  for(var i = 0; i < world.animals.length; i++){
-    var a = world.animals[i];
-    var dx = (a.x - player.x) * scale;
-    var dy = (a.y - player.y) * scale;
-    if(Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
-    mmc.fillStyle = a.type.aggressive ? '#d04848' : '#d0a048';
-    mmc.fillRect(cx + dx - 1.5, cy + dy - 1.5, 3, 3);
-  }
-  // Боты
-  for(var i = 0; i < world.bots.length; i++){
-    var b = world.bots[i];
-    if(!b.alive) continue;
-    var dx = (b.x - player.x) * scale;
-    var dy = (b.y - player.y) * scale;
-    if(Math.abs(dx) > 180 || Math.abs(dy) > 180) continue;
-    mmc.fillStyle = '#d0d040';
-    mmc.fillRect(cx + dx - 2, cy + dy - 2, 4, 4);
-  }
-  
-  // Игрок
-  mmc.fillStyle = '#7fc94a';
-  mmc.beginPath();
-  mmc.arc(cx, cy, 4, 0, 6.28);
-  mmc.fill();
-  mmc.strokeStyle = '#fff';
-  mmc.lineWidth = 1;
-  mmc.stroke();
-  
-  // Название мира
-  mmc.fillStyle = 'rgba(255,255,255,0.5)';
-  mmc.font = '11px Arial';
-  mmc.textAlign = 'center';
-  mmc.fillText('forest-' + Math.abs(Math.floor(player.x / 1000)) + '-' + Math.abs(Math.floor(player.y / 1000)), 180, 350);
-}
-
-// ============================================================
-// ЛИДЕРБОРД
-// ============================================================
-function drawLeaderboard(){
-  var lb = document.getElementById('leaderboard');
-  var all = [];
-  
-  // Игрок
-  all.push({
-    name: (player.clan ? '[' + player.clan + '] ' : '') + player.nick,
-    score: Math.floor(player.xp + player.level * 100 + player.coins * 10),
-    me: true
-  });
-  
-  // Боты
-  for(var i = 0; i < world.bots.length; i++){
-    var b = world.bots[i];
-    if(!b.alive) continue;
-    all.push({
-      name: b.nick,
-      score: Math.floor(b.score),
-      me: false
-    });
-  }
-  
-  all.sort(function(a, b){ return b.score - a.score; });
-  
-  var html = '';
-  for(var i = 0; i < Math.min(6, all.length); i++){
-    var x = all[i];
-    html += '<div class="row' + (x.me ? ' me' : '') + '">' +
-            '<span class="rank">' + (i + 1) + '</span>' +
-            '<span class="name">' + x.name + '</span>' +
-            '<span class="score">' + formatScore(x.score) + '</span>' +
-            '</div>';
-  }
-  lb.innerHTML = html;
-}
-
-function formatScore(s){
-  if(s >= 1000) return (s / 1000).toFixed(1) + 'K';
-  return s.toString();
-}
-
-function updateHUD(){
-  document.getElementById('coins').textContent = player.coins;
-  document.getElementById('xpText').textContent = 'Уровень ' + player.level;
-  document.getElementById('xpFill').style.width = (player.xp / player.xpNext * 100) + '%';
-  document.getElementById('xpBar').setAttribute('data-lvl', player.xp + ' / ' + player.xpNext);
-}
-
-function showNotif(text, type){
-  var n = document.createElement('div');
-  n.className = 'nf' + (type ? ' ' + type : '');
-  n.textContent = text;
-  document.getElementById('notif').appendChild(n);
-  setTimeout(function(){ n.remove(); }, 2500);
-}
-
-// ============================================================
-// МОДАЛКИ
-// ============================================================
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-function closeAll(){
-  document.querySelectorAll('.modal').forEach(function(m){ m.classList.remove('show'); });
-}
-
-function openCraft(){
-  var body = document.getElementById('craftBody');
-  var recipes = [
-    { id: 'club',   cost: { wood: 5 },                name: 'Дубина',       icon: '🏏', desc: 'Урон 10 · Дальность 48' },
-    { id: 'stone_axe', cost: { wood: 5, stone: 5 },   name: 'Каменный топор', icon: '🪓', desc: 'Урон 12 · Бонус к дереву' },
-    { id: 'sword',  cost: { wood: 10, stone: 8 },     name: 'Меч',           icon: '⚔️', desc: 'Урон 18 · Дальность 52' },
-    { id: 'spear',  cost: { wood: 12, stone: 10 },    name: 'Копьё',         icon: '🗡️', desc: 'Урон 22 · Дальность 68' },
-    { id: 'katana', cost: { wood: 15, stone: 15 },    name: 'Катана',        icon: '🗡️', desc: 'Урон 26 · Быстрая' },
-    { id: 'bow',    cost: { wood: 8 },                name: 'Лук',           icon: '🏹', desc: 'Стреляет стрелами' },
-    { id: 'arrow',  cost: { stone: 3 },               name: 'Стрела x5',     icon: '➳',  desc: 'Боеприпас для лука', x5: true }
-  ];
-  
-  body.innerHTML = '';
-  for(var i = 0; i < recipes.length; i++){
-    var r = recipes[i];
-    var can = canCraft(r.cost);
-    var costHtml = '';
-    for(var k in r.cost){
-      costHtml += '<span style="color:' + (player[k] >= r.cost[k] ? '#7fc94a' : '#d04848') + '">' + ITEMS[k].icon + ' ' + r.cost[k] + '</span> ';
-    }
-    var item = document.createElement('div');
-    item.className = 'listItem';
-    item.innerHTML = '<span class="ico">' + r.icon + '</span>' +
-                     '<div class="info"><b>' + r.name + '</b><small>' + r.desc + '</small></div>' +
-                     '<span class="cost">' + costHtml + '</span>' +
-                     '<button ' + (can ? '' : 'disabled') + '>Создать</button>';
-    (function(recipe){
-      item.querySelector('button').onclick = function(){
-        if(craftItem(recipe)) openCraft();
-      };
-    })(r);
-    body.appendChild(item);
-  }
-  
-  document.getElementById('craftModal').classList.add('show');
-}
-
-function canCraft(cost){
-  for(var k in cost){
-    if(player[k] < cost[k]) return false;
-  }
-  return true;
-}
-
-function craftItem(r){
-  if(!canCraft(r.cost)) return false;
-  for(var k in r.cost) player[k] -= r.cost[k];
-  
-  if(r.x5){
-    // Стрелы — просто увеличиваем счётчик
-    if(!player.arrows) player.arrows = 0;
-    player.arrows += 5;
-    showNotif('+5 стрел', 'gold');
-  } else {
-    // Оружие в хотбар
-    if(player.weapon && player.weapon !== 'fist'){
-      // Уже есть
-    }
-    addItemToHotbar(r.id, 1);
-    showNotif('Создано: ' + r.name, 'gold');
-  }
-  beep(500, 0.1, 'sine', 0.12);
-  updateHUD();
-  return true;
-}
-
-function openBuild(){
-  var body = document.getElementById('buildBody');
-  var builds = [
-    { id: 'wall', name: 'Деревянная стена', icon: '🪵', cost: { wood: 5 }, desc: 'Прочная защита' },
-    { id: 'spike', name: 'Деревянные шипы', icon: '⚔️', cost: { wood: 3 }, desc: 'Наносит урон врагам' },
-    { id: 'tower', name: 'Защитная башня', icon: '🏰', cost: { wood: 15, stone: 10 }, desc: 'Стреляет сама' },
-    { id: 'campfire', name: 'Костёр', icon: '🔥', cost: { wood: 4, stone: 2 }, desc: 'Свет ночью' }
-  ];
-  
-  body.innerHTML = '';
-  for(var i = 0; i < builds.length; i++){
-    var b = builds[i];
-    var can = canCraft(b.cost);
-    var costHtml = '';
-    for(var k in b.cost){
-      costHtml += '<span style="color:' + (player[k] >= b.cost[k] ? '#7fc94a' : '#d04848') + '">' + ITEMS[k].icon + ' ' + b.cost[k] + '</span> ';
-    }
-    var item = document.createElement('div');
-    item.className = 'listItem';
-    item.innerHTML = '<span class="ico">' + b.icon + '</span>' +
-                     '<div class="info"><b>' + b.name + '</b><small>' + b.desc + '</small></div>' +
-                     '<span class="cost">' + costHtml + '</span>' +
-                     '<button ' + (can ? '' : 'disabled') + '>Построить</button>';
-    (function(build){
-      item.querySelector('button').onclick = function(){
-        if(buildItem(build)) openBuild();
-      };
-    })(b);
-    body.appendChild(item);
-  }
-  
-  document.getElementById('buildModal').classList.add('show');
-}
-
-function buildItem(b){
-  if(!canCraft(b.cost)) return false;
-  for(var k in b.cost) player[k] -= b.cost[k];
-  
-  var bx = player.x + Math.cos(player.angle) * 50;
-  var by = player.y + Math.sin(player.angle) * 50;
-  world.buildings.push({ x: bx, y: by, type: b.id, icon: b.icon });
-  
-  spawnParticles(bx, by, 15, '#7fc94a', 5, 0.6);
-  beep(400, 0.15, 'sine', 0.12);
-  showNotif('Построено: ' + b.name, 'gold');
-  updateHUD();
-  return true;
-}
-
-function openClans(){
-  var list = document.getElementById('clanList');
-  var clans = ['Geo', 'Wolf Pack', 'Frost', 'Ember', 'Shadow'];
-  list.innerHTML = '';
-  for(var i = 0; i < clans.length; i++){
-    var c = clans[i];
-    var item = document.createElement('div');
-    item.className = 'listItem';
-    item.innerHTML = '<span class="ico">🛡️</span>' +
-                     '<div class="info"><b>' + c + '</b><small>' + (3 + i) + ' участника</small></div>' +
-                     '<button>Вступить</button>';
-    (function(clan){
-      item.querySelector('button').onclick = function(){
-        player.clan = clan;
-        showNotif('Ты вступил в клан: ' + clan, 'gold');
-        closeModal('clanModal');
-      };
-    })(c);
-    list.appendChild(item);
-  }
-  document.getElementById('clanModal').classList.add('show');
-}
-
-function createClan(){
-  var name = document.getElementById('clanName').value.trim();
-  if(!name){ showNotif('Введи название', 'warn'); return; }
-  player.clan = name;
-  showNotif('Создан клан: ' + name, 'gold');
-  closeModal('clanModal');
-}
-
-function openShop(){
-  var body = document.getElementById('shopBody');
-  var items = [
-    { name: 'Зелье здоровья', icon: '🧪', price: 10, act: function(){ player.hp = player.maxHp; showNotif('HP восстановлено!', 'gold'); } },
-    { name: 'Стейк', icon: '🍖', price: 8, act: function(){ player.hp = Math.min(player.maxHp, player.hp + 30); showNotif('+30 HP', 'gold'); } },
-    { name: 'Дерево x10', icon: '🪵', price: 15, act: function(){ player.wood += 10; showNotif('+10 дерева', 'gold'); } },
-    { name: 'Камень x10', icon: '🪨', price: 20, act: function(){ player.stone += 10; showNotif('+10 камня', 'gold'); } }
-  ];
-  body.innerHTML = '';
-  for(var i = 0; i < items.length; i++){
-    var it = items[i];
-    var can = player.coins >= it.price;
-    var item = document.createElement('div');
-    item.className = 'listItem';
-    item.innerHTML = '<span class="ico">' + it.icon + '</span>' +
-                     '<div class="info"><b>' + it.name + '</b></div>' +
-                     '<span class="cost">🪙 ' + it.price + '</span>' +
-                     '<button ' + (can ? '' : 'disabled') + '>Купить</button>';
-    (function(shopItem){
-      item.querySelector('button').onclick = function(){
-        if(player.coins >= shopItem.price){
-          player.coins -= shopItem.price;
-          shopItem.act();
-          updateHUD();
-          openShop();
-        }
-      };
-    })(it);
-    body.appendChild(item);
-  }
-  document.getElementById('shopModal').classList.add('show');
-}
-
-function openInventory(){
-  var body = document.getElementById('invBody');
-  var html = '<div class="section-title">Ресурсы</div>';
-  for(var k in ITEMS){
-    html += '<div class="listItem"><span class="ico">' + ITEMS[k].icon + '</span>' +
-            '<div class="info"><b>' + ITEMS[k].name + '</b></div>' +
-            '<span class="cost">' + (player[k] || 0) + '</span></div>';
-  }
-  html += '<div class="section-title">Инструменты</div>';
-  for(var i = 0; i < 6; i++){
-    var s = player.hotbar[i];
-    if(s.type === 'weapon'){
-      html += '<div class="listItem"><span class="ico">' + s.icon + '</span>' +
-              '<div class="info"><b>' + s.name + '</b></div>' +
-              '<span class="cost">x' + (s.count || 1) + '</span></div>';
-    }
-  }
-  if(player.arrows){
-    html += '<div class="listItem"><span class="ico">➳</span><div class="info"><b>Стрелы</b></div><span class="cost">' + player.arrows + '</span></div>';
-  }
-  body.innerHTML = html;
-  document.getElementById('invModal').classList.add('show');
-}
-
-// Клик по фону модалки — закрытие
-document.querySelectorAll('.modal').forEach(function(m){
-  m.addEventListener('click', function(e){
-    if(e.target === m) m.classList.remove('show');
-  });
-});
-
-// ============================================================
-// СТАРТ ЦИКЛА
-// ============================================================
+})();
 </script>
 </body>
 </html>
