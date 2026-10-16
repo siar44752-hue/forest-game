@@ -1,18 +1,25 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#080a09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
 <title>НОМЕРОК — охота за редкостью</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800;900&family=Russo+One&display=swap');
 :root{--bg:#080a09;--line:#2b352d;--lime:#c4ff46;--muted:#98a39a;--white:#f5f7f3;--gold:#ffd95a;--blue:#57c7ff;--purple:#c38bff;--orange:#ff9b68;--red:#ff5050;--glass-brd:rgba(255,255,255,.08)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{width:100%;min-height:100%;overflow-x:hidden}
-body{background:#050806;color:var(--white);font-family:Manrope,Arial,sans-serif;padding-bottom:env(safe-area-inset-bottom);min-height:100vh}
+html,body{width:100%;min-height:100%;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:manipulation}
+body{background:#050806;color:var(--white);font-family:Manrope,Arial,sans-serif;min-height:100vh;min-height:100dvh}
+
+/* ФОН */
 .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-aurora{position:absolute;inset:-20%;background:radial-gradient(ellipse 60% 50% at 20% 25%, rgba(196,255,70,.24), transparent 60%),radial-gradient(ellipse 55% 45% at 80% 70%, rgba(87,199,255,.2), transparent 60%),radial-gradient(ellipse 50% 40% at 60% 20%, rgba(195,139,255,.16), transparent 60%),radial-gradient(ellipse 70% 60% at 30% 85%, rgba(255,155,104,.14), transparent 65%);filter:blur(60px) saturate(150%);animation:aurora 22s ease-in-out infinite alternate;opacity:.9}
+.bg-aurora{position:absolute;inset:-20%;background:radial-gradient(ellipse 60% 50% at 20% 25%, rgba(196,255,70,.24), transparent 60%),radial-gradient(ellipse 55% 45% at 80% 70%, rgba(87,199,255,.2), transparent 60%),radial-gradient(ellipse 50% 40% at 60% 20%, rgba(195,139,255,.16), transparent 60%),radial-gradient(ellipse 70% 60% at 30% 85%, rgba(255,155,104,.14), transparent 65%);filter:blur(60px) saturate(150%);animation:aurora 22s ease-in-out infinite alternate;opacity:.9;will-change:transform}
 @keyframes aurora{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(3%,-2%) scale(1.08) rotate(4deg)}100%{transform:translate(-3%,2%) scale(1.05) rotate(-3deg)}}
 .bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(196,255,70,.05) 1px, transparent 1px),linear-gradient(90deg, rgba(196,255,70,.05) 1px, transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);animation:gridDrift 40s linear infinite}
 @keyframes gridDrift{to{background-position:60px 60px,60px 60px}}
@@ -20,10 +27,14 @@ body{background:#050806;color:var(--white);font-family:Manrope,Arial,sans-serif;
 .bg-particles{position:absolute;inset:0;overflow:hidden}
 .bg-particles span{position:absolute;bottom:-20px;width:3px;height:3px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px currentColor;opacity:0;animation:floatUp linear infinite}
 @keyframes floatUp{0%{transform:translateY(0);opacity:0}10%{opacity:.65}90%{opacity:.3}100%{transform:translateY(-110vh) translateX(20px);opacity:0}}
-button{font:inherit;cursor:pointer;border:0;color:inherit;transition:all .25s cubic-bezier(.4,0,.2,1)}
+
+button{font:inherit;cursor:pointer;border:0;color:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);touch-action:manipulation;user-select:none;-webkit-user-select:none}
 button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
-.setup{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at center,#101a13,#020403);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;animation:fadeIn .4s}
-.setup-card{max-width:520px;width:100%;text-align:center;padding:38px 28px;background:linear-gradient(145deg, rgba(24,34,26,.9), rgba(10,15,12,.9));backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(196,255,70,.18);border-radius:26px;box-shadow:0 30px 100px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.06),0 0 60px rgba(196,255,70,.08);position:relative;overflow:hidden;margin:auto}
+button:active{transform:scale(.97)}
+
+/* SETUP */
+.setup{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at center,#101a13,#020403);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;animation:fadeIn .4s;-webkit-overflow-scrolling:touch}
+.setup-card{max-width:520px;width:100%;text-align:center;padding:38px 28px;background:linear-gradient(145deg, rgba(24,34,26,.9), rgba(10,15,12,.9));backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(196,255,70,.18);border-radius:26px;box-shadow:0 30px 100px rgba(0,0,0,.85);position:relative;overflow:hidden;margin:auto}
 .setup-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(196,255,70,.14),transparent 30%);animation:rotate 8s linear infinite;pointer-events:none}
 @keyframes rotate{to{transform:rotate(360deg)}}
 .setup-card>*{position:relative;z-index:1}
@@ -33,17 +44,21 @@ button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 .setup-step-desc{font-size:12px;color:var(--muted);margin-bottom:22px;line-height:1.5}
 .setup-btns{display:flex;flex-direction:column;gap:10px}
 .setup-btn{display:flex;align-items:center;gap:16px;padding:18px 22px;background:linear-gradient(145deg,rgba(30,44,30,.7),rgba(15,22,15,.7));border:2px solid rgba(196,255,70,.15);border-radius:16px;text-align:left;font-size:14px;font-weight:800}
-.setup-btn:hover{border-color:var(--lime);background:linear-gradient(145deg,rgba(40,58,38,.8),rgba(20,30,18,.8));transform:translateY(-3px);box-shadow:0 12px 30px rgba(196,255,70,.28)}
+.setup-btn:hover{border-color:var(--lime);transform:translateY(-3px);box-shadow:0 12px 30px rgba(196,255,70,.28)}
+.setup-btn:active{transform:scale(.97)}
 .setup-btn .sb-icon{font-size:36px;flex-shrink:0}
 .setup-btn .sb-info b{display:block;font-size:16px;margin-bottom:4px}
 .setup-btn .sb-info small{font-size:11px;color:var(--muted);font-weight:600}
+
 #rotateHint{position:fixed;inset:0;z-index:9998;background:rgba(5,8,6,.98);display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;text-align:center;padding:30px}
 #rotateHint.show{display:flex}
 #rotateHint .rot-icon{font-size:80px;animation:rotPulse 1.5s infinite alternate}
 @keyframes rotPulse{0%{transform:rotate(0)}100%{transform:rotate(90deg) scale(1.08)}}
 #rotateHint h2{font:24px 'Russo One';color:var(--lime)}
 #rotateHint p{color:var(--muted);font-size:14px;max-width:340px;line-height:1.6}
-.top{height:72px;padding:0 clamp(14px,4vw,48px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(8,12,10,.75);backdrop-filter:blur(20px) saturate(150%);position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top);box-shadow:0 1px 0 rgba(196,255,70,.06)}
+
+/* TOP */
+.top{height:72px;padding:0 clamp(14px,4vw,48px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(8,12,10,.78);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);position:sticky;top:0;z-index:100;padding-top:env(safe-area-inset-top);box-shadow:0 1px 0 rgba(196,255,70,.06)}
 .logo{font:23px 'Russo One';letter-spacing:1px;line-height:1}
 .logo span{color:var(--lime);text-shadow:0 0 20px rgba(196,255,70,.7)}
 .sublogo{font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:4px}
@@ -57,6 +72,8 @@ button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 @keyframes walletFlash{0%{transform:scale(1)}40%{transform:scale(1.18);box-shadow:0 0 40px rgba(196,255,70,.7);border-color:var(--lime)}100%{transform:scale(1)}}
 .passive-badge{padding:7px 12px;background:linear-gradient(145deg,rgba(30,44,28,.8),rgba(15,22,15,.8));border:1px solid rgba(87,199,255,.35);border-radius:11px;font-size:11px;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:6px}
 .passive-badge b{color:#fff}
+
+/* TRADER BANNER */
 .trader-banner{position:fixed;top:calc(72px + env(safe-area-inset-top) + 12px);left:50%;transform:translateX(-50%) translateY(-140%);z-index:150;padding:14px 22px;background:linear-gradient(145deg, rgba(40,32,12,.96), rgba(24,18,8,.98));border:2px solid var(--gold);border-radius:16px;box-shadow:0 20px 60px rgba(255,214,107,.5);display:flex;align-items:center;gap:14px;transition:transform .6s cubic-bezier(.34,1.56,.64,1);max-width:calc(100vw - 24px);cursor:pointer}
 .trader-banner.show{transform:translateX(-50%) translateY(0)}
 .trader-banner .tb-icon{font-size:32px;animation:tbWiggle 1.5s infinite}
@@ -64,6 +81,7 @@ button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 .trader-banner .tb-info b{display:block;color:var(--gold);font-size:13px;margin-bottom:3px}
 .trader-banner .tb-info small{font-size:11px;color:var(--muted)}
 .trader-banner .tb-timer{margin-left:auto;font:bold 20px 'Russo One';color:var(--gold);min-width:40px;text-align:center}
+
 .wrap{max-width:1200px;padding:30px 20px 60px;margin:auto;position:relative;z-index:2}
 .intro{text-align:center;margin-bottom:20px;animation:fadeUp .5s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -71,7 +89,9 @@ button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;background:linear-gradient(135deg,#fff 0%,#c4ff46 30%,#fff 50%,#c4ff46 70%,#fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shine 3.5s linear infinite}
 @keyframes shine{0%{background-position:0% center}100%{background-position:200% center}}
 .intro p{font-size:13px;color:var(--muted)}
-.case{margin:27px auto 0;border-radius:22px;overflow:hidden;background:linear-gradient(145deg, rgba(24,32,24,.85), rgba(12,17,13,.9));backdrop-filter:blur(16px) saturate(150%);box-shadow:0 28px 90px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05);animation:fadeUp .6s;position:relative;border:1px solid rgba(196,255,70,.12)}
+
+/* CASE */
+.case{margin:27px auto 0;border-radius:22px;overflow:hidden;background:linear-gradient(145deg, rgba(24,32,24,.85), rgba(12,17,13,.9));backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);box-shadow:0 28px 90px rgba(0,0,0,.7);animation:fadeUp .6s;position:relative;border:1px solid rgba(196,255,70,.12)}
 .case::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;height:1px;background:linear-gradient(90deg,transparent,var(--lime),transparent);opacity:.5;animation:borderScan 6s ease-in-out infinite}
 @keyframes borderScan{0%,100%{opacity:.2}50%{opacity:.8}}
 .casebar{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:800;letter-spacing:1.5px;gap:10px;flex-wrap:wrap}
@@ -112,28 +132,36 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .labels{display:flex;justify-content:space-between;color:#8e9990;font-size:9px;margin-top:10px;font-weight:700;text-align:center}
 .labels span{flex:1;line-height:1.3}
 .actions{padding:0 22px 23px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn{padding:14px 20px;border-radius:12px;font-weight:900;font-size:12px;letter-spacing:.5px;position:relative;overflow:hidden}
+.btn{padding:14px 20px;border-radius:12px;font-weight:900;font-size:12px;letter-spacing:.5px;position:relative;overflow:hidden;min-height:44px}
 .primary{background:linear-gradient(145deg,#e0ff80,#a8e032);color:#10150b;box-shadow:0 6px 24px rgba(196,255,70,.35),inset 0 1px 0 rgba(255,255,255,.5)}
-.primary:hover:not(:disabled){background:linear-gradient(145deg,#ecff9a,#b8f042);transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,255,70,.5)}
-.primary:active:not(:disabled){transform:translateY(0) scale(.98)}
+.primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,255,70,.5)}
+.primary:active:not(:disabled){transform:scale(.97)}
 .primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transition:.7s}
 .primary:hover::before{left:100%}
 .primary:disabled{background:#1f2a1f;color:#4a5a4a;box-shadow:none;cursor:not-allowed}
 .secondary{background:linear-gradient(145deg,rgba(40,48,42,.9),rgba(25,32,27,.9));border:1px solid rgba(255,255,255,.1)}
-.secondary:hover{background:linear-gradient(145deg,rgba(50,62,52,.95),rgba(35,44,37,.95));border-color:rgba(196,255,70,.4);transform:translateY(-2px)}
+.secondary:hover{background:linear-gradient(145deg,rgba(50,62,52,.95),rgba(35,44,37,.95));border-color:rgba(196,255,70,.4)}
 .hint{font-size:11px;color:var(--muted);line-height:1.5;margin-left:auto;max-width:235px}
-.nav{display:flex;justify-content:center;gap:5px;margin:20px auto 0;flex-wrap:wrap;background:rgba(20,28,20,.55);backdrop-filter:blur(12px);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);width:fit-content;max-width:100%}
-.nav button{padding:10px 14px;background:transparent;border-radius:10px;color:var(--muted);font-size:11px;font-weight:800;position:relative}
+
+/* TOP NAV (hidden on mobile) */
+.nav{display:flex;justify-content:center;gap:5px;margin:20px auto 0;flex-wrap:wrap;background:rgba(20,28,20,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);width:fit-content;max-width:100%}
+.nav button{padding:10px 14px;background:transparent;border-radius:10px;color:var(--muted);font-size:11px;font-weight:800;position:relative;min-height:40px}
 .nav button:hover{color:var(--white);background:rgba(255,255,255,.04)}
 .nav button.active{color:var(--lime);background:linear-gradient(145deg,rgba(30,44,28,.95),rgba(20,30,20,.95));box-shadow:0 0 20px rgba(196,255,70,.25);border:1px solid rgba(196,255,70,.3)}
 .nav button.has-event::after{content:'';position:absolute;top:5px;right:5px;width:8px;height:8px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px var(--gold);animation:eventPulse 1s infinite alternate}
 @keyframes eventPulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.3);opacity:1}}
+
+/* BOTTOM NAV (mobile only) */
+.bottom-nav{display:none}
+
 .view{display:none}
 .view.active{display:block;animation:fadeIn .5s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .pagehead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .pagehead h2{font:clamp(27px,4vw,40px) 'Russo One';margin:8px 0}
 .pagehead p{color:var(--muted);font-size:12px;margin:0;line-height:1.5}
+
+/* GARAGE */
 .scene{height:clamp(340px,50vw,520px);position:relative;border:1px solid rgba(196,255,70,.15);border-radius:20px;overflow:hidden;background:radial-gradient(ellipse at 50% 75%,#2b3822,#101511 55%,#080a09);box-shadow:inset 0 0 80px rgba(0,0,0,.6),0 0 60px rgba(196,255,70,.08)}
 #car{width:100%;height:100%;display:block;touch-action:pan-y;cursor:grab}
 #car:active{cursor:grabbing}
@@ -141,7 +169,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .scenetag small{display:block;color:var(--muted);margin-top:5px}
 .scene-hud{position:absolute;bottom:18px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:end;pointer-events:none;font-size:10px;color:var(--muted);letter-spacing:1px}
 .scene-hud .speed{color:var(--lime);font:bold 20px 'Russo One';text-shadow:0 0 15px rgba(196,255,70,.6)}
-.plateinfo,.panel{padding:18px;border:1px solid var(--glass-brd);border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.7), rgba(12,17,13,.8));backdrop-filter:blur(12px);margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.plateinfo,.panel{padding:18px;border:1px solid var(--glass-brd);border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.7), rgba(12,17,13,.8));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
 .plateinfo{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .info{flex:1;min-width:180px}
 .info h3{margin:0 0 7px;font-size:17px}
@@ -160,9 +188,11 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .upgrade-visual{display:flex;gap:3px;margin-bottom:10px}
 .upgrade-visual i{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;transition:all .4s}
 .upgrade-visual i.on{background:var(--lime);box-shadow:0 0 8px rgba(196,255,70,.5)}
-.upgrade-btn{width:100%;padding:10px;border-radius:9px;background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111;font-weight:800;font-size:11px}
+.upgrade-btn{width:100%;padding:12px;border-radius:9px;background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111;font-weight:800;font-size:12px;min-height:44px}
 .upgrade-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 25px rgba(196,255,70,.4)}
 .upgrade-btn:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed;box-shadow:none}
+
+/* TRADER */
 .trader-panel{padding:20px;border-radius:18px;background:linear-gradient(145deg, rgba(40,32,12,.85), rgba(24,18,8,.9));border:2px solid var(--gold);box-shadow:0 0 60px rgba(255,214,107,.25);margin-bottom:16px;position:relative;overflow:hidden}
 .trader-panel::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,214,107,.1),transparent 30%);animation:rotate 10s linear infinite;pointer-events:none}
 .trader-panel>*{position:relative;z-index:1}
@@ -175,7 +205,9 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .trader-offer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;background:rgba(0,0,0,.25);border-radius:12px;border:1px solid rgba(255,214,107,.2);margin-top:10px;flex-wrap:wrap}
 .trader-offer .to-plate{flex:1;min-width:180px}
 .trader-offer .to-price{font:bold 22px 'Russo One';color:var(--gold)}
-.trader-offer button{padding:12px 20px;border-radius:10px;background:linear-gradient(145deg,#ffd95a,#e0b637);color:#1a1408;font-weight:900;font-size:12px}
+.trader-offer button{padding:12px 20px;border-radius:10px;background:linear-gradient(145deg,#ffd95a,#e0b637);color:#1a1408;font-weight:900;font-size:12px;min-height:44px}
+
+/* PLATE */
 .plate{display:flex;align-items:center;justify-content:center;position:relative;border:5px solid #242a26;border-radius:10px;background:linear-gradient(180deg,#fdfefc 0%,#eef0ed 45%,#dde1dc 100%);color:#151916;font-family:Arial,sans-serif;font-weight:900;letter-spacing:2px;box-shadow:inset 0 0 0 1px #9da59e;padding:6px 10px}
 .plate::after{content:"";position:absolute;inset:4px;border:1px solid #919992;pointer-events:none;border-radius:5px}
 .plate .chars{font-size:32px;white-space:nowrap;letter-spacing:1px}
@@ -186,6 +218,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .plate.rar-epic{border-color:#5a2b8a;box-shadow:inset 0 0 0 1px #9da59e,0 0 30px rgba(195,139,255,.6)}
 .plate.rar-legendary{border-color:#a8861e;box-shadow:inset 0 0 0 1px #9da59e,0 0 35px rgba(255,214,107,.7)}
 .plate.rar-mythic{border-color:#b0491a;box-shadow:inset 0 0 0 1px #9da59e,0 0 40px rgba(255,155,104,.8)}
+
 .collection{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .item{padding:14px;background:linear-gradient(145deg, rgba(22,30,22,.7), rgba(12,17,13,.8));border:1px solid var(--line);border-radius:15px;transition:all .35s cubic-bezier(.34,1.56,.64,1);animation:fadeUp .4s ease backwards}
 .item:hover{transform:translateY(-6px);border-color:var(--lime);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 40px rgba(196,255,70,.2)}
@@ -203,42 +236,46 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .epic{color:var(--purple);background:rgba(195,139,255,.12)}
 .legendary{color:var(--gold);background:rgba(255,214,107,.12)}
 .mythic{color:var(--orange);background:rgba(255,155,104,.12)}
-.item button{width:100%;margin-top:10px;padding:11px;border-radius:9px;background:rgba(45,58,45,.8);font-weight:800;font-size:11px;border:1px solid rgba(255,255,255,.08)}
+.item button{width:100%;margin-top:10px;padding:12px;border-radius:9px;background:rgba(45,58,45,.8);font-weight:800;font-size:12px;border:1px solid rgba(255,255,255,.08);min-height:44px}
 .item button:hover{background:var(--lime);color:#111;transform:translateY(-2px)}
 .item button.installed{background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111}
 .empty{padding:40px 30px;text-align:center;border:1px dashed #364137;border-radius:14px;color:var(--muted);font-size:12px;line-height:1.7}
+
 .offer{background:linear-gradient(145deg, rgba(24,34,24,.7), rgba(15,22,16,.8));border:1px solid rgba(196,255,70,.18);border-radius:13px;padding:15px;margin-top:10px}
 .offerhead{display:flex;justify-content:space-between;gap:8px;font-weight:800;font-size:14px;align-items:center;flex-wrap:wrap}
 .offerprice{color:var(--lime);font-size:18px;font-weight:900}
 .offer small{color:var(--muted);font-size:11px}
 .offerbuttons{display:flex;gap:8px;margin-top:12px}
-.offerbuttons button{flex:1;padding:11px;border-radius:9px;background:rgba(45,55,45,.9);font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.08)}
+.offerbuttons button{flex:1;padding:12px;border-radius:9px;background:rgba(45,55,45,.9);font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.08);min-height:44px}
 .offerbuttons .accept{background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111}
+
 .leisure-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .leisure-card{padding:20px;border-radius:18px;background:linear-gradient(145deg, rgba(22,30,22,.8), rgba(12,17,13,.9));border:1px solid var(--line);transition:all .3s}
-.leisure-card:hover{border-color:rgba(196,255,70,.4);box-shadow:0 15px 50px rgba(0,0,0,.5),0 0 40px rgba(196,255,70,.1)}
+.leisure-card:hover{border-color:rgba(196,255,70,.4);box-shadow:0 15px 50px rgba(0,0,0,.5)}
 .leisure-card .lc-icon{font-size:48px;margin-bottom:12px;display:block}
 .leisure-card h3{margin:0 0 8px;font:18px 'Russo One'}
 .leisure-card p{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:14px;min-height:54px}
-.leisure-card button{width:100%;padding:13px;border-radius:11px;font-weight:900;font-size:12px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111}
+.leisure-card button{width:100%;padding:14px;border-radius:11px;font-weight:900;font-size:13px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111;min-height:48px}
 .leisure-card button:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
 .leisure-card .cd{font-size:11px;color:var(--gold);text-align:center;margin-top:8px;font-weight:800;letter-spacing:1px}
 .leisure-card.gold{border-color:rgba(255,214,107,.4);background:linear-gradient(145deg, rgba(40,32,12,.7), rgba(24,18,8,.85))}
 .leisure-card.blue{border-color:rgba(87,199,255,.4)}
+
 .sortgame{padding:20px;border-radius:18px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line)}
 .sortgame .sg-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .sortgame .sg-timer{font:bold 20px 'Russo One';color:var(--lime)}
 .sortgame .sg-score{font-size:12px;color:var(--muted)}
 .sortgame .sg-score b{color:var(--gold);font-size:18px}
 .sg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:400px;margin:0 auto}
-.sg-cell{aspect-ratio:1;border-radius:14px;background:linear-gradient(145deg,rgba(40,52,40,.8),rgba(20,28,20,.9));border:2px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font:bold 30px 'Russo One';color:var(--muted);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);user-select:none}
-.sg-cell:hover{border-color:rgba(196,255,70,.5);transform:translateY(-3px);color:var(--white)}
+.sg-cell{aspect-ratio:1;border-radius:14px;background:linear-gradient(145deg,rgba(40,52,40,.8),rgba(20,28,20,.9));border:2px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font:bold 30px 'Russo One';color:var(--muted);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);user-select:none;min-height:60px}
+.sg-cell:active{transform:scale(.95)}
 .sg-cell.found{background:linear-gradient(145deg,rgba(196,255,70,.3),rgba(140,200,50,.2));border-color:var(--lime);color:var(--lime);box-shadow:0 0 25px rgba(196,255,70,.4);pointer-events:none}
 .sg-cell.wrong{background:linear-gradient(145deg,rgba(255,80,80,.3),rgba(180,40,40,.2));border-color:#ff5050;color:#ff5050;animation:wrongShake .4s}
 @keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* EXCHANGE */
 .exchange-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .stock-card{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);position:relative;overflow:hidden;transition:all .3s}
-.stock-card:hover{border-color:rgba(196,255,70,.4);box-shadow:0 15px 50px rgba(0,0,0,.5),0 0 40px rgba(196,255,70,.1)}
 .stock-card.up{border-color:rgba(196,255,70,.4)}
 .stock-card.down{border-color:rgba(255,80,80,.4)}
 .stock-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
@@ -252,13 +289,13 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .stock-price.down{color:var(--red)}
 .stock-base{font-size:10px;color:var(--muted)}
 .stock-base b{color:#fff}
-.stock-buy{width:100%;padding:11px;border-radius:10px;margin-top:12px;background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111;font-weight:900;font-size:12px}
-.stock-buy:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 25px rgba(196,255,70,.4)}
-.stock-buy:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
+.stock-buy{width:100%;padding:12px;border-radius:10px;margin-top:12px;background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111;font-weight:900;font-size:12px;min-height:44px}
+
+/* WORKSHOP */
 .workshop-sel{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);margin-bottom:14px}
-.workshop-sel .ws-plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px;max-height:340px;overflow-y:auto;padding-right:6px}
+.workshop-sel .ws-plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px;max-height:340px;overflow-y:auto;padding-right:6px;-webkit-overflow-scrolling:touch}
 .ws-plate{padding:10px;border-radius:12px;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative}
-.ws-plate:hover{border-color:rgba(196,255,70,.5);transform:translateY(-3px)}
+.ws-plate:active{transform:scale(.96)}
 .ws-plate.selected{border-color:var(--lime);background:rgba(196,255,70,.08);box-shadow:0 0 25px rgba(196,255,70,.25)}
 .ws-plate.selected::after{content:'✓';position:absolute;top:-8px;right:-8px;width:22px;height:22px;background:var(--lime);color:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;box-shadow:0 0 15px rgba(196,255,70,.7)}
 .ws-plate .plate{width:100%;margin-bottom:8px}
@@ -267,8 +304,8 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .ws-plate .ws-val{font-size:11px;color:var(--muted);text-align:center;font-weight:800}
 .ws-plate .ws-val b{color:var(--white)}
 .ws-target{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
-.ws-target-btn{padding:14px 10px;border-radius:12px;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s;text-align:center;color:var(--muted);font-weight:800}
-.ws-target-btn:hover:not(:disabled){border-color:rgba(196,255,70,.5);color:var(--white);transform:translateY(-3px)}
+.ws-target-btn{padding:14px 10px;border-radius:12px;background:rgba(0,0,0,.3);border:2px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s;text-align:center;color:var(--muted);font-weight:800;min-height:64px}
+.ws-target-btn:active:not(:disabled){transform:scale(.96)}
 .ws-target-btn.selected{border-color:var(--lime);background:rgba(196,255,70,.1);color:var(--white);box-shadow:0 0 25px rgba(196,255,70,.3)}
 .ws-target-btn:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
 .ws-target-btn .tt-name{display:block;font-size:12px;margin-bottom:6px}
@@ -282,7 +319,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .wheel-container{position:relative;width:min(320px,80vw);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
 .wheel-arrow{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:5;pointer-events:none;filter:drop-shadow(0 0 12px rgba(196,255,70,.9))}
 .wheel-arrow svg{display:block}
-#wheelCanvas{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 0 30px rgba(196,255,70,.35)) drop-shadow(0 0 60px rgba(196,255,70,.15))}
+#wheelCanvas{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 0 30px rgba(196,255,70,.35))}
 .wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22%;height:22%;border-radius:50%;background:radial-gradient(circle at 35% 30%, #2a342a, #0a0f0c);border:3px solid rgba(196,255,70,.5);box-shadow:inset 0 0 20px rgba(0,0,0,.9),0 0 25px rgba(196,255,70,.5);z-index:4;display:flex;align-items:center;justify-content:center;font:bold 20px 'Russo One';color:var(--lime);pointer-events:none}
 .wheel-center::after{content:'';position:absolute;inset:8%;border-radius:50%;border:1px solid rgba(196,255,70,.3);animation:centerPulse 2s ease-in-out infinite alternate}
 @keyframes centerPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.15);opacity:1}}
@@ -297,11 +334,12 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .ws-chance-val{font:bold 30px 'Russo One';color:var(--lime);text-shadow:0 0 30px rgba(196,255,70,.6);transition:color .3s}
 .ws-chance-val.low{color:var(--red);text-shadow:0 0 30px rgba(255,80,80,.6)}
 .ws-chance-val.mid{color:var(--gold);text-shadow:0 0 30px rgba(255,214,107,.6)}
-.ws-roll{width:100%;padding:16px;border-radius:12px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111;font-weight:900;font-size:14px;letter-spacing:1px;box-shadow:0 6px 24px rgba(196,255,70,.35);margin-top:14px}
-.ws-roll:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,255,70,.5)}
+.ws-roll{width:100%;padding:16px;border-radius:12px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111;font-weight:900;font-size:14px;letter-spacing:1px;box-shadow:0 6px 24px rgba(196,255,70,.35);margin-top:14px;min-height:52px}
 .ws-roll:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed;box-shadow:none}
-.modalback{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);animation:fadeIn .3s}
-.modal{width:100%;max-width:480px;text-align:center;background:linear-gradient(145deg, rgba(24,34,24,.95), rgba(12,17,13,.97));border:1px solid rgba(196,255,70,.25);border-radius:22px;padding:28px;position:relative;overflow:hidden;animation:modalIn .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 30px 100px rgba(0,0,0,.9)}
+
+/* MODAL */
+.modalback{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:fadeIn .3s}
+.modal{width:100%;max-width:480px;text-align:center;background:linear-gradient(145deg, rgba(24,34,24,.95), rgba(12,17,13,.97));border:1px solid rgba(196,255,70,.25);border-radius:22px;padding:28px;position:relative;overflow:hidden;animation:modalIn .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 30px 100px rgba(0,0,0,.9);max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
 @keyframes modalIn{from{transform:scale(.85) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
 .modal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(196,255,70,.1),transparent 30%);animation:rotate 8s linear infinite;pointer-events:none}
 .modal>*{position:relative;z-index:1}
@@ -309,9 +347,13 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .modal p{font-size:12px;color:var(--muted);line-height:1.6}
 .modal .plate{margin:20px auto;max-width:320px}
 .modalprice{font:28px 'Russo One';color:var(--lime);margin:10px;text-shadow:0 0 30px rgba(196,255,70,.6)}
-.modal button{width:100%;margin-top:8px}
+.modal button{width:100%;margin-top:8px;min-height:48px}
+.modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;z-index:10;min-height:36px}
+.modal-close:active{background:rgba(255,255,255,.15);color:var(--white)}
+
 .toast{position:fixed;z-index:2000;bottom:24px;left:50%;transform:translate(-50%,30px);opacity:0;transition:.35s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(145deg,#eaffd2,#c4ff46);color:#111b0a;padding:14px 24px;border-radius:12px;font-size:12px;font-weight:800;max-width:calc(100vw - 30px);text-align:center;pointer-events:none;box-shadow:0 15px 50px rgba(196,255,70,.5)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
 .confetti{position:fixed;width:10px;height:10px;z-index:1500;pointer-events:none;top:-20px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
 .burst{position:fixed;width:8px;height:8px;border-radius:50%;z-index:1500;pointer-events:none;animation:burstOut .9s cubic-bezier(.16,1,.3,1) forwards}
@@ -319,7 +361,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .coin{position:fixed;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff5a5,#ffd95a 40%,#c99a1f);box-shadow:0 0 15px rgba(255,214,107,.8);z-index:2000;pointer-events:none;font-size:11px;font-weight:900;color:#7a5500;display:flex;align-items:center;justify-content:center}
 .coin.fly{animation:coinFly 1.1s cubic-bezier(.16,1,.3,1) forwards}
 @keyframes coinFly{0%{transform:translate(0,0) scale(1) rotate(0)}50%{transform:translate(var(--dx),var(--dy)) scale(1.3) rotate(360deg)}100%{transform:translate(var(--dx),-150px) scale(.3) rotate(720deg);opacity:0}}
-.ach-popup{position:fixed;top:100px;left:50%;transform:translate(-50%,-200px);z-index:2000;background:linear-gradient(145deg, rgba(24,34,24,.95), rgba(12,17,13,.97));border:2px solid var(--gold);border-radius:16px;padding:16px 26px;display:flex;align-items:center;gap:14px;box-shadow:0 15px 60px rgba(255,214,107,.5);transition:transform .6s cubic-bezier(.34,1.56,.64,1)}
+.ach-popup{position:fixed;top:100px;left:50%;transform:translate(-50%,-200px);z-index:2000;background:linear-gradient(145deg, rgba(24,34,24,.95), rgba(12,17,13,.97));border:2px solid var(--gold);border-radius:16px;padding:16px 26px;display:flex;align-items:center;gap:14px;box-shadow:0 15px 60px rgba(255,214,107,.5);transition:transform .6s cubic-bezier(.34,1.56,.64,1);max-width:calc(100vw - 24px)}
 .ach-popup.show{transform:translate(-50%,0)}
 .ach-popup .ach-icon{font-size:38px}
 .ach-popup .ach-info b{display:block;font-size:14px;color:var(--gold);margin-bottom:3px}
@@ -327,6 +369,263 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 @keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(3px,2px)}}
 body.shake{animation:shake .5s}
 footer{text-align:center;color:#667068;font-size:10px;padding:30px 0 0;line-height:1.8}
+
+/* ============================================ */
+/* ============ MOBILE (<= 768px) ============= */
+/* ============================================ */
+@media(max-width:768px){
+  /* Hide top nav — use bottom nav */
+  .nav{display:none!important}
+  
+  /* Perf: cheaper blur on mobile */
+  .bg-aurora{filter:blur(40px) saturate(130%)}
+  .bg-grid{background-size:40px 40px}
+  
+  /* Body padding for bottom nav */
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+  .wrap{padding:16px 12px calc(96px + env(safe-area-inset-bottom))}
+  
+  /* TOP: tighter, safer */
+  .top{height:56px;padding:0 12px;padding-top:env(safe-area-inset-top)}
+  .logo{font-size:16px}
+  .sublogo{font-size:8px;letter-spacing:2px;margin-top:2px}
+  .wallet{padding:8px 12px;font-size:14px;border-radius:11px}
+  .passive-badge{display:none}
+  
+  /* BOTTOM NAV */
+  .bottom-nav{
+    display:flex;
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:200;
+    background:rgba(8,12,10,.94);
+    backdrop-filter:blur(22px) saturate(160%);
+    -webkit-backdrop-filter:blur(22px) saturate(160%);
+    border-top:1px solid rgba(196,255,70,.15);
+    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+    gap:2px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    box-shadow:0 -10px 40px rgba(0,0,0,.6);
+    scroll-snap-type:x proximity;
+  }
+  .bottom-nav::-webkit-scrollbar{display:none}
+  .bottom-nav button{
+    flex:1 0 auto;
+    min-width:64px;
+    padding:6px 4px;
+    background:transparent;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.2px;
+    min-height:54px;
+    position:relative;
+    scroll-snap-align:center;
+    transition:all .2s;
+  }
+  .bottom-nav button .bn-icon{font-size:22px;line-height:1;transition:transform .2s}
+  .bottom-nav button.active{color:var(--lime);background:rgba(196,255,70,.1)}
+  .bottom-nav button.active .bn-icon{transform:translateY(-2px) scale(1.1)}
+  .bottom-nav button.active::before{
+    content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+    width:32px;height:3px;background:var(--lime);border-radius:0 0 4px 4px;
+    box-shadow:0 0 14px var(--lime);
+  }
+  .bottom-nav button:active{transform:scale(.92);background:rgba(255,255,255,.05)}
+  .bottom-nav button.has-event::after{top:4px;right:14px;width:8px;height:8px}
+  
+  /* TRADER BANNER above the top bar */
+  .trader-banner{
+    top:calc(56px + env(safe-area-inset-top) + 8px);
+    padding:10px 14px;
+    gap:10px;
+  }
+  .trader-banner .tb-icon{font-size:24px}
+  .trader-banner .tb-info b{font-size:11px;margin-bottom:2px}
+  .trader-banner .tb-info small{font-size:9px}
+  .trader-banner .tb-timer{font-size:16px;min-width:34px;padding:2px 8px}
+  
+  /* CASE */
+  .intro{margin-bottom:14px}
+  .intro p{font-size:12px}
+  h1{font-size:26px!important;letter-spacing:0;margin:8px 0 6px}
+  .case{margin-top:12px;border-radius:16px}
+  .casebar{padding:11px 14px;font-size:10px;flex-direction:row;justify-content:space-between;align-items:center;gap:6px}
+  .pill{padding:5px 10px;font-size:9px}
+  .reelbox{padding:14px 12px 8px}
+  .reeltop{font-size:10px;margin-bottom:8px}
+  .slot-stage{padding:14px 8px;gap:10px;border-radius:12px}
+  .plate-live{min-width:auto;width:100%;max-width:320px;padding:8px 10px;border-width:4px}
+  .plate-live .slot-char{font-size:clamp(34px,9vw,44px);width:clamp(24px,6vw,32px);letter-spacing:0}
+  .plate-live .slot-region{font-size:clamp(24px,6.5vw,30px);min-width:clamp(50px,14vw,64px);padding-left:6px}
+  .slot-hint{font-size:11px}
+  .anim-progress{max-width:100%}
+  .scale{padding:8px 14px 14px}
+  .scalehead{font-size:10px;margin-bottom:6px}
+  .bar{height:7px}
+  .marker{width:16px;height:16px}
+  .labels{font-size:7px;gap:2px}
+  .labels b{font-size:7px}
+  .actions{padding:8px 14px 14px;flex-direction:column;align-items:stretch;gap:8px}
+  .actions .primary{width:100%;padding:16px;font-size:14px;min-height:52px}
+  .hint{max-width:none;text-align:center;font-size:10px;margin:0}
+  
+  /* PAGE HEADERS */
+  .pagehead{align-items:flex-start;flex-direction:column;gap:8px;margin-bottom:14px}
+  .pagehead h2{font-size:22px;margin:6px 0}
+  .pagehead p{font-size:11px}
+  .kicker{font-size:9px;letter-spacing:2px}
+  
+  /* GARAGE */
+  .scene{height:320px;border-radius:14px}
+  .scenetag{font-size:9px;top:12px;left:12px}
+  .scene-hud{bottom:12px;left:12px;right:12px;font-size:9px}
+  .scene-hud .speed{font-size:16px}
+  .plateinfo{padding:12px;gap:10px;flex-direction:column;align-items:stretch;margin-top:10px}
+  .plateinfo .plate{width:100%}
+  .info h3{font-size:15px}
+  .panel{padding:14px;margin-top:10px}
+  .panel h3{font-size:14px}
+  .upgrades-grid{grid-template-columns:1fr;gap:10px;margin-top:10px}
+  .upgrade{padding:12px}
+  
+  /* MARKET */
+  .grid{grid-template-columns:1fr;gap:10px}
+  .offer{padding:12px;margin-top:8px}
+  .offerhead{font-size:13px}
+  .offerprice{font-size:16px}
+  .offerbuttons{flex-direction:column;gap:6px}
+  .offerbuttons button{width:100%}
+  .trader-panel{padding:14px}
+  .trader-head .th-icon{font-size:32px}
+  .trader-head .th-name b{font-size:15px}
+  .trader-head .th-timer{font-size:18px;padding:6px 10px}
+  .trader-offer{flex-direction:column;align-items:stretch;gap:8px}
+  .trader-offer .to-plate{min-width:0}
+  .trader-offer button{width:100%}
+  
+  /* EXCHANGE */
+  .exchange-grid{grid-template-columns:1fr;gap:10px}
+  .stock-card{padding:12px}
+  .stock-price{font-size:20px}
+  
+  /* WORKSHOP */
+  .workshop-sel{padding:12px;border-radius:14px;margin-bottom:10px}
+  .ws-plates{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;max-height:none;overflow:visible;padding:0}
+  .ws-plate{padding:8px}
+  .ws-plate .chars{font-size:16px}
+  .ws-plate .region{font-size:12px}
+  .ws-target{grid-template-columns:repeat(2,1fr);gap:8px}
+  .ws-target-btn{padding:12px 8px;min-height:68px}
+  .ws-wheel-wrap{padding:14px 10px;border-radius:16px}
+  .ws-wheel-stage{padding:12px 0}
+  .wheel-container{width:min(260px,72vw)}
+  .ws-summary{padding:12px;border-radius:14px}
+  .ws-summary-row{font-size:12px;padding:6px 0}
+  .ws-chance-val{font-size:26px}
+  .ws-roll{font-size:13px;padding:15px;min-height:52px}
+  
+  /* LEISURE */
+  .leisure-grid{grid-template-columns:1fr;gap:10px}
+  .leisure-card{padding:16px;border-radius:16px}
+  .leisure-card .lc-icon{font-size:40px;margin-bottom:8px}
+  .leisure-card h3{font-size:16px}
+  .leisure-card p{min-height:auto;font-size:11px}
+  .sortgame{padding:14px;border-radius:16px}
+  .sg-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .sg-cell{font-size:24px;min-height:70px;border-radius:12px}
+  
+  /* COLLECTION */
+  .collection{grid-template-columns:1fr;gap:10px}
+  .item{padding:12px}
+  .item .chars{font-size:24px}
+  .item .region{font-size:18px}
+  
+  /* MODAL as bottom sheet */
+  .modalback{align-items:flex-end;padding:0}
+  .modal{
+    max-width:100%;
+    border-radius:24px 24px 0 0;
+    padding:22px 18px calc(22px + env(safe-area-inset-bottom));
+    max-height:88vh;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    animation:sheetIn .4s cubic-bezier(.34,1.56,.64,1);
+    border-bottom:0;
+  }
+  @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal h2{font-size:22px}
+  .modal p{font-size:12px}
+  .modal .plate{margin:16px auto;max-width:280px}
+  .modalprice{font-size:26px}
+  .modal button{margin-top:10px}
+  
+  /* TOAST above bottom nav */
+  .toast{bottom:calc(90px + env(safe-area-inset-bottom));padding:14px 18px;font-size:12px}
+  
+  /* ACH popup below top bar */
+  .ach-popup{top:calc(64px + env(safe-area-inset-top));padding:12px 18px}
+  .ach-popup .ach-icon{font-size:30px}
+  .ach-popup .ach-info b{font-size:13px}
+  
+  /* SETUP full-screen friendly */
+  .setup{padding:0}
+  .setup-card{
+    max-width:100%;
+    border-radius:0;
+    padding:36px 22px;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    margin:0;
+    animation:none;
+  }
+  .setup-card::before{display:none}
+  .setup-logo{font-size:32px}
+  .setup-btn{min-height:76px;padding:16px 18px}
+  .setup-btn .sb-icon{font-size:32px}
+  .setup-btn .sb-info b{font-size:15px}
+  .setup-btn .sb-info small{font-size:11px}
+  
+  /* Bottom nav hidden in setup screens */
+  body:has(.setup:not([hidden])) .bottom-nav{display:none}
+}
+
+@media(max-width:400px){
+  .bottom-nav button{font-size:8px;min-width:58px;padding:6px 2px}
+  .bottom-nav button .bn-icon{font-size:20px}
+  .plate-live .slot-char{font-size:32px;width:22px}
+  .plate-live .slot-region{font-size:22px;min-width:46px}
+  .wheel-container{width:min(230px,68vw)}
+}
+
+/* ============ LANDSCAPE MOBILE ============ */
+@media(max-height:500px) and (orientation:landscape){
+  .top{height:44px}
+  .logo{font-size:14px}
+  .sublogo{display:none}
+  .wallet{padding:6px 10px;font-size:12px}
+  .bottom-nav button{min-height:42px;padding:4px}
+  .bottom-nav button .bn-icon{font-size:18px}
+  .bottom-nav button span:not(.bn-icon){display:none}
+  body{padding-bottom:calc(58px + env(safe-area-inset-bottom))}
+  .wrap{padding:10px 12px calc(66px + env(safe-area-inset-bottom))}
+  .intro{display:none}
+  .scene{height:calc(100vh - 220px);min-height:200px}
+}
+
+/* ============ LANDSCAPE (existing desktop behavior) ============ */
 body.landscape .wrap{padding:14px 14px 30px;max-width:100%}
 body.landscape .top{height:54px;padding:0 14px}
 body.landscape .intro{display:none}
@@ -338,42 +637,8 @@ body.landscape .plate-live .slot-char{font-size:42px;width:34px}
 body.landscape .plate-live .slot-region{font-size:30px;min-width:60px}
 body.landscape .scale{grid-column:1;padding:8px 14px 12px}
 body.landscape .actions{grid-column:2;padding:14px;flex-direction:column;justify-content:center;align-self:center}
-body.landscape .scene{height:calc(100vh - 260px);min-height:220px}
 body.landscape h1{font-size:28px !important}
-@media(max-width:650px){
-  .top{height:62px;padding:0 12px}
-  .logo{font-size:16px}
-  .wallet{padding:8px 12px;font-size:14px}
-  .passive-badge{display:none}
-  .trader-banner{padding:10px 14px;gap:10px}
-  .trader-banner .tb-icon{font-size:24px}
-  .trader-banner .tb-info b{font-size:11px}
-  .trader-banner .tb-info small{font-size:9px}
-  .trader-banner .tb-timer{font-size:16px;min-width:30px}
-  .wrap{padding:20px 12px 40px}
-  .plate-live{min-width:280px;padding:8px 10px;border-width:4px}
-  .plate-live .slot-char{font-size:42px;width:32px}
-  .plate-live .slot-region{font-size:30px;min-width:70px}
-  .plate .chars{font-size:22px}
-  .plate .region{font-size:18px}
-  .actions{padding:0 14px 18px;flex-direction:column;align-items:stretch}
-  .nav{gap:3px;margin-top:16px;padding:5px}
-  .nav button{padding:8px 6px;flex:1;font-size:9px;min-width:0}
-  .grid{grid-template-columns:1fr}
-  .scene{height:340px;border-radius:14px}
-  .collection{grid-template-columns:1fr;gap:10px}
-  .leisure-grid{grid-template-columns:1fr}
-  .sg-grid{grid-template-columns:repeat(3,1fr)}
-  .ws-target{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
-  .ws-chance-val{font-size:24px}
-  h1{font-size:30px !important}
-  .wheel-container{width:min(260px,72vw)}
-}
-@media(max-width:400px){
-  .plate-live{min-width:240px}
-  .plate-live .slot-char{font-size:34px;width:26px}
-  .plate-live .slot-region{font-size:24px;min-width:58px}
-}
+
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
 </style>
 </head>
@@ -500,9 +765,9 @@ body.landscape h1{font-size:28px !important}
   </div>
   <div class="scene">
     <canvas id="car"></canvas>
-    <div class="scenetag">GARAGE / 001<small>FRONT VIEW · SHOWROOM</small></div>
+    <div class="scenetag">GARAGE / 001<small>FRONT VIEW</small></div>
     <div class="scene-hud">
-      <div><div class="speed" id="carSpeed">0</div>КМ/Ч · СКОРОСТЬ</div>
+      <div><div class="speed" id="carSpeed">0</div>КМ/Ч</div>
       <div style="text-align:right"><div class="speed" id="carIncome">0 ₽</div>ДОХОД/МИН</div>
     </div>
   </div>
@@ -535,7 +800,7 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">КОЛЛЕКЦИОНЕРЫ И ПЕРЕКУПЩИКИ</div>
       <h2>РЫНОК</h2>
-      <p>Обычные предложения — раз в минуту. Перекупщик приезжает раз в 2–4 минуты.</p>
+      <p>Перекупщик приезжает раз в 2–4 минуты.</p>
     </div>
     <span class="pill" id="timer">ПРОВЕРКА РЫНКА</span>
   </div>
@@ -543,7 +808,6 @@ body.landscape h1{font-size:28px !important}
   <div class="grid">
     <div class="panel">
       <h3>Входящие предложения</h3>
-      <p class="muted">Коллекционеры предлагают цену близкую к рыночной.</p>
       <div id="offers"><div class="empty">Пока предложений нет.</div></div>
     </div>
     <div class="panel">
@@ -571,18 +835,18 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">ЖИВОЙ РЫНОК НОМЕРОВ</div>
       <h2>БИРЖА</h2>
-      <p>Цены двигаются каждые 2 секунды. <b style="color:#c4ff46">Зелёный</b> — растёт, <b style="color:#ff5050">красный</b> — падает.</p>
+      <p>Зелёный — растёт, красный — падает.</p>
     </div>
     <button class="btn secondary" data-view="caseView">← К кейсу</button>
   </div>
   <div class="panel" style="margin-bottom:14px">
     <h3>📊 Индекс рынка</h3>
     <div class="stock-top">
-      <div><span class="stock-name">ОБЩИЙ ИНДЕКС НОМЕРОВ</span></div>
+      <div><span class="stock-name">ОБЩИЙ ИНДЕКС</span></div>
       <span class="stock-trend" id="marketIndexTrend">+0.0 %</span>
     </div>
     <canvas id="marketIndexChart" class="stock-chart" style="height:100px"></canvas>
-    <div class="muted" id="marketIndexInfo">Индекс показывает среднее изменение цен на бирже.</div>
+    <div class="muted" id="marketIndexInfo">Индекс показывает среднее изменение цен.</div>
   </div>
   <div class="exchange-grid" id="exchangeGrid"></div>
   <nav class="nav">
@@ -596,30 +860,28 @@ body.landscape h1{font-size:28px !important}
   </nav>
 </section>
 
-<!-- WORKSHOP -->
 <section id="workshopView" class="view">
   <div class="pagehead">
     <div>
       <div class="kicker">СПЛАВ НОМЕРОВ · РИСК / НАГРАДА</div>
       <h2>МАСТЕРСКАЯ</h2>
-      <p>Выбери номера, цель — увидишь честный шанс и колесо фортуны. При провале номера <b style="color:#ff5050">сгорают</b>.</p>
+      <p>При провале номера <b style="color:#ff5050">сгорают</b>.</p>
     </div>
     <button class="btn secondary" data-view="collectionView">📚 К коллекции</button>
   </div>
 
   <div class="workshop-sel">
-    <h3 style="margin:0 0 6px;font-size:15px">1️⃣ Выбери номера для сплава <span style="color:var(--muted);font-weight:600;font-size:12px">(мин. 1, макс. 8)</span></h3>
-    <p class="muted" style="margin-bottom:10px">Жми на карточки, чтобы добавить/убрать. Чем больше сумма — тем выше шанс.</p>
+    <h3 style="margin:0 0 6px;font-size:15px">1️⃣ Выбери номера <span style="color:var(--muted);font-weight:600;font-size:12px">(1–8)</span></h3>
+    <p class="muted" style="margin-bottom:10px">Чем больше сумма — тем выше шанс.</p>
     <div class="ws-plates" id="wsPlates"></div>
   </div>
 
   <div class="workshop-sel">
     <h3 style="margin:0 0 6px;font-size:15px">2️⃣ Куда целимся?</h3>
-    <p class="muted" style="margin-bottom:10px">Доступны только редкости выше суммы выбранных номеров.</p>
+    <p class="muted" style="margin-bottom:10px">Только редкости выше суммы выбранных.</p>
     <div class="ws-target" id="wsTargets"></div>
   </div>
 
-  <!-- WHEEL -->
   <div class="ws-wheel-wrap" id="wsWheelWrap" hidden>
     <div class="ws-wheel-stage">
       <div class="wheel-container">
@@ -653,8 +915,8 @@ body.landscape h1{font-size:28px !important}
 
   <div class="panel" style="margin-top:14px">
     <h3>📐 Как считается шанс?</h3>
-    <p class="muted">Формула: <b style="color:var(--lime)">Шанс = (Сумма / Средняя цель) × 30 %</b>, ограничение 0.01–45 %.<br>
-    Пример: 500 ₽ → 500 000 ₽ = <b style="color:var(--red)">0.03 %</b>. 150 000 ₽ → 500 000 ₽ = 9 %. 400 000 ₽ → 500 000 ₽ = 24 %.</p>
+    <p class="muted">Формула: <b style="color:var(--lime)">(Сумма / Средняя цель) × 30 %</b>, лимит 0.01–45 %.<br>
+    Пример: 500 ₽ → 500 000 ₽ = <b style="color:var(--red)">0.03 %</b>. 400 000 ₽ → 500 000 ₽ = 24 %.</p>
   </div>
 
   <nav class="nav">
@@ -681,7 +943,7 @@ body.landscape h1{font-size:28px !important}
     <div class="leisure-card gold">
       <span class="lc-icon">🪙</span>
       <h3>Ржавая копилка</h3>
-      <p>Бесплатный кейс раз в 5 минут. Даёт 300–1 500 ₽.</p>
+      <p>Бесплатный кейс раз в 5 минут. 300–1 500 ₽.</p>
       <button id="freeCaseBtn">ОТКРЫТЬ БЕСПЛАТНО</button>
       <div class="cd" id="freeCaseCd"></div>
     </div>
@@ -694,7 +956,7 @@ body.landscape h1{font-size:28px !important}
     <div class="leisure-card">
       <span class="lc-icon">🧠</span>
       <h3>Сортировка</h3>
-      <p>Мини-игра на память. 30 сек, 6 пар номеров.</p>
+      <p>Мини-игра на память. 30 сек, 6 пар.</p>
       <button id="sortBtn">НАЧАТЬ · 30 СЕК</button>
     </div>
     <div class="leisure-card">
@@ -707,7 +969,7 @@ body.landscape h1{font-size:28px !important}
   </div>
   <div class="sortgame" id="sortGame" hidden style="margin-top:20px">
     <div class="sg-head">
-      <div><div class="kicker">МИНИ-ИГРА</div><h3 style="margin:6px 0;font:20px 'Russo One'">Найди пары номеров</h3></div>
+      <div><div class="kicker">МИНИ-ИГРА</div><h3 style="margin:6px 0;font:18px 'Russo One'">Найди пары</h3></div>
       <div style="text-align:right"><div class="sg-timer" id="sgTimer">30</div><div class="sg-score">Очки: <b id="sgScore">0</b></div></div>
     </div>
     <div class="sg-grid" id="sgGrid"></div>
@@ -747,8 +1009,20 @@ body.landscape h1{font-size:28px !important}
 <footer>НОМЕРОК · ДЕМО-ЭКОНОМИКА · ИГРОВЫЕ РУБЛИ НЕ ИМЕЮТ РЕАЛЬНОЙ СТОИМОСТИ</footer>
 </main>
 
+<!-- BOTTOM NAV (mobile only) -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Основная навигация">
+  <button data-view="caseView" class="active"><span class="bn-icon">🎰</span>Кейс</button>
+  <button data-view="garageView"><span class="bn-icon">🏎️</span>Гараж</button>
+  <button data-view="marketView"><span class="bn-icon">💰</span>Рынок</button>
+  <button data-view="exchangeView"><span class="bn-icon">📈</span>Биржа</button>
+  <button data-view="workshopView"><span class="bn-icon">🔬</span>Сплав</button>
+  <button data-view="leisureView"><span class="bn-icon">🎮</span>Досуг</button>
+  <button data-view="collectionView"><span class="bn-icon">📚</span>Коллекция</button>
+</nav>
+
 <div id="modal" class="modalback" hidden>
   <div class="modal" id="modalBox">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Закрыть">×</button>
     <div class="kicker" id="modalKicker">НОВЫЙ ЭКЗЕМПЛЯР</div>
     <h2 id="modalTitle">ТВОЙ НОМЕР</h2>
     <p id="modalText"></p>
@@ -769,6 +1043,13 @@ body.landscape h1{font-size:28px !important}
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const IS_MOBILE=window.matchMedia('(max-width:768px)').matches;
+
+// ============ HAPTIC ============
+function haptic(pattern){
+  try{ if(navigator.vibrate) navigator.vibrate(pattern); }catch(e){}
+}
+const HAP={tap:10,lock:[8],success:[40,30,60],fail:[80,40,120],rare:[60,40,60,40,180]};
 
 const LETTERS=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
 const DIGITS=['0','1','2','3','4','5','6','7','8','9'];
@@ -804,16 +1085,16 @@ function sfxSuccess(){if(!initAudio())return;[523.25,659.25,783.99,1046.5].forEa
 function sfxFail(){if(!initAudio())return;const t=audioCtx.currentTime;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(220,t);o.frequency.exponentialRampToValueAtTime(60,t+0.7);g.gain.setValueAtTime(0.13,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.7);o.connect(g);g.connect(masterGain);o.start(t);o.stop(t+0.75);}
 function startAmbient(){if(ambientStarted||!initAudio())return;ambientStarted=true;const t=audioCtx.currentTime;const g=audioCtx.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(0.035,t+4);const f=audioCtx.createBiquadFilter();f.type='lowpass';f.frequency.value=420;f.Q.value=0.7;g.connect(f);f.connect(masterGain);[55,55.3,82.5].forEach(fr=>{const o=audioCtx.createOscillator();o.type='sawtooth';o.frequency.value=fr;const og=audioCtx.createGain();og.gain.value=0.4;o.connect(og);og.connect(g);o.start(t);});const lfo=audioCtx.createOscillator();const lfoG=audioCtx.createGain();lfo.frequency.value=0.06;lfoG.gain.value=180;lfo.connect(lfoG);lfoG.connect(f.frequency);lfo.start(t);}
 
-(function initParticles(){const root=$('bgParticles');if(!root)return;const colors=['#c4ff46','#57c7ff','#c38bff','#ffd95a'];for(let i=0;i<24;i++){const s=document.createElement('span');s.style.left=Math.random()*100+'%';s.style.animationDuration=(14+Math.random()*16)+'s';s.style.animationDelay=(Math.random()*20)+'s';s.style.background=colors[i%colors.length];s.style.boxShadow='0 0 8px '+colors[i%colors.length];const sz=(2+Math.random()*3)+'px';s.style.width=sz;s.style.height=sz;root.appendChild(s);}})();
+(function initParticles(){const root=$('bgParticles');if(!root)return;const colors=['#c4ff46','#57c7ff','#c38bff','#ffd95a'];const count=IS_MOBILE?14:24;for(let i=0;i<count;i++){const s=document.createElement('span');s.style.left=Math.random()*100+'%';s.style.animationDuration=(14+Math.random()*16)+'s';s.style.animationDelay=(Math.random()*20)+'s';s.style.background=colors[i%colors.length];s.style.boxShadow='0 0 8px '+colors[i%colors.length];const sz=(2+Math.random()*3)+'px';s.style.width=sz;s.style.height=sz;root.appendChild(s);}})();
 
 // ============ UI ============
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);}
 function showAch(icon,name,desc){$('achIcon').textContent=icon;$('achName').textContent=name;$('achDesc').textContent=desc;$('achPopup').classList.add('show');tone(660,0.2,'sine',0.11,0.005,0.18);setTimeout(()=>tone(880,0.2,'sine',0.1),110);setTimeout(()=>tone(1174.66,0.35,'sine',0.1),220);setTimeout(()=>$('achPopup').classList.remove('show'),3200);}
 function flashWallet(){const w=document.querySelector('.wallet');w.classList.add('flash');setTimeout(()=>w.classList.remove('flash'),700);}
 function screenShake(){document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),500);}
-function confetti(count=60){for(let i=0;i<count;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=['#c4ff46','#ffd95a','#57c7ff','#c38bff','#ff9b68','#fff'][Math.floor(Math.random()*6)];c.style.animationDuration=(2.5+Math.random()*2.5)+'s';c.style.animationDelay=(Math.random()*0.4)+'s';c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';const r=Math.random();if(r<.33)c.style.borderRadius='50%';else if(r<.66)c.style.clipPath='polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)';document.body.appendChild(c);setTimeout(()=>c.remove(),5500);}}
-function burstFromElement(el,color,count=24){if(!el)return;const r=el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;for(let i=0;i<count;i++){const p=document.createElement('div');p.className='burst';p.style.left=cx+'px';p.style.top=cy+'px';p.style.background=color;p.style.boxShadow='0 0 12px '+color+',0 0 24px '+color;const ang=Math.random()*Math.PI*2,dist=80+Math.random()*160;p.style.setProperty('--dx',Math.cos(ang)*dist+'px');p.style.setProperty('--dy',Math.sin(ang)*dist+'px');p.style.animationDuration=(0.7+Math.random()*0.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),1400);}}
-function coinFly(targetEl,count=8){if(!targetEl)return;const r=targetEl.getBoundingClientRect();const tx=r.left+r.width/2,ty=r.top+r.height/2;const w=document.querySelector('.wallet').getBoundingClientRect();for(let i=0;i<count;i++){const c=document.createElement('div');c.className='coin';c.textContent='₽';const sx=tx+(Math.random()-0.5)*100,sy=ty+(Math.random()-0.5)*40;c.style.left=sx+'px';c.style.top=sy+'px';c.style.setProperty('--dx',(w.left+w.width/2-sx)+'px');c.style.setProperty('--dy',(w.top+w.height/2-sy)+'px');document.body.appendChild(c);requestAnimationFrame(()=>c.classList.add('fly'));setTimeout(()=>c.remove(),1200);}}
+function confetti(count=60){const c=IS_MOBILE?Math.min(count,80):count;for(let i=0;i<c;i++){const el=document.createElement('div');el.className='confetti';el.style.left=Math.random()*100+'vw';el.style.background=['#c4ff46','#ffd95a','#57c7ff','#c38bff','#ff9b68','#fff'][Math.floor(Math.random()*6)];el.style.animationDuration=(2.5+Math.random()*2.5)+'s';el.style.animationDelay=(Math.random()*0.4)+'s';el.style.width=(6+Math.random()*8)+'px';el.style.height=(6+Math.random()*8)+'px';const r=Math.random();if(r<.33)el.style.borderRadius='50%';else if(r<.66)el.style.clipPath='polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)';document.body.appendChild(el);setTimeout(()=>el.remove(),5500);}}
+function burstFromElement(el,color,count=24){if(!el)return;const r=el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const c=IS_MOBILE?Math.min(count,32):count;for(let i=0;i<c;i++){const p=document.createElement('div');p.className='burst';p.style.left=cx+'px';p.style.top=cy+'px';p.style.background=color;p.style.boxShadow='0 0 12px '+color+',0 0 24px '+color;const ang=Math.random()*Math.PI*2,dist=80+Math.random()*160;p.style.setProperty('--dx',Math.cos(ang)*dist+'px');p.style.setProperty('--dy',Math.sin(ang)*dist+'px');p.style.animationDuration=(0.7+Math.random()*0.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),1400);}}
+function coinFly(targetEl,count=8){if(!targetEl)return;const r=targetEl.getBoundingClientRect();const tx=r.left+r.width/2,ty=r.top+r.height/2;const w=document.querySelector('.wallet').getBoundingClientRect();const c=IS_MOBILE?Math.min(count,6):count;for(let i=0;i<c;i++){const el=document.createElement('div');el.className='coin';el.textContent='₽';const sx=tx+(Math.random()-0.5)*100,sy=ty+(Math.random()-0.5)*40;el.style.left=sx+'px';el.style.top=sy+'px';el.style.setProperty('--dx',(w.left+w.width/2-sx)+'px');el.style.setProperty('--dy',(w.top+w.height/2-sy)+'px');document.body.appendChild(el);requestAnimationFrame(()=>el.classList.add('fly'));setTimeout(()=>el.remove(),1200);}}
 
 // ============ ЛОГИКА РЕДКОСТИ ============
 function analyzePlate(letters,digits,region){
@@ -846,14 +1127,15 @@ function desc(p){const r=RARITIES[p.rarity];const rangeTxt=r?` · диапазо
 // ============ НАВИГАЦИЯ ============
 function nav(id){
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===id));
-  document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));
+  document.querySelectorAll('.nav [data-view], .bottom-nav [data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));
   window.scrollTo({top:0,behavior:'smooth'});
+  haptic(HAP.tap);
   sfxClick();
-  if(id==='garageView')setTimeout(resizeCar,80);
-  if(id==='exchangeView')renderExchange();
-  if(id==='workshopView')renderWorkshop();
+  if(id==='garageView')setTimeout(resizeCar,120);
+  if(id==='exchangeView')setTimeout(renderExchange,50);
+  if(id==='workshopView')setTimeout(renderWorkshop,50);
 }
-document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>nav(b.dataset.view));
+document.querySelectorAll('.nav [data-view], .bottom-nav [data-view]').forEach(b=>b.onclick=()=>nav(b.dataset.view));
 
 // ============ ПАССИВ ============
 function getUpgradeBonus(){let b=0;for(const k of Object.keys(S.upgrades))b+=S.upgrades[k];return b*0.05;}
@@ -873,7 +1155,9 @@ function render(){
   $('carIncome').textContent=fmt(inc)+' ₽';
   renderCollection();renderGarage();renderOffers();renderUpgrades();renderTrader();updateEventDots();save();
 }
-function updateEventDots(){const t=document.querySelector('[data-view="marketView"]');if(t)t.classList.toggle('has-event',S.trader.active);}
+function updateEventDots(){
+  document.querySelectorAll('.nav [data-view="marketView"], .bottom-nav [data-view="marketView"]').forEach(t=>t.classList.toggle('has-event',S.trader.active));
+}
 
 // ============ СЛОТ ============
 function resetSlots(){document.querySelectorAll('#livePlate .slot-char, #livePlate .slot-region').forEach(el=>{el.textContent='•';el.classList.remove('locked','active');});document.querySelectorAll('#animProgress span').forEach(el=>el.classList.remove('done','current'));$('slotHint').textContent='Нажми кнопку, чтобы начать';$('slotHint').classList.remove('win');$('livePlate').className='plate-live';$('slotStage').classList.remove('spinning');}
@@ -883,24 +1167,24 @@ function animateSlot(index,finalValue,duration=800,isRegion=false){
     const pb=document.querySelectorAll('#animProgress span')[index];
     el.classList.add('active');pb.classList.add('current');
     const pool=isRegion?PREMIUM_REGIONS.concat(NORMAL_REGIONS.slice(0,20)):(index===0||index===4||index===5)?LETTERS:DIGITS;
-    const start=performance.now();const ni=55;let ln=0;
-    function loop(now){const el2=now-start;if(el2-ln>ni){ln=el2;el.textContent=pool[Math.floor(Math.random()*pool.length)];if(Math.random()<0.35)sfxTick(0.9+Math.random()*0.4);}if(el2<duration){requestAnimationFrame(loop);}else{el.textContent=finalValue;el.classList.remove('active');el.classList.add('locked');pb.classList.remove('current');pb.classList.add('done');sfxLock(index);resolve();}}
+    const start=performance.now();const ni=IS_MOBILE?70:55;let ln=0;
+    function loop(now){const el2=now-start;if(el2-ln>ni){ln=el2;el.textContent=pool[Math.floor(Math.random()*pool.length)];if(Math.random()<0.3)sfxTick(0.9+Math.random()*0.4);}if(el2<duration){requestAnimationFrame(loop);}else{el.textContent=finalValue;el.classList.remove('active');el.classList.add('locked');pb.classList.remove('current');pb.classList.add('done');sfxLock(index);haptic(HAP.lock);resolve();}}
     requestAnimationFrame(loop);
   });
 }
 $('spin').onclick=async ()=>{
   if(spinning)return;
-  if(S.balance<CASE_PRICE){toast('Недостаточно средств. Загляни в «Досуг».');return;}
+  if(S.balance<CASE_PRICE){toast('Недостаточно средств. Загляни в «Досуг».');haptic(HAP.fail);return;}
   startAmbient();spinning=true;S.balance-=CASE_PRICE;S.stats.opened++;
   $('balance').textContent=fmt(S.balance);flashWallet();resetSlots();
   $('spin').disabled=true;$('slotStage').classList.add('spinning');
   $('currentRarity').textContent='СБОРКА…';$('scaleText').textContent='Определяем редкость';
   $('marker').style.left='3%';$('slotHint').textContent='Загрузка…';
-  sfxWhoosh();sfxTension(1.0);
+  sfxWhoosh();sfxTension(1.0);haptic([15]);
   const winner=generatePlate();
   const seq=[{i:0,val:winner.L1,region:false},{i:1,val:winner.digits[0],region:false},{i:2,val:winner.digits[1],region:false},{i:3,val:winner.digits[2],region:false},{i:4,val:winner.L2,region:false},{i:5,val:winner.L3,region:false},{i:6,val:winner.region,region:true}];
-  for(let k=0;k<seq.length;k++){const s=seq[k];$('slotHint').textContent=`Позиция ${k+1} / 7`;await animateSlot(s.i,s.val,750+Math.random()*200,s.region);await new Promise(r=>setTimeout(r,120));if(s.i===3)$('currentRarity').textContent='ПРОДОЛЖАЕМ…';}
-  await new Promise(r=>setTimeout(r,400));
+  for(let k=0;k<seq.length;k++){const s=seq[k];$('slotHint').textContent=`Позиция ${k+1} / 7`;await animateSlot(s.i,s.val,750+Math.random()*200,s.region);await new Promise(r=>setTimeout(r,100));if(s.i===3)$('currentRarity').textContent='ПРОДОЛЖАЕМ…';}
+  await new Promise(r=>setTimeout(r,300));
   $('livePlate').classList.add('rar-'+winner.rarity);
   document.querySelectorAll('#livePlate .slot-char, #livePlate .slot-region').forEach(el=>el.classList.remove('active'));
   const r=RARITIES[winner.rarity];
@@ -911,10 +1195,11 @@ $('spin').onclick=async ()=>{
   $('slotHint').textContent=`✨ ${winner.rarityName} · ${fmt(winner.value)} ₽`;$('slotHint').classList.add('win');
   $('slotStage').classList.remove('spinning');
   sfxRarity(winner.rarity);
-  if(winner.rarity==='rare')burstFromElement($('livePlate'),'#57c7ff',18);
-  else if(winner.rarity==='epic'){burstFromElement($('livePlate'),'#c38bff',26);confetti(40);}
-  else if(winner.rarity==='legendary'){burstFromElement($('livePlate'),'#ffd95a',40);confetti(110);screenShake();}
-  else if(winner.rarity==='mythic'){burstFromElement($('livePlate'),'#ff9b68',60);burstFromElement($('livePlate'),'#ffd95a',40);confetti(180);screenShake();setTimeout(screenShake,300);}
+  if(winner.rarity==='rare'){burstFromElement($('livePlate'),'#57c7ff',18);haptic(HAP.rare);}
+  else if(winner.rarity==='epic'){burstFromElement($('livePlate'),'#c38bff',26);confetti(40);haptic(HAP.rare);}
+  else if(winner.rarity==='legendary'){burstFromElement($('livePlate'),'#ffd95a',40);confetti(110);screenShake();haptic(HAP.rare);}
+  else if(winner.rarity==='mythic'){burstFromElement($('livePlate'),'#ff9b68',60);burstFromElement($('livePlate'),'#ffd95a',40);confetti(180);screenShake();setTimeout(screenShake,300);haptic([100,50,100,50,300]);}
+  else haptic(HAP.success);
   setTimeout(()=>{
     S.pending=winner;
     $('modalKicker').textContent=winner.rarityName.toUpperCase();
@@ -922,34 +1207,67 @@ $('spin').onclick=async ()=>{
     $('modalText').textContent=desc(winner);
     $('modalPlate').innerHTML=plateHTML(winner);
     $('modalPrice').textContent=fmt(winner.value)+' ₽';
-    $('modal').hidden=false;spinning=false;sfxModalOpen();render();
+    $('modal').hidden=false;
+    lockScroll(true);
+    spinning=false;
+    sfxModalOpen();
+    render();
   },700);
 };
-function claim(){if(!S.pending)return;const p=S.pending;S.collection.unshift(p);S.installed=p.id;if(p.value>S.stats.best)S.stats.best=p.value;if(p.rarity==='mythic')S.stats.mythic++;if(p.rarity==='legendary')S.stats.legendary++;if(p.rarity==='epic')S.stats.epic++;if(p.rarity==='rare')S.stats.rare++;S.pending=null;$('modal').hidden=true;render();nav('garageView');toast('Номер получен');sfxClick();if(S.collection.length===1)showAch('🎯','Первый номер','Первый кейс!');if(S.collection.length===10)showAch('📚','Коллекционер','10 номеров');if(p.rarity==='mythic')showAch('🔥','МИФИЧЕСКИЙ','Выбил мифик!');if(p.rarity==='legendary')showAch('⭐','ЛЕГЕНДА','Выбил легендарку!');}
-$('claim').onclick=claim;$('seeGarage').onclick=claim;
+
+// Scroll lock for modal
+function lockScroll(lock){
+  if(lock){document.body.style.overflow='hidden';document.body.style.touchAction='none';}
+  else{document.body.style.overflow='';document.body.style.touchAction='';}
+}
+
+function claim(goToGarage=true){
+  if(!S.pending)return;
+  const p=S.pending;
+  S.collection.unshift(p);
+  if(goToGarage)S.installed=p.id;
+  if(p.value>S.stats.best)S.stats.best=p.value;
+  if(p.rarity==='mythic')S.stats.mythic++;if(p.rarity==='legendary')S.stats.legendary++;if(p.rarity==='epic')S.stats.epic++;if(p.rarity==='rare')S.stats.rare++;
+  S.pending=null;
+  $('modal').hidden=true;
+  lockScroll(false);
+  render();
+  if(goToGarage){nav('garageView');toast('Номер установлен в гараж');}
+  else toast('Номер добавлен в коллекцию');
+  haptic(HAP.tap);sfxClick();
+  if(S.collection.length===1)showAch('🎯','Первый номер','Первый кейс!');
+  if(S.collection.length===10)showAch('📚','Коллекционер','10 номеров');
+  if(p.rarity==='mythic')showAch('🔥','МИФИЧЕСКИЙ','Выбил мифик!');
+  if(p.rarity==='legendary')showAch('⭐','ЛЕГЕНДА','Выбил легендарку!');
+}
+$('claim').onclick=()=>claim(true);
+$('seeGarage').onclick=()=>claim(false);
+$('modalCloseBtn').onclick=()=>claim(false);
+// Backdrop tap to close (mobile friendly)
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))claim(false);});
 
 // ============ GARAGE ============
 function renderGarage(){const p=S.collection.find(x=>x.id===S.installed);const demo={L1:'А',L2:'А',L3:'А',digits:'000',region:'77',rarity:'common'};$('garagePlate').innerHTML=plateHTML(p||demo);$('garageName').textContent=p?`${p.L1}${p.digits}${p.L2}${p.L3} · ${p.region}`:'Демонстрационный номер';$('garageDesc').textContent=p?desc(p):'Открой кейс.';$('garageValue').textContent=p?'ОЦЕНКА: '+fmt(p.value)+' ₽':'—';if(carPlateTexture)update3DPlate(p||demo);}
 function renderUpgrades(){const root=$('upgradesGrid');if(!root)return;root.innerHTML=Object.entries(UPGRADES).map(([key,u])=>{const lv=S.upgrades[key],next=lv+1<u.levels.length?u.levels[lv+1]:null,owned=lv===u.levels.length-1;return `<div class="upgrade ${owned?'owned':''}"><div class="upgrade-head"><b>${u.name}</b><span class="lv">УР. ${lv+1}/${u.levels.length}</span></div><div class="upgrade-desc">${owned?'Максимум.':'След: '+next.name+' · '+fmt(next.cost)+' ₽'}</div><div class="upgrade-visual">${u.levels.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div><button class="upgrade-btn" data-up="${key}" ${owned||S.balance<((next&&next.cost)||0)?'disabled':''}>${owned?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));}
-function buyUpgrade(key){const u=UPGRADES[key],lv=S.upgrades[key];if(lv+1>=u.levels.length){toast('Максимум');return;}const cost=u.levels[lv+1].cost;if(S.balance<cost){toast('Не хватает денег');return;}S.balance-=cost;S.upgrades[key]=lv+1;flashWallet();sfxUpgrade();applyCarUpgrades();render();toast(`${u.name} → ${u.levels[lv+1].name}`);if(getUpgradeBonus()>=0.5)showAch('🔧','Тюнинг','+50% бонус');}
+function buyUpgrade(key){const u=UPGRADES[key],lv=S.upgrades[key];if(lv+1>=u.levels.length){toast('Максимум');return;}const cost=u.levels[lv+1].cost;if(S.balance<cost){toast('Не хватает денег');haptic(HAP.fail);return;}S.balance-=cost;S.upgrades[key]=lv+1;flashWallet();sfxUpgrade();haptic(HAP.success);applyCarUpgrades();render();toast(`${u.name} → ${u.levels[lv+1].name}`);if(getUpgradeBonus()>=0.5)showAch('🔧','Тюнинг','+50% бонус');}
 
 // ============ COLLECTION ============
 function renderCollection(){
   const root=$('collection');if(!S.collection.length){root.innerHTML='<div class="empty">Коллекция пуста.</div>';return;}
-  root.innerHTML=S.collection.map((p,i)=>`<article class="item rar-${p.rarity}" style="animation-delay:${i*0.03}s">${plateHTML(p)}<div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(p.value)} ₽</b></div><p class="muted">${desc(p)}</p><button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button></article>`).join('');
-  root.querySelectorAll('[data-install]').forEach(b=>b.onclick=()=>{S.installed=b.dataset.install;render();nav('garageView');toast('Установлен');sfxClick();});
+  root.innerHTML=S.collection.map((p,i)=>`<article class="item rar-${p.rarity}" style="animation-delay:${Math.min(i,10)*0.03}s">${plateHTML(p)}<div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(p.value)} ₽</b></div><p class="muted">${desc(p)}</p><button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button></article>`).join('');
+  root.querySelectorAll('[data-install]').forEach(b=>b.onclick=()=>{S.installed=b.dataset.install;render();nav('garageView');toast('Установлен');haptic(HAP.tap);sfxClick();});
 }
 
 // ============ MARKET ============
 const buyers=['Артём · коллекционер','Илья · автолюбитель','Максим · охотник','Денис · клуб','Никита · шоурум','Сергей · бизнесмен','Олег · таксист'];
-function renderOffers(){const root=$('offers');if(!S.offers.length){root.innerHTML='<div class="empty">Пока предложений нет.</div>';return;}root.innerHTML=S.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);const ps=p?`${p.L1}${p.digits}${p.L2}${p.L3} · ${p.region}`:'из коллекции';return `<div class="offer"><div class="offerhead">${o.name}<span class="offerprice">${fmt(o.price)} ₽</span></div><small>За номер ${ps}</small><div class="offerbuttons"><button class="accept" data-accept="${o.id}">Принять</button><button data-decline="${o.id}">Отказать</button></div></div>`;}).join('');root.querySelectorAll('[data-accept]').forEach(b=>b.onclick=()=>acceptOffer(b.dataset.accept));root.querySelectorAll('[data-decline]').forEach(b=>b.onclick=()=>{S.offers=S.offers.filter(o=>o.id!==b.dataset.decline);render();toast('Отклонено');sfxClick();});}
-function acceptOffer(id){const o=S.offers.find(x=>x.id===id);if(!o)return;const i=S.collection.findIndex(p=>p.id===o.pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.offers=S.offers.filter(x=>x.id!==id);render();flashWallet();toast('Продано: '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),6);sfxCash();if(S.stats.sold===5)showAch('💼','Продавец','5 продаж');if(S.stats.earned>=100000)showAch('💎','Богач','100 000 ₽ заработано');}
+function renderOffers(){const root=$('offers');if(!S.offers.length){root.innerHTML='<div class="empty">Пока предложений нет.</div>';return;}root.innerHTML=S.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);const ps=p?`${p.L1}${p.digits}${p.L2}${p.L3} · ${p.region}`:'из коллекции';return `<div class="offer"><div class="offerhead">${o.name}<span class="offerprice">${fmt(o.price)} ₽</span></div><small>За номер ${ps}</small><div class="offerbuttons"><button class="accept" data-accept="${o.id}">Принять</button><button data-decline="${o.id}">Отказать</button></div></div>`;}).join('');root.querySelectorAll('[data-accept]').forEach(b=>b.onclick=()=>acceptOffer(b.dataset.accept));root.querySelectorAll('[data-decline]').forEach(b=>b.onclick=()=>{S.offers=S.offers.filter(o=>o.id!==b.dataset.decline);render();toast('Отклонено');haptic(HAP.tap);sfxClick();});}
+function acceptOffer(id){const o=S.offers.find(x=>x.id===id);if(!o)return;const i=S.collection.findIndex(p=>p.id===o.pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.offers=S.offers.filter(x=>x.id!==id);render();flashWallet();toast('Продано: '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),6);sfxCash();haptic(HAP.success);if(S.stats.sold===5)showAch('💼','Продавец','5 продаж');if(S.stats.earned>=100000)showAch('💎','Богач','100 000 ₽');}
 
 // ============ TRADER ============
-function spawnTrader(){const av=S.collection;if(!av.length){S.lastTrader=Date.now();return;}const count=Math.min(av.length,Math.random()<0.3?2:1);const sh=[...av].sort(()=>Math.random()-0.5).slice(0,count);const offers=sh.map(p=>{const mult=1.25+Math.random()*0.35;const price=Math.max(100,Math.round(p.value*mult/50)*50);return {pid:p.id,price,base:p.value,mult};});S.trader={active:true,expires:Date.now()+45000,offers};S.lastTrader=Date.now();sfxTraderHorn();$('traderBanner').hidden=false;setTimeout(()=>$('traderBanner').classList.add('show'),50);render();renderTrader();toast('🧳 Перекупщик приехал!');}
+function spawnTrader(){const av=S.collection;if(!av.length){S.lastTrader=Date.now();return;}const count=Math.min(av.length,Math.random()<0.3?2:1);const sh=[...av].sort(()=>Math.random()-0.5).slice(0,count);const offers=sh.map(p=>{const mult=1.25+Math.random()*0.35;const price=Math.max(100,Math.round(p.value*mult/50)*50);return {pid:p.id,price,base:p.value,mult};});S.trader={active:true,expires:Date.now()+45000,offers};S.lastTrader=Date.now();sfxTraderHorn();haptic([30,40,30]);$('traderBanner').hidden=false;setTimeout(()=>$('traderBanner').classList.add('show'),50);render();renderTrader();toast('🧳 Перекупщик приехал!');}
 function closeTrader(){S.trader={active:false,expires:0,offers:[]};$('traderBanner').classList.remove('show');setTimeout(()=>$('traderBanner').hidden=true,600);render();renderTrader();}
-function renderTrader(){const wrap=$('traderPanelWrap');if(!wrap)return;if(!S.trader.active||!S.trader.offers.length){wrap.innerHTML='';return;}const left=Math.max(0,Math.ceil((S.trader.expires-Date.now())/1000));wrap.innerHTML=`<div class="trader-panel"><div class="trader-head"><div class="th-left"><div class="th-icon">🧳</div><div class="th-name"><b>ПЕРЕКУПЩИК</b><small>Скупает дороже · уедет через</small></div></div><div class="th-timer">${left}с</div></div>${S.trader.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);if(!p)return '';const pct=Math.round((o.mult-1)*100);return `<div class="trader-offer"><div class="to-plate">${plateHTML(p)}<div class="muted">${p.rarityName} · база ${fmt(o.base)} ₽ <span style="color:#ffd95a;font-weight:900">+${pct}%</span></div></div><div style="text-align:right"><div class="to-price">${fmt(o.price)} ₽</div></div><button data-trader="${o.pid}">ПРОДАТЬ</button></div>`;}).join('')}</div>`;wrap.querySelectorAll('[data-trader]').forEach(b=>b.onclick=()=>acceptTraderOffer(b.dataset.trader));}
-function acceptTraderOffer(pid){const o=S.trader.offers.find(x=>x.pid===pid);if(!o)return;const i=S.collection.findIndex(p=>p.id===pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.traderSold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.trader.offers=S.trader.offers.filter(x=>x.pid!==pid);if(!S.trader.offers.length)closeTrader();render();flashWallet();toast('Перекупщик дал '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),10);sfxCash();if(S.stats.traderSold===3)showAch('🤝','Партнёр','3 продажи');}
+function renderTrader(){const wrap=$('traderPanelWrap');if(!wrap)return;if(!S.trader.active||!S.trader.offers.length){wrap.innerHTML='';return;}const left=Math.max(0,Math.ceil((S.trader.expires-Date.now())/1000));wrap.innerHTML=`<div class="trader-panel"><div class="trader-head"><div class="th-left"><div class="th-icon">🧳</div><div class="th-name"><b>ПЕРЕКУПЩИК</b><small>Скупает дороже · уедет через</small></div></div><div class="th-timer">${left}с</div></div>${S.trader.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);if(!p)return '';const pct=Math.round((o.mult-1)*100);return `<div class="trader-offer"><div class="to-plate">${plateHTML(p)}<div class="muted" style="margin-top:6px">${p.rarityName} · база ${fmt(o.base)} ₽ <span style="color:#ffd95a;font-weight:900">+${pct}%</span></div></div><div style="text-align:right"><div class="to-price">${fmt(o.price)} ₽</div></div><button data-trader="${o.pid}">ПРОДАТЬ</button></div>`;}).join('')}</div>`;wrap.querySelectorAll('[data-trader]').forEach(b=>b.onclick=()=>acceptTraderOffer(b.dataset.trader));}
+function acceptTraderOffer(pid){const o=S.trader.offers.find(x=>x.pid===pid);if(!o)return;const i=S.collection.findIndex(p=>p.id===pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.traderSold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.trader.offers=S.trader.offers.filter(x=>x.pid!==pid);if(!S.trader.offers.length)closeTrader();render();flashWallet();toast('Перекупщик дал '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),10);sfxCash();haptic(HAP.success);if(S.stats.traderSold===3)showAch('🤝','Партнёр','3 продажи');}
 $('traderBanner').onclick=()=>{nav('marketView');if(S.trader.active)renderTrader();};
 function marketTick(){const left=60000-(Date.now()-S.lastOffer);$('timer').textContent=left>0?'СЛЕДУЮЩЕЕ: '+Math.ceil(left/1000)+' СЕК':'РЫНОК АКТИВЕН';if(left>0)return;S.lastOffer=Date.now();const av=S.collection.filter(p=>!S.offers.some(o=>o.pid===p.id));if(av.length){const p=av[Math.floor(Math.random()*av.length)];const price=Math.max(100,Math.round(p.value*(0.88+Math.random()*0.24)/50)*50);S.offers.unshift({id:Math.random().toString(36).slice(2),pid:p.id,price,name:buyers[Math.floor(Math.random()*buyers.length)],message:'Предлагаю близко к рыночной.'});S.offers=S.offers.slice(0,8);toast('Новое предложение!');tone(560,0.15,'sine',0.09,0.005,0.13);setTimeout(()=>tone(760,0.2,'sine',0.08),100);}renderOffers();save();}
 setInterval(marketTick,1000);
@@ -968,7 +1286,7 @@ function updateStocks(){
 }
 setInterval(updateStocks,2000);
 function drawChart(canvas,history,baseValue){
-  const dpr=Math.min(devicePixelRatio||1,2);const W=canvas.clientWidth,H=canvas.clientHeight;
+  const dpr=Math.min(devicePixelRatio||1,2);const W=canvas.clientWidth||canvas.parentElement.clientWidth||300;const H=canvas.clientHeight||80;
   canvas.width=W*dpr;canvas.height=H*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
   if(history.length<2)return;
   const min=Math.min(...history),max=Math.max(...history);const range=(max-min)||1;const pad=6;
@@ -995,172 +1313,91 @@ function renderExchange(){
 }
 function buyStock(id){
   const st=S.stocks.find(x=>x.id===id);if(!st)return;
-  if(S.balance<st.current){toast('Не хватает денег');return;}
+  if(S.balance<st.current){toast('Не хватает денег');haptic(HAP.fail);return;}
   S.balance-=st.current;
   const plate={...st.plate,id:Date.now().toString(36)+Math.random().toString(36).slice(2,7)};
   S.collection.unshift(plate);
-  flashWallet();sfxCash();coinFly(document.querySelector('.wallet'),8);
+  flashWallet();sfxCash();haptic(HAP.success);coinFly(document.querySelector('.wallet'),8);
   toast(`Куплено за ${fmt(st.current)} ₽`);
   const idx=S.stocks.indexOf(st);S.stocks[idx]=generateStock();
   render();renderExchange();
 }
 window.addEventListener('resize',()=>{if($('exchangeView').classList.contains('active'))renderExchange();});
 
-// ============ МАСТЕРСКАЯ (СПЛАВ + КОЛЕСО) ============
+// ============ МАСТЕРСКАЯ + КОЛЕСО ============
 function calcChance(sum,targetMid){if(sum<=0)return 0;let ch=(sum/targetMid)*30;return Math.max(0.01,Math.min(45,ch));}
 
-// --- Колесо ---
-let wheelRotation=0;         // текущий угол в градусах
-let wheelSpinning=false;
-let wheelTargetAngle=0;
-let wheelAnimId=null;
-
+let wheelRotation=0,wheelSpinning=false,wheelTargetAngle=0,wheelAnimId=null;
 function drawWheel(chancePct){
-  const canvas=$('wheelCanvas');
-  if(!canvas)return;
+  const canvas=$('wheelCanvas');if(!canvas)return;
   const dpr=Math.min(devicePixelRatio||1,2);
-  const size=canvas.clientWidth||300;
+  const size=canvas.clientWidth||canvas.parentElement.clientWidth||300;
+  if(size<10)return;
   canvas.width=size*dpr;canvas.height=size*dpr;
-  const c=canvas.getContext('2d');
-  c.setTransform(dpr,0,0,dpr,0,0);
+  const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);
   const cx=size/2,cy=size/2,R=size/2-4;
   c.clearRect(0,0,size,size);
-  // Внешнее кольцо
   c.beginPath();c.arc(cx,cy,R,0,Math.PI*2);c.strokeStyle='rgba(196,255,70,.3)';c.lineWidth=3;c.stroke();
   c.beginPath();c.arc(cx,cy,R-6,0,Math.PI*2);c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=1;c.stroke();
-  // Сектора (начинаем сверху = -90°, по часовой)
-  const startRad=-Math.PI/2 + (wheelRotation*Math.PI/180);
+  const startRad=-Math.PI/2+(wheelRotation*Math.PI/180);
   const chanceAngle=(chancePct/100)*Math.PI*2;
   const failAngle=Math.PI*2-chanceAngle;
-  // Красный (провал) — рисуем полностью
   c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+Math.PI*2);c.closePath();
   const failGrad=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);
-  failGrad.addColorStop(0,'#a02020');
-  failGrad.addColorStop(0.7,'#5a1010');
-  failGrad.addColorStop(1,'#2a0808');
+  failGrad.addColorStop(0,'#a02020');failGrad.addColorStop(0.7,'#5a1010');failGrad.addColorStop(1,'#2a0808');
   c.fillStyle=failGrad;c.fill();
-  // Зелёный (успех) — поверх
   if(chanceAngle>0){
     c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+chanceAngle);c.closePath();
     const winGrad=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);
-    winGrad.addColorStop(0,'#d0ff5a');
-    winGrad.addColorStop(0.7,'#8ec92a');
-    winGrad.addColorStop(1,'#4d7a10');
+    winGrad.addColorStop(0,'#d0ff5a');winGrad.addColorStop(0.7,'#8ec92a');winGrad.addColorStop(1,'#4d7a10');
     c.fillStyle=winGrad;c.fill();
   }
-  // Разделительные линии
-  c.save();
-  c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);c.clip();
-  c.lineWidth=2;c.strokeStyle='rgba(0,0,0,.6)';
-  // Линия между секторами
-  if(chanceAngle>0 && chanceAngle<Math.PI*2){
-    c.beginPath();
-    c.moveTo(cx,cy);
-    const a1=startRad+chanceAngle;
-    c.lineTo(cx+Math.cos(a1)*(R-7),cy+Math.sin(a1)*(R-7));
-    c.stroke();
-    c.beginPath();
-    c.moveTo(cx,cy);
-    const a2=startRad+Math.PI*2;
-    c.lineTo(cx+Math.cos(a2)*(R-7),cy+Math.sin(a2)*(R-7));
-    c.stroke();
+  c.save();c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);c.clip();c.lineWidth=2;c.strokeStyle='rgba(0,0,0,.6)';
+  if(chanceAngle>0&&chanceAngle<Math.PI*2){
+    c.beginPath();c.moveTo(cx,cy);const a1=startRad+chanceAngle;c.lineTo(cx+Math.cos(a1)*(R-7),cy+Math.sin(a1)*(R-7));c.stroke();
+    c.beginPath();c.moveTo(cx,cy);const a2=startRad+Math.PI*2;c.lineTo(cx+Math.cos(a2)*(R-7),cy+Math.sin(a2)*(R-7));c.stroke();
   }
   c.restore();
-  // Деления
   const ticks=24;
-  for(let i=0;i<ticks;i++){
-    const a=startRad+(i/ticks)*Math.PI*2;
-    const r1=R-7,r2=R-15;
-    c.beginPath();c.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);c.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);
-    c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1;c.stroke();
-  }
-  // Тексты
-  if(chanceAngle>0.35){
-    c.save();
-    c.translate(cx,cy);
-    c.rotate(startRad+chanceAngle/2+Math.PI/2);
-    c.fillStyle='#0d1a05';
-    c.font=`bold ${Math.min(28,Math.max(11,R*0.09))}px Manrope,Arial`;
-    c.textAlign='center';c.textBaseline='middle';
-    c.fillText('ШАНС',0,-R*0.6);
-    c.restore();
-  }
-  if(failAngle>0.35){
-    c.save();
-    c.translate(cx,cy);
-    c.rotate(startRad+chanceAngle+failAngle/2+Math.PI/2);
-    c.fillStyle='rgba(255,255,255,.85)';
-    c.font=`bold ${Math.min(28,Math.max(11,R*0.09))}px Manrope,Arial`;
-    c.textAlign='center';c.textBaseline='middle';
-    c.fillText('ПРОВАЛ',0,-R*0.6);
-    c.restore();
-  }
-  // Блик сверху
-  const shine=c.createLinearGradient(0,0,0,size);
-  shine.addColorStop(0,'rgba(255,255,255,.15)');
-  shine.addColorStop(0.5,'rgba(255,255,255,0)');
-  c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);
-  c.fillStyle=shine;c.fill();
+  for(let i=0;i<ticks;i++){const a=startRad+(i/ticks)*Math.PI*2;const r1=R-7,r2=R-15;c.beginPath();c.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);c.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1;c.stroke();}
+  if(chanceAngle>0.35){c.save();c.translate(cx,cy);c.rotate(startRad+chanceAngle/2+Math.PI/2);c.fillStyle='#0d1a05';c.font=`bold ${Math.min(26,Math.max(11,R*0.09))}px Manrope,Arial`;c.textAlign='center';c.textBaseline='middle';c.fillText('ШАНС',0,-R*0.6);c.restore();}
+  if(failAngle>0.35){c.save();c.translate(cx,cy);c.rotate(startRad+chanceAngle+failAngle/2+Math.PI/2);c.fillStyle='rgba(255,255,255,.85)';c.font=`bold ${Math.min(26,Math.max(11,R*0.09))}px Manrope,Arial`;c.textAlign='center';c.textBaseline='middle';c.fillText('ПРОВАЛ',0,-R*0.6);c.restore();}
+  const shine=c.createLinearGradient(0,0,0,size);shine.addColorStop(0,'rgba(255,255,255,.15)');shine.addColorStop(0.5,'rgba(255,255,255,0)');
+  c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);c.fillStyle=shine;c.fill();
 }
-
 function updateWheelCenter(chancePct){
-  const el=$('wheelCenter');
-  if(!el)return;
-  if(chancePct===null||chancePct===undefined){el.textContent='?';el.style.color='var(--lime)';return;}
+  const el=$('wheelCenter');if(!el)return;
+  if(chancePct===null||chancePct===undefined){el.textContent='?';el.style.color='var(--lime)';el.style.fontSize='20px';return;}
   if(chancePct<0.1){el.textContent='0.03';el.style.fontSize='14px';el.style.color='#ff5050';}
   else if(chancePct<1){el.textContent=chancePct.toFixed(2);el.style.fontSize='14px';el.style.color='var(--red)';}
   else if(chancePct<10){el.textContent=chancePct.toFixed(1);el.style.fontSize='16px';el.style.color='var(--gold)';}
   else {el.textContent=Math.round(chancePct);el.style.fontSize='20px';el.style.color='var(--lime)';}
 }
-
-function spinWheel(chancePct, success, callback){
+function spinWheel(chancePct,success,callback){
   if(wheelSpinning)return;
   wheelSpinning=true;
-  // Целевой угол в системе колеса (0 = верх, по часовой)
   let targetAngleDeg;
-  if(success){
-    // попадём в зелёный сектор
-    const greenDeg=Math.max(chancePct*3.6,0.01);
-    targetAngleDeg=Math.random()*greenDeg;
-  } else {
-    const greenDeg=chancePct*3.6;
-    const redDeg=360-greenDeg;
-    targetAngleDeg=greenDeg+Math.random()*redDeg;
-  }
-  // Угол поворота колеса (по часовой): нужно чтобы (targetAngle + rotation) mod 360 === 0 (стрелка сверху)
-  // rotation = -targetAngle mod 360
+  if(success){const greenDeg=Math.max(chancePct*3.6,0.01);targetAngleDeg=Math.random()*greenDeg;}
+  else{const greenDeg=chancePct*3.6;const redDeg=360-greenDeg;targetAngleDeg=greenDeg+Math.random()*redDeg;}
   const desiredRotation=(360-targetAngleDeg)%360;
-  // Сколько полных оборотов
   const turns=5+Math.floor(Math.random()*3);
   const totalRotation=turns*360+desiredRotation;
   const startRotation=wheelRotation%360;
   const startTime=performance.now();
-  const duration=4200+Math.random()*800;
+  const duration=(IS_MOBILE?3500:4200)+Math.random()*800;
   let lastTick=0;
   function easeOutQuart(t){return 1-Math.pow(1-t,4);}
   function loop(now){
     const t=Math.min(1,(now-startTime)/duration);
     const eased=easeOutQuart(t);
     wheelRotation=startRotation+totalRotation*eased;
-    // Рисуем с текущей chance
     drawWheel(chancePct);
-    // Тик
-    if(t<0.98 && now-lastTick>(80+1200*t*t*t)){
-      lastTick=now;
-      sfxTick(1.2+Math.random()*0.6);
-    }
-    if(t<1){
-      wheelAnimId=requestAnimationFrame(loop);
-    } else {
-      wheelRotation=startRotation+totalRotation;
-      drawWheel(chancePct);
-      wheelSpinning=false;
-      callback && callback();
-    }
+    if(t<0.98 && now-lastTick>(80+1200*t*t*t)){lastTick=now;sfxTick(1.2+Math.random()*0.6);}
+    if(t<1)wheelAnimId=requestAnimationFrame(loop);
+    else{wheelRotation=startRotation+totalRotation;drawWheel(chancePct);wheelSpinning=false;callback&&callback();}
   }
   wheelAnimId=requestAnimationFrame(loop);
 }
-
 function renderWheelAndSummary(){
   const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);
   const sum=selPlates.reduce((a,p)=>a+p.value,0);
@@ -1183,7 +1420,6 @@ function renderWheelAndSummary(){
   rollBtn.disabled=selPlates.length>8||wheelSpinning;
   rollBtn.textContent=selPlates.length>8?'МАКС 8 НОМЕРОВ':'🎡 ИСПЫТАТЬ СУДЬБУ';
 }
-
 function renderWorkshop(){
   const root=$('wsPlates');
   if(!S.collection.length){root.innerHTML='<div class="empty" style="grid-column:1/-1">Коллекция пуста — открой кейс.</div>';}
@@ -1199,16 +1435,15 @@ function renderWorkshop(){
     const allowed=sum>0&&sum<r.min;const sel=S.workshop.target===r.id;
     return `<button class="ws-target-btn ${sel?'selected':''}" data-target="${r.id}" ${allowed?'':'disabled'}><span class="tt-name" style="color:${RARITY_COLORS[r.id]}">${r.name}</span><span class="tt-range">${fmt(r.min)} – ${fmt(r.max)} ₽</span></button>`;
   }).join('');
-  tgRoot.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>{if(b.disabled)return;S.workshop.target=b.dataset.target;sfxClick();renderWorkshop();});
+  tgRoot.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>{if(b.disabled)return;S.workshop.target=b.dataset.target;haptic(HAP.tap);sfxClick();renderWorkshop();});
   renderWheelAndSummary();
 }
 function togglePlateSelect(id){
   const idx=S.workshop.selected.indexOf(id);
   if(idx>=0)S.workshop.selected.splice(idx,1);
   else{if(S.workshop.selected.length>=8){toast('Максимум 8 номеров');return;}S.workshop.selected.push(id);}
-  sfxClick();renderWorkshop();
+  haptic(HAP.tap);sfxClick();renderWorkshop();
 }
-
 $('wsRoll').onclick=()=>{
   if(wheelSpinning)return;
   const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);
@@ -1218,17 +1453,12 @@ $('wsRoll').onclick=()=>{
   const sum=selPlates.reduce((a,p)=>a+p.value,0);
   const chance=calcChance(sum,mid);
   const rollBtn=$('wsRoll');
-  rollBtn.disabled=true;
-  rollBtn.textContent='🎡 КРУТИМ…';
-  sfxTension(3.5);
-  // Определяем результат заранее
+  rollBtn.disabled=true;rollBtn.textContent='🎡 КРУТИМ…';
+  sfxTension(3.5);haptic([20,20,20]);
   const success=Math.random()*100<chance;
   spinWheel(chance,success,()=>resolveRoll(selPlates,chance,r,success));
 };
-
 function resolveRoll(selPlates,chance,r,success){
-  const rollBtn=$('wsRoll');
-  // Удаляем выбранные
   const ids=selPlates.map(p=>p.id);
   S.collection=S.collection.filter(p=>!ids.includes(p.id));
   if(S.installed&&ids.includes(S.installed))S.installed=S.collection[0]?.id||null;
@@ -1237,10 +1467,9 @@ function resolveRoll(selPlates,chance,r,success){
     let newPlate;let attempts=0;
     do{newPlate=generatePlate();attempts++;}while(newPlate.rarity!==r.id&&attempts<30);
     if(newPlate.rarity!==r.id){newPlate.rarity=r.id;newPlate.rarityName=r.name;newPlate.value=Math.round((r.min+Math.random()*(r.max-r.min))/50)*50;}
-    S.collection.unshift(newPlate);
-    S.stats.crafted++;
+    S.collection.unshift(newPlate);S.stats.crafted++;
     sfxSuccess();sfxRarity(newPlate.rarity);
-    confetti(120);screenShake();
+    confetti(120);screenShake();haptic([100,60,200]);
     burstFromElement($('wheelCanvas'),'#c4ff46',60);
     if(newPlate.rarity==='mythic'){confetti(120);screenShake();}
     S.pending=newPlate;
@@ -1249,14 +1478,14 @@ function resolveRoll(selPlates,chance,r,success){
     $('modalText').textContent='Сплав удался! Получен '+desc(newPlate);
     $('modalPlate').innerHTML=plateHTML(newPlate);
     $('modalPrice').textContent=fmt(newPlate.value)+' ₽';
-    $('modal').hidden=false;
+    $('modal').hidden=false;lockScroll(true);
     sfxModalOpen();
     showAch('⚗️','Алхимик','Успешный сплав');
     if(newPlate.rarity==='mythic')showAch('🔥','СОЗДАН МИФ','Сплав дал мифик');
     if(newPlate.rarity==='legendary')showAch('⭐','СОЗДАНА ЛЕГЕНДА','Сплав дал легендарку');
   } else {
     S.stats.craftFailed++;
-    sfxFail();screenShake();
+    sfxFail();screenShake();haptic([200,100,300]);
     burstFromElement($('wheelCanvas'),'#ff5050',40);
     toast('💀 Сплав провалился. Номера сгорели.');
     document.body.style.transition='box-shadow .3s';
@@ -1269,9 +1498,9 @@ function resolveRoll(selPlates,chance,r,success){
 // ============ ДОСУГ ============
 const FREE_CASE_CD=5*60*1000;
 function renderFreeCase(){const btn=$('freeCaseBtn'),cd=$('freeCaseCd');const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0){btn.disabled=true;btn.textContent='ЖДИ '+Math.ceil(left/1000)+'с';cd.textContent='Следующая через '+Math.ceil(left/60000)+' мин';}else{btn.disabled=false;btn.textContent='ОТКРЫТЬ БЕСПЛАТНО';cd.textContent='Готово!';}}
-$('freeCaseBtn').onclick=()=>{const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0)return;S.lastFreeCase=Date.now();const amount=Math.round((300+Math.random()*1200)/50)*50;S.balance+=amount;flashWallet();sfxCash();coinFly($('freeCaseBtn'),10);toast('Из копилки: +'+fmt(amount)+' ₽');burstFromElement($('freeCaseBtn'),'#ffd95a',20);render();renderFreeCase();};
+$('freeCaseBtn').onclick=()=>{const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0)return;S.lastFreeCase=Date.now();const amount=Math.round((300+Math.random()*1200)/50)*50;S.balance+=amount;flashWallet();sfxCash();haptic(HAP.success);coinFly($('freeCaseBtn'),10);toast('Из копилки: +'+fmt(amount)+' ₽');burstFromElement($('freeCaseBtn'),'#ffd95a',20);render();renderFreeCase();};
 setInterval(renderFreeCase,1000);
-$('luckyBtn').onclick=()=>{if(S.balance<500){toast('Нужно 500 ₽');return;}S.balance-=500;flashWallet();const target=Math.floor(Math.random()*10);const guess=Math.floor(Math.random()*10);const win=guess===target;toast('Крутим...');tone(660,0.15,'sine',0.09);setTimeout(()=>tone(880,0.15,'sine',0.09),150);setTimeout(()=>tone(1100,0.2,'sine',0.09),300);setTimeout(()=>{if(win){const payout=500*6;S.balance+=payout;toast('🎉 Угадал! +'+fmt(payout)+' ₽');confetti(80);flashWallet();sfxCash();burstFromElement(document.body,'#ffd95a',40);showAch('🎯','Счастливчик','Угадал x6');}else{toast('Не угадал. Было: '+target+', твоё: '+guess);beep(200,0.3,'sawtooth',0.1);}render();},800);};
+$('luckyBtn').onclick=()=>{if(S.balance<500){toast('Нужно 500 ₽');haptic(HAP.fail);return;}S.balance-=500;flashWallet();const target=Math.floor(Math.random()*10);const guess=Math.floor(Math.random()*10);const win=guess===target;toast('Крутим...');haptic([20,20,20]);tone(660,0.15,'sine',0.09);setTimeout(()=>tone(880,0.15,'sine',0.09),150);setTimeout(()=>tone(1100,0.2,'sine',0.09),300);setTimeout(()=>{if(win){const payout=500*6;S.balance+=payout;toast('🎉 Угадал! +'+fmt(payout)+' ₽');confetti(80);flashWallet();sfxCash();haptic([100,50,200]);burstFromElement(document.body,'#ffd95a',40);showAch('🎯','Счастливчик','Угадал x6');}else{toast('Не угадал. Было: '+target+', твоё: '+guess);beep(200,0.3,'sawtooth',0.1);haptic(HAP.fail);}render();},800);};
 const WASH_CD=45*1000,WASH_DURATION=20000;
 function renderWash(){const btn=$('washBtn'),cd=$('washCd');const left=WASH_CD-(Date.now()-S.lastWash);if(left>0){btn.disabled=true;btn.textContent='ЖДИ '+Math.ceil(left/1000)+'с';cd.textContent='Кулдаун';}else{btn.disabled=false;btn.textContent='ПОМЫТЬ · 20 СЕК';cd.textContent='';}}
 function washHandler(){
@@ -1281,14 +1510,14 @@ function washHandler(){
   let earned=0,clicks=0;
   const start=Date.now();
   btn.textContent='КЛИКАЙ! 20';
-  btn.onclick=()=>{const amt=10+Math.round(Math.random()*30);earned+=amt;clicks++;S.balance+=amt;$('balance').textContent=fmt(S.balance);coinFly(btn,3);sfxTick(1+Math.random()*0.5);burstFromElement(btn,'#57c7ff',5);};
+  btn.onclick=()=>{const amt=10+Math.round(Math.random()*30);earned+=amt;clicks++;S.balance+=amt;$('balance').textContent=fmt(S.balance);haptic(5);coinFly(btn,3);sfxTick(1+Math.random()*0.5);burstFromElement(btn,'#57c7ff',5);};
   const interval=setInterval(()=>{
     const t=Math.max(0,WASH_DURATION-(Date.now()-start));
     btn.textContent=`КЛИКАЙ! ${Math.ceil(t/1000)}`;
     if(t<=0){
       clearInterval(interval);
       toast(`Помыто! ${fmt(earned)} ₽ за ${clicks} кликов`);
-      sfxCash();
+      sfxCash();haptic(HAP.success);
       if(earned>500)showAch('🚿','Мойщик','Заработал 500+ ₽');
       render();renderWash();
       btn.onclick=washHandler;
@@ -1311,24 +1540,24 @@ function startSortGame(){
   const grid=$('sgGrid');grid.innerHTML='';
   deck.forEach((card,i)=>{const cell=document.createElement('div');cell.className='sg-cell';cell.textContent='?';cell.dataset.idx=i;cell.dataset.id=card.id;cell.onclick=()=>flipCell(cell,card);grid.appendChild(cell);});
   sg.interval=setInterval(()=>{sg.time--;$('sgTimer').textContent=sg.time;if(sg.time<=0)endSortGame();},1000);
-  sfxClick();
+  haptic(HAP.tap);sfxClick();
 }
 function flipCell(cell,card){
   if(!sg.active)return;
   if(cell.classList.contains('found')||cell.classList.contains('wrong'))return;
   if(sg.flipped.length>=2)return;
-  cell.textContent=card.str;cell.style.fontSize='14px';
-  sg.flipped.push({cell,card});sfxTick(1.2);
+  cell.textContent=card.str;cell.style.fontSize=IS_MOBILE?'13px':'14px';
+  sg.flipped.push({cell,card});haptic(HAP.tap);sfxTick(1.2);
   if(sg.flipped.length===2){
     const [a,b]=sg.flipped;
     if(a.card.id===b.card.id&&a.cell!==b.cell){
-      setTimeout(()=>{a.cell.classList.add('found');b.cell.classList.add('found');sg.matched++;sg.score+=100;$('sgScore').textContent=sg.score;sg.flipped=[];sfxLock(sg.matched);if(sg.matched===SG_PAIRS)setTimeout(()=>endSortGame(true),300);},200);
+      setTimeout(()=>{a.cell.classList.add('found');b.cell.classList.add('found');sg.matched++;sg.score+=100;$('sgScore').textContent=sg.score;sg.flipped=[];sfxLock(sg.matched);haptic(HAP.lock);if(sg.matched===SG_PAIRS)setTimeout(()=>endSortGame(true),300);},200);
     } else {
-      setTimeout(()=>{a.cell.classList.add('wrong');b.cell.classList.add('wrong');setTimeout(()=>{a.cell.classList.remove('wrong');b.cell.classList.remove('wrong');a.cell.textContent='?';b.cell.textContent='?';a.cell.style.fontSize='30px';b.cell.style.fontSize='30px';sg.flipped=[];},500);sg.score=Math.max(0,sg.score-30);$('sgScore').textContent=sg.score;},400);
+      setTimeout(()=>{a.cell.classList.add('wrong');b.cell.classList.add('wrong');setTimeout(()=>{a.cell.classList.remove('wrong');b.cell.classList.remove('wrong');a.cell.textContent='?';b.cell.textContent='?';a.cell.style.fontSize=IS_MOBILE?'24px':'30px';b.cell.style.fontSize=IS_MOBILE?'24px':'30px';sg.flipped=[];},500);sg.score=Math.max(0,sg.score-30);$('sgScore').textContent=sg.score;haptic(HAP.fail);},400);
     }
   }
 }
-function endSortGame(win=false){if(!sg.active)return;clearInterval(sg.interval);sg.active=false;const payout=Math.round(sg.score*1.5);if(payout>0){S.balance+=payout;flashWallet();toast('Победа! +'+fmt(payout)+' ₽');sfxCash();coinFly($('sortBtn'),8);}else toast('Игра окончена');setTimeout(()=>{$('sortGame').hidden=true;render();},1500);}
+function endSortGame(win=false){if(!sg.active)return;clearInterval(sg.interval);sg.active=false;const payout=Math.round(sg.score*1.5);if(payout>0){S.balance+=payout;flashWallet();toast('Победа! +'+fmt(payout)+' ₽');sfxCash();haptic(HAP.success);coinFly($('sortBtn'),8);}else toast('Игра окончена');setTimeout(()=>{$('sortGame').hidden=true;render();},1500);}
 $('sortBtn').onclick=()=>startSortGame();
 
 // ============ 3D GARAGE ============
@@ -1344,18 +1573,18 @@ function setupCar(){
   const canvas=$('car');
   scene=new THREE.Scene();scene.background=new THREE.Color('#0a0f0c');scene.fog=new THREE.Fog('#0a0f0c',14,26);
   camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.set(0,2.4,11);
-  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+  renderer=new THREE.WebGLRenderer({canvas,antialias:!IS_MOBILE,alpha:true,powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,IS_MOBILE?1.4:1.6));
   renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
-  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled=!IS_MOBILE;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   scene.add(new THREE.HemisphereLight(0xd8e8ff,0x1a2218,1.6));
-  const kl=new THREE.DirectionalLight(0xffffff,2.5);kl.position.set(-5,8,8);kl.castShadow=true;kl.shadow.mapSize.set(1024,1024);kl.shadow.camera.left=-10;kl.shadow.camera.right=10;kl.shadow.camera.top=10;kl.shadow.camera.bottom=-10;scene.add(kl);
+  const kl=new THREE.DirectionalLight(0xffffff,2.5);kl.position.set(-5,8,8);kl.castShadow=!IS_MOBILE;kl.shadow.mapSize.set(1024,1024);kl.shadow.camera.left=-10;kl.shadow.camera.right=10;kl.shadow.camera.top=10;kl.shadow.camera.bottom=-10;scene.add(kl);
   const rl=new THREE.DirectionalLight(0xb4ff43,2.5);rl.position.set(6,4,-5);scene.add(rl);
   const bl=new THREE.DirectionalLight(0x57c7ff,1.8);bl.position.set(0,3,-8);scene.add(bl);
   const fl=new THREE.PointLight(0xffffff,1.2,20);fl.position.set(0,3,8);scene.add(fl);
   [1,-1].forEach(s=>{const sp=new THREE.SpotLight(0xc4ff46,2.5,18,0.5,0.5,1.5);sp.position.set(s*4,6,4);sp.target.position.set(0,0,0);scene.add(sp);scene.add(sp.target);});
   const floorMat=new THREE.MeshStandardMaterial({color:0x141a16,roughness:0.15,metalness:0.85});
-  const floor=new THREE.Mesh(new THREE.CircleGeometry(15,64),floorMat);floor.rotation.x=-Math.PI/2;floor.position.y=-0.85;floor.receiveShadow=true;scene.add(floor);
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(15,64),floorMat);floor.rotation.x=-Math.PI/2;floor.position.y=-0.85;floor.receiveShadow=!IS_MOBILE;scene.add(floor);
   const ring=new THREE.Mesh(new THREE.RingGeometry(4.5,4.8,64),new THREE.MeshBasicMaterial({color:0xc4ff46,transparent:true,opacity:0.18,side:THREE.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=-0.84;scene.add(ring);
   const ring2=new THREE.Mesh(new THREE.RingGeometry(6.2,6.35,64),new THREE.MeshBasicMaterial({color:0x57c7ff,transparent:true,opacity:0.1,side:THREE.DoubleSide}));ring2.rotation.x=-Math.PI/2;ring2.position.y=-0.83;scene.add(ring2);
   platform=new THREE.Group();scene.add(platform);
@@ -1368,7 +1597,8 @@ function setupCar(){
   applyCarUpgrades();
   resizeCar();
   dustGroup=new THREE.Group();scene.add(dustGroup);
-  for(let i=0;i<40;i++){const d=new THREE.Mesh(new THREE.SphereGeometry(0.02+Math.random()*0.03,6,4),new THREE.MeshBasicMaterial({color:0xc4ff46,transparent:true,opacity:0.3}));d.position.set((Math.random()-0.5)*14,-0.8+Math.random()*2,(Math.random()-0.5)*14);d.userData={vy:0.002+Math.random()*0.006,phase:Math.random()*Math.PI*2};dustGroup.add(d);dustParticles.push(d);}
+  const dustCount=IS_MOBILE?20:40;
+  for(let i=0;i<dustCount;i++){const d=new THREE.Mesh(new THREE.SphereGeometry(0.02+Math.random()*0.03,6,4),new THREE.MeshBasicMaterial({color:0xc4ff46,transparent:true,opacity:0.3}));d.position.set((Math.random()-0.5)*14,-0.8+Math.random()*2,(Math.random()-0.5)*14);d.userData={vy:0.002+Math.random()*0.006,phase:Math.random()*Math.PI*2};dustGroup.add(d);dustParticles.push(d);}
   renderer.setAnimationLoop(()=>{
     carSuspensionV+=-carSuspension*0.15;carSuspensionV*=0.88;carSuspension+=carSuspensionV;carTilt*=0.92;
     carGroup.position.y=carSuspension;carGroup.rotation.z=carTilt;
@@ -1378,11 +1608,12 @@ function setupCar(){
     headLights.forEach((hl,i)=>{hl.material.emissiveIntensity=2.5+Math.sin(performance.now()*0.003+i)*0.5;});
     renderer.render(scene,camera);
   });
-  canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId);bounce(0.15);sfxEngine(1);});
+  // Touch/pointer
+  canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;canvas.setPointerCapture(e.pointerId);bounce(0.15);sfxEngine(1);haptic(HAP.tap);});
   canvas.addEventListener('pointermove',e=>{if(drag){const dx=(e.clientX-lastX);yaw=Math.max(-0.5,Math.min(0.5,yaw+dx*0.008));carTilt=Math.max(-0.1,Math.min(0.1,-dx*0.004));lastX=e.clientX;}});
   canvas.addEventListener('pointerup',()=>{drag=false;bounce(-0.08);});
   canvas.addEventListener('pointercancel',()=>drag=false);
-  canvas.addEventListener('click',()=>bounce(0.25));
+  canvas.addEventListener('click',()=>{bounce(0.25);haptic([8,20,8]);});
 }
 function bounce(p){carSuspensionV+=p;const sp=$('carSpeed');const v=Math.round(Math.abs(p)*200);sp.textContent=v;setTimeout(()=>{sp.textContent='0';},400);}
 function buildCar(){
@@ -1405,7 +1636,7 @@ function buildCar(){
   wheels=[];
   for(const s of [-1,1]){
     const wx=s*2.6;
-    const w=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.34,32),rb);w.rotation.z=Math.PI/2;w.position.set(wx,-0.34,0);w.castShadow=true;carGroup.add(w);wheels.push(w);
+    const w=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.34,32),rb);w.rotation.z=Math.PI/2;w.position.set(wx,-0.34,0);w.castShadow=!IS_MOBILE;carGroup.add(w);wheels.push(w);
     const h=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.36,24),sv);h.rotation.z=Math.PI/2;h.position.set(wx,-0.34,0);carGroup.add(h);
     for(let k=0;k<5;k++){const sp=new THREE.Mesh(new THREE.BoxGeometry(0.4,0.05,0.06),ch);sp.position.set(wx,Math.sin((k/5)*Math.PI*2)*0.18-0.34,Math.cos((k/5)*Math.PI*2)*0.18);sp.rotation.x=(k/5)*Math.PI*2;sp.rotation.y=Math.PI/2;carGroup.add(sp);}
   }
@@ -1431,16 +1662,17 @@ function applyCarUpgrades(){
   if(nl>0){const color=UPGRADES.neon.levels[nl].color;const geo=new THREE.PlaneGeometry(4.6,2);const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.55,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});neonMesh=new THREE.Mesh(geo,mat);neonMesh.rotation.x=-Math.PI/2;neonMesh.position.y=-0.78;carGroup.add(neonMesh);const fg=new THREE.Mesh(new THREE.PlaneGeometry(6,3),new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.25,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));fg.rotation.x=-Math.PI/2;fg.position.y=-0.8;carGroup.add(fg);}
 }
 function update3DPlate(p){if(!carPlateTexture)return;const c=carPlateTexture.getContext('2d');const W=1024,H=300;c.fillStyle='#f4f5f1';c.fillRect(0,0,W,H);c.strokeStyle='#202522';c.lineWidth=20;c.strokeRect(12,12,W-24,H-24);const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,0,0,0.08)');g.addColorStop(0.5,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,0.06)');c.fillStyle=g;c.fillRect(12,12,W-24,H-24);c.fillStyle='#111';c.font='bold 155px Arial';c.textAlign='center';c.textBaseline='middle';c.fillText(p.L1+p.digits+p.L2+p.L3,375,150);c.fillStyle='#222';c.fillRect(730,20,6,260);c.font='bold 100px Arial';c.fillText(p.region,865,125);c.font='bold 34px Arial';c.fillText('RUS',865,220);c.fillStyle='#fff';c.fillRect(800,200,55,12);c.fillStyle='#2855b9';c.fillRect(800,212,55,12);c.fillStyle='#df3535';c.fillRect(800,224,55,12);carPlate.material.map.needsUpdate=true;}
-function resizeCar(){if(!renderer||!camera)return;const c=$('car'),w=c.clientWidth||600,h=c.clientHeight||400;renderer.setSize(w,h,false);camera.aspect=w/h;camera.lookAt(0,0.2,0);camera.updateProjectionMatrix();}
+function resizeCar(){if(!renderer||!camera)return;const c=$('car');const w=c.clientWidth||600,h=c.clientHeight||400;if(w<10||h<10)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.lookAt(0,0.2,0);camera.updateProjectionMatrix();}
 window.addEventListener('resize',resizeCar);
+window.addEventListener('orientationchange',()=>setTimeout(resizeCar,300));
 
 // ============ SETUP ============
 function setupPlatform(){const saved=localStorage.getItem('nomerok-platform');if(saved){S.platform=saved;if(S.platform==='mobile'){const so=localStorage.getItem('nomerok-orient');if(so){S.orientation=so;applyOrientation();$('platformSetup').hidden=true;$('orientationSetup').hidden=true;return;}else{$('platformSetup').hidden=true;$('orientationSetup').hidden=false;return;}}$('platformSetup').hidden=true;$('orientationSetup').hidden=true;}}
-document.querySelectorAll('[data-platform]').forEach(b=>{b.onclick=()=>{startAmbient();S.platform=b.dataset.platform;try{localStorage.setItem('nomerok-platform',S.platform)}catch(e){}if(S.platform==='mobile'){$('platformSetup').hidden=true;$('orientationSetup').hidden=false;}else{$('platformSetup').hidden=true;$('orientationSetup').hidden=true;}};});
-document.querySelectorAll('[data-orient]').forEach(b=>{b.onclick=()=>{S.orientation=b.dataset.orient;try{localStorage.setItem('nomerok-orient',S.orientation)}catch(e){}applyOrientation();$('orientationSetup').hidden=true;};});
+document.querySelectorAll('[data-platform]').forEach(b=>{b.onclick=()=>{startAmbient();S.platform=b.dataset.platform;try{localStorage.setItem('nomerok-platform',S.platform)}catch(e){}haptic(HAP.tap);if(S.platform==='mobile'){$('platformSetup').hidden=true;$('orientationSetup').hidden=false;}else{$('platformSetup').hidden=true;$('orientationSetup').hidden=true;}};});
+document.querySelectorAll('[data-orient]').forEach(b=>{b.onclick=()=>{S.orientation=b.dataset.orient;try{localStorage.setItem('nomerok-orient',S.orientation)}catch(e){}haptic(HAP.tap);applyOrientation();$('orientationSetup').hidden=true;};});
 function applyOrientation(){if(S.orientation==='landscape'){document.body.classList.add('landscape');if(window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}}else{document.body.classList.remove('landscape');$('rotateHint').classList.remove('show');}}
 window.skipRotate=function(){$('rotateHint').classList.remove('show')};
-window.addEventListener('resize',()=>{if(S.orientation==='landscape'&&window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}setTimeout(resizeCar,150);if(!$('workshopView').hidden&&$('workshopView').classList.contains('active'))renderWheelAndSummary();});
+window.addEventListener('resize',()=>{if(S.orientation==='landscape'&&window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}setTimeout(resizeCar,150);if($('workshopView').classList.contains('active'))setTimeout(renderWheelAndSummary,150);if($('exchangeView').classList.contains('active'))setTimeout(renderExchange,150);});
 
 // ============ INIT ============
 setupPlatform();
@@ -1450,7 +1682,7 @@ initStocks();
 render();
 renderFreeCase();renderWash();
 ['click','touchstart','keydown'].forEach(ev=>{window.addEventListener(ev,function s(){startAmbient();['click','touchstart','keydown'].forEach(e=>window.removeEventListener(e,s))},{once:false});});
-if(S.pending){const w=S.pending;$('modalKicker').textContent=w.rarityName.toUpperCase();$('modalTitle').textContent=w.notes[0]||'ТВОЙ НОМЕР';$('modalText').textContent=desc(w);$('modalPlate').innerHTML=plateHTML(w);$('modalPrice').textContent=fmt(w.value)+' ₽';$('modal').hidden=false;document.querySelector('#livePlate [data-i="0"]').textContent=w.L1;document.querySelector('#livePlate [data-i="1"]').textContent=w.digits[0];document.querySelector('#livePlate [data-i="2"]').textContent=w.digits[1];document.querySelector('#livePlate [data-i="3"]').textContent=w.digits[2];document.querySelector('#livePlate [data-i="4"]').textContent=w.L2;document.querySelector('#livePlate [data-i="5"]').textContent=w.L3;document.querySelector('#livePlate [data-i="6"]').textContent=w.region;$('livePlate').classList.add('rar-'+w.rarity);}
+if(S.pending){const w=S.pending;$('modalKicker').textContent=w.rarityName.toUpperCase();$('modalTitle').textContent=w.notes[0]||'ТВОЙ НОМЕР';$('modalText').textContent=desc(w);$('modalPlate').innerHTML=plateHTML(w);$('modalPrice').textContent=fmt(w.value)+' ₽';$('modal').hidden=false;lockScroll(true);document.querySelector('#livePlate [data-i="0"]').textContent=w.L1;document.querySelector('#livePlate [data-i="1"]').textContent=w.digits[0];document.querySelector('#livePlate [data-i="2"]').textContent=w.digits[1];document.querySelector('#livePlate [data-i="3"]').textContent=w.digits[2];document.querySelector('#livePlate [data-i="4"]').textContent=w.L2;document.querySelector('#livePlate [data-i="5"]').textContent=w.L3;document.querySelector('#livePlate [data-i="6"]').textContent=w.region;$('livePlate').classList.add('rar-'+w.rarity);}
 if(S.balance<CASE_PRICE&&!S.collection.length&&!S.pending){S.balance=START_BALANCE;render();}
 window.addEventListener('error',e=>console.error('Ошибка:',e.message));
 </script>
