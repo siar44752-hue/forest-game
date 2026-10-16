@@ -2022,6 +2022,126 @@ if(S.balance<CASE_PRICE&&!S.collection.length&&!S.pending){S.balance=START_BALAN
 if(S.friendCodeBlocked)setTimeout(()=>showBanOverlay(),500);
 setTimeout(updateScrollProgress,300);
 window.addEventListener('error',e=>console.error('Ошибка:',e.message));
+
+// ============================================================
+// 🔧 ФИКС 3D ГАРАЖА — ResizeObserver + усиленная инициализация
+// ============================================================
+(function fixGarage(){
+  const canvas = document.getElementById('car');
+  if(!canvas) return;
+
+  // 1. Логирование для диагностики
+  console.log('🔍 Garage fix инициализирован');
+  console.log('  canvas.clientWidth =', canvas.clientWidth);
+  console.log('  canvas.clientHeight =', canvas.clientHeight);
+  console.log('  parent display =', getComputedStyle(canvas.parentElement).display);
+
+  // 2. Принудительно задаём CSS-размер канваса (даже когда скрыт)
+  canvas.style.width  = '100%';
+  canvas.style.height = '100%';
+  canvas.style.display = 'block';
+  canvas.style.background = '#0a0f0c';
+
+  // 3. Патчим resizeCar — добавляем проверку и логи
+  if(typeof window.resizeCar === 'undefined' || true){
+    const originalResize = window.resizeCar;
+    window.resizeCar = function(){
+      if(typeof renderer === 'undefined' || !renderer) return;
+      if(typeof webglFailed !== 'undefined' && webglFailed) return;
+
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      console.log('🔧 resizeCar:', w, 'x', h);
+
+      if(w < 10 || h < 10){
+        console.warn('⚠️ Канвас ещё не виден, пропускаем');
+        return;
+      }
+      try{
+        renderer.setSize(w, h, false);
+        if(typeof camera !== 'undefined' && camera){
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+        if(typeof scene !== 'undefined' && scene && typeof camera !== 'undefined' && camera){
+          renderer.render(scene, camera);
+        }
+      }catch(e){
+        console.error('resizeCar error:', e);
+      }
+    };
+  }
+
+  // 4. ГЛАВНОЕ: ResizeObserver ловит момент, когда гараж становится видимым
+  if(typeof ResizeObserver !== 'undefined'){
+    const ro = new ResizeObserver((entries)=>{
+      for(const entry of entries){
+        const {width, height} = entry.contentRect;
+        console.log('📐 ResizeObserver сработал:', Math.round(width), 'x', Math.round(height));
+        if(width > 10 && height > 10 && typeof window.resizeCar === 'function'){
+          window.resizeCar();
+          // Дополнительный render
+          setTimeout(()=>{
+            if(typeof renderer !== 'undefined' && renderer && typeof scene !== 'undefined' && scene && typeof camera !== 'undefined' && camera){
+              try{ renderer.render(scene, camera); }catch(e){}
+            }
+          }, 50);
+        }
+      }
+    });
+    ro.observe(canvas);
+    ro.observe(canvas.parentElement);
+    // Также наблюдаем за секцией гаража
+    const garageView = document.getElementById('garageView');
+    if(garageView) ro.observe(garageView);
+    console.log('✅ ResizeObserver подключён');
+  } else {
+    console.warn('⚠️ ResizeObserver не поддерживается, fallback через таймеры');
+  }
+
+  // 5. Дополнительная страховка: раз в 500мс проверяем, не появился ли размер
+  let checkCount = 0;
+  const checkInterval = setInterval(()=>{
+    checkCount++;
+    if(canvas.clientWidth > 10 && canvas.clientHeight > 10){
+      if(typeof window.resizeCar === 'function'){
+        window.resizeCar();
+      }
+      clearInterval(checkInterval);
+      console.log('✅ Канвас получил размеры, fix завершён');
+    }
+    if(checkCount > 60){ // 30 секунд
+      clearInterval(checkInterval);
+      console.warn('⚠️ Таймаут ожидания размеров канваса');
+    }
+  }, 500);
+
+  // 6. Ещё одна страховка: когда пользователь нажимает "Гараж", принудительно ресайзим
+  document.querySelectorAll('[data-view="garageView"]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      console.log('🚗 Нажат Гараж');
+      // Множественные попытки на разных задержках
+      [50, 150, 300, 500, 1000].forEach(delay=>{
+        setTimeout(()=>{
+          if(typeof window.resizeCar === 'function') window.resizeCar();
+        }, delay);
+      });
+    });
+  });
+
+  // 7. Дополнительно: если canvas.width или height всё ещё 0 через 3 секунды — показать fallback
+  setTimeout(()=>{
+    const c = document.getElementById('car');
+    if(c && (c.width < 10 || c.height < 10) && c.clientWidth > 10){
+      console.warn('⚠️ Canvas без буфера, форсирую fallback');
+      const fb = document.getElementById('carFallback');
+      if(fb) fb.classList.add('show');
+    }
+  }, 3000);
+
+  console.log('✅ Фикс гаража применён');
+})();
+</script>
 </script>
 </body>
 </html>
