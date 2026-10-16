@@ -109,14 +109,11 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .actions{padding:0 22px 23px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .btn{padding:14px 20px;border-radius:12px;font-weight:900;font-size:12px;letter-spacing:.5px;position:relative;overflow:hidden}
 .primary{background:linear-gradient(145deg,#e0ff80,#a8e032);color:#10150b;box-shadow:0 6px 24px rgba(196,255,70,.35),inset 0 1px 0 rgba(255,255,255,.5)}
-.primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,255,70,.5)}
 .primary:disabled{background:#1f2a1f;color:#4a5a4a;box-shadow:none;cursor:not-allowed}
 .secondary{background:linear-gradient(145deg,rgba(40,48,42,.9),rgba(25,32,27,.9));border:1px solid rgba(255,255,255,.1)}
-.secondary:hover{background:linear-gradient(145deg,rgba(50,62,52,.95),rgba(35,44,37,.95));border-color:rgba(196,255,70,.4)}
 .hint{font-size:11px;color:var(--muted);line-height:1.5;margin-left:auto;max-width:235px}
 .nav{display:flex;justify-content:center;gap:5px;margin:20px auto 0;flex-wrap:wrap;background:rgba(20,28,20,.55);backdrop-filter:blur(12px);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);width:fit-content;max-width:100%}
 .nav button{padding:10px 14px;background:transparent;border-radius:10px;color:var(--muted);font-size:11px;font-weight:800;position:relative}
-.nav button:hover{color:var(--white);background:rgba(255,255,255,.04)}
 .nav button.active{color:var(--lime);background:linear-gradient(145deg,rgba(30,44,28,.95),rgba(20,30,20,.95));box-shadow:0 0 20px rgba(196,255,70,.25);border:1px solid rgba(196,255,70,.3)}
 .nav button.has-event::after,.bottom-nav button.has-event::after{content:'';position:absolute;top:5px;right:5px;width:8px;height:8px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px var(--gold);animation:eventPulse 1s infinite alternate}
 @keyframes eventPulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.3);opacity:1}}
@@ -147,7 +144,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .panel h3{margin:0 0 8px;font-size:15px}
 .upgrades-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
 .upgrade{padding:14px;background:linear-gradient(145deg, rgba(22,30,22,.8), rgba(12,17,13,.9));border:1px solid var(--line);border-radius:14px;transition:all .3s}
-.upgrade:hover{border-color:rgba(196,255,70,.35);transform:translateY(-3px)}
 .upgrade.owned{border-color:rgba(196,255,70,.5);background:linear-gradient(145deg, rgba(30,44,28,.9), rgba(18,26,18,.95));box-shadow:0 0 25px rgba(196,255,70,.15)}
 .upgrade-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .upgrade-head b{font-size:13px}
@@ -199,8 +195,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .offerbuttons button{flex:1;padding:11px;border-radius:9px;background:rgba(45,55,45,.9);font-size:11px;font-weight:800;border:1px solid rgba(255,255,255,.08)}
 .offerbuttons .accept{background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111}
 .trader-panel{padding:20px;border-radius:18px;background:linear-gradient(145deg, rgba(40,32,12,.85), rgba(24,18,8,.9));border:2px solid var(--gold);box-shadow:0 0 60px rgba(255,214,107,.25);margin-bottom:16px;position:relative;overflow:hidden}
-.trader-panel::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,214,107,.1),transparent 30%);animation:rotate 10s linear infinite;pointer-events:none}
-.trader-panel>*{position:relative;z-index:1}
 .trader-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
 .trader-head .th-left{display:flex;align-items:center;gap:12px}
 .trader-head .th-icon{font-size:42px;animation:tbWiggle 1.5s infinite}
@@ -208,7 +202,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .trader-head .th-name small{font-size:11px;color:var(--muted)}
 .trader-head .th-timer{font:bold 22px 'Russo One';color:var(--gold);padding:8px 14px;background:rgba(0,0,0,.3);border-radius:10px;border:1px solid rgba(255,214,107,.3)}
 .trader-offer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;background:rgba(0,0,0,.25);border-radius:12px;border:1px solid rgba(255,214,107,.2);margin-top:10px;flex-wrap:wrap}
-.trader-offer .to-plate{flex:1;min-width:180px}
 .trader-offer .to-price{font:bold 22px 'Russo One';color:var(--gold)}
 .trader-offer button{padding:12px 20px;border-radius:10px;background:linear-gradient(145deg,#ffd95a,#e0b637);color:#1a1408;font-weight:900;font-size:12px}
 .exchange-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
@@ -255,7 +248,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .cp-card .plate{width:100%;margin-bottom:8px}
 .cp-card .chars{font-size:20px}.cp-card .region{font-size:15px}
 .cp-card .cp-info{font-size:11px;text-align:center;font-weight:800}
-.cp-card .cp-info .cpr{color:var(--white)}
 .cp-card .cp-info .cpv{color:var(--lime);display:block;font-size:13px;margin-top:2px}
 .cp-empty{padding:30px;text-align:center;color:var(--muted);font-size:12px;border:1px dashed #364137;border-radius:14px}
 .ws-wheel-wrap{padding:24px;border-radius:20px;background:radial-gradient(ellipse at 50% 30%, rgba(30,44,28,.55), rgba(10,15,12,.95) 70%);border:1px solid rgba(196,255,70,.2);margin-bottom:14px;position:relative;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.6)}
@@ -272,7 +264,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .ws-chance-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-top:6px;border-top:1px solid rgba(196,255,70,.2)}
 .ws-chance-label-small{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:800}
 .ws-chance-val{font:bold 30px 'Russo One';color:var(--lime);text-shadow:0 0 30px rgba(196,255,70,.6)}
-.ws-chance-val.low{color:var(--red)}.ws-chance-val.mid{color:var(--gold)}.ws-chance-val.high{color:#7fff7f;text-shadow:0 0 30px rgba(120,255,120,.8)}
+.ws-chance-val.low{color:var(--red)}.ws-chance-val.mid{color:var(--gold)}.ws-chance-val.high{color:#7fff7f}
 .ws-roll{width:100%;padding:16px;border-radius:12px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111;font-weight:900;font-size:14px;letter-spacing:1px;box-shadow:0 6px 24px rgba(196,255,70,.35);margin-top:14px}
 .ws-roll:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
 .leisure-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
@@ -306,7 +298,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .scratch-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--lime),var(--gold));width:0%;transition:width .15s}
 .scratch-fake{position:absolute;bottom:12px;left:12px;padding:8px 16px;background:linear-gradient(145deg,#ff5050,#a01010);color:#fff;font:900 15px Manrope;border-radius:10px;transform:rotate(-8deg);box-shadow:0 6px 20px rgba(255,80,80,.7);z-index:10;letter-spacing:1px;border:2px solid #fff;animation:fakePop .5s cubic-bezier(.34,1.56,.64,1)}
 @keyframes fakePop{0%{transform:rotate(-8deg) scale(0)}60%{transform:rotate(-8deg) scale(1.2)}100%{transform:rotate(-8deg) scale(1)}}
-/* ROULETTE */
 .roulette-wrap{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(30,15,15,.9),rgba(12,8,8,.95));border:2px solid rgba(255,80,80,.4);margin-top:14px}
 .roulette-stage{display:flex;flex-direction:column;align-items:center;gap:16px;padding:14px 0}
 .roulette-wheel{position:relative;width:min(280px,70vw);aspect-ratio:1;border-radius:50%;background:conic-gradient(from 0deg, #c81010 0deg 9.73deg, #111 9.73deg 19.46deg, #c81010 19.46deg 29.19deg, #111 29.19deg 38.92deg, #c81010 38.92deg 48.65deg, #111 48.65deg 58.38deg, #c81010 58.38deg 68.11deg, #111 68.11deg 77.84deg, #c81010 77.84deg 87.57deg, #111 87.57deg 97.3deg, #c81010 97.3deg 107.03deg, #111 107.03deg 116.76deg, #c81010 116.76deg 126.49deg, #111 126.49deg 136.22deg, #c81010 136.22deg 145.95deg, #111 145.95deg 155.68deg, #c81010 155.68deg 165.41deg, #111 165.41deg 175.14deg, #c81010 175.14deg 184.87deg, #111 184.87deg 194.6deg, #c81010 194.6deg 204.33deg, #111 204.33deg 214.06deg, #c81010 214.06deg 223.79deg, #111 223.79deg 233.52deg, #c81010 233.52deg 243.25deg, #111 243.25deg 252.98deg, #c81010 252.98deg 262.71deg, #111 262.71deg 272.44deg, #c81010 272.44deg 282.17deg, #111 282.17deg 291.9deg, #c81010 291.9deg 301.63deg, #111 301.63deg 311.36deg, #c81010 311.36deg 321.09deg, #111 321.09deg 330.82deg, #c81010 330.82deg 340.55deg, #111 340.55deg 350.28deg, #0f8f0f 350.28deg 360deg);box-shadow:0 0 40px rgba(255,80,80,.4),inset 0 0 60px rgba(0,0,0,.6);transition:transform 4.5s cubic-bezier(.17,.67,.2,1)}
@@ -317,7 +308,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .roulette-choices button{padding:16px;border-radius:12px;font-weight:900;font-size:14px;letter-spacing:1px;border:2px solid}
 .roulette-choices .red-btn{background:linear-gradient(145deg,#c81010,#7a0808);color:#fff;border-color:#c81010}
 .roulette-choices .black-btn{background:linear-gradient(145deg,#2a2a2a,#0a0a0a);color:#fff;border-color:#3a3a3a}
-/* REACTION */
 .reaction-wrap{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(15,25,35,.9),rgba(8,12,16,.95));border:2px solid rgba(87,199,255,.4);margin-top:14px}
 .reaction-stage{width:100%;min-height:180px;border-radius:16px;display:flex;align-items:center;justify-content:center;font:bold 20px 'Russo One';text-align:center;padding:20px;cursor:pointer;transition:background .2s;user-select:none}
 .reaction-stage.waiting{background:linear-gradient(145deg,#1a2530,#0d1419);color:var(--muted);border:2px dashed rgba(87,199,255,.3)}
@@ -325,11 +315,9 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 @keyframes reactionPulse{0%{transform:scale(1)}100%{transform:scale(1.02)}}
 .reaction-stage.tooSoon{background:linear-gradient(145deg,#7a0808,#3a0404);color:#fff;border:2px solid #c81010}
 .reaction-stage.result{background:linear-gradient(145deg,#1a2530,#0d1419);color:var(--lime);border:2px solid rgba(196,255,70,.4)}
-/* SHELL GAME */
 .shell-wrap{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(30,25,15,.9),rgba(15,12,8,.95));border:2px solid rgba(195,139,255,.4);margin-top:14px}
 .shell-stage{display:flex;justify-content:space-around;gap:10px;padding:20px 0;min-height:140px;align-items:center}
 .shell{width:80px;height:100px;background:linear-gradient(180deg,#8a6a3a,#4a3020);border-radius:40px 40px 8px 8px;display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer;transition:transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;position:relative;box-shadow:inset 0 -10px 15px rgba(0,0,0,.4),0 6px 15px rgba(0,0,0,.5);user-select:none}
-.shell:hover{transform:translateY(-5px)}
 .shell.reveal{transform:translateY(-15px) rotate(-15deg)}
 .shell.picked{box-shadow:inset 0 -10px 15px rgba(0,0,0,.4),0 6px 15px rgba(0,0,0,.5),0 0 30px rgba(196,255,70,.8);border:2px solid var(--lime)}
 .shell.wrong-pick{box-shadow:inset 0 -10px 15px rgba(0,0,0,.4),0 6px 15px rgba(0,0,0,.5),0 0 30px rgba(255,80,80,.8);border:2px solid var(--red)}
@@ -404,7 +392,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .set-card .set-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800}
 .set-card .set-foot .sf-count{color:var(--white)}
 .set-card .set-foot .sf-bonus{color:var(--lime);font-size:13px}
-/* FRIENDS */
 .friends-hero{padding:24px;border-radius:20px;background:linear-gradient(135deg, rgba(87,199,255,.15), rgba(195,139,255,.1), rgba(196,255,70,.08));border:2px solid rgba(87,199,255,.35);margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(87,199,255,.15)}
 .friends-hero h3{margin:0 0 8px;font:22px 'Russo One';color:var(--blue)}
 .friends-hero p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
@@ -417,12 +404,14 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .fs-card .fs-value{font:bold 22px 'Russo One';color:var(--lime)}
 .fs-card .fs-value.blue{color:var(--blue)}
 .fs-card .fs-value.gold{color:var(--gold)}
-.enter-code{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);margin-bottom:20px}
+.enter-code{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);margin-bottom:20px;position:relative}
+.enter-code.blocked{border-color:rgba(255,80,80,.5);background:linear-gradient(145deg,rgba(40,12,12,.85),rgba(20,8,8,.95))}
 .enter-code h4{margin:0 0 10px;font:16px 'Russo One'}
 .enter-code .ec-row{display:flex;gap:10px;flex-wrap:wrap}
 .enter-code input{flex:1;min-width:180px;padding:14px 18px;border-radius:12px;background:rgba(0,0,0,.5);border:2px solid rgba(87,199,255,.3);color:var(--white);font:bold 18px 'Russo One';letter-spacing:3px;text-align:center;outline:none;text-transform:uppercase}
 .enter-code button{padding:14px 22px;border-radius:12px;background:linear-gradient(145deg,#57c7ff,#2a89c4);color:#fff;font-weight:900;font-size:13px;box-shadow:0 6px 20px rgba(87,199,255,.4)}
 .enter-code button:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
+.code-attempts{font-size:10px;color:var(--red);font-weight:900;letter-spacing:1px;margin-top:8px}
 .friends-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .friend-card{padding:16px;border-radius:18px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:2px solid var(--line);transition:all .3s;position:relative;overflow:hidden}
 .friend-card.online{border-color:rgba(196,255,70,.5);background:linear-gradient(145deg, rgba(30,44,28,.9), rgba(15,22,16,.95))}
@@ -489,7 +478,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 @keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(3px,2px)}}
 body.shake{animation:shake .5s}
 footer{text-align:center;color:#667068;font-size:10px;padding:30px 0 0;line-height:1.8}
-/* MOBILE */
 body.is-mobile{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 body.is-mobile .top{height:56px;padding:0 12px;padding-top:env(safe-area-inset-top)}
 body.is-mobile .logo{font-size:16px}
@@ -528,17 +516,10 @@ body.is-mobile .setup-card{max-width:100%;border-radius:0;padding:36px 22px;min-
 body.is-mobile .setup-card::before{display:none}
 body.is-mobile .friends-stats{grid-template-columns:1fr 1fr}
 body.is-mobile .invite-code{font-size:18px;letter-spacing:3px;padding:12px}
-/* Красота на мобиле как на ПК */
 body.is-mobile .case{box-shadow:0 28px 90px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05),0 0 80px rgba(196,255,70,.15)}
 body.is-mobile .plate-live{box-shadow:inset 0 0 0 1px #9da59e,0 8px 30px rgba(0,0,0,.7),0 0 40px rgba(196,255,70,.25)}
 body.is-mobile .panel{box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 40px rgba(196,255,70,.05)}
-body.is-mobile .nav button.active,
-body.is-mobile .item,
-body.is-mobile .stock-card,
-body.is-mobile .upgrade,
-body.is-mobile .friend-card{box-shadow:0 0 30px rgba(196,255,70,.06),inset 0 1px 0 rgba(255,255,255,.04)}
 body.is-mobile .scene{box-shadow:inset 0 0 80px rgba(0,0,0,.6),0 0 80px rgba(196,255,70,.12)}
-body.is-mobile .leisure-card{box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 0 30px rgba(196,255,70,.05)}
 body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px rgba(0,0,0,.7),0 0 30px rgba(196,255,70,.08)}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
@@ -551,10 +532,10 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
   <div class="setup-card">
     <div class="setup-logo">НОМЕРОК</div><div class="setup-sub">ОХОТА ЗА РЕДКОСТЬЮ</div>
     <div class="setup-step-title">С ЧЕГО ТЫ ИГРАЕШЬ?</div>
-    <div class="setup-step-desc">Мы подстроим управление под твоё устройство.</div>
+    <div class="setup-step-desc">Мы подстроим управление.</div>
     <div class="setup-btns">
-      <button class="setup-btn" data-platform="pc"><span class="sb-icon">💻</span><span class="sb-info"><b>Компьютер / ноутбук</b><small>Верхняя навигация, мышь</small></span></button>
-      <button class="setup-btn" data-platform="mobile"><span class="sb-icon">📱</span><span class="sb-info"><b>Телефон / планшет</b><small>Нижняя навигация, тач</small></span></button>
+      <button class="setup-btn" data-platform="pc"><span class="sb-icon">💻</span><span class="sb-info"><b>Компьютер</b><small>Верхняя навигация, мышь</small></span></button>
+      <button class="setup-btn" data-platform="mobile"><span class="sb-icon">📱</span><span class="sb-info"><b>Телефон</b><small>Нижняя навигация, тач</small></span></button>
     </div>
   </div>
 </div>
@@ -562,10 +543,10 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 <div class="setup" id="orientationSetup" hidden>
   <div class="setup-card">
     <div class="setup-logo">НОМЕРОК</div><div class="setup-sub">ОХОТА ЗА РЕДКОСТЬЮ</div>
-    <div class="setup-step-title">КАК УДОБНЕЕ?</div><div class="setup-step-desc">Это можно изменить позже.</div>
+    <div class="setup-step-title">КАК УДОБНЕЕ?</div><div class="setup-step-desc">Позже изменить нельзя.</div>
     <div class="setup-btns">
-      <button class="setup-btn" data-orient="portrait"><span class="sb-icon">📱</span><span class="sb-info"><b>Вертикально</b><small>Классика</small></span></button>
-      <button class="setup-btn" data-orient="landscape"><span class="sb-icon">↔️</span><span class="sb-info"><b>Горизонтально</b><small>Широкий экран</small></span></button>
+      <button class="setup-btn" data-orient="portrait"><span class="sb-icon">📱</span><span class="sb-info"><b>Вертикально</b></span></button>
+      <button class="setup-btn" data-orient="landscape"><span class="sb-icon">↔️</span><span class="sb-info"><b>Горизонтально</b></span></button>
     </div>
   </div>
 </div>
@@ -580,7 +561,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
   </div>
 </header>
 
-<div class="trader-banner" id="traderBanner" hidden><div class="tb-icon">🧳</div><div class="tb-info"><b>ПЕРЕКУПЩИК ПРИЕХАЛ!</b><small>Скупает дороже рынка</small></div><div class="tb-timer" id="traderBannerTimer">45</div></div>
+<div class="trader-banner" id="traderBanner" hidden><div class="tb-icon">🧳</div><div class="tb-info"><b>ПЕРЕКУПЩИК!</b><small>Дороже рынка</small></div><div class="tb-timer" id="traderBannerTimer">45</div></div>
 
 <main class="wrap">
 
@@ -597,7 +578,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
           <span class="slot-char" data-i="3">•</span><span class="slot-char" data-i="4">•</span><span class="slot-char" data-i="5">•</span>
           <span class="slot-region" data-i="6">••</span>
         </div>
-        <div class="slot-hint" id="slotHint">Нажми кнопку, чтобы начать</div>
+        <div class="slot-hint" id="slotHint">Нажми кнопку</div>
         <div class="anim-progress" id="animProgress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       </div>
     </div>
@@ -610,7 +591,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
         <span>МИФИЧЕСКИЙ<br><b style="color:#ff9b68">100К+ ₽</b></span>
       </div>
     </div>
-    <div class="actions"><button id="spin" class="btn primary">ОТКРЫТЬ КЕЙС · 5 000 ₽</button><div class="hint" id="hint">На старте у тебя 5 000 ₽.</div></div>
+    <div class="actions"><button id="spin" class="btn primary">ОТКРЫТЬ КЕЙС · 5 000 ₽</button><div class="hint" id="hint">На старте 5 000 ₽.</div></div>
   </div>
   <nav class="nav">
     <button class="active" data-view="caseView">🎰 Кейс</button><button data-view="garageView">🏎️ Гараж</button>
@@ -626,15 +607,12 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
     <canvas id="car"></canvas>
     <div class="scenetag" id="carTag">GARAGE / 001<small>FRONT VIEW</small></div>
     <div class="car-arrows"><button id="carPrev" aria-label="Назад">◀</button><button id="carNext" aria-label="Вперёд">▶</button></div>
-    <div class="scene-hud">
-      <div><div class="speed" id="carSpeed">0</div>КМ/Ч</div>
-      <div style="text-align:right"><div class="speed" id="carIncome">0 ₽</div>ДОХОД/МИН</div>
-    </div>
+    <div class="scene-hud"><div><div class="speed" id="carSpeed">0</div>КМ/Ч</div><div style="text-align:right"><div class="speed" id="carIncome">0 ₽</div>ДОХОД/МИН</div></div>
   </div>
   <div class="plateinfo"><div id="garagePlate"></div><div class="info"><h3 id="garageName">Демонстрационный номер</h3><div class="muted" id="garageDesc">Открой кейс.</div><div class="value" id="garageValue">—</div></div></div>
-  <div class="panel"><h3>🔧 Прокачка машины</h3><p class="muted">Каждый апгрейд даёт +8 % к пассивному доходу.</p><div class="upgrades-grid" id="upgradesGrid"></div></div>
+  <div class="panel"><h3>🔧 Прокачка машины</h3><p class="muted">Каждый апгрейд +8 % к пассивному доходу.</p><div class="upgrades-grid" id="upgradesGrid"></div></div>
   <div class="panel"><h3>🏠 Интерьер гаража</h3><p class="muted">Каждый уровень +3–18 % к доходу и меняет вид гаража.</p><div class="interier-grid" id="interierGrid"></div></div>
-  <div class="panel"><h3>🚗 Дилерский салон</h3><p class="muted">Купи дополнительные машины.</p><div class="car-shop" id="carShop"></div></div>
+  <div class="panel"><h3>🚗 Дилерский салон</h3><p class="muted">Больше машин — больше доход.</p><div class="car-shop" id="carShop"></div></div>
   <nav class="nav">
     <button data-view="caseView">🎰 Кейс</button><button class="active" data-view="garageView">🏎️ Гараж</button>
     <button data-view="marketView">💰 Рынок</button><button data-view="exchangeView">📈 Биржа</button>
@@ -644,7 +622,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 </section>
 
 <section id="marketView" class="view">
-  <div class="pagehead"><div><div class="kicker">КОЛЛЕКЦИОНЕРЫ</div><h2>РЫНОК</h2><p>Цены теперь ближе к 100 % + перекупщик ездит чаще.</p></div><span class="pill" id="timer">ПРОВЕРКА РЫНКА</span></div>
+  <div class="pagehead"><div><div class="kicker">КОЛЛЕКЦИОНЕРЫ</div><h2>РЫНОК</h2><p>Перекупщик ездит чаще, платит больше.</p></div><span class="pill" id="timer">ПРОВЕРКА РЫНКА</span></div>
   <div id="traderPanelWrap"></div>
   <div class="market-toolbar">
     <div class="market-filter" id="marketFilter">
@@ -655,10 +633,10 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
     <button class="market-sellall" id="sellAllBtn">💸 ПРОДАТЬ ВСЁ (-10 %)</button>
   </div>
   <div class="grid">
-    <div class="panel"><h3>Входящие предложения <span id="offersCount" style="color:var(--lime);font-size:12px"></span></h3><div id="offers"><div class="empty">Пока предложений нет.</div></div></div>
+    <div class="panel"><h3>Входящие <span id="offersCount" style="color:var(--lime);font-size:12px"></span></h3><div id="offers"><div class="empty">Пока предложений нет.</div></div></div>
     <div class="panel"><h3>Правила редкости</h3>
       <div class="offer"><div class="offer-avatar">🏆</div><div class="offer-body"><div class="offerhead">Три одинаковые цифры <span class="tag legendary">+8</span></div><small>111...999 включая 777/888/999</small></div></div>
-      <div class="offer"><div class="offer-avatar">🔥</div><div class="offer-body"><div class="offerhead">Три одинаковые буквы <span class="tag legendary">+6</span></div><small>ААА, ВВВ, ..., ХХХ</small></div></div>
+      <div class="offer"><div class="offer-avatar">🔥</div><div class="offer-body"><div class="offerhead">Три одинаковые буквы <span class="tag legendary">+6</span></div><small>ААА...ХХХ</small></div></div>
       <div class="offer"><div class="offer-avatar">💎</div><div class="offer-body"><div class="offerhead">Зеркальные цифры <span class="tag epic">+3</span></div><small>101, 121, ..., 909</small></div></div>
       <div class="offer"><div class="offer-avatar">⭐</div><div class="offer-body"><div class="offerhead">Премиум регион <span class="tag rare">+3</span></div><small>77, 97, 99, 177, 197, 199, 777</small></div></div>
     </div>
@@ -672,12 +650,12 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 </section>
 
 <section id="exchangeView" class="view">
-  <div class="pagehead"><div><div class="kicker">ЖИВОЙ РЫНОК</div><h2>БИРЖА</h2><p>Редко лоты падают на 20 % — лови момент!</p></div><button class="btn secondary" data-view="caseView">← К кейсу</button></div>
+  <div class="pagehead"><div><div class="kicker">ЖИВОЙ РЫНОК</div><h2>БИРЖА</h2><p>Лови редкие крахи редких номеров -20 %!</p></div><button class="btn secondary" data-view="caseView">← К кейсу</button></div>
   <div class="panel" style="margin-bottom:14px">
     <h3>📊 Индекс рынка</h3>
     <div class="stock-top"><div><span class="stock-name">ОБЩИЙ ИНДЕКС</span></div><span class="stock-trend" id="marketIndexTrend">+0.0 %</span></div>
     <canvas id="marketIndexChart" class="stock-chart" style="height:100px"></canvas>
-    <div class="muted" id="marketIndexInfo">Индекс показывает среднее изменение цен.</div>
+    <div class="muted" id="marketIndexInfo">Средний уровень цен.</div>
   </div>
   <div class="exchange-grid" id="exchangeGrid"></div>
   <nav class="nav">
@@ -689,10 +667,10 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 </section>
 
 <section id="workshopView" class="view">
-  <div class="pagehead"><div><div class="kicker">СПЛАВ · РИСК / НАГРАДА</div><h2>МАСТЕРСКАЯ</h2><p>Введи цену — получи 5 номеров на выбор. Сплав на понижение = 100 %!</p></div><button class="btn secondary" data-view="collectionView">📚 К коллекции</button></div>
+  <div class="pagehead"><div><div class="kicker">СПЛАВ · РИСК / НАГРАДА</div><h2>МАСТЕРСКАЯ</h2><p>2000 → 4000 = 50 % шанс. 4000 → 2000 = 100 %.</p></div><button class="btn secondary" data-view="collectionView">📚 К коллекции</button></div>
   <div class="craft-price">
     <h3>🎲 Хочу номер за…</h3>
-    <p class="muted">Введи желаемую цену — подберём 5 номеров ±30 %. Формула: если плавишь ≥ цели — 100 %; если 2x разница — 50 %; 4x — 25 %; и так далее.</p>
+    <p class="muted">Введи желаемую цену. Формула: если плавишь ≥ цели — 100 %, если половина — 50 %, четверть — 25 %.</p>
     <div class="cp-row">
       <input type="text" id="craftPriceInput" inputmode="numeric" placeholder="Например, 500000" value="">
       <button class="btn primary" id="craftSearchBtn">🔍 ПОДОБРАТЬ</button>
@@ -703,7 +681,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
     </div>
   </div>
   <div class="workshop-sel"><h3 style="margin:0 0 6px;font-size:15px">1️⃣ Выбери номер-цель</h3><div class="craft-pool" id="craftPool"><div class="cp-empty">Введи цену и нажми «Подобрать».</div></div></div>
-  <div class="workshop-sel"><h3 style="margin:0 0 6px;font-size:15px">2️⃣ Выбери номера для плавки (1–8)</h3><p class="muted" style="margin-bottom:10px">Чем больше сумма — тем выше шанс.</p><div class="ws-plates" id="wsPlates"></div></div>
+  <div class="workshop-sel"><h3 style="margin:0 0 6px;font-size:15px">2️⃣ Выбери номера для плавки (1–8)</h3><p class="muted" style="margin-bottom:10px">Больше сумма — выше шанс.</p><div class="ws-plates" id="wsPlates"></div></div>
   <div class="ws-wheel-wrap" id="wsWheelWrap" hidden>
     <div class="ws-wheel-stage"><div class="wheel-container">
       <div class="wheel-arrow"><svg width="28" height="38" viewBox="0 0 28 38"><defs><linearGradient id="arrowGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0ff80"/><stop offset="100%" stop-color="#a8e032"/></linearGradient></defs><path d="M14 36 L2 12 Q14 4 26 12 Z" fill="url(#arrowGrad)" stroke="#0a0f0c" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
@@ -729,7 +707,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
   <div class="pagehead"><div><div class="kicker">СОЦИАЛЬНАЯ СЕТЬ</div><h2>ДРУЗЬЯ</h2><p>Приглашай, забирай подарки, играй в дуэли.</p></div><button class="btn secondary" data-view="caseView">← К кейсу</button></div>
   <div class="friends-hero">
     <h3>🎁 Пригласи друга — получи 5 000 ₽</h3>
-    <p>Отправь код. Когда друг введёт его — ты получишь +5 000 ₽ и +2 % к пассивному доходу навсегда. Максимум +20 %.</p>
+    <p>Отправь код. Когда друг введёт — ты получишь +5 000 ₽ и +2 % к пассивному доходу навсегда.</p>
     <div class="invite-box"><div class="invite-code" id="inviteCode">NOM-XXXXX</div><button class="invite-btn" id="copyInviteBtn">📋 КОПИРОВАТЬ</button></div>
     <div class="friends-stats">
       <div class="fs-card"><div class="fs-label">Друзей</div><div class="fs-value" id="fsFriendsCount">0</div></div>
@@ -738,10 +716,11 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
       <div class="fs-card"><div class="fs-label">Побед</div><div class="fs-value" id="fsDuelWins">0</div></div>
     </div>
   </div>
-  <div class="enter-code">
+  <div class="enter-code" id="enterCodeBlock">
     <h4>🔑 Активировать код друга</h4>
     <div class="ec-row"><input type="text" id="friendCodeInput" placeholder="NOM-ABCDEF" maxlength="12" autocomplete="off"><button id="activateCodeBtn">АКТИВИРОВАТЬ</button></div>
-    <div class="muted" style="margin-top:10px;font-size:11px">Получишь +5 000 ₽, друг — +2 % к доходу.</div>
+    <div class="code-attempts" id="codeAttempts"></div>
+    <div class="muted" style="margin-top:10px;font-size:11px">Вводи код друга — получишь +5 000 ₽, друг +2 % к доходу.</div>
   </div>
   <div class="rating-panel" id="ratingPanel"><h3>🏆 Рейтинг по доходу</h3><div id="ratingList"></div></div>
   <div style="margin-top:20px"><h3 style="margin:0 0 12px;font:20px 'Russo One'">👥 Мои друзья <span id="friendsCountTag" style="color:var(--lime);font-size:14px"></span></h3><div class="friends-list" id="friendsList"></div></div>
@@ -754,17 +733,17 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 </section>
 
 <section id="leisureView" class="view">
-  <div class="pagehead"><div><div class="kicker">РАЗВЛЕЧЕНИЯ</div><h2>ИГРЫ</h2><p>9 игр: копилка, угадай, сортировка, мойка, скретч, ставка, рулетка, реакция, напёрстки.</p></div><button class="btn secondary" data-view="caseView">← К кейсу</button></div>
+  <div class="pagehead"><div><div class="kicker">РАЗВЛЕЧЕНИЯ</div><h2>ИГРЫ</h2><p>9 игр. Античит включён — не балуйся!</p></div><button class="btn secondary" data-view="caseView">← К кейсу</button></div>
   <div class="leisure-grid">
     <div class="leisure-card gold"><span class="lc-icon">🪙</span><h3>Ржавая копилка</h3><p>Бесплатный кейс раз в 5 минут. 300–1 500 ₽.</p><button id="freeCaseBtn">ОТКРЫТЬ БЕСПЛАТНО</button><div class="cd" id="freeCaseCd"></div></div>
     <div class="leisure-card blue"><span class="lc-icon">🎯</span><h3>Угадай цифру</h3><p>Ставка 500 ₽. Угадал — x6.</p><button id="luckyBtn">СЫГРАТЬ · 500 ₽</button></div>
     <div class="leisure-card"><span class="lc-icon">🧠</span><h3>Сортировка</h3><p>Мини-игра на память. 30 сек, 6 пар.</p><button id="sortBtn">НАЧАТЬ · 30 СЕК</button></div>
     <div class="leisure-card"><span class="lc-icon">🚿</span><h3>Мойка машины</h3><p>Кликер на 20 сек. 10–40 ₽ за клик.</p><button id="washBtn">ПОМЫТЬ · 20 СЕК</button><div class="cd" id="washCd"></div></div>
-    <div class="leisure-card purple"><span class="lc-icon">🎫</span><h3>Скретч-карта</h3><p>500 ₽ → 300–1 500 ₽. 25 % шанс фальшивки!</p><button id="scratchBtn">КУПИТЬ · 500 ₽</button><div class="cd" id="scratchCd"></div></div>
+    <div class="leisure-card purple"><span class="lc-icon">🎫</span><h3>Скретч-карта</h3><p>500 ₽ → 300–1 500 ₽. 25 % шанс фальшивки.</p><button id="scratchBtn">КУПИТЬ · 500 ₽</button><div class="cd" id="scratchCd"></div></div>
     <div class="leisure-card"><span class="lc-icon">📊</span><h3>Ставка на индекс</h3><p>Угадай движение индекса через 20 сек. x2.5.</p><button id="betBtn">СТАВКА · 500 ₽</button></div>
-    <div class="leisure-card red"><span class="lc-icon">🎡</span><h3>Рулетка</h3><p>Ставка 500 ₽. Красное/чёрное — x2.</p><button id="rouletteBtn">СЫГРАТЬ · 500 ₽</button></div>
-    <div class="leisure-card blue"><span class="lc-icon">⚡</span><h3>Реакция</h3><p>Жми, когда экран позеленеет. Быстрее — больше денег.</p><button id="reactionBtn">НАЧАТЬ ТЕСТ</button></div>
-    <div class="leisure-card purple"><span class="lc-icon">🥤</span><h3>Напёрстки</h3><p>500 ₽. Угадай, где шарик. x3 при победе.</p><button id="shellBtn">ИГРАТЬ · 500 ₽</button></div>
+    <div class="leisure-card red"><span class="lc-icon">🎡</span><h3>Рулетка</h3><p>Красное/чёрное ×2.</p><button id="rouletteBtn">СЫГРАТЬ · 500 ₽</button></div>
+    <div class="leisure-card blue"><span class="lc-icon">⚡</span><h3>Реакция</h3><p>Жми, когда экран позеленеет. Быстрее — больше.</p><button id="reactionBtn">НАЧАТЬ ТЕСТ</button></div>
+    <div class="leisure-card purple"><span class="lc-icon">🥤</span><h3>Напёрстки</h3><p>500 ₽. Угадай где шарик. ×3 при победе.</p><button id="shellBtn">ИГРАТЬ · 500 ₽</button></div>
   </div>
 
   <div class="sortgame" id="sortGame" hidden style="margin-top:20px">
@@ -797,22 +776,16 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
     <div class="kicker">РУЛЕТКА</div>
     <h3 style="margin:6px 0;font:20px 'Russo One'">Красное или чёрное?</h3>
     <div class="roulette-stage">
-      <div style="position:relative">
-        <div class="roulette-pointer"></div>
-        <div class="roulette-wheel" id="rouletteWheel"></div>
-      </div>
+      <div style="position:relative"><div class="roulette-pointer"></div><div class="roulette-wheel" id="rouletteWheel"></div></div>
       <div class="roulette-result" id="rouletteResult">Выбирай!</div>
-      <div class="roulette-choices">
-        <button class="red-btn" id="rouletteRed">КРАСНОЕ x2</button>
-        <button class="black-btn" id="rouletteBlack">ЧЁРНОЕ x2</button>
-      </div>
+      <div class="roulette-choices"><button class="red-btn" id="rouletteRed">КРАСНОЕ x2</button><button class="black-btn" id="rouletteBlack">ЧЁРНОЕ x2</button></div>
       <button class="btn secondary" id="rouletteClose" style="width:100%">ЗАКРЫТЬ</button>
     </div>
   </div>
 
   <div class="reaction-wrap" id="reactionGame" hidden>
     <div class="kicker">РЕАКЦИЯ</div>
-    <h3 style="margin:6px 0 12px;font:20px 'Russo One'">Жми как только станет зелёным</h3>
+    <h3 style="margin:6px 0 12px;font:20px 'Russo One'">Жми когда станет зелёным</h3>
     <div class="reaction-stage waiting" id="reactionStage">Нажми чтобы начать</div>
     <button class="btn secondary" id="reactionClose" style="width:100%;margin-top:14px">ЗАКРЫТЬ</button>
   </div>
@@ -839,7 +812,7 @@ body.is-mobile .bottom-nav{background:rgba(8,12,10,.96);box-shadow:0 -10px 40px 
 
 <section id="collectionView" class="view">
   <div class="pagehead"><div><div class="kicker">СОБИРАЙ ИСТОРИЮ</div><h2>МОЯ КОЛЛЕКЦИЯ</h2><p>Ставь на машину, отправляй в сплав, собирай наборы.</p></div><span class="pill" id="count">0 НОМЕРОВ</span></div>
-  <div class="sets-toolbar"><div class="st-info">Собрано наборов: <b id="setsCompleted">0 / 0</b> · Бонус: <b id="setsBonus">+0 %</b></div></div>
+  <div class="sets-toolbar"><div class="st-info">Собрано: <b id="setsCompleted">0 / 0</b> · Бонус: <b id="setsBonus">+0 %</b></div></div>
   <div class="sets-grid" id="setsGrid"></div>
   <div style="margin-top:24px"><h3 style="margin:0 0 12px;font:20px 'Russo One'">📚 Все номера</h3><div id="collection" class="collection"><div class="empty">Коллекция пуста.</div></div></div>
   <nav class="nav">
@@ -898,10 +871,8 @@ const SEQUENCES=['123','234','345','456','567','678','789'];
 const CASE_PRICE=5000,START_BALANCE=5000;
 const RARITIES={common:{id:'common',name:'Обычный',min:250,max:900,weight:45},rare:{id:'rare',name:'Редкий',min:1000,max:3500,weight:30},epic:{id:'epic',name:'Эпический',min:4000,max:14000,weight:17},legendary:{id:'legendary',name:'Легендарный',min:18000,max:90000,weight:6.5},mythic:{id:'mythic',name:'Мифический',min:100000,max:500000,weight:1.5}};
 const RARITY_COLORS={common:'#aeb6af',rare:'#57c7ff',epic:'#c38bff',legendary:'#ffd95a',mythic:'#ff9b68'};
-// Бонусы апгрейдов усилены (было +5 % → стало +8 %)
 const UPGRADES={paint:{name:'🎨 Краска',levels:[{name:'Лайм',cost:0,color:'#8aff00'},{name:'Голубой',cost:2000,color:'#1ea8ff'},{name:'Фиолет',cost:5000,color:'#a44cff'},{name:'Красный',cost:8000,color:'#ff2d55'},{name:'Золотой',cost:18000,color:'#ffcc33'}]},wheels:{name:'⚙️ Диски',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:4000},{name:'Хром',cost:12000},{name:'Карбон',cost:28000}]},spoiler:{name:'🪽 Спойлер',levels:[{name:'Нет',cost:0},{name:'Спорт',cost:6000},{name:'Карбон',cost:16000},{name:'GT',cost:42000}]},exhaust:{name:'🔥 Выхлоп',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:5000},{name:'Титан',cost:14000}]},neon:{name:'💡 Неон',levels:[{name:'Нет',cost:0},{name:'Лайм',cost:3500,color:0xc4ff46},{name:'Голубой',cost:7000,color:0x57c7ff},{name:'Розовый',cost:12000,color:0xff6ec7}]}};
 const CARS=[{id:'lambo',name:'Lamborghini',icon:'🏎️',price:0,bonus:0,desc:'Стартовая.',color:'#8aff00'},{id:'porsche',name:'Porsche 911',icon:'🚙',price:500000,bonus:0.5,desc:'+50 % доход.',color:'#ff2d55'},{id:'ferrari',name:'Ferrari Roma',icon:'🏁',price:5000000,bonus:1.0,desc:'+100 % доход.',color:'#c4a648'}];
-// Интерьер усилен: +3..18 %
 const INTERIER={walls:{name:'🧱 Стены',levels:[{name:'Бетон',cost:0,bonus:0},{name:'Металл',cost:8000,bonus:0.03},{name:'Дерево',cost:25000,bonus:0.06},{name:'Мрамор',cost:80000,bonus:0.10},{name:'Гранит',cost:250000,bonus:0.18}]},light:{name:'💡 Освещение',levels:[{name:'Лампа',cost:0,bonus:0},{name:'LED',cost:12000,bonus:0.04},{name:'Софиты',cost:40000,bonus:0.08},{name:'Лазеры',cost:150000,bonus:0.14}]},shelves:{name:'📦 Стеллажи',levels:[{name:'Нет',cost:0,bonus:0},{name:'Простые',cost:15000,bonus:0.04},{name:'Стекло',cost:45000,bonus:0.08},{name:'Премиум',cost:120000,bonus:0.14}]},stand:{name:'🏆 Стенд',levels:[{name:'Нет',cost:0,bonus:0},{name:'3 номера',cost:20000,bonus:0.05},{name:'6 номеров',cost:60000,bonus:0.10},{name:'12 номеров',cost:200000,bonus:0.18}]},bar:{name:'🍸 Бар',levels:[{name:'Нет',cost:0,bonus:0},{name:'Мини',cost:50000,bonus:0.08},{name:'Полный',cost:180000,bonus:0.15}]}};
 const SETS=[{id:'capital',name:'Столица',icon:'🏛️',desc:'Номера регионов 77, 97, 99, 177, 197, 199, 777.',bonus:0.05,check:p=>PREMIUM_REGIONS.includes(p.region)},{id:'triple7',name:'Три семёрки',icon:'🔥',desc:'Три одинаковые цифры.',bonus:0.08,check:p=>p.digits[0]===p.digits[1]&&p.digits[1]===p.digits[2]},{id:'mirror',name:'Зеркала',icon:'💎',desc:'Зеркальные номера.',bonus:0.04,check:p=>p.digits[0]===p.digits[2]&&p.digits[0]!==p.digits[1]},{id:'agent',name:'Агент 007',icon:'🕵️',desc:'007, 001 или 100.',bonus:0.04,check:p=>['007','001','100'].includes(p.digits)},{id:'seq',name:'Последователь',icon:'🎯',desc:'Последовательности.',bonus:0.06,check:p=>SEQUENCES.includes(p.digits)},{id:'letters',name:'Буквоежка',icon:'✍️',desc:'3 одинаковые буквы.',bonus:0.06,check:p=>p.L1===p.L2&&p.L2===p.L3},{id:'legendary',name:'Легенда',icon:'👑',desc:'Легендарные.',bonus:0.10,check:p=>p.rarity==='legendary'},{id:'mythic',name:'Миф',icon:'⭐',desc:'Мифические.',bonus:0.15,check:p=>p.rarity==='mythic'}];
 const SET_TARGET={capital:3,triple7:3,mirror:3,agent:3,seq:3,letters:2,legendary:2,mythic:1};
@@ -910,9 +881,9 @@ const FRIEND_NAMES=['Макс','Илья','Артём','Дима','Кирилл'
 const FRIEND_ICONS=['😎','🔥','🏎️','😈','🦊','🐺','🦁','🐻','🐯','🦅','🐉','👑'];
 const FAKE_PRIZES=[700000,800000,900000,1000000];
 
-let S={balance:START_BALANCE,collection:[],installed:null,offers:[],lastOffer:Date.now(),pending:null,upgrades:{paint:0,wheels:0,spoiler:0,exhaust:0,neon:0},interier:{walls:0,light:0,shelves:0,stand:0,bar:0},cars:{owned:['lambo'],current:'lambo'},lastFreeCase:0,lastWash:0,lastScratch:0,trader:{active:false,expires:0,offers:[]},lastTrader:Date.now(),stocks:[],marketIndex:{history:[100,100,100],value:100},workshop:{selected:[],target:null,targetPlate:null,craftPool:[]},marketFilter:'all',daily:null,friends:[],inviteCode:'',refEarned:0,duelWins:0,lastFriendAdd:'',stats:{opened:0,best:0,sold:0,earned:0,traderSold:0,crafted:0,craftFailed:0}};
-try{const x=JSON.parse(localStorage.getItem('nomerok-v8'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
-function save(){try{localStorage.setItem('nomerok-v8',JSON.stringify(S));}catch(e){}}
+let S={balance:START_BALANCE,collection:[],installed:null,offers:[],lastOffer:Date.now(),pending:null,upgrades:{paint:0,wheels:0,spoiler:0,exhaust:0,neon:0},interier:{walls:0,light:0,shelves:0,stand:0,bar:0},cars:{owned:['lambo'],current:'lambo'},lastFreeCase:0,lastWash:0,lastScratch:0,trader:{active:false,expires:0,offers:[]},lastTrader:Date.now(),stocks:[],marketIndex:{history:[100,100,100],value:100},workshop:{selected:[],target:null,targetPlate:null,craftPool:[]},marketFilter:'all',daily:null,friends:[],inviteCode:'',refEarned:0,duelWins:0,lastFriendAdd:'',friendCodeAttempts:0,friendCodeBlocked:false,antiCheat:{},stats:{opened:0,best:0,sold:0,earned:0,traderSold:0,crafted:0,craftFailed:0}};
+try{const x=JSON.parse(localStorage.getItem('nomerok-v9'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];if(!S.antiCheat)S.antiCheat={};if(!S.friendCodeAttempts)S.friendCodeAttempts=0;if(!S.friendCodeBlocked)S.friendCodeBlocked=false;S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
+function save(){try{localStorage.setItem('nomerok-v9',JSON.stringify(S));}catch(e){}}
 
 // ===== АУДИО =====
 let audioCtx=null,masterGain=null,ambientStarted=false;
@@ -936,6 +907,7 @@ function sfxReaction(){if(!initAudio())return;tone(1200,0.08,'square',0.12,0.002
 function sfxShell(){if(!initAudio())return;const ct=audioCtx.currentTime;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.setValueAtTime(400,ct);o.frequency.exponentialRampToValueAtTime(150,ct+0.15);g.gain.setValueAtTime(0.1,ct);g.gain.exponentialRampToValueAtTime(0.0001,ct+0.2);o.connect(g);g.connect(masterGain);o.start(ct);o.stop(ct+0.22);}
 function sfxFake(){if(!initAudio())return;const ct=audioCtx.currentTime;[440,392,349,294].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f,ct);o.frequency.exponentialRampToValueAtTime(f*0.85,ct+0.15);g.gain.setValueAtTime(0.0001,ct+i*0.12);g.gain.linearRampToValueAtTime(0.1,ct+i*0.12+0.02);g.gain.exponentialRampToValueAtTime(0.0001,ct+i*0.12+0.18);o.connect(g);g.connect(masterGain);o.start(ct+i*0.12);o.stop(ct+i*0.12+0.2);});}
 function sfxFriend(){if(!initAudio())return;[659.25,830.6,987.77,1174.66].forEach((f,i)=>setTimeout(()=>tone(f,0.3,'sine',0.11,0.005,0.25),i*80));}
+function sfxBan(){if(!initAudio())return;const ct=audioCtx.currentTime;[220,174.6,146.8,110].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f,ct+i*0.2);g.gain.setValueAtTime(0,ct+i*0.2);g.gain.linearRampToValueAtTime(0.15,ct+i*0.2+0.02);g.gain.exponentialRampToValueAtTime(0.0001,ct+i*0.2+0.4);o.connect(g);g.connect(masterGain);o.start(ct+i*0.2);o.stop(ct+i*0.2+0.45);});}
 function startAmbient(){if(ambientStarted||!initAudio())return;ambientStarted=true;const ct=audioCtx.currentTime;const g=audioCtx.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(0.035,ct+4);const f=audioCtx.createBiquadFilter();f.type='lowpass';f.frequency.value=420;f.Q.value=0.7;g.connect(f);f.connect(masterGain);[55,55.3,82.5].forEach(fr=>{const o=audioCtx.createOscillator();o.type='sawtooth';o.frequency.value=fr;const og=audioCtx.createGain();og.gain.value=0.4;o.connect(og);og.connect(g);o.start(ct);});const lfo=audioCtx.createOscillator();const lfoG=audioCtx.createGain();lfo.frequency.value=0.06;lfoG.gain.value=180;lfo.connect(lfoG);lfoG.connect(f.frequency);lfo.start(ct);}
 let scratchSoundNode=null;
 function startScratchSound(){if(!initAudio())return;if(scratchSoundNode)return;const ct=audioCtx.currentTime;const bufSize=audioCtx.sampleRate*2;const buf=audioCtx.createBuffer(1,bufSize,audioCtx.sampleRate);const data=buf.getChannelData(0);for(let i=0;i<bufSize;i++)data[i]=(Math.random()*2-1)*0.15;const src=audioCtx.createBufferSource();src.buffer=buf;src.loop=true;const f=audioCtx.createBiquadFilter();f.type='bandpass';f.frequency.value=2200;f.Q.value=0.8;const g=audioCtx.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(0.07,ct+0.05);src.connect(f);f.connect(g);g.connect(masterGain);src.start(ct);scratchSoundNode={src,g};}
@@ -950,6 +922,85 @@ function screenShake(){document.body.classList.add('shake');setTimeout(()=>docum
 function confetti(count=60){const c=isMobile()?Math.min(count,80):count;for(let i=0;i<c;i++){const el=document.createElement('div');el.className='confetti';el.style.left=Math.random()*100+'vw';el.style.background=['#c4ff46','#ffd95a','#57c7ff','#c38bff','#ff9b68','#fff'][Math.floor(Math.random()*6)];el.style.animationDuration=(2.5+Math.random()*2.5)+'s';el.style.animationDelay=(Math.random()*0.4)+'s';el.style.width=(6+Math.random()*8)+'px';el.style.height=(6+Math.random()*8)+'px';const r=Math.random();if(r<.33)el.style.borderRadius='50%';else if(r<.66)el.style.clipPath='polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)';document.body.appendChild(el);setTimeout(()=>el.remove(),5500);}}
 function burstFromElement(el,color,count=24){if(!el)return;const r=el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;const c=isMobile()?Math.min(count,32):count;for(let i=0;i<c;i++){const p=document.createElement('div');p.className='burst';p.style.left=cx+'px';p.style.top=cy+'px';p.style.background=color;p.style.boxShadow='0 0 12px '+color;const ang=Math.random()*Math.PI*2,dist=80+Math.random()*160;p.style.setProperty('--dx',Math.cos(ang)*dist+'px');p.style.setProperty('--dy',Math.sin(ang)*dist+'px');p.style.animationDuration=(0.7+Math.random()*0.5)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),1400);}}
 function coinFly(targetEl,count=8){if(!targetEl)return;const r=targetEl.getBoundingClientRect();const tx=r.left+r.width/2,ty=r.top+r.height/2;const w=document.querySelector('.wallet').getBoundingClientRect();const c=isMobile()?Math.min(count,6):count;for(let i=0;i<c;i++){const el=document.createElement('div');el.className='coin';el.textContent='₽';const sx=tx+(Math.random()-0.5)*100,sy=ty+(Math.random()-0.5)*40;el.style.left=sx+'px';el.style.top=sy+'px';el.style.setProperty('--dx',(w.left+w.width/2-sx)+'px');el.style.setProperty('--dy',(w.top+w.height/2-sy)+'px');document.body.appendChild(el);requestAnimationFrame(()=>el.classList.add('fly'));setTimeout(()=>el.remove(),1200);}}
+
+// ====== АНТИЧИТ ======
+function acCheck(game, maxPerMin=20){
+  const now = Date.now();
+  if(!S.antiCheat) S.antiCheat = {};
+  if(!S.antiCheat[game]) S.antiCheat[game] = {strikes:0, blockUntil:0, actions:[]};
+  const ac = S.antiCheat[game];
+  if(now < ac.blockUntil){
+    const left = Math.ceil((ac.blockUntil-now)/1000);
+    const m = Math.floor(left/60);
+    const s = left%60;
+    toast(`🚫 ${game.toUpperCase()}: блок ${m>0?m+'м ':''}${s}с`);
+    haptic([80,40,120]);
+    return false;
+  }
+  ac.actions = ac.actions.filter(t => now-t < 60000);
+  ac.actions.push(now);
+  if(ac.actions.length > maxPerMin){
+    ac.strikes++;
+    const blockDur = 60000 * Math.pow(3, ac.strikes-1);
+    ac.blockUntil = now + blockDur;
+    save();
+    const m = Math.round(blockDur/60000);
+    showAch('🚫','Античит','Подозрение на взлом');
+    sfxBan();
+    toast(`🚫 ${game.toUpperCase()}: блок на ${m} мин (×${ac.strikes})`);
+    haptic([200,100,300]);
+    return false;
+  }
+  return true;
+}
+function acDetectFast(game, threshold=150){
+  const now = Date.now();
+  if(!S.antiCheat) S.antiCheat = {};
+  if(!S.antiCheat[game]) S.antiCheat[game] = {strikes:0, blockUntil:0, actions:[], fastHits:0};
+  const ac = S.antiCheat[game];
+  if(!ac.lastAction) ac.lastAction = now;
+  const diff = now - ac.lastAction;
+  ac.lastAction = now;
+  if(diff < threshold){
+    ac.fastHits = (ac.fastHits||0) + 1;
+    if(ac.fastHits > 3){
+      ac.strikes++;
+      const blockDur = 60000 * Math.pow(3, ac.strikes-1);
+      ac.blockUntil = now + blockDur;
+      ac.fastHits = 0;
+      save();
+      showAch('🚫','Античит','Слишком быстрое нажатие');
+      sfxBan();
+      const m = Math.round(blockDur/60000);
+      toast(`🚫 ${game.toUpperCase()}: блок на ${m} мин`);
+      haptic([200,100,300]);
+      return false;
+    }
+  } else {
+    ac.fastHits = Math.max(0, (ac.fastHits||0) - 1);
+  }
+  return true;
+}
+
+// ====== БАН ОВЕРЛЕЙ ======
+let banShown = false;
+function showBanOverlay(reason){
+  if(banShown) return;
+  banShown = true;
+  sfxBan();
+  haptic([300,150,300,150,500]);
+  const ov = document.createElement('div');
+  ov.id = 'banOverlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:linear-gradient(145deg,#2a0a0a,#0a0404);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:30px;text-align:center;font-family:Manrope,Arial,sans-serif;color:#fff;animation:fadeIn .4s';
+  ov.innerHTML = `
+    <div style="font-size:90px;filter:drop-shadow(0 0 40px rgba(255,80,80,.9));animation:rotPulse 1.5s infinite alternate">🚫</div>
+    <h1 style="font:900 44px 'Russo One',sans-serif;color:#ff5050;text-shadow:0 0 40px rgba(255,80,80,.8);letter-spacing:4px;margin:0;text-align:center">ВЫ ЗАБЛОКИРОВАНЫ</h1>
+    <div style="font-size:13px;color:#888;letter-spacing:4px;text-transform:uppercase;font-weight:800">Причина:</div>
+    <div style="font:900 28px 'Russo One',sans-serif;color:#fff;background:linear-gradient(145deg,#3a0a0a,#1a0404);padding:20px 40px;border-radius:16px;border:2px solid #ff5050;box-shadow:0 0 60px rgba(255,80,80,.5);letter-spacing:3px;text-align:center">«СИЯР ГЛАВА»</div>
+    <div style="font-size:13px;color:#888;max-width:420px;line-height:1.7;margin-top:20px">Превышен лимит ввода кодов друзей. Доступ к разделу «Друзья» навсегда заблокирован.</div>
+  `;
+  document.body.appendChild(ov);
+}
 
 function analyzePlate(letters,digits,region){const L1=letters[0],L2=letters[1],L3=letters[2];const d1=digits[0],d2=digits[1],d3=digits[2];const notes=[];let score=0;
   if(d1===d2&&d2===d3){if(d1==='7'||d1==='8'||d1==='9'){score+=8;notes.push('Тройные премиум-цифры '+digits);}else{score+=6;notes.push('Три одинаковые цифры '+digits);}}
@@ -978,7 +1029,6 @@ function initDaily(){const today=getTodayKey();if(!S.daily||S.daily.date!==today
 function trackQuest(type,amount=1){if(!S.daily)initDaily();let ch=false;S.daily.quests.forEach(q=>{if(q.claimed)return;if(q.track===type&&q.progress<q.goal){q.progress=Math.min(q.goal,q.progress+amount);ch=true;}});if(ch){renderDaily();save();}}
 function getSetsBonus(){let b=0;SETS.forEach(set=>{const c=S.collection.filter(set.check).length;if(c>=SET_TARGET[set.id])b+=set.bonus;});return b;}
 
-// ===== ДРУЗЬЯ =====
 function genInviteCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='NOM-';for(let i=0;i<5;i++)c+=chars[Math.floor(Math.random()*chars.length)];return c;}
 function initInviteCode(){if(!S.inviteCode)S.inviteCode=genInviteCode();}
 function getRefBonus(){return Math.min(0.20,S.friends.length*0.02);}
@@ -999,9 +1049,23 @@ function initFriends(){
   S.friends.forEach(f=>{if(Math.random()<0.2)f.online=Math.random()<0.5;});
   save();
 }
+// Код друга — 2 попытки, потом бан навсегда
 function addFriendByCode(code){
+  if(S.friendCodeBlocked){showBanOverlay('сияр глава');return false;}
   code=code.toUpperCase().trim();
-  if(!/^NOM-[A-Z0-9]{5}$/.test(code)){toast('Неверный формат');return false;}
+  if(!code){toast('Введи код');return false;}
+  if(!/^NOM-[A-Z0-9]{5}$/.test(code)){
+    S.friendCodeAttempts++;
+    save();
+    if(S.friendCodeAttempts>=2){
+      S.friendCodeBlocked=true;save();
+      showBanOverlay('сияр глава');
+      return false;
+    }
+    toast(`❌ Неверный формат. Попыток: ${2-S.friendCodeAttempts}`);
+    renderCodeAttempts();
+    return false;
+  }
   if(code===S.inviteCode){toast('Нельзя свой код');return false;}
   if(S.friends.some(f=>f.inviteCode===code)){toast('Уже активирован');return false;}
   const friend=genFriend();friend.inviteCode=code;friend.online=true;
@@ -1010,7 +1074,15 @@ function addFriendByCode(code){
   toast(`🎉 Друг добавлен! +5 000 ₽`);showAch('👥','Новый друг',`${friend.name} присоединился`);
   render();save();return true;
 }
+function renderCodeAttempts(){
+  const el=$('codeAttempts');if(!el)return;
+  const left=2-S.friendCodeAttempts;
+  if(S.friendCodeBlocked){el.textContent='🚫 ВЫ ЗАБЛОКИРОВАНЫ — причина: СИЯР ГЛАВА';el.style.color='var(--red)';}
+  else if(S.friendCodeAttempts>0){el.textContent=`⚠️ Осталось попыток: ${left}`;el.style.color='var(--gold)';}
+  else{el.textContent='';}
+}
 function claimGift(friendId){
+  if(!antiCheatOk('friends',30))return;
   const f=S.friends.find(x=>x.id===friendId);if(!f)return;
   const today=new Date().toDateString();
   if(f.lastGift&&new Date(f.lastGift).toDateString()===today){toast('Уже сегодня');return;}
@@ -1021,6 +1093,7 @@ function claimGift(friendId){
   renderFriends();render();
 }
 function testDrive(friendId){
+  if(!antiCheatOk('friends',30))return;
   const f=S.friends.find(x=>x.id===friendId);if(!f)return;
   const today=new Date().toDateString();
   if(f.lastTest&&new Date(f.lastTest).toDateString()===today){toast('Уже сегодня');return;}
@@ -1031,6 +1104,7 @@ function testDrive(friendId){
   renderFriends();render();
 }
 function duel(friendId){
+  if(!antiCheatOk('friends',30))return;
   const f=S.friends.find(x=>x.id===friendId);if(!f)return;
   const myInc=getPassiveIncome();const diff=myInc-f.income;
   if(diff>0){
@@ -1046,8 +1120,11 @@ function duel(friendId){
   }
   renderFriends();render();save();
 }
+// Универсальный античит для кнопок
+function antiCheatOk(game,max){return acCheck(game,max) && acDetectFast(game,180);}
 
 function nav(id){
+  if(id==='friendsView'&&S.friendCodeBlocked){showBanOverlay('сияр глава');return;}
   document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===id));
   document.querySelectorAll('.nav [data-view], .bottom-nav [data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===id));
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1073,7 +1150,7 @@ function render(){
   $('spin').disabled=S.balance<CASE_PRICE||spinning;
   $('spin').textContent=`ОТКРЫТЬ КЕЙС · ${fmt(CASE_PRICE)} ₽`;
   $('caseStatus').textContent=S.balance>=CASE_PRICE?`ДОСТУПНО: ${Math.floor(S.balance/CASE_PRICE)}`:'НЕДОСТАТОЧНО';
-  $('hint').textContent=S.balance>=CASE_PRICE?'Открывай, пока есть деньги!':'Загляни в «Игры» или «Сплав».';
+  $('hint').textContent=S.balance>=CASE_PRICE?'Открывай!':'Иди в «Игры» или «Сплав».';
   $('count').textContent=`${S.collection.length} НОМЕРОВ`;
   const inc=getPassiveIncome();
   if(inc>0){$('passiveBadge').hidden=false;$('passiveVal').textContent=fmt(inc);}else{$('passiveBadge').hidden=true;}
@@ -1084,7 +1161,7 @@ function render(){
 function updateEventDots(){
   document.querySelectorAll('.nav [data-view="marketView"], .bottom-nav [data-view="marketView"]').forEach(t=>t.classList.toggle('has-event',S.trader.active));
   const hasGift=S.friends.some(f=>{const ld=f.lastGift?new Date(f.lastGift).toDateString():'';return ld!==new Date().toDateString();});
-  document.querySelectorAll('.nav [data-view="friendsView"], .bottom-nav [data-view="friendsView"]').forEach(t=>t.classList.toggle('has-event',hasGift));
+  document.querySelectorAll('.nav [data-view="friendsView"], .bottom-nav [data-view="friendsView"]').forEach(t=>t.classList.toggle('has-event',hasGift&&!S.friendCodeBlocked));
 }
 
 function renderDaily(){
@@ -1117,15 +1194,15 @@ function renderGarage(){
   updateCarSwitchers();
 }
 function updateCarSwitchers(){const idx=S.cars.owned.indexOf(S.cars.current);const prev=$('carPrev'),next=$('carNext');if(!prev||!next)return;prev.disabled=idx<=0;next.disabled=idx>=S.cars.owned.length-1;}
-$('carPrev').onclick=()=>{const i=S.cars.owned.indexOf(S.cars.current);if(i>0){S.cars.current=S.cars.owned[i-1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
-$('carNext').onclick=()=>{const i=S.cars.owned.indexOf(S.cars.current);if(i<S.cars.owned.length-1){S.cars.current=S.cars.owned[i+1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
+$('carPrev').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i>0){S.cars.current=S.cars.owned[i-1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
+$('carNext').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i<S.cars.owned.length-1){S.cars.current=S.cars.owned[i+1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
 
-function renderUpgrades(){const root=$('upgradesGrid');if(!root)return;root.innerHTML=Object.entries(UPGRADES).map(([key,u])=>{const lv=S.upgrades[key];const next=lv+1<u.levels.length?u.levels[lv+1]:null;const owned=lv===u.levels.length-1;const cur=u.levels[lv];return `<div class="upgrade ${owned?'owned':''}"><div class="upgrade-head"><b>${u.name}</b><span class="lv">УР. ${lv+1}/${u.levels.length}</span></div><div class="upgrade-desc">${owned?'Максимум. Текущий: '+cur.name:'Текущий: '+cur.name+' → След: '+next.name+' ('+fmt(next.cost)+' ₽)'}</div><div class="upgrade-visual">${u.levels.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div><button class="upgrade-btn" data-up="${key}" ${owned||S.balance<((next&&next.cost)||0)?'disabled':''}>${owned?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));}
+function renderUpgrades(){const root=$('upgradesGrid');if(!root)return;root.innerHTML=Object.entries(UPGRADES).map(([key,u])=>{const lv=S.upgrades[key];const next=lv+1<u.levels.length?u.levels[lv+1]:null;const owned=lv===u.levels.length-1;const cur=u.levels[lv];return `<div class="upgrade ${owned?'owned':''}"><div class="upgrade-head"><b>${u.name}</b><span class="lv">УР. ${lv+1}/${u.levels.length}</span></div><div class="upgrade-desc">${owned?'Максимум.':'Текущий: '+cur.name+' → '+next.name+' ('+fmt(next.cost)+' ₽)'}</div><div class="upgrade-visual">${u.levels.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div><button class="upgrade-btn" data-up="${key}" ${owned||S.balance<((next&&next.cost)||0)?'disabled':''}>${owned?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));}
 function buyUpgrade(key){
   const u=UPGRADES[key];const lv=S.upgrades[key];
   if(lv+1>=u.levels.length){toast('Максимум');return;}
   const cost=u.levels[lv+1].cost;
-  if(S.balance<cost){toast('Не хватает денег');haptic([80,40,120]);return;}
+  if(S.balance<cost){toast('Не хватает');haptic([80,40,120]);return;}
   S.balance-=cost;S.upgrades[key]=lv+1;
   flashWallet();sfxUpgrade();haptic([40,30,60]);trackQuest('spentMoney',cost);trackQuest('carUpgrade',1);
   applyCarUpgrades();
@@ -1133,12 +1210,12 @@ function buyUpgrade(key){
   toast(`${u.name} → ${u.levels[lv+1].name} (доход +${Math.round(getUpgradeBonus()*100)}%)`);
 }
 
-function renderInterier(){const root=$('interierGrid');if(!root)return;root.innerHTML=Object.entries(INTERIER).map(([key,it])=>{const lv=S.interier[key]||0;const next=lv+1<it.levels.length?it.levels[lv+1]:null;const max=lv===it.levels.length-1;const cur=it.levels[lv];return `<div class="interier-card ${max?'max':''}"><span class="ic-icon">${it.name.split(' ')[0]}</span><h4>${it.name.split(' ').slice(1).join(' ')}</h4><div class="ic-lv">УР. ${lv+1}/${it.levels.length}</div><div class="ic-desc">${max?'Максимум. '+cur.name:'Текущий: '+cur.name+' → '+next.name}</div><div class="ic-bonus">+${(cur.bonus*100).toFixed(0)}% ${max?'':`→ +${(next.bonus*100).toFixed(0)}%`}</div><button data-int="${key}" ${max||S.balance<((next&&next.cost)||0)?'disabled':''}>${max?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-int]').forEach(b=>b.onclick=()=>buyInterier(b.dataset.int));}
+function renderInterier(){const root=$('interierGrid');if(!root)return;root.innerHTML=Object.entries(INTERIER).map(([key,it])=>{const lv=S.interier[key]||0;const next=lv+1<it.levels.length?it.levels[lv+1]:null;const max=lv===it.levels.length-1;const cur=it.levels[lv];return `<div class="interier-card ${max?'max':''}"><span class="ic-icon">${it.name.split(' ')[0]}</span><h4>${it.name.split(' ').slice(1).join(' ')}</h4><div class="ic-lv">УР. ${lv+1}/${it.levels.length}</div><div class="ic-desc">${max?'Максимум.':'Текущий: '+cur.name+' → '+next.name}</div><div class="ic-bonus">+${(cur.bonus*100).toFixed(0)}% ${max?'':`→ +${(next.bonus*100).toFixed(0)}%`}</div><button data-int="${key}" ${max||S.balance<((next&&next.cost)||0)?'disabled':''}>${max?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-int]').forEach(b=>b.onclick=()=>buyInterier(b.dataset.int));}
 function buyInterier(key){
   const it=INTERIER[key];const lv=S.interier[key]||0;
   if(lv+1>=it.levels.length){toast('Максимум');return;}
   const cost=it.levels[lv+1].cost;
-  if(S.balance<cost){toast('Не хватает денег');haptic([80,40,120]);return;}
+  if(S.balance<cost){toast('Не хватает');haptic([80,40,120]);return;}
   S.balance-=cost;S.interier[key]=lv+1;
   flashWallet();sfxInterier();haptic([40,30,60]);trackQuest('spentMoney',cost);
   applyInterier();
@@ -1173,7 +1250,7 @@ function renderFriends(){
   const reEl=$('fsRefEarned');if(reEl)reEl.textContent=fmt(S.refEarned);
   const dwEl=$('fsDuelWins');if(dwEl)dwEl.textContent=S.duelWins;
   const fctEl=$('friendsCountTag');if(fctEl)fctEl.textContent=S.friends.length?`(${S.friends.length})`:'';
-  renderRating();renderFriendsList();
+  renderCodeAttempts();renderRating();renderFriendsList();
 }
 function renderRating(){
   const root=$('ratingList');if(!root)return;
@@ -1220,7 +1297,11 @@ $('copyInviteBtn').onclick=()=>{
   else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано!');}catch(e){toast('Код: '+S.inviteCode);}ta.remove();}
 };
 $('inviteCode').onclick=()=>$('copyInviteBtn').click();
-$('activateCodeBtn').onclick=()=>{const val=($('friendCodeInput').value||'').toUpperCase().trim();if(!val){toast('Введи код');return;}if(addFriendByCode(val)){$('friendCodeInput').value='';renderFriends();}};
+$('activateCodeBtn').onclick=()=>{
+  if(S.friendCodeBlocked){showBanOverlay('сияр глава');return;}
+  const val=($('friendCodeInput').value||'').toUpperCase().trim();
+  if(addFriendByCode(val)){$('friendCodeInput').value='';renderFriends();}
+};
 $('friendCodeInput').addEventListener('keypress',e=>{if(e.key==='Enter')$('activateCodeBtn').click();});
 
 function renderCollection(){
@@ -1235,7 +1316,8 @@ function animateSlot(i,fv,d=800,isR=false){return new Promise(res=>{const el=doc
 
 $('spin').onclick=async ()=>{
   if(spinning)return;
-  if(S.balance<CASE_PRICE){toast('Недостаточно средств.');haptic([80,40,120]);return;}
+  if(!acCheck('case',60))return;
+  if(S.balance<CASE_PRICE){toast('Недостаточно.');haptic([80,40,120]);return;}
   spinning=true;window.__spinLockTime=Date.now();
   try{
     startAmbient();
@@ -1309,7 +1391,7 @@ document.querySelectorAll('#marketFilter button').forEach(b=>b.onclick=()=>{S.ma
 $('sellAllBtn').onclick=()=>{
   if(!S.collection.length){toast('Пусто');return;}
   const bonus=getSetsBonus();const total=S.collection.reduce((a,p)=>a+p.value*(1+bonus),0);
-  const offer=Math.round(total*0.90/50)*50; // было -15%, стало -10%
+  const offer=Math.round(total*0.90/50)*50;
   if(!confirm(`Продать ${S.collection.length} номеров за ${fmt(offer)} ₽? (-10%)`))return;
   S.balance+=offer;S.stats.sold+=S.collection.length;S.stats.earned+=offer;trackQuest('sold',S.collection.length);
   S.collection=[];S.installed=null;S.offers=[];
@@ -1323,7 +1405,7 @@ function closeTrader(){S.trader={active:false,expires:0,offers:[]};$('traderBann
 function renderTrader(){const wrap=$('traderPanelWrap');if(!wrap)return;if(!S.trader.active||!S.trader.offers.length){wrap.innerHTML='';return;}const left=Math.max(0,Math.ceil((S.trader.expires-Date.now())/1000));wrap.innerHTML=`<div class="trader-panel"><div class="trader-head"><div class="th-left"><div class="th-icon">🧳</div><div class="th-name"><b>ПЕРЕКУПЩИК</b><small>Уедет через</small></div></div><div class="th-timer">${left}с</div></div>${S.trader.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);if(!p)return '';const pct=Math.round((o.mult-1)*100);return `<div class="trader-offer"><div class="to-plate">${plateHTML(p)}<div class="muted" style="margin-top:6px">${p.rarityName} · база ${fmt(o.base)} ₽ <span style="color:#ffd95a;font-weight:900">+${pct}%</span></div></div><div style="text-align:right"><div class="to-price">${fmt(o.price)} ₽</div></div><button data-trader="${o.pid}">ПРОДАТЬ</button></div>`;}).join('')}</div>`;wrap.querySelectorAll('[data-trader]').forEach(b=>b.onclick=()=>acceptTraderOffer(b.dataset.trader));}
 function acceptTraderOffer(pid){const o=S.trader.offers.find(x=>x.pid===pid);if(!o)return;const i=S.collection.findIndex(p=>p.id===pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.traderSold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.trader.offers=S.trader.offers.filter(x=>x.pid!==pid);if(!S.trader.offers.length)closeTrader();trackQuest('sold',1);render();flashWallet();toast('Перекупщик дал '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),10);sfxCash();haptic([40,30,60]);}
 $('traderBanner').onclick=()=>{nav('marketView');if(S.trader.active)renderTrader();};
-function marketTick(){const left=60000-(Date.now()-S.lastOffer);$('timer').textContent=left>0?'СЛЕДУЮЩЕЕ: '+Math.ceil(left/1000)+' СЕК':'РЫНОК АКТИВЕН';if(left>0)return;S.lastOffer=Date.now();const av=S.collection.filter(p=>!S.offers.some(o=>o.pid===p.id));if(av.length){const p=av[Math.floor(Math.random()*av.length)];const price=Math.max(100,Math.round(p.value*(0.95+Math.random()*0.20)/50)*50);/* 95-115% вместо 88-112% */S.offers.unshift({id:Math.random().toString(36).slice(2),pid:p.id,price,buyerIdx:Math.floor(Math.random()*buyers.length)});S.offers=S.offers.slice(0,8);toast('Новое предложение!');tone(560,0.15,'sine',0.09,0.005,0.13);setTimeout(()=>tone(760,0.2,'sine',0.08),100);}renderOffers();save();}
+function marketTick(){const left=60000-(Date.now()-S.lastOffer);$('timer').textContent=left>0?'СЛЕДУЮЩЕЕ: '+Math.ceil(left/1000)+' СЕК':'РЫНОК АКТИВЕН';if(left>0)return;S.lastOffer=Date.now();const av=S.collection.filter(p=>!S.offers.some(o=>o.pid===p.id));if(av.length){const p=av[Math.floor(Math.random()*av.length)];const price=Math.max(100,Math.round(p.value*(0.95+Math.random()*0.20)/50)*50);S.offers.unshift({id:Math.random().toString(36).slice(2),pid:p.id,price,buyerIdx:Math.floor(Math.random()*buyers.length)});S.offers=S.offers.slice(0,8);toast('Новое предложение!');tone(560,0.15,'sine',0.09,0.005,0.13);setTimeout(()=>tone(760,0.2,'sine',0.08),100);}renderOffers();save();}
 setInterval(marketTick,1000);
 setInterval(()=>{if(S.trader.active){const left=Math.max(0,S.trader.expires-Date.now());$('traderBannerTimer').textContent=Math.ceil(left/1000);if(left<=0){closeTrader();toast('Перекупа уехал');}else{renderTrader();}return;}const since=Date.now()-S.lastTrader;if(since>90000+Math.random()*90000)spawnTrader();},1000);
 setInterval(()=>{const inc=getPassiveIncome();if(inc>0){S.balance+=inc;$('balance').textContent=fmt(S.balance);flashWallet();toast('📈 +'+fmt(inc)+' ₽');tone(880,0.15,'sine',0.08,0.005,0.13);render();}},60000);
@@ -1336,12 +1418,11 @@ function updateStocks(){
     const vol=0.018;const ch=(Math.random()-0.48)*vol;
     st.current=Math.max(st.basePrice*0.4,st.current*(1+ch));
     st.history.push(st.current);if(st.history.length>60)st.history.shift();
-    // Редкие краши: только для rare+ (не common). Шанс ~ 1 раз в ~5 минут на лот
     if(!st.isCrashed&&['rare','epic','legendary','mythic'].includes(st.plate.rarity)&&Math.random()<0.006){
-      const dropPct=0.15+Math.random()*0.10; // 15-25%
+      const dropPct=0.18+Math.random()*0.04;
       st.current=st.current*(1-dropPct);
       st.isCrashed=true;st.crashUntil=Date.now()+8000;
-      if($('exchangeView').classList.contains('active'))toast(`💥 КРАХ! Лот #${st.plate.rarityName} упал на ${Math.round(dropPct*100)}%`);
+      if($('exchangeView').classList.contains('active'))toast(`💥 КРАХ! ${st.plate.rarityName} -${Math.round(dropPct*100)}%`);
     }
     if(st.isCrashed&&Date.now()>st.crashUntil){st.isCrashed=false;st.current*=1.05;}
   });
@@ -1373,15 +1454,15 @@ function renderExchange(){
   grid.querySelectorAll('.stock-chart').forEach(cv=>{const i=+cv.dataset.idx;requestAnimationFrame(()=>drawChart(cv,S.stocks[i].history,S.stocks[i].basePrice));});
   grid.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buyStock(b.dataset.buy));
   const mi=$('marketIndexChart');
-  if(mi){requestAnimationFrame(()=>drawChart(mi,S.marketIndex.history,100));const miPct=S.marketIndex.value-100;const t=$('marketIndexTrend');t.textContent=(miPct>=0?'+':'')+miPct.toFixed(1)+' %';t.className='stock-trend '+(miPct>=0?'up':'down');$('marketIndexInfo').innerHTML=`Средний уровень. ${miPct>=0?'<b style="color:#c4ff46">Растёт</b>':'<b style="color:#ff5050">Падает</b>'} · Лови краши rare+!`;}
+  if(mi){requestAnimationFrame(()=>drawChart(mi,S.marketIndex.history,100));const miPct=S.marketIndex.value-100;const t=$('marketIndexTrend');t.textContent=(miPct>=0?'+':'')+miPct.toFixed(1)+' %';t.className='stock-trend '+(miPct>=0?'up':'down');$('marketIndexInfo').innerHTML=`Средний уровень. ${miPct>=0?'<b style="color:#c4ff46">Растёт</b>':'<b style="color:#ff5050">Падает</b>'} · Лови крахи!`;}
 }
-function buyStock(id){const st=S.stocks.find(x=>x.id===id);if(!st)return;if(S.balance<st.current){toast('Не хватает');haptic([80,40,120]);return;}S.balance-=st.current;trackQuest('spentMoney',st.current);const plate={...st.plate,id:Date.now().toString(36)+Math.random().toString(36).slice(2,7)};S.collection.unshift(plate);flashWallet();sfxCash();haptic([40,30,60]);coinFly(document.querySelector('.wallet'),8);toast(`Куплено за ${fmt(st.current)} ₽`);const idx=S.stocks.indexOf(st);S.stocks[idx]=generateStock();render();renderExchange();}
+function buyStock(id){
+  if(!antiCheatOk('exchange',40))return;
+  const st=S.stocks.find(x=>x.id===id);if(!st)return;if(S.balance<st.current){toast('Не хватает');haptic([80,40,120]);return;}S.balance-=st.current;trackQuest('spentMoney',st.current);const plate={...st.plate,id:Date.now().toString(36)+Math.random().toString(36).slice(2,7)};S.collection.unshift(plate);flashWallet();sfxCash();haptic([40,30,60]);coinFly(document.querySelector('.wallet'),8);toast(`Куплено за ${fmt(st.current)} ₽`);const idx=S.stocks.indexOf(st);S.stocks[idx]=generateStock();render();renderExchange();
+}
 window.addEventListener('resize',()=>{if($('exchangeView').classList.contains('active'))renderExchange();});
 
-// ===== СПЛАВ: НОВАЯ ФОРМУЛА ШАНСА =====
-// 2000 → 4000 = 50%
-// 4000 → 2000 = 100%
-// formula: if sum >= target: 100%; else (sum/target)*100
+// ===== СПЛАВ =====
 function calcChance(sum,targetPrice){
   if(sum<=0||targetPrice<=0)return 0;
   if(sum>=targetPrice)return 100;
@@ -1396,15 +1477,11 @@ function drawWheel(chancePct){
   const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);
   const cx=size/2,cy=size/2,R=size/2-4;c.clearRect(0,0,size,size);
   c.beginPath();c.arc(cx,cy,R,0,Math.PI*2);c.strokeStyle='rgba(196,255,70,.3)';c.lineWidth=3;c.stroke();
-  c.beginPath();c.arc(cx,cy,R-6,0,Math.PI*2);c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=1;c.stroke();
   const startRad=-Math.PI/2+(wheelRotation*Math.PI/180);
   const chanceAngle=(chancePct/100)*Math.PI*2;const failAngle=Math.PI*2-chanceAngle;
   c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+Math.PI*2);c.closePath();
   const fg=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);fg.addColorStop(0,'#a02020');fg.addColorStop(0.7,'#5a1010');fg.addColorStop(1,'#2a0808');c.fillStyle=fg;c.fill();
   if(chanceAngle>0){c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+chanceAngle);c.closePath();const wg=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);wg.addColorStop(0,'#d0ff5a');wg.addColorStop(0.7,'#8ec92a');wg.addColorStop(1,'#4d7a10');c.fillStyle=wg;c.fill();}
-  c.save();c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);c.clip();c.lineWidth=2;c.strokeStyle='rgba(0,0,0,.6)';
-  if(chanceAngle>0&&chanceAngle<Math.PI*2){c.beginPath();c.moveTo(cx,cy);const a1=startRad+chanceAngle;c.lineTo(cx+Math.cos(a1)*(R-7),cy+Math.sin(a1)*(R-7));c.stroke();c.beginPath();c.moveTo(cx,cy);const a2=startRad+Math.PI*2;c.lineTo(cx+Math.cos(a2)*(R-7),cy+Math.sin(a2)*(R-7));c.stroke();}
-  c.restore();
   for(let i=0;i<24;i++){const a=startRad+(i/24)*Math.PI*2;c.beginPath();c.moveTo(cx+Math.cos(a)*(R-7),cy+Math.sin(a)*(R-7));c.lineTo(cx+Math.cos(a)*(R-15),cy+Math.sin(a)*(R-15));c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1;c.stroke();}
 }
 function updateWheelCenter(pct){const el=$('wheelCenter');if(!el)return;if(pct==null){el.textContent='?';el.style.color='var(--lime)';el.style.fontSize='20px';return;}if(pct<1){el.textContent=pct.toFixed(1);el.style.fontSize='13px';el.style.color='#ff5050';}else if(pct<10){el.textContent=pct.toFixed(1);el.style.fontSize='16px';el.style.color='var(--gold)';}else if(pct<50){el.textContent=Math.round(pct);el.style.fontSize='20px';el.style.color='var(--gold)';}else if(pct<100){el.textContent=Math.round(pct);el.style.fontSize='20px';el.style.color='var(--lime)';}else{el.textContent='100';el.style.fontSize='20px';el.style.color='#7fff7f';}}
@@ -1416,7 +1493,7 @@ function spinWheel(chancePct,success,cb){
   function loop(now){const t=Math.min(1,(now-st)/dur);const e=1-Math.pow(1-t,4);wheelRotation=sr+tr*e;drawWheel(chancePct);if(t<0.98&&now-lt>(80+1200*t*t*t)){lt=now;sfxTick(1.2+Math.random()*0.6);}if(t<1)requestAnimationFrame(loop);else{wheelRotation=sr+tr;drawWheel(chancePct);wheelSpinning=false;cb&&cb();}}
   requestAnimationFrame(loop);
 }
-function renderCraftPool(){const root=$('craftPool');const pool=S.workshop.craftPool;if(!pool.length){root.innerHTML='<div class="cp-empty">Введи цену выше и нажми «Подобрать».</div>';return;}root.innerHTML=`<div class="cp-head"><b>Найдено: ${pool.length}</b><small>Выбери цель</small></div><div class="cp-grid">${pool.map((p,idx)=>{const sel=S.workshop.targetPlate&&S.workshop.targetPlate.id===p.id;return `<div class="cp-card ${sel?'selected':''}" data-cp="${idx}">${plateHTML(p)}<div class="cp-info"><span class="cpr">${p.rarityName}</span><span class="cpv">${fmt(p.value)} ₽</span></div></div>`;}).join('')}</div>`;root.querySelectorAll('[data-cp]').forEach(el=>el.onclick=()=>{const idx=+el.dataset.cp;S.workshop.targetPlate=S.workshop.craftPool[idx];S.workshop.target=S.workshop.targetPlate.rarity;haptic([10]);sfxClick();renderCraftPool();renderWheelAndSummary();});}
+function renderCraftPool(){const root=$('craftPool');const pool=S.workshop.craftPool;if(!pool.length){root.innerHTML='<div class="cp-empty">Введи цену и нажми «Подобрать».</div>';return;}root.innerHTML=`<div class="cp-head"><b>Найдено: ${pool.length}</b></div><div class="cp-grid">${pool.map((p,idx)=>{const sel=S.workshop.targetPlate&&S.workshop.targetPlate.id===p.id;return `<div class="cp-card ${sel?'selected':''}" data-cp="${idx}">${plateHTML(p)}<div class="cp-info"><span>${p.rarityName}</span><span class="cpv">${fmt(p.value)} ₽</span></div></div>`;}).join('')}</div>`;root.querySelectorAll('[data-cp]').forEach(el=>el.onclick=()=>{const idx=+el.dataset.cp;S.workshop.targetPlate=S.workshop.craftPool[idx];S.workshop.target=S.workshop.targetPlate.rarity;haptic([10]);sfxClick();renderCraftPool();renderWheelAndSummary();});}
 function renderWorkshop(){
   const root=$('wsPlates');
   if(!S.collection.length){root.innerHTML='<div class="empty" style="grid-column:1/-1">Коллекция пуста.</div>';}
@@ -1443,7 +1520,7 @@ function renderWheelAndSummary(){
 $('craftSearchBtn').onclick=()=>{const val=parseInt(($('craftPriceInput').value||'').replace(/\s/g,''));if(!val||val<100){toast('Мин 100 ₽');haptic([80,40,120]);return;}if(val>1000000){toast('Макс 1 000 000 ₽');haptic([80,40,120]);return;}const pool=[];for(let i=0;i<5;i++)pool.push(generatePlateAtPrice(val));S.workshop.craftPool=pool;S.workshop.targetPlate=null;S.workshop.target=null;haptic([10]);sfxClick();renderCraftPool();renderWheelAndSummary();toast('Найдено 5 номеров');};
 document.querySelectorAll('.preset-btns button').forEach(b=>b.onclick=()=>{$('craftPriceInput').value=fmt(+b.dataset.preset).replace(/\s/g,'');document.querySelectorAll('.preset-btns button').forEach(x=>x.classList.toggle('active',x===b));$('craftSearchBtn').click();});
 $('craftPriceInput').addEventListener('input',e=>{const v=e.target.value.replace(/[^\d]/g,'');e.target.value=v?fmt(+v).replace(/\s/g,' '):'';});
-$('wsRoll').onclick=()=>{if(wheelSpinning)return;const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);if(!selPlates.length||!S.workshop.targetPlate)return;const target=S.workshop.targetPlate;const sum=selPlates.reduce((a,p)=>a+p.value,0);const chance=calcChance(sum,target.value);const rb=$('wsRoll');rb.disabled=true;rb.textContent='🎡 КРУТИМ…';sfxTension(3.5);haptic([20,20,20]);const success=Math.random()*100<chance;spinWheel(chance,success,()=>resolveRoll(selPlates,chance,target,success));};
+$('wsRoll').onclick=()=>{if(wheelSpinning)return;if(!antiCheatOk('workshop',30))return;const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);if(!selPlates.length||!S.workshop.targetPlate)return;const target=S.workshop.targetPlate;const sum=selPlates.reduce((a,p)=>a+p.value,0);const chance=calcChance(sum,target.value);const rb=$('wsRoll');rb.disabled=true;rb.textContent='🎡 КРУТИМ…';sfxTension(3.5);haptic([20,20,20]);const success=Math.random()*100<chance;spinWheel(chance,success,()=>resolveRoll(selPlates,chance,target,success));};
 function resolveRoll(selPlates,chance,target,success){
   const ids=selPlates.map(p=>p.id);S.collection=S.collection.filter(p=>!ids.includes(p.id));if(S.installed&&ids.includes(S.installed))S.installed=S.collection[0]?.id||null;
   S.workshop.selected=[];S.workshop.target=null;S.workshop.targetPlate=null;S.workshop.craftPool=[];
@@ -1452,45 +1529,74 @@ function resolveRoll(selPlates,chance,target,success){
   render();renderWorkshop();
 }
 
-// ===== ИГРЫ =====
+// ===== ИГРЫ С АНТИЧИТОМ =====
 const FREE_CASE_CD=5*60*1000;
 function renderFreeCase(){const btn=$('freeCaseBtn'),cd=$('freeCaseCd');const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0){btn.disabled=true;btn.textContent='ЖДИ '+Math.ceil(left/1000)+'с';cd.textContent='Через '+Math.ceil(left/60000)+' мин';}else{btn.disabled=false;btn.textContent='ОТКРЫТЬ БЕСПЛАТНО';cd.textContent='Готово!';}}
-$('freeCaseBtn').onclick=()=>{const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0)return;S.lastFreeCase=Date.now();const amount=Math.round((300+Math.random()*1200)/50)*50;S.balance+=amount;trackQuest('freeCase',1);flashWallet();sfxCash();haptic([40,30,60]);coinFly($('freeCaseBtn'),10);toast('Копилка: +'+fmt(amount)+' ₽');burstFromElement($('freeCaseBtn'),'#ffd95a',20);render();renderFreeCase();};
+$('freeCaseBtn').onclick=()=>{if(!antiCheatOk('freecase',20))return;const left=FREE_CASE_CD-(Date.now()-S.lastFreeCase);if(left>0)return;S.lastFreeCase=Date.now();const amount=Math.round((300+Math.random()*1200)/50)*50;S.balance+=amount;trackQuest('freeCase',1);flashWallet();sfxCash();haptic([40,30,60]);coinFly($('freeCaseBtn'),10);toast('Копилка: +'+fmt(amount)+' ₽');burstFromElement($('freeCaseBtn'),'#ffd95a',20);render();renderFreeCase();};
 setInterval(renderFreeCase,1000);
-$('luckyBtn').onclick=()=>{if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}S.balance-=500;trackQuest('spentMoney',500);flashWallet();const target=Math.floor(Math.random()*10);const guess=Math.floor(Math.random()*10);const win=guess===target;toast('Крутим...');haptic([20,20,20]);tone(660,0.15,'sine',0.09);setTimeout(()=>tone(880,0.15,'sine',0.09),150);setTimeout(()=>tone(1100,0.2,'sine',0.09),300);setTimeout(()=>{if(win){const payout=500*6;S.balance+=payout;trackQuest('luckyWin',1);toast('🎉 +'+fmt(payout)+' ₽');confetti(80);flashWallet();sfxCash();haptic([100,50,200]);showAch('🎯','Счастливчик','x6');}else{toast('Не угадал. Было: '+target);beep(200,0.3,'sawtooth',0.1);haptic([80,40,120]);}render();},800);};
-
+$('luckyBtn').onclick=()=>{
+  if(!antiCheatOk('lucky',20))return;
+  if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
+  S.balance-=500;trackQuest('spentMoney',500);flashWallet();const target=Math.floor(Math.random()*10);const guess=Math.floor(Math.random()*10);const win=guess===target;
+  toast('Крутим...');haptic([20,20,20]);tone(660,0.15,'sine',0.09);setTimeout(()=>tone(880,0.15,'sine',0.09),150);setTimeout(()=>tone(1100,0.2,'sine',0.09),300);
+  setTimeout(()=>{if(win){const payout=500*6;S.balance+=payout;trackQuest('luckyWin',1);toast('🎉 +'+fmt(payout)+' ₽');confetti(80);flashWallet();sfxCash();haptic([100,50,200]);showAch('🎯','Счастливчик','x6');}else{toast('Не угадал. Было: '+target);sfxFail();haptic([80,40,120]);}render();},800);
+};
 const WASH_CD=45*1000,WASH_DURATION=20000;
 function renderWash(){const btn=$('washBtn'),cd=$('washCd');const left=WASH_CD-(Date.now()-S.lastWash);if(left>0){btn.disabled=true;btn.textContent='ЖДИ '+Math.ceil(left/1000)+'с';cd.textContent='Кулдаун';}else{btn.disabled=false;btn.textContent='ПОМЫТЬ · 20 СЕК';cd.textContent='';}}
-function washHandler(){const left=WASH_CD-(Date.now()-S.lastWash);if(left>0)return;S.lastWash=Date.now();const btn=$('washBtn');btn.disabled=true;let earned=0,clicks=0;const start=Date.now();btn.textContent='КЛИКАЙ! 20';btn.onclick=()=>{const amt=10+Math.round(Math.random()*30);earned+=amt;clicks++;S.balance+=amt;$('balance').textContent=fmt(S.balance);haptic([5]);coinFly(btn,3);sfxTick(1+Math.random()*0.5);burstFromElement(btn,'#57c7ff',5);};const interval=setInterval(()=>{const t=Math.max(0,WASH_DURATION-(Date.now()-start));btn.textContent=`КЛИКАЙ! ${Math.ceil(t/1000)}`;if(t<=0){clearInterval(interval);toast(`Помыто! ${fmt(earned)} ₽`);sfxCash();haptic([40,30,60]);render();renderWash();btn.onclick=washHandler;}},250);}
+function washHandler(){
+  if(!antiCheatOk('wash',15))return;
+  const left=WASH_CD-(Date.now()-S.lastWash);if(left>0)return;
+  S.lastWash=Date.now();
+  const btn=$('washBtn');btn.disabled=true;let earned=0,clicks=0;const start=Date.now();
+  btn.textContent='КЛИКАЙ! 20';
+  btn.onclick=()=>{const now=Date.now();if(!window.__lastWashClick)window.__lastWashClick=0;if(now-window.__lastWashClick<50){acDetectFast('wash',50);return;}window.__lastWashClick=now;const amt=10+Math.round(Math.random()*30);earned+=amt;clicks++;S.balance+=amt;$('balance').textContent=fmt(S.balance);haptic([5]);coinFly(btn,3);sfxTick(1+Math.random()*0.5);burstFromElement(btn,'#57c7ff',5);};
+  const interval=setInterval(()=>{const t=Math.max(0,WASH_DURATION-(Date.now()-start));btn.textContent=`КЛИКАЙ! ${Math.ceil(t/1000)}`;if(t<=0){clearInterval(interval);toast(`Помыто! ${fmt(earned)} ₽`);sfxCash();haptic([40,30,60]);render();renderWash();btn.onclick=washHandler;}},250);
+}
 $('washBtn').onclick=washHandler;
 setInterval(renderWash,1000);
 
 let sg={active:false,score:0,time:0,interval:null,flipped:[],matched:0};
 const SG_PAIRS=6;
-function startSortGame(){if(sg.active)return;sg={active:true,score:0,time:30,flipped:[],matched:0,interval:null};$('sortGame').hidden=false;$('sgScore').textContent='0';$('sgTimer').textContent='30';const pool=[];while(pool.length<SG_PAIRS){const p=generatePlate();const str=`${p.L1}${p.digits}${p.L2}${p.L3}`;if(!pool.some(x=>x.str===str))pool.push({str});}const deck=[];pool.forEach((item,i)=>{deck.push({id:i,str:item.str});deck.push({id:i,str:item.str});});deck.sort(()=>Math.random()-0.5);const grid=$('sgGrid');grid.innerHTML='';deck.forEach(card=>{const cell=document.createElement('div');cell.className='sg-cell';cell.textContent='?';cell.dataset.id=card.id;cell.onclick=()=>flipCell(cell,card);grid.appendChild(cell);});sg.interval=setInterval(()=>{sg.time--;$('sgTimer').textContent=sg.time;if(sg.time<=0)endSortGame();},1000);haptic([10]);sfxClick();$('sortGame').scrollIntoView({behavior:'smooth',block:'center'});}
-function flipCell(cell,card){if(!sg.active)return;if(cell.classList.contains('found')||cell.classList.contains('wrong'))return;if(sg.flipped.length>=2)return;cell.textContent=card.str;cell.style.fontSize=isMobile()?'13px':'14px';sg.flipped.push({cell,card});haptic([10]);sfxTick(1.2);if(sg.flipped.length===2){const [a,b]=sg.flipped;if(a.card.id===b.card.id&&a.cell!==b.cell){setTimeout(()=>{a.cell.classList.add('found');b.cell.classList.add('found');sg.matched++;sg.score+=100;$('sgScore').textContent=sg.score;sg.flipped=[];sfxLock(sg.matched);haptic([8]);if(sg.matched===SG_PAIRS)setTimeout(()=>endSortGame(true),300);},200);}else{setTimeout(()=>{a.cell.classList.add('wrong');b.cell.classList.add('wrong');setTimeout(()=>{a.cell.classList.remove('wrong');b.cell.classList.remove('wrong');a.cell.textContent='?';b.cell.textContent='?';a.cell.style.fontSize=isMobile()?'24px':'30px';b.cell.style.fontSize=isMobile()?'24px':'30px';sg.flipped=[];},500);sg.score=Math.max(0,sg.score-30);$('sgScore').textContent=sg.score;haptic([80,40,120]);},400);}}}
+function startSortGame(){
+  if(sg.active)return;
+  if(!antiCheatOk('sort',10))return;
+  sg={active:true,score:0,time:30,flipped:[],matched:0,interval:null};
+  $('sortGame').hidden=false;$('sgScore').textContent='0';$('sgTimer').textContent='30';
+  const pool=[];while(pool.length<SG_PAIRS){const p=generatePlate();const str=`${p.L1}${p.digits}${p.L2}${p.L3}`;if(!pool.some(x=>x.str===str))pool.push({str});}
+  const deck=[];pool.forEach((item,i)=>{deck.push({id:i,str:item.str});deck.push({id:i,str:item.str});});
+  deck.sort(()=>Math.random()-0.5);
+  const grid=$('sgGrid');grid.innerHTML='';
+  deck.forEach(card=>{const cell=document.createElement('div');cell.className='sg-cell';cell.textContent='?';cell.dataset.id=card.id;cell.onclick=()=>flipCell(cell,card);grid.appendChild(cell);});
+  sg.interval=setInterval(()=>{sg.time--;$('sgTimer').textContent=sg.time;if(sg.time<=0)endSortGame();},1000);
+  haptic([10]);sfxClick();$('sortGame').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function flipCell(cell,card){
+  if(!sg.active)return;
+  if(!acDetectFast('sort',100))return;
+  if(cell.classList.contains('found')||cell.classList.contains('wrong'))return;if(sg.flipped.length>=2)return;
+  cell.textContent=card.str;cell.style.fontSize=isMobile()?'13px':'14px';
+  sg.flipped.push({cell,card});haptic([10]);sfxTick(1.2);
+  if(sg.flipped.length===2){const [a,b]=sg.flipped;if(a.card.id===b.card.id&&a.cell!==b.cell){setTimeout(()=>{a.cell.classList.add('found');b.cell.classList.add('found');sg.matched++;sg.score+=100;$('sgScore').textContent=sg.score;sg.flipped=[];sfxLock(sg.matched);haptic([8]);if(sg.matched===SG_PAIRS)setTimeout(()=>endSortGame(true),300);},200);}else{setTimeout(()=>{a.cell.classList.add('wrong');b.cell.classList.add('wrong');setTimeout(()=>{a.cell.classList.remove('wrong');b.cell.classList.remove('wrong');a.cell.textContent='?';b.cell.textContent='?';a.cell.style.fontSize=isMobile()?'24px':'30px';b.cell.style.fontSize=isMobile()?'24px':'30px';sg.flipped=[];},500);sg.score=Math.max(0,sg.score-30);$('sgScore').textContent=sg.score;haptic([80,40,120]);},400);}}
+}
 function endSortGame(){if(!sg.active)return;clearInterval(sg.interval);sg.active=false;const payout=Math.round(sg.score*1.5);if(payout>0){S.balance+=payout;flashWallet();toast('Победа! +'+fmt(payout)+' ₽');sfxCash();haptic([40,30,60]);coinFly($('sortBtn'),8);}else toast('Игра окончена');setTimeout(()=>{$('sortGame').hidden=true;render();},1500);}
 $('sortBtn').onclick=()=>startSortGame();
 
-// ===== СКРЕТЧ (25% ФЕЙК, 80% СТИРАНИЯ, 300-1500) =====
+// ===== СКРЕТЧ =====
 const SCRATCH_CD=2*60*1000;
 let scratchActive=false,scratchPrize=0,scratchRevealed=false,scratchIsFake=false,scratchHandlers={};
 function renderScratchCd(){const btn=$('scratchBtn'),cd=$('scratchCd');const left=SCRATCH_CD-(Date.now()-S.lastScratch);if(left>0&&!scratchActive){btn.disabled=true;btn.textContent='ЖДИ '+Math.ceil(left/1000)+'с';cd.textContent='Через '+Math.ceil(left/60000)+' мин';}else if(!scratchActive){btn.disabled=false;btn.textContent='КУПИТЬ · 500 ₽';cd.textContent='';}}
 $('scratchBtn').onclick=()=>{
-  const left=SCRATCH_CD-(Date.now()-S.lastScratch);
-  if(left>0){toast('Кулдаун: '+Math.ceil(left/1000)+'с');return;}
+  if(!antiCheatOk('scratch',15))return;
+  const left=SCRATCH_CD-(Date.now()-S.lastScratch);if(left>0){toast('Кулдаун: '+Math.ceil(left/1000)+'с');return;}
   if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
   S.balance-=500;S.lastScratch=Date.now();trackQuest('spentMoney',500);flashWallet();
-  // 25% шанс на фейк
   scratchIsFake=Math.random()<0.25;
   if(scratchIsFake){scratchPrize=FAKE_PRIZES[Math.floor(Math.random()*FAKE_PRIZES.length)];}
-  else{scratchPrize=Math.round((300+Math.random()*1200)/50)*50;} // 300-1500
+  else{scratchPrize=Math.round((300+Math.random()*1200)/50)*50;}
   scratchActive=true;scratchRevealed=false;
-  $('scratchPrize').textContent=fmt(scratchPrize)+' ₽';
-  $('scratchFake').hidden=true;
+  $('scratchPrize').textContent=fmt(scratchPrize)+' ₽';$('scratchFake').hidden=true;
   $('scratchGame').hidden=false;$('scratchBtn').disabled=true;$('scratchBtn').textContent='ИГРАЙ';
-  initScratchCanvas();$('scratchGame').scrollIntoView({behavior:'smooth',block:'center'});
-  sfxClick();haptic([10]);
+  initScratchCanvas();$('scratchGame').scrollIntoView({behavior:'smooth',block:'center'});sfxClick();haptic([10]);
 };
 function initScratchCanvas(){
   const canvas=$('scratchCanvas');const stage=$('scratchStage');
@@ -1498,40 +1604,21 @@ function initScratchCanvas(){
   canvas.width=W*dpr;canvas.height=H*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);
   const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,'#c8ccc6');g.addColorStop(0.3,'#8a938c');g.addColorStop(0.5,'#e0e3de');g.addColorStop(0.7,'#7f8880');g.addColorStop(1,'#b8bdb7');c.fillStyle=g;c.fillRect(0,0,W,H);
   c.fillStyle='rgba(0,0,0,.35)';c.font=`bold ${Math.min(28,W*0.08)}px 'Russo One',sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText('СТИРАЙ 80%',W/2,H/2);
-  c.font=`bold ${Math.min(14,W*0.04)}px Manrope,sans-serif`;c.fillStyle='rgba(0,0,0,.25)';c.fillText('мышью или пальцем',W/2,H/2+34);
   if(scratchHandlers.down){canvas.removeEventListener('pointerdown',scratchHandlers.down);canvas.removeEventListener('pointermove',scratchHandlers.move);canvas.removeEventListener('pointerup',scratchHandlers.up);canvas.removeEventListener('pointercancel',scratchHandlers.up);canvas.removeEventListener('pointerleave',scratchHandlers.up);}
   let isDown=false,lastPos=null,pixelCheckThrottle=0;
   function scratchAt(x,y,r=28){c.globalCompositeOperation='destination-out';c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();c.globalCompositeOperation='source-over';}
   function posFromEvent(e){const rect=canvas.getBoundingClientRect();const x=(e.clientX!=null?e.clientX:e.touches[0].clientX)-rect.left;const y=(e.clientY!=null?e.clientY:e.touches[0].clientY)-rect.top;return {x,y};}
-  function onMove(e){
-    if(!isDown)return;e.preventDefault();
-    const p=posFromEvent(e);
-    if(lastPos){const dx=p.x-lastPos.x,dy=p.y-lastPos.y;const dist=Math.hypot(dx,dy);const steps=Math.ceil(dist/8);for(let i=0;i<=steps;i++)scratchAt(lastPos.x+dx*i/steps,lastPos.y+dy*i/steps);}else scratchAt(p.x,p.y);
-    lastPos=p;
-    if(performance.now()-pixelCheckThrottle>120){
-      pixelCheckThrottle=performance.now();
-      const img=c.getImageData(0,0,canvas.width,canvas.height);let tr=0;for(let i=3;i<img.data.length;i+=32){if(img.data[i]<128)tr++;}
-      const ratio=tr/(img.data.length/32);$('scratchProgressBar').style.width=Math.min(100,ratio*100)+'%';
-      if(ratio>0.80&&!scratchRevealed){scratchRevealed=true;revealScratch();}
-    }
-  }
+  function onMove(e){if(!isDown)return;e.preventDefault();const p=posFromEvent(e);if(lastPos){const dx=p.x-lastPos.x,dy=p.y-lastPos.y;const dist=Math.hypot(dx,dy);const steps=Math.ceil(dist/8);for(let i=0;i<=steps;i++)scratchAt(lastPos.x+dx*i/steps,lastPos.y+dy*i/steps);}else scratchAt(p.x,p.y);lastPos=p;
+    if(performance.now()-pixelCheckThrottle>120){pixelCheckThrottle=performance.now();const img=c.getImageData(0,0,canvas.width,canvas.height);let tr=0;for(let i=3;i<img.data.length;i+=32){if(img.data[i]<128)tr++;}const ratio=tr/(img.data.length/32);$('scratchProgressBar').style.width=Math.min(100,ratio*100)+'%';if(ratio>0.80&&!scratchRevealed){scratchRevealed=true;revealScratch();}}}
   function onDown(e){isDown=true;lastPos=null;haptic([5]);startScratchSound();onMove(e);}
   function onUp(){isDown=false;lastPos=null;stopScratchSound();}
   canvas.addEventListener('pointerdown',onDown);canvas.addEventListener('pointermove',onMove);canvas.addEventListener('pointerup',onUp);canvas.addEventListener('pointercancel',onUp);canvas.addEventListener('pointerleave',onUp);
   scratchHandlers={down:onDown,move:onMove,up:onUp};
 }
 function revealScratch(){
-  if(!scratchActive)return;
-  stopScratchSound();
-  if(scratchIsFake){
-    $('scratchFake').hidden=false;
-    sfxFake();haptic([80,40,120,40,200]);
-    toast('💀 Фальшивые!');showAch('🤡','Обман','Попался на фальшивку');screenShake();
-  } else {
-    S.balance+=scratchPrize;trackQuest('scratchWin',1);
-    flashWallet();sfxCash();haptic([100,50,200]);confetti(80);burstFromElement($('scratchStage'),'#ffd95a',40);
-    toast('🎉 +'+fmt(scratchPrize)+' ₽');showAch('🎫','Скретч-мастер','Выиграл');
-  }
+  if(!scratchActive)return;stopScratchSound();
+  if(scratchIsFake){$('scratchFake').hidden=false;sfxFake();haptic([80,40,120,40,200]);toast('💀 Фальшивые!');showAch('🤡','Обман','Попался');screenShake();}
+  else{S.balance+=scratchPrize;trackQuest('scratchWin',1);flashWallet();sfxCash();haptic([100,50,200]);confetti(80);burstFromElement($('scratchStage'),'#ffd95a',40);toast('🎉 +'+fmt(scratchPrize)+' ₽');showAch('🎫','Скретч-мастер','Выиграл');}
   render();
   const canvas=$('scratchCanvas');const c=canvas.getContext('2d');c.clearRect(0,0,canvas.width,canvas.height);
   $('scratchProgressBar').style.width='100%';
@@ -1539,36 +1626,42 @@ function revealScratch(){
 $('scratchClose').onclick=()=>{$('scratchGame').hidden=true;$('scratchFake').hidden=true;scratchActive=false;scratchRevealed=false;$('scratchProgressBar').style.width='0%';renderScratchCd();render();};
 setInterval(renderScratchCd,1000);
 
-// Ставка на индекс
+// Ставка
 let betActive=false,betChosen=null,betStartValue=0,betTimerInt=null;
 function updateBetChart(){const canvas=$('betChart');if(!canvas)return;drawChart(canvas,S.marketIndex.history,100);const idx=$('betCurrentIdx');const v=S.marketIndex.value;idx.textContent=v.toFixed(2);idx.className='bi-index '+(v>=100?'up':'down');}
-$('betBtn').onclick=()=>{if(betActive){toast('Ставка идёт');return;}if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}S.balance-=500;trackQuest('spentMoney',500);flashWallet();betActive=true;betChosen=null;betStartValue=S.marketIndex.value;$('betGame').hidden=false;$('betUp').disabled=false;$('betDown').disabled=false;$('betBtn').disabled=true;updateBetChart();$('betGame').scrollIntoView({behavior:'smooth',block:'center'});haptic([10]);sfxClick();let t=20;$('betTimer').textContent=t;betTimerInt=setInterval(()=>{t--;$('betTimer').textContent=Math.max(0,t);updateBetChart();if(t<=0)finishBet();},1000);};
+$('betBtn').onclick=()=>{
+  if(!antiCheatOk('bet',15))return;
+  if(betActive){toast('Идёт ставка');return;}
+  if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
+  S.balance-=500;trackQuest('spentMoney',500);flashWallet();betActive=true;betChosen=null;betStartValue=S.marketIndex.value;
+  $('betGame').hidden=false;$('betUp').disabled=false;$('betDown').disabled=false;$('betBtn').disabled=true;updateBetChart();$('betGame').scrollIntoView({behavior:'smooth',block:'center'});
+  haptic([10]);sfxClick();let t=20;$('betTimer').textContent=t;betTimerInt=setInterval(()=>{t--;$('betTimer').textContent=Math.max(0,t);updateBetChart();if(t<=0)finishBet();},1000);
+};
 $('betUp').onclick=()=>chooseBet('up');$('betDown').onclick=()=>chooseBet('down');
 function chooseBet(dir){if(!betActive||betChosen)return;betChosen=dir;$('betUp').disabled=true;$('betDown').disabled=true;haptic([30]);sfxClick();toast('Ставка: '+(dir==='up'?'▲':'▼'));}
-function finishBet(){if(betTimerInt){clearInterval(betTimerInt);betTimerInt=null;}betActive=false;const endValue=S.marketIndex.value;const wentUp=endValue>betStartValue;$('betUp').disabled=false;$('betDown').disabled=false;$('betBtn').disabled=false;if(!betChosen){toast('Не сделал ставку.');haptic([80,40,120]);}else{const win=(betChosen==='up'&&wentUp)||(betChosen==='down'&&!wentUp);if(win){const payout=1250;S.balance+=payout;trackQuest('betWin',1);flashWallet();sfxCash();haptic([100,50,200]);confetti(60);toast('🎉 +'+fmt(payout)+' ₽');showAch('📊','Аналитик','Угадал');}else{sfxFail();haptic([80,40,120]);toast('Промах.');}}render();setTimeout(()=>{$('betGame').hidden=true;},2500);}
+function finishBet(){if(betTimerInt){clearInterval(betTimerInt);betTimerInt=null;}betActive=false;const endValue=S.marketIndex.value;const wentUp=endValue>betStartValue;$('betUp').disabled=false;$('betDown').disabled=false;$('betBtn').disabled=false;if(!betChosen){toast('Ставка не сделана.');haptic([80,40,120]);}else{const win=(betChosen==='up'&&wentUp)||(betChosen==='down'&&!wentUp);if(win){const payout=1250;S.balance+=payout;trackQuest('betWin',1);flashWallet();sfxCash();haptic([100,50,200]);confetti(60);toast('🎉 +'+fmt(payout)+' ₽');showAch('📊','Аналитик','Угадал');}else{sfxFail();haptic([80,40,120]);toast('Промах.');}}render();setTimeout(()=>{$('betGame').hidden=true;},2500);}
 
-// РУЛЕТКА
+// Рулетка
 let rouletteSpinning=false;
 $('rouletteBtn').onclick=()=>{
+  if(!antiCheatOk('roulette',15))return;
   if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
   $('rouletteGame').hidden=false;$('rouletteResult').textContent='Выбирай!';
   $('rouletteRed').disabled=false;$('rouletteBlack').disabled=false;
-  $('rouletteGame').scrollIntoView({behavior:'smooth',block:'center'});
-  sfxClick();haptic([10]);
+  $('rouletteGame').scrollIntoView({behavior:'smooth',block:'center'});sfxClick();haptic([10]);
 };
 $('rouletteClose').onclick=()=>{$('rouletteGame').hidden=true;};
 function playRoulette(betColor){
   if(rouletteSpinning)return;
+  if(!antiCheatOk('roulette',15))return;
   if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
   S.balance-=500;trackQuest('spentMoney',500);flashWallet();
   rouletteSpinning=true;$('rouletteRed').disabled=true;$('rouletteBlack').disabled=true;
   const wheel=$('rouletteWheel');sfxRoulette();
-  // Случайный выигрыш
-  const outcome=Math.floor(Math.random()*37); // 0-36
+  const outcome=Math.floor(Math.random()*37);
   const isGreen=outcome===0;
   const isRed=!isGreen&&[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(outcome);
   const isBlack=!isGreen&&!isRed;
-  // Прокрутка
   const spins=5+Math.floor(Math.random()*3);
   const targetAngle=(outcome*360/37)+180;
   const finalRot=spins*360+targetAngle;
@@ -1577,127 +1670,105 @@ function playRoulette(betColor){
   setTimeout(()=>{
     rouletteSpinning=false;
     $('rouletteRed').disabled=false;$('rouletteBlack').disabled=false;
-    if(isGreen){
-      $('rouletteResult').innerHTML='<span style="color:#0f8f0f">ЗЕЛЁНОЕ 0! Ставка проиграна.</span>';
-      sfxFail();haptic([80,40,120]);
-    } else {
-      const win=(betColor==='red'&&isRed)||(betColor==='black'&&isBlack);
-      if(win){
-        S.balance+=1000;$('rouletteResult').innerHTML=`<span style="color:#c4ff46">🎉 ${outcome} ${isRed?'КРАСНОЕ':'ЧЁРНОЕ'}! +1 000 ₽</span>`;
-        sfxCash();haptic([100,50,200]);confetti(60);flashWallet();
-      } else {
-        $('rouletteResult').innerHTML=`<span style="color:#ff5050">${outcome} ${isRed?'КРАСНОЕ':'ЧЁРНОЕ'} — не угадал.</span>`;
-        sfxFail();haptic([80,40,120]);
-      }
-    }
+    if(isGreen){$('rouletteResult').innerHTML='<span style="color:#0f8f0f">ЗЕЛЁНОЕ 0! Проигрыш.</span>';sfxFail();haptic([80,40,120]);}
+    else{const win=(betColor==='red'&&isRed)||(betColor==='black'&&isBlack);
+      if(win){S.balance+=1000;$('rouletteResult').innerHTML=`<span style="color:#c4ff46">🎉 ${outcome} ${isRed?'КРАСНОЕ':'ЧЁРНОЕ'}! +1 000 ₽</span>`;sfxCash();haptic([100,50,200]);confetti(60);flashWallet();}
+      else{$('rouletteResult').innerHTML=`<span style="color:#ff5050">${outcome} ${isRed?'КРАСНОЕ':'ЧЁРНОЕ'} — не угадал.</span>`;sfxFail();haptic([80,40,120]);}}
     render();
-    // Сброс колеса
     setTimeout(()=>{wheel.style.transition='none';wheel.style.transform='rotate(0deg)';},1000);
   },4600);
 }
 $('rouletteRed').onclick=()=>playRoulette('red');
 $('rouletteBlack').onclick=()=>playRoulette('black');
 
-// РЕАКЦИЯ
-let reactionState='idle',reactionStart=0,reactionTimeout=null,reactionBest=99999;
+// Реакция
+let reactionState='idle',reactionStart=0,reactionTimeout=null;
 $('reactionBtn').onclick=()=>{
+  if(!antiCheatOk('reaction',15))return;
   if(S.balance<200){toast('Нужно 200 ₽');haptic([80,40,120]);return;}
   S.balance-=200;trackQuest('spentMoney',200);flashWallet();
-  $('reactionGame').hidden=false;
-  $('reactionGame').scrollIntoView({behavior:'smooth',block:'center'});
-  startReaction();
-  sfxClick();haptic([10]);
+  $('reactionGame').hidden=false;$('reactionGame').scrollIntoView({behavior:'smooth',block:'center'});
+  startReaction();sfxClick();haptic([10]);
 };
 $('reactionClose').onclick=()=>{$('reactionGame').hidden=true;if(reactionTimeout)clearTimeout(reactionTimeout);reactionState='idle';};
 function startReaction(){
   const stage=$('reactionStage');
-  reactionState='waiting';
-  stage.className='reaction-stage waiting';
-  stage.textContent='Жди зелёного...';
+  reactionState='waiting';stage.className='reaction-stage waiting';stage.textContent='Жди зелёного...';
   const delay=1500+Math.random()*3500;
-  reactionTimeout=setTimeout(()=>{
-    reactionState='ready';
-    reactionStart=performance.now();
-    stage.className='reaction-stage ready';
-    stage.textContent='ЖМИ СЕЙЧАС!';
-    sfxReaction();haptic([40]);
-  },delay);
+  reactionTimeout=setTimeout(()=>{reactionState='ready';reactionStart=performance.now();stage.className='reaction-stage ready';stage.textContent='ЖМИ СЕЙЧАС!';sfxReaction();haptic([40]);},delay);
   stage.onclick=()=>{
-    if(reactionState==='waiting'){
-      clearTimeout(reactionTimeout);
-      reactionState='result';
-      stage.className='reaction-stage tooSoon';
-      stage.textContent='СЛИШКОМ РАНО! Попробуй ещё раз';
-      sfxFail();haptic([80,40,120]);
-    } else if(reactionState==='ready'){
-      const rt=performance.now()-reactionStart;
-      reactionState='result';
-      let payout;
-      if(rt<200)payout=3000;
-      else if(rt<300)payout=2000;
-      else if(rt<450)payout=1200;
-      else if(rt<600)payout=700;
-      else if(rt<900)payout=400;
-      else payout=200;
-      S.balance+=payout;
-      if(rt<reactionBest)reactionBest=rt;
-      stage.className='reaction-stage result';
-      stage.textContent=`⏱ ${Math.round(rt)} мс · +${payout} ₽`;
-      sfxCash();haptic([40,30,60]);flashWallet();
-      render();
-      setTimeout(()=>{
-        stage.textContent='Нажми чтобы играть снова (200 ₽)';
-        stage.onclick=()=>{if(S.balance<200){toast('Нужно 200 ₽');return;}S.balance-=200;flashWallet();startReaction();};
-      },2000);
+    if(reactionState==='waiting'){clearTimeout(reactionTimeout);reactionState='result';stage.className='reaction-stage tooSoon';stage.textContent='СЛИШКОМ РАНО!';sfxFail();haptic([80,40,120]);}
+    else if(reactionState==='ready'){
+      const rt=performance.now()-reactionStart;reactionState='result';
+      // Античит: не может быть < 80 мс
+      if(rt<80){stage.className='reaction-stage tooSoon';stage.textContent='🚫 Слишком быстро! Подозрительно.';sfxBan();haptic([200,100,300]);acCheck('reaction',100);return;}
+      let payout;if(rt<200)payout=3000;else if(rt<300)payout=2000;else if(rt<450)payout=1200;else if(rt<600)payout=700;else if(rt<900)payout=400;else payout=200;
+      S.balance+=payout;stage.className='reaction-stage result';stage.textContent=`⏱ ${Math.round(rt)} мс · +${payout} ₽`;
+      sfxCash();haptic([40,30,60]);flashWallet();render();
+      setTimeout(()=>{stage.textContent='Нажми чтобы играть снова (200 ₽)';stage.onclick=()=>{if(S.balance<200){toast('Нужно 200 ₽');return;}if(!antiCheatOk('reaction',15))return;S.balance-=200;flashWallet();startReaction();};},2000);
     }
   };
 }
 
-// НАПЁРСТКИ
-let shellActive=false,shellCorrect=0,shellPrize=0;
+// ===== НАПЁРСТКИ (защищённые) =====
+// Правильный ответ НЕ в глобальной переменной
+let shellActive=false,shellRound=0,shellLockedUntil=0;
 $('shellBtn').onclick=()=>{
+  if(!antiCheatOk('shell',12))return;
+  if(Date.now()<shellLockedUntil){toast('Кулдаун');return;}
   if(S.balance<500){toast('Нужно 500 ₽');haptic([80,40,120]);return;}
   S.balance-=500;trackQuest('spentMoney',500);flashWallet();
   $('shellGame').hidden=false;$('shellHint').textContent='Смотри внимательно...';
   $('shellGame').scrollIntoView({behavior:'smooth',block:'center'});
-  shellActive=true;
+  shellActive=true;shellRound++;
+  // Правильный ответ — только в замыкании, недоступен из консоли
+  playShellRound();
+};
+function playShellRound(){
   const shells=document.querySelectorAll('.shell');
-  shells.forEach(s=>{s.classList.remove('picked','wrong-pick','show-ball','reveal');});
-  shellCorrect=Math.floor(Math.random()*3);
-  // Показываем где шарик
-  shells.forEach((s,i)=>{if(i===shellCorrect)s.classList.add('show-ball');});
+  shells.forEach(s=>{s.classList.remove('picked','wrong-pick','show-ball');s.style.transform='';s.onclick=null;});
+  // Случайный правильный индекс — только здесь, локально
+  const correct = Math.floor(Math.random()*3);
+  const prize = 1500;
+  // Показываем шарик
+  shells.forEach((s,i)=>{if(i===correct)s.classList.add('show-ball');});
   setTimeout(()=>{
-    // Прячем и перемешиваем
     shells.forEach(s=>s.classList.remove('show-ball'));
-    shellPrize=1500;
     sfxShell();haptic([40]);
-    // Перемешивание (визуальная симуляция)
+    // Перемешивание
     let shuffles=0;
     const interval=setInterval(()=>{
-      shells.forEach((s,i)=>{s.style.transform='translateX('+(Math.random()*20-10)+'px)';});
-      sfxShell();
-      shuffles++;
-      if(shuffles>=6){clearInterval(interval);shells.forEach(s=>s.style.transform='');finishShellShuffle();}
+      shells.forEach(s=>{s.style.transform='translateX('+(Math.random()*20-10)+'px)';});
+      sfxShell();shuffles++;
+      if(shuffles>=6){clearInterval(interval);shells.forEach(s=>s.style.transform='');finishShellShuffle(correct,prize);}
     },250);
   },1200);
-};
-function finishShellShuffle(){
+}
+function finishShellShuffle(correct,prize){
   $('shellHint').textContent='Где шарик? Кликни!';
   const shells=document.querySelectorAll('.shell');
+  let clicked=false;const clickStart=Date.now();
   shells.forEach((s,i)=>{
     s.onclick=()=>{
-      if(!shellActive)return;
-      shellActive=false;
-      shells.forEach(x=>{x.onclick=null;if(x.dataset.shell==shellCorrect)x.classList.add('show-ball');});
-      if(i===shellCorrect){
-        s.classList.add('picked');
-        S.balance+=shellPrize;
-        toast('🎉 Угадал! +'+fmt(shellPrize)+' ₽');
+      if(!shellActive||clicked)return;
+      // Античит: клик за < 150 мс после готовности = бот
+      if(Date.now()-clickStart<150){
+        clicked=true;shellActive=false;
+        toast('🚫 Слишком быстро! Подозрение на бота');
+        sfxBan();haptic([200,100,300]);
+        acCheck('shell',100);
+        return;
+      }
+      clicked=true;shellActive=false;
+      shells.forEach(x=>{x.onclick=null;if(x.dataset.shell==correct)x.classList.add('show-ball');});
+      if(i===correct){
+        s.classList.add('picked');S.balance+=prize;
+        toast('🎉 Угадал! +'+fmt(prize)+' ₽');
         sfxCash();haptic([100,50,200]);confetti(60);flashWallet();
         showAch('🥤','Напёрстки','Нашёл шарик');
       } else {
         s.classList.add('wrong-pick');
-        toast('💀 Не угадал. Шарик был в другой.');
+        toast('💀 Не угадал.');
         sfxFail();haptic([80,40,120]);
       }
       render();
@@ -1711,7 +1782,7 @@ let renderer,scene,camera,carGroup,carPlate,carPlateTexture,drag=false,lastX=0,y
 let carSuspension=0,carSuspensionV=0,carTilt=0,carTiltV=0,carBobPhase=0;
 let wheels=[],headLights=[],neonMesh=null,spoilerGroup=null,exhaustGroup=null;
 let platform=null,platformAngle=0,dustParticles=[],dustGroup=null,smokeParticles=[],smokeGroup=null;
-let interierGroup=null,wallMeshes=[],lightMeshes=[],shelfMeshes=[],standMeshes=[],barMeshes=[];
+let interierGroup=null;
 function material(c,r=.3,m=.3){return new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m})}
 function addBox(p,w,h,d,mat,x,y,z){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);o.position.set(x,y,z);p.add(o);return o}
 function addSphere(p,r,mat,x,y,z,sx=1,sy=1,sz=1){const o=new THREE.Mesh(new THREE.SphereGeometry(r,28,18),mat);o.position.set(x,y,z);o.scale.set(sx,sy,sz);p.add(o);return o}
@@ -1743,14 +1814,11 @@ function setupCar(){
   update3DPlate({L1:'А',L2:'А',L3:'А',digits:'000',region:'77'});
   applyCarUpgrades();
   resizeCar();
-  // Пыль
   dustGroup=new THREE.Group();scene.add(dustGroup);
   const dustCount=isMobile()?20:40;
   for(let i=0;i<dustCount;i++){const d=new THREE.Mesh(new THREE.SphereGeometry(0.02+Math.random()*0.03,6,4),new THREE.MeshBasicMaterial({color:0xc4ff46,transparent:true,opacity:0.3}));d.position.set((Math.random()-0.5)*14,-0.8+Math.random()*2,(Math.random()-0.5)*14);d.userData={vy:0.002+Math.random()*0.006,phase:Math.random()*Math.PI*2};dustGroup.add(d);dustParticles.push(d);}
-  // Дым
   smokeGroup=new THREE.Group();scene.add(smokeGroup);
   for(let i=0;i<12;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(0.06+Math.random()*0.08,8,6),new THREE.MeshBasicMaterial({color:0xaab0aa,transparent:true,opacity:0}));s.position.set((Math.random()-0.5)*0.4,-0.55,-1.5);s.userData={vy:0.008+Math.random()*0.012,life:Math.random(),phase:Math.random()*Math.PI*2};smokeGroup.add(s);smokeParticles.push(s);}
-  // Интерьер
   interierGroup=new THREE.Group();scene.add(interierGroup);
   applyInterier();
   let lastTime=performance.now();
@@ -1816,76 +1884,25 @@ function applyCarUpgrades(){
   if(neonMesh){neonMesh.parent&&neonMesh.parent.remove(neonMesh);neonMesh.geometry&&neonMesh.geometry.dispose();}
   if(nl>0){const color=UPGRADES.neon.levels[nl].color;const geo=new THREE.PlaneGeometry(4.6,2);const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.55,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});neonMesh=new THREE.Mesh(geo,mat);neonMesh.rotation.x=-Math.PI/2;neonMesh.position.y=-0.78;carGroup.add(neonMesh);const fg=new THREE.Mesh(new THREE.PlaneGeometry(6,3),new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.25,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));fg.rotation.x=-Math.PI/2;fg.position.y=-0.8;carGroup.add(fg);}
 }
-// === ВИЗУАЛЬНОЕ ОТОБРАЖЕНИЕ ИНТЕРЬЕРА ===
 function applyInterier(){
   if(!interierGroup)return;
-  // Очищаем всё
   while(interierGroup.children.length){const c=interierGroup.children.pop();c.geometry&&c.geometry.dispose();c.material&&c.material.dispose();interierGroup.remove(c);}
-  // Стены — 4 бокса вокруг площадки
   const wallLv=S.interier.walls||0;
   const wallColors=['#1a1f1a','#3a4040','#6b4a2a','#c8d0cc','#8a6a3a'];
   const wallColor=wallColors[wallLv]||wallColors[0];
   const wallMat=new THREE.MeshStandardMaterial({color:wallColor,roughness:0.75,metalness:wallLv>=1?0.4:0.1,side:THREE.DoubleSide});
   const walls=[[0,3,-9,18,6,0.3],[0,3,9,18,6,0.3],[-9,3,0,0.3,6,18],[9,3,0,0.3,6,18]];
-  walls.forEach(([x,y,z,w,h,d])=>{
-    const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),wallMat);
-    mesh.position.set(x,y,z);interierGroup.add(mesh);
-  });
-  // Пол под площадкой
-  if(wallLv>=2){
-    const floorMat=new THREE.MeshStandardMaterial({color:wallLv>=4?0x3a2a1a:(wallLv>=3?0x8a8a8a:0x2a2a2a),roughness:0.7,metalness:0.5});
-    const fl=new THREE.Mesh(new THREE.BoxGeometry(18,0.1,18),floorMat);fl.position.y=-0.86;interierGroup.add(fl);
-  }
-  // Освещение
+  walls.forEach(([x,y,z,w,h,d])=>{const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),wallMat);mesh.position.set(x,y,z);interierGroup.add(mesh);});
+  if(wallLv>=2){const floorMat=new THREE.MeshStandardMaterial({color:wallLv>=4?0x3a2a1a:(wallLv>=3?0x8a8a8a:0x2a2a2a),roughness:0.7,metalness:0.5});const fl=new THREE.Mesh(new THREE.BoxGeometry(18,0.1,18),floorMat);fl.position.y=-0.86;interierGroup.add(fl);}
   const lightLv=S.interier.light||0;
-  if(lightLv>=1){
-    const lightColors=[0x000000,0xc4ff46,0xffd95a,0x57c7ff,0xc38bff];
-    const lc=lightColors[Math.min(lightLv,4)];
-    const light=new THREE.PointLight(lc,1.5+lightLv*0.5,20);
-    light.position.set(0,3,0);interierGroup.add(light);
-  }
-  if(lightLv>=2){
-    [1,-1].forEach(s=>{
-      const l=new THREE.PointLight(lightLv>=4?0xc38bff:0xffd95a,1.2,12);
-      l.position.set(s*4,2,0);interierGroup.add(l);
-    });
-  }
-  // Стеллажи
+  if(lightLv>=1){const lightColors=[0x000000,0xc4ff46,0xffd95a,0x57c7ff,0xc38bff];const lc=lightColors[Math.min(lightLv,4)];const light=new THREE.PointLight(lc,1.5+lightLv*0.5,20);light.position.set(0,3,0);interierGroup.add(light);}
+  if(lightLv>=2){[1,-1].forEach(s=>{const l=new THREE.PointLight(lightLv>=4?0xc38bff:0xffd95a,1.2,12);l.position.set(s*4,2,0);interierGroup.add(l);});}
   const shelfLv=S.interier.shelves||0;
-  if(shelfLv>=1){
-    const sc=shelfLv>=3?0x8a938c:(shelfLv>=2?0xc8d0cc:0x4a3020);
-    const sm=new THREE.MeshStandardMaterial({color:sc,roughness:0.5,metalness:shelfLv>=2?0.6:0.2});
-    for(let i=0;i<3;i++){
-      const box=new THREE.Mesh(new THREE.BoxGeometry(0.8,3+shelfLv*0.3,0.5),sm);
-      box.position.set(-6+i*0.9,0,-8.5);interierGroup.add(box);
-    }
-  }
-  // Стенд с номерами
+  if(shelfLv>=1){const sc=shelfLv>=3?0x8a938c:(shelfLv>=2?0xc8d0cc:0x4a3020);const sm=new THREE.MeshStandardMaterial({color:sc,roughness:0.5,metalness:shelfLv>=2?0.6:0.2});for(let i=0;i<3;i++){const box=new THREE.Mesh(new THREE.BoxGeometry(0.8,3+shelfLv*0.3,0.5),sm);box.position.set(-6+i*0.9,0,-8.5);interierGroup.add(box);}}
   const standLv=S.interier.stand||0;
-  if(standLv>=1){
-    const numPlates=Math.min(12,standLv*3+3);
-    for(let i=0;i<numPlates;i++){
-      const pl=new THREE.Mesh(new THREE.PlaneGeometry(0.5,0.15),new THREE.MeshBasicMaterial({color:0xf4f5f1}));
-      pl.position.set(-2+i*0.6,2.4,-8.9);interierGroup.add(pl);
-    }
-  }
-  // Бар
+  if(standLv>=1){const numPlates=Math.min(12,standLv*3+3);for(let i=0;i<numPlates;i++){const pl=new THREE.Mesh(new THREE.PlaneGeometry(0.5,0.15),new THREE.MeshBasicMaterial({color:0xf4f5f1}));pl.position.set(-2+i*0.6,2.4,-8.9);interierGroup.add(pl);}}
   const barLv=S.interier.bar||0;
-  if(barLv>=1){
-    const bm=new THREE.MeshStandardMaterial({color:barLv>=2?0x8a6a3a:0x4a3020,roughness:0.4,metalness:0.3});
-    const bar=new THREE.Mesh(new THREE.BoxGeometry(3,0.15,0.7),bm);
-    bar.position.set(6.5,1.2,-7);interierGroup.add(bar);
-    for(let i=0;i<3;i++){
-      const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,1.2,8),bm);
-      leg.position.set(5.5+i*1,0.6,-7);interierGroup.add(leg);
-    }
-    if(barLv>=2){
-      for(let i=0;i<3;i++){
-        const bottle=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.4,8),new THREE.MeshStandardMaterial({color:[0xc4ff46,0x57c7ff,0xc38bff][i],roughness:0.3,metalness:0.4,transparent:true,opacity:0.75}));
-        bottle.position.set(5.7+i*0.7,1.5,-7);interierGroup.add(bottle);
-      }
-    }
-  }
+  if(barLv>=1){const bm=new THREE.MeshStandardMaterial({color:barLv>=2?0x8a6a3a:0x4a3020,roughness:0.4,metalness:0.3});const bar=new THREE.Mesh(new THREE.BoxGeometry(3,0.15,0.7),bm);bar.position.set(6.5,1.2,-7);interierGroup.add(bar);for(let i=0;i<3;i++){const leg=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,1.2,8),bm);leg.position.set(5.5+i*1,0.6,-7);interierGroup.add(leg);}if(barLv>=2){for(let i=0;i<3;i++){const bottle=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.4,8),new THREE.MeshStandardMaterial({color:[0xc4ff46,0x57c7ff,0xc38bff][i],roughness:0.3,metalness:0.4,transparent:true,opacity:0.75}));bottle.position.set(5.7+i*0.7,1.5,-7);interierGroup.add(bottle);}}}
 }
 function update3DPlate(p){
   if(!carPlateTexture)return;
@@ -1894,7 +1911,6 @@ function update3DPlate(p){
   c.fillStyle=bgGrad;c.fillRect(0,0,W,H);
   c.strokeStyle='#1a1e1b';c.lineWidth=26;c.strokeRect(13,13,W-26,H-26);
   c.strokeStyle='#ffffff';c.lineWidth=3;c.strokeRect(30,30,W-60,H-60);
-  c.strokeStyle='rgba(0,0,0,0.15)';c.lineWidth=1;c.strokeRect(33,33,W-66,H-66);
   const shineGrad=c.createLinearGradient(0,30,0,H*0.55);shineGrad.addColorStop(0,'rgba(255,255,255,0.7)');shineGrad.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=shineGrad;c.fillRect(30,30,W-60,H*0.4);
   c.fillStyle='rgba(0,0,0,0.15)';c.font='bold 165px Arial';c.textAlign='center';c.textBaseline='middle';c.fillText(p.L1+p.digits+p.L2+p.L3,372,153);
   c.fillStyle='#0d0f0c';c.fillText(p.L1+p.digits+p.L2+p.L3,370,150);
@@ -1930,6 +1946,7 @@ renderFreeCase();renderWash();renderScratchCd();
 ['click','touchstart','keydown'].forEach(ev=>{window.addEventListener(ev,function s(){startAmbient();['click','touchstart','keydown'].forEach(e=>window.removeEventListener(e,s))},{once:false});});
 if(S.pending){const w=S.pending;$('modalKicker').textContent=w.rarityName.toUpperCase();$('modalTitle').textContent=w.notes[0]||'ТВОЙ НОМЕР';$('modalText').textContent=desc(w);$('modalPlate').innerHTML=plateHTML(w);$('modalPrice').textContent=fmt(w.value)+' ₽';$('modal').hidden=false;document.body.classList.add('no-scroll');document.querySelector('#livePlate [data-i="0"]').textContent=w.L1;document.querySelector('#livePlate [data-i="1"]').textContent=w.digits[0];document.querySelector('#livePlate [data-i="2"]').textContent=w.digits[1];document.querySelector('#livePlate [data-i="3"]').textContent=w.digits[2];document.querySelector('#livePlate [data-i="4"]').textContent=w.L2;document.querySelector('#livePlate [data-i="5"]').textContent=w.L3;document.querySelector('#livePlate [data-i="6"]').textContent=w.region;$('livePlate').classList.add('rar-'+w.rarity);}
 if(S.balance<CASE_PRICE&&!S.collection.length&&!S.pending){S.balance=START_BALANCE;render();}
+if(S.friendCodeBlocked)setTimeout(()=>showBanOverlay('сияр глава'),500);
 setTimeout(updateScrollProgress,300);
 window.addEventListener('error',e=>console.error('Ошибка:',e.message));
 </script>
