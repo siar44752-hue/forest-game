@@ -12,7 +12,7 @@
 html,body{width:100%;min-height:100%;overflow-x:hidden}
 body{background:#050806;color:var(--white);font-family:Manrope,Arial,sans-serif;padding-bottom:env(safe-area-inset-bottom);min-height:100vh}
 .bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.bg-aurora{position:absolute;inset:-20%;background:radial-gradient(ellipse 60% 50% at 20% 25%, rgba(196,255,70,.22), transparent 60%),radial-gradient(ellipse 55% 45% at 80% 70%, rgba(87,199,255,.18), transparent 60%),radial-gradient(ellipse 50% 40% at 60% 20%, rgba(195,139,255,.14), transparent 60%),radial-gradient(ellipse 70% 60% at 30% 85%, rgba(255,155,104,.12), transparent 65%);filter:blur(60px) saturate(140%);animation:aurora 22s ease-in-out infinite alternate;opacity:.85}
+.bg-aurora{position:absolute;inset:-20%;background:radial-gradient(ellipse 60% 50% at 20% 25%, rgba(196,255,70,.24), transparent 60%),radial-gradient(ellipse 55% 45% at 80% 70%, rgba(87,199,255,.2), transparent 60%),radial-gradient(ellipse 50% 40% at 60% 20%, rgba(195,139,255,.16), transparent 60%),radial-gradient(ellipse 70% 60% at 30% 85%, rgba(255,155,104,.14), transparent 65%);filter:blur(60px) saturate(150%);animation:aurora 22s ease-in-out infinite alternate;opacity:.9}
 @keyframes aurora{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(3%,-2%) scale(1.08) rotate(4deg)}100%{transform:translate(-3%,2%) scale(1.05) rotate(-3deg)}}
 .bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(196,255,70,.05) 1px, transparent 1px),linear-gradient(90deg, rgba(196,255,70,.05) 1px, transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center, #000 20%, transparent 75%);animation:gridDrift 40s linear infinite}
 @keyframes gridDrift{to{background-position:60px 60px,60px 60px}}
@@ -236,7 +236,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .sg-cell.found{background:linear-gradient(145deg,rgba(196,255,70,.3),rgba(140,200,50,.2));border-color:var(--lime);color:var(--lime);box-shadow:0 0 25px rgba(196,255,70,.4);pointer-events:none}
 .sg-cell.wrong{background:linear-gradient(145deg,rgba(255,80,80,.3),rgba(180,40,40,.2));border-color:#ff5050;color:#ff5050;animation:wrongShake .4s}
 @keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-/* EXCHANGE */
 .exchange-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .stock-card{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);position:relative;overflow:hidden;transition:all .3s}
 .stock-card:hover{border-color:rgba(196,255,70,.4);box-shadow:0 15px 50px rgba(0,0,0,.5),0 0 40px rgba(196,255,70,.1)}
@@ -256,8 +255,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .stock-buy{width:100%;padding:11px;border-radius:10px;margin-top:12px;background:linear-gradient(145deg,#d0ff5a,#a8e032);color:#111;font-weight:900;font-size:12px}
 .stock-buy:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 25px rgba(196,255,70,.4)}
 .stock-buy:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
-.stock-buy.sell{background:linear-gradient(145deg,#ff9b68,#e07a48)}
-/* WORKSHOP */
 .workshop-sel{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(22,30,22,.85), rgba(12,17,13,.95));border:1px solid var(--line);margin-bottom:14px}
 .workshop-sel .ws-plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px;max-height:340px;overflow-y:auto;padding-right:6px}
 .ws-plate{padding:10px;border-radius:12px;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.08);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative}
@@ -276,23 +273,33 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .ws-target-btn:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
 .ws-target-btn .tt-name{display:block;font-size:12px;margin-bottom:6px}
 .ws-target-btn .tt-range{display:block;font-size:10px;opacity:.7;font-weight:600}
+
+/* WHEEL */
+.ws-wheel-wrap{padding:24px;border-radius:20px;background:radial-gradient(ellipse at 50% 30%, rgba(30,44,28,.55), rgba(10,15,12,.95) 70%);border:1px solid rgba(196,255,70,.2);margin-bottom:14px;position:relative;overflow:hidden;box-shadow:inset 0 0 80px rgba(0,0,0,.6),0 0 40px rgba(196,255,70,.08)}
+.ws-wheel-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(196,255,70,.06), transparent 65%);pointer-events:none;animation:wheelGlow 3s ease-in-out infinite alternate}
+@keyframes wheelGlow{0%{opacity:.4}100%{opacity:.9}}
+.ws-wheel-stage{display:flex;justify-content:center;align-items:center;position:relative;padding:20px 0}
+.wheel-container{position:relative;width:min(320px,80vw);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.wheel-arrow{position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:5;pointer-events:none;filter:drop-shadow(0 0 12px rgba(196,255,70,.9))}
+.wheel-arrow svg{display:block}
+#wheelCanvas{width:100%;height:100%;display:block;border-radius:50%;filter:drop-shadow(0 0 30px rgba(196,255,70,.35)) drop-shadow(0 0 60px rgba(196,255,70,.15))}
+.wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22%;height:22%;border-radius:50%;background:radial-gradient(circle at 35% 30%, #2a342a, #0a0f0c);border:3px solid rgba(196,255,70,.5);box-shadow:inset 0 0 20px rgba(0,0,0,.9),0 0 25px rgba(196,255,70,.5);z-index:4;display:flex;align-items:center;justify-content:center;font:bold 20px 'Russo One';color:var(--lime);pointer-events:none}
+.wheel-center::after{content:'';position:absolute;inset:8%;border-radius:50%;border:1px solid rgba(196,255,70,.3);animation:centerPulse 2s ease-in-out infinite alternate}
+@keyframes centerPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.15);opacity:1}}
 .ws-summary{padding:16px;border-radius:16px;background:linear-gradient(145deg, rgba(30,44,30,.7), rgba(18,26,18,.85));border:1px solid rgba(196,255,70,.3);margin-bottom:14px}
 .ws-summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);font-size:13px}
 .ws-summary-row:last-of-type{border-bottom:none}
 .ws-summary-row .wsr-val{font-weight:900;color:var(--white)}
 .ws-summary-row .wsr-val.lime{color:var(--lime);text-shadow:0 0 15px rgba(196,255,70,.5)}
-.ws-summary-row .wsr-val.red{color:var(--red)}
 .ws-summary-row .wsr-val.gold{color:var(--gold);text-shadow:0 0 15px rgba(255,214,107,.5)}
-.ws-chance{font:bold 32px 'Russo One';text-align:center;padding:12px 0;color:var(--lime);text-shadow:0 0 30px rgba(196,255,70,.6);transition:color .3s}
-.ws-chance.low{color:var(--red);text-shadow:0 0 30px rgba(255,80,80,.6)}
-.ws-chance.mid{color:var(--gold);text-shadow:0 0 30px rgba(255,214,107,.6)}
-.ws-chance-label{text-align:center;font-size:11px;color:var(--muted);letter-spacing:2px;margin-top:-4px}
+.ws-chance-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-top:6px;border-top:1px solid rgba(196,255,70,.2)}
+.ws-chance-label-small{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;font-weight:800}
+.ws-chance-val{font:bold 30px 'Russo One';color:var(--lime);text-shadow:0 0 30px rgba(196,255,70,.6);transition:color .3s}
+.ws-chance-val.low{color:var(--red);text-shadow:0 0 30px rgba(255,80,80,.6)}
+.ws-chance-val.mid{color:var(--gold);text-shadow:0 0 30px rgba(255,214,107,.6)}
 .ws-roll{width:100%;padding:16px;border-radius:12px;background:linear-gradient(145deg,#e0ff80,#a8e032);color:#111;font-weight:900;font-size:14px;letter-spacing:1px;box-shadow:0 6px 24px rgba(196,255,70,.35);margin-top:14px}
 .ws-roll:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(196,255,70,.5)}
 .ws-roll:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed;box-shadow:none}
-.ws-roll.rolling{animation:wsShake .1s infinite}
-@keyframes wsShake{0%,100%{transform:translateX(0)}50%{transform:translateX(-2px)}}
-/* MODAL */
 .modalback{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(14px);animation:fadeIn .3s}
 .modal{width:100%;max-width:480px;text-align:center;background:linear-gradient(145deg, rgba(24,34,24,.95), rgba(12,17,13,.97));border:1px solid rgba(196,255,70,.25);border-radius:22px;padding:28px;position:relative;overflow:hidden;animation:modalIn .6s cubic-bezier(.34,1.56,.64,1);box-shadow:0 30px 100px rgba(0,0,0,.9)}
 @keyframes modalIn{from{transform:scale(.85) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
@@ -331,7 +338,6 @@ body.landscape .plate-live .slot-char{font-size:42px;width:34px}
 body.landscape .plate-live .slot-region{font-size:30px;min-width:60px}
 body.landscape .scale{grid-column:1;padding:8px 14px 12px}
 body.landscape .actions{grid-column:2;padding:14px;flex-direction:column;justify-content:center;align-self:center}
-body.landscape .nav{margin-top:10px}
 body.landscape .scene{height:calc(100vh - 260px);min-height:220px}
 body.landscape h1{font-size:28px !important}
 @media(max-width:650px){
@@ -359,8 +365,9 @@ body.landscape h1{font-size:28px !important}
   .leisure-grid{grid-template-columns:1fr}
   .sg-grid{grid-template-columns:repeat(3,1fr)}
   .ws-target{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
-  .ws-chance{font-size:26px}
+  .ws-chance-val{font-size:24px}
   h1{font-size:30px !important}
+  .wheel-container{width:min(260px,72vw)}
 }
 @media(max-width:400px){
   .plate-live{min-width:240px}
@@ -487,7 +494,7 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">ЛИЧНЫЙ ШОУРУМ · LAMBORGHINI</div>
       <h2>ТВОЙ ГАРАЖ</h2>
-      <p>Клик по машине — пружинка. Тащи влево-вправо для поворота. Прокачка даёт +5 % дохода за уровень.</p>
+      <p>Клик по машине — пружинка. Тащи влево-вправо для поворота.</p>
     </div>
     <button class="btn secondary" data-view="caseView">← К кейсу</button>
   </div>
@@ -528,7 +535,7 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">КОЛЛЕКЦИОНЕРЫ И ПЕРЕКУПЩИКИ</div>
       <h2>РЫНОК</h2>
-      <p>Обычные предложения — раз в минуту. Перекупщик приезжает раз в 2–4 минуты с оверпрайсом.</p>
+      <p>Обычные предложения — раз в минуту. Перекупщик приезжает раз в 2–4 минуты.</p>
     </div>
     <span class="pill" id="timer">ПРОВЕРКА РЫНКА</span>
   </div>
@@ -559,13 +566,12 @@ body.landscape h1{font-size:28px !important}
   </nav>
 </section>
 
-<!-- EXCHANGE -->
 <section id="exchangeView" class="view">
   <div class="pagehead">
     <div>
       <div class="kicker">ЖИВОЙ РЫНОК НОМЕРОВ</div>
       <h2>БИРЖА</h2>
-      <p>Цены двигаются каждые 2 секунды. <b style="color:#c4ff46">Зелёный</b> — растёт, <b style="color:#ff5050">красный</b> — падает. Покупай дёшево — продавай дорого.</p>
+      <p>Цены двигаются каждые 2 секунды. <b style="color:#c4ff46">Зелёный</b> — растёт, <b style="color:#ff5050">красный</b> — падает.</p>
     </div>
     <button class="btn secondary" data-view="caseView">← К кейсу</button>
   </div>
@@ -596,33 +602,61 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">СПЛАВ НОМЕРОВ · РИСК / НАГРАДА</div>
       <h2>МАСТЕРСКАЯ</h2>
-      <p>Выбери номера из коллекции, укажи цель — увидишь честный шанс. При провале все выбранные номера <b style="color:#ff5050">сгорают</b>.</p>
+      <p>Выбери номера, цель — увидишь честный шанс и колесо фортуны. При провале номера <b style="color:#ff5050">сгорают</b>.</p>
     </div>
     <button class="btn secondary" data-view="collectionView">📚 К коллекции</button>
   </div>
+
   <div class="workshop-sel">
     <h3 style="margin:0 0 6px;font-size:15px">1️⃣ Выбери номера для сплава <span style="color:var(--muted);font-weight:600;font-size:12px">(мин. 1, макс. 8)</span></h3>
     <p class="muted" style="margin-bottom:10px">Жми на карточки, чтобы добавить/убрать. Чем больше сумма — тем выше шанс.</p>
     <div class="ws-plates" id="wsPlates"></div>
   </div>
+
   <div class="workshop-sel">
     <h3 style="margin:0 0 6px;font-size:15px">2️⃣ Куда целимся?</h3>
     <p class="muted" style="margin-bottom:10px">Доступны только редкости выше суммы выбранных номеров.</p>
     <div class="ws-target" id="wsTargets"></div>
   </div>
-  <div class="ws-summary" id="wsSummary" hidden>
-    <div class="ws-summary-row"><span>💵 Сумма выбранных</span><span class="wsr-val" id="wsSum">0 ₽</span></div>
-    <div class="ws-summary-row"><span>🎯 Целевая редкость</span><span class="wsr-val gold" id="wsTargetName">—</span></div>
-    <div class="ws-summary-row"><span>💰 Средняя цена цели</span><span class="wsr-val gold" id="wsTargetValue">—</span></div>
-    <div class="ws-chance" id="wsChance">— %</div>
-    <div class="ws-chance-label">ШАНС УСПЕХА</div>
-    <button class="ws-roll" id="wsRoll" disabled>ИСПЫТАТЬ СУДЬБУ</button>
+
+  <!-- WHEEL -->
+  <div class="ws-wheel-wrap" id="wsWheelWrap" hidden>
+    <div class="ws-wheel-stage">
+      <div class="wheel-container">
+        <div class="wheel-arrow">
+          <svg width="28" height="38" viewBox="0 0 28 38">
+            <defs>
+              <linearGradient id="arrowGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#e0ff80"/>
+                <stop offset="100%" stop-color="#a8e032"/>
+              </linearGradient>
+            </defs>
+            <path d="M14 36 L2 12 Q14 4 26 12 Z" fill="url(#arrowGrad)" stroke="#0a0f0c" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M14 30 L7 15 Q14 10 21 15 Z" fill="rgba(255,255,255,.5)" opacity=".4"/>
+          </svg>
+        </div>
+        <canvas id="wheelCanvas"></canvas>
+        <div class="wheel-center" id="wheelCenter">?</div>
+      </div>
+    </div>
+    <div class="ws-summary" id="wsSummary">
+      <div class="ws-summary-row"><span>💵 Сумма выбранных</span><span class="wsr-val" id="wsSum">0 ₽</span></div>
+      <div class="ws-summary-row"><span>🎯 Целевая редкость</span><span class="wsr-val gold" id="wsTargetName">—</span></div>
+      <div class="ws-summary-row"><span>💰 Средняя цена цели</span><span class="wsr-val gold" id="wsTargetValue">—</span></div>
+      <div class="ws-chance-row">
+        <span class="ws-chance-label-small">ШАНС УСПЕХА</span>
+        <span class="ws-chance-val" id="wsChanceVal">— %</span>
+      </div>
+      <button class="ws-roll" id="wsRoll" disabled>🎡 ИСПЫТАТЬ СУДЬБУ</button>
+    </div>
   </div>
+
   <div class="panel" style="margin-top:14px">
     <h3>📐 Как считается шанс?</h3>
     <p class="muted">Формула: <b style="color:var(--lime)">Шанс = (Сумма / Средняя цель) × 30 %</b>, ограничение 0.01–45 %.<br>
     Пример: 500 ₽ → 500 000 ₽ = <b style="color:var(--red)">0.03 %</b>. 150 000 ₽ → 500 000 ₽ = 9 %. 400 000 ₽ → 500 000 ₽ = 24 %.</p>
   </div>
+
   <nav class="nav">
     <button data-view="caseView">🎰 Кейс</button>
     <button data-view="garageView">🏎️ Гараж</button>
@@ -639,7 +673,7 @@ body.landscape h1{font-size:28px !important}
     <div>
       <div class="kicker">КОГДА ДЕНЬГИ КОНЧИЛИСЬ</div>
       <h2>ДОСУГ</h2>
-      <p>Мини-игры, бесплатные активности и кликеры.</p>
+      <p>Мини-игры и бесплатные активности.</p>
     </div>
     <button class="btn secondary" data-view="caseView">← К кейсу</button>
   </div>
@@ -654,7 +688,7 @@ body.landscape h1{font-size:28px !important}
     <div class="leisure-card blue">
       <span class="lc-icon">🎯</span>
       <h3>Угадай цифру</h3>
-      <p>Ставка 500 ₽. Угадал — x6. Не угадал — ставка уходит.</p>
+      <p>Ставка 500 ₽. Угадал — x6.</p>
       <button id="luckyBtn">СЫГРАТЬ · 500 ₽</button>
     </div>
     <div class="leisure-card">
@@ -666,7 +700,7 @@ body.landscape h1{font-size:28px !important}
     <div class="leisure-card">
       <span class="lc-icon">🚿</span>
       <h3>Мойка машины</h3>
-      <p>Кликер на 20 сек. 10–40 ₽ за клик. Кулдаун 45 сек.</p>
+      <p>Кликер на 20 сек. 10–40 ₽ за клик.</p>
       <button id="washBtn">ПОМЫТЬ · 20 СЕК</button>
       <div class="cd" id="washCd"></div>
     </div>
@@ -821,7 +855,7 @@ function nav(id){
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>nav(b.dataset.view));
 
-// ============ ПАССИВНЫЙ ДОХОД ============
+// ============ ПАССИВ ============
 function getUpgradeBonus(){let b=0;for(const k of Object.keys(S.upgrades))b+=S.upgrades[k];return b*0.05;}
 function getPassiveIncome(){const p=S.collection.find(x=>x.id===S.installed);if(!p)return 0;return Math.round(p.value*0.004*(1+getUpgradeBonus()));}
 
@@ -839,12 +873,9 @@ function render(){
   $('carIncome').textContent=fmt(inc)+' ₽';
   renderCollection();renderGarage();renderOffers();renderUpgrades();renderTrader();updateEventDots();save();
 }
-function updateEventDots(){
-  const t=document.querySelector('[data-view="marketView"]');
-  if(t)t.classList.toggle('has-event',S.trader.active);
-}
+function updateEventDots(){const t=document.querySelector('[data-view="marketView"]');if(t)t.classList.toggle('has-event',S.trader.active);}
 
-// ============ АНИМАЦИЯ СЛОТА ============
+// ============ СЛОТ ============
 function resetSlots(){document.querySelectorAll('#livePlate .slot-char, #livePlate .slot-region').forEach(el=>{el.textContent='•';el.classList.remove('locked','active');});document.querySelectorAll('#animProgress span').forEach(el=>el.classList.remove('done','current'));$('slotHint').textContent='Нажми кнопку, чтобы начать';$('slotHint').classList.remove('win');$('livePlate').className='plate-live';$('slotStage').classList.remove('spinning');}
 function animateSlot(index,finalValue,duration=800,isRegion=false){
   return new Promise(resolve=>{
@@ -899,29 +930,13 @@ $('claim').onclick=claim;$('seeGarage').onclick=claim;
 
 // ============ GARAGE ============
 function renderGarage(){const p=S.collection.find(x=>x.id===S.installed);const demo={L1:'А',L2:'А',L3:'А',digits:'000',region:'77',rarity:'common'};$('garagePlate').innerHTML=plateHTML(p||demo);$('garageName').textContent=p?`${p.L1}${p.digits}${p.L2}${p.L3} · ${p.region}`:'Демонстрационный номер';$('garageDesc').textContent=p?desc(p):'Открой кейс.';$('garageValue').textContent=p?'ОЦЕНКА: '+fmt(p.value)+' ₽':'—';if(carPlateTexture)update3DPlate(p||demo);}
-function renderUpgrades(){
-  const root=$('upgradesGrid');if(!root)return;
-  root.innerHTML=Object.entries(UPGRADES).map(([key,u])=>{
-    const lv=S.upgrades[key],next=lv+1<u.levels.length?u.levels[lv+1]:null,owned=lv===u.levels.length-1;
-    return `<div class="upgrade ${owned?'owned':''}">
-      <div class="upgrade-head"><b>${u.name}</b><span class="lv">УР. ${lv+1}/${u.levels.length}</span></div>
-      <div class="upgrade-desc">${owned?'Максимум.':'След: '+next.name+' · '+fmt(next.cost)+' ₽'}</div>
-      <div class="upgrade-visual">${u.levels.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div>
-      <button class="upgrade-btn" data-up="${key}" ${owned||S.balance<((next&&next.cost)||0)?'disabled':''}>${owned?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;
-  }).join('');
-  root.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));
-}
+function renderUpgrades(){const root=$('upgradesGrid');if(!root)return;root.innerHTML=Object.entries(UPGRADES).map(([key,u])=>{const lv=S.upgrades[key],next=lv+1<u.levels.length?u.levels[lv+1]:null,owned=lv===u.levels.length-1;return `<div class="upgrade ${owned?'owned':''}"><div class="upgrade-head"><b>${u.name}</b><span class="lv">УР. ${lv+1}/${u.levels.length}</span></div><div class="upgrade-desc">${owned?'Максимум.':'След: '+next.name+' · '+fmt(next.cost)+' ₽'}</div><div class="upgrade-visual">${u.levels.map((_,i)=>`<i class="${i<=lv?'on':''}"></i>`).join('')}</div><button class="upgrade-btn" data-up="${key}" ${owned||S.balance<((next&&next.cost)||0)?'disabled':''}>${owned?'✓ МАКС':`КУПИТЬ · ${fmt(next.cost)} ₽`}</button></div>`;}).join('');root.querySelectorAll('[data-up]').forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));}
 function buyUpgrade(key){const u=UPGRADES[key],lv=S.upgrades[key];if(lv+1>=u.levels.length){toast('Максимум');return;}const cost=u.levels[lv+1].cost;if(S.balance<cost){toast('Не хватает денег');return;}S.balance-=cost;S.upgrades[key]=lv+1;flashWallet();sfxUpgrade();applyCarUpgrades();render();toast(`${u.name} → ${u.levels[lv+1].name}`);if(getUpgradeBonus()>=0.5)showAch('🔧','Тюнинг','+50% бонус');}
 
 // ============ COLLECTION ============
 function renderCollection(){
   const root=$('collection');if(!S.collection.length){root.innerHTML='<div class="empty">Коллекция пуста.</div>';return;}
-  root.innerHTML=S.collection.map((p,i)=>`<article class="item rar-${p.rarity}" style="animation-delay:${i*0.03}s">
-    ${plateHTML(p)}
-    <div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(p.value)} ₽</b></div>
-    <p class="muted">${desc(p)}</p>
-    <button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button>
-  </article>`).join('');
+  root.innerHTML=S.collection.map((p,i)=>`<article class="item rar-${p.rarity}" style="animation-delay:${i*0.03}s">${plateHTML(p)}<div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(p.value)} ₽</b></div><p class="muted">${desc(p)}</p><button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button></article>`).join('');
   root.querySelectorAll('[data-install]').forEach(b=>b.onclick=()=>{S.installed=b.dataset.install;render();nav('garageView');toast('Установлен');sfxClick();});
 }
 
@@ -934,136 +949,49 @@ function acceptOffer(id){const o=S.offers.find(x=>x.id===id);if(!o)return;const 
 function spawnTrader(){const av=S.collection;if(!av.length){S.lastTrader=Date.now();return;}const count=Math.min(av.length,Math.random()<0.3?2:1);const sh=[...av].sort(()=>Math.random()-0.5).slice(0,count);const offers=sh.map(p=>{const mult=1.25+Math.random()*0.35;const price=Math.max(100,Math.round(p.value*mult/50)*50);return {pid:p.id,price,base:p.value,mult};});S.trader={active:true,expires:Date.now()+45000,offers};S.lastTrader=Date.now();sfxTraderHorn();$('traderBanner').hidden=false;setTimeout(()=>$('traderBanner').classList.add('show'),50);render();renderTrader();toast('🧳 Перекупщик приехал!');}
 function closeTrader(){S.trader={active:false,expires:0,offers:[]};$('traderBanner').classList.remove('show');setTimeout(()=>$('traderBanner').hidden=true,600);render();renderTrader();}
 function renderTrader(){const wrap=$('traderPanelWrap');if(!wrap)return;if(!S.trader.active||!S.trader.offers.length){wrap.innerHTML='';return;}const left=Math.max(0,Math.ceil((S.trader.expires-Date.now())/1000));wrap.innerHTML=`<div class="trader-panel"><div class="trader-head"><div class="th-left"><div class="th-icon">🧳</div><div class="th-name"><b>ПЕРЕКУПЩИК</b><small>Скупает дороже · уедет через</small></div></div><div class="th-timer">${left}с</div></div>${S.trader.offers.map(o=>{const p=S.collection.find(x=>x.id===o.pid);if(!p)return '';const pct=Math.round((o.mult-1)*100);return `<div class="trader-offer"><div class="to-plate">${plateHTML(p)}<div class="muted">${p.rarityName} · база ${fmt(o.base)} ₽ <span style="color:#ffd95a;font-weight:900">+${pct}%</span></div></div><div style="text-align:right"><div class="to-price">${fmt(o.price)} ₽</div></div><button data-trader="${o.pid}">ПРОДАТЬ</button></div>`;}).join('')}</div>`;wrap.querySelectorAll('[data-trader]').forEach(b=>b.onclick=()=>acceptTraderOffer(b.dataset.trader));}
-function acceptTraderOffer(pid){const o=S.trader.offers.find(x=>x.pid===pid);if(!o)return;const i=S.collection.findIndex(p=>p.id===pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.traderSold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.trader.offers=S.trader.offers.filter(x=>x.pid!==pid);if(!S.trader.offers.length)closeTrader();render();flashWallet();toast('Перекупщик дал '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),10);sfxCash();if(S.stats.traderSold===3)showAch('🤝','Партнёр','3 продажи перекупщику');}
+function acceptTraderOffer(pid){const o=S.trader.offers.find(x=>x.pid===pid);if(!o)return;const i=S.collection.findIndex(p=>p.id===pid);if(i<0)return;const p=S.collection[i];S.balance+=o.price;S.stats.sold++;S.stats.traderSold++;S.stats.earned+=o.price;S.collection.splice(i,1);if(S.installed===p.id)S.installed=S.collection[0]?.id||null;S.trader.offers=S.trader.offers.filter(x=>x.pid!==pid);if(!S.trader.offers.length)closeTrader();render();flashWallet();toast('Перекупщик дал '+fmt(o.price)+' ₽');coinFly(document.querySelector('.wallet'),10);sfxCash();if(S.stats.traderSold===3)showAch('🤝','Партнёр','3 продажи');}
 $('traderBanner').onclick=()=>{nav('marketView');if(S.trader.active)renderTrader();};
 function marketTick(){const left=60000-(Date.now()-S.lastOffer);$('timer').textContent=left>0?'СЛЕДУЮЩЕЕ: '+Math.ceil(left/1000)+' СЕК':'РЫНОК АКТИВЕН';if(left>0)return;S.lastOffer=Date.now();const av=S.collection.filter(p=>!S.offers.some(o=>o.pid===p.id));if(av.length){const p=av[Math.floor(Math.random()*av.length)];const price=Math.max(100,Math.round(p.value*(0.88+Math.random()*0.24)/50)*50);S.offers.unshift({id:Math.random().toString(36).slice(2),pid:p.id,price,name:buyers[Math.floor(Math.random()*buyers.length)],message:'Предлагаю близко к рыночной.'});S.offers=S.offers.slice(0,8);toast('Новое предложение!');tone(560,0.15,'sine',0.09,0.005,0.13);setTimeout(()=>tone(760,0.2,'sine',0.08),100);}renderOffers();save();}
 setInterval(marketTick,1000);
 setInterval(()=>{if(S.trader.active){const left=Math.max(0,S.trader.expires-Date.now());$('traderBannerTimer').textContent=Math.ceil(left/1000);if(left<=0){closeTrader();toast('Перекупщик уехал');}else{renderTrader();}return;}const since=Date.now()-S.lastTrader;if(since>120000+Math.random()*120000)spawnTrader();},1000);
 setInterval(()=>{const inc=getPassiveIncome();if(inc>0){S.balance+=inc;$('balance').textContent=fmt(S.balance);flashWallet();toast('📈 Пассивный доход: +'+fmt(inc)+' ₽');tone(880,0.15,'sine',0.08,0.005,0.13);render();}},60000);
 
-// ============ БИРЖА (EXCHANGE) ============
-function generateStock(){
-  const p=generatePlate();
-  const price=p.value;
-  return {id:Math.random().toString(36).slice(2,9),plate:p,basePrice:price,current:price,history:[price*0.98,price*0.99,price,price*1.01,price]};
-}
+// ============ БИРЖА ============
+function generateStock(){const p=generatePlate();const price=p.value;return {id:Math.random().toString(36).slice(2,9),plate:p,basePrice:price,current:price,history:[price*0.98,price*0.99,price,price*1.01,price]};}
 function initStocks(){while(S.stocks.length<4)S.stocks.push(generateStock());}
 function updateStocks(){
   if(!S.stocks.length)initStocks();
-  S.stocks.forEach(st=>{
-    const vol=0.018; // 1.8% волатильность
-    const change=(Math.random()-0.48)*vol; // небольшой bias вверх
-    st.current=Math.max(st.basePrice*0.4,st.current*(1+change));
-    st.history.push(st.current);
-    if(st.history.length>60)st.history.shift();
-  });
-  // Индекс рынка = средний % от базовой
-  const ratios=S.stocks.map(s=>s.current/s.basePrice);
-  const avg=ratios.length?ratios.reduce((a,b)=>a+b,0)/ratios.length:1;
-  S.marketIndex.value=avg*100;
-  S.marketIndex.history.push(S.marketIndex.value);
-  if(S.marketIndex.history.length>60)S.marketIndex.history.shift();
-  // Замена "протухших" акций (упали сильно или долго на бирже)
-  S.stocks.forEach((st,i)=>{
-    if(Math.random()<0.008||st.current<st.basePrice*0.55){
-      S.stocks[i]=generateStock();
-    }
-  });
+  S.stocks.forEach(st=>{const vol=0.018;const change=(Math.random()-0.48)*vol;st.current=Math.max(st.basePrice*0.4,st.current*(1+change));st.history.push(st.current);if(st.history.length>60)st.history.shift();});
+  const ratios=S.stocks.map(s=>s.current/s.basePrice);const avg=ratios.length?ratios.reduce((a,b)=>a+b,0)/ratios.length:1;S.marketIndex.value=avg*100;S.marketIndex.history.push(S.marketIndex.value);if(S.marketIndex.history.length>60)S.marketIndex.history.shift();
+  S.stocks.forEach((st,i)=>{if(Math.random()<0.008||st.current<st.basePrice*0.55)S.stocks[i]=generateStock();});
   if($('exchangeView').classList.contains('active'))renderExchange();
 }
 setInterval(updateStocks,2000);
-
 function drawChart(canvas,history,baseValue){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  const W=canvas.clientWidth,H=canvas.clientHeight;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  const c=canvas.getContext('2d');
-  c.setTransform(dpr,0,0,dpr,0,0);
-  c.clearRect(0,0,W,H);
+  const dpr=Math.min(devicePixelRatio||1,2);const W=canvas.clientWidth,H=canvas.clientHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
   if(history.length<2)return;
-  const min=Math.min(...history),max=Math.max(...history);
-  const range=(max-min)||1;
-  const pad=6;
-  const up=history[history.length-1]>=history[0];
-  const color=up?'#c4ff46':'#ff5050';
-  const colorDim=up?'rgba(196,255,70,0.18)':'rgba(255,80,80,0.18)';
-  // Базовая линия (если задана)
-  if(baseValue!=null){
-    const baseY=H-pad-((baseValue-min)/range)*(H-pad*2);
-    c.strokeStyle='rgba(255,255,255,0.15)';
-    c.setLineDash([4,4]);
-    c.lineWidth=1;
-    c.beginPath();c.moveTo(0,baseY);c.lineTo(W,baseY);c.stroke();
-    c.setLineDash([]);
-  }
-  // Заливка
-  c.beginPath();
-  history.forEach((v,i)=>{
-    const x=(i/(history.length-1))*W;
-    const y=H-pad-((v-min)/range)*(H-pad*2);
-    if(i===0)c.moveTo(x,y);else c.lineTo(x,y);
-  });
-  c.lineTo(W,H);c.lineTo(0,H);c.closePath();
-  const grad=c.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,colorDim);
-  grad.addColorStop(1,'rgba(0,0,0,0)');
-  c.fillStyle=grad;c.fill();
-  // Линия
-  c.beginPath();
-  history.forEach((v,i)=>{
-    const x=(i/(history.length-1))*W;
-    const y=H-pad-((v-min)/range)*(H-pad*2);
-    if(i===0)c.moveTo(x,y);else c.lineTo(x,y);
-  });
-  c.strokeStyle=color;
-  c.lineWidth=2.2;
-  c.lineJoin='round';
-  c.shadowColor=color;
-  c.shadowBlur=10;
-  c.stroke();
-  c.shadowBlur=0;
-  // Точка на конце
+  const min=Math.min(...history),max=Math.max(...history);const range=(max-min)||1;const pad=6;
+  const up=history[history.length-1]>=history[0];const color=up?'#c4ff46':'#ff5050';const colorDim=up?'rgba(196,255,70,0.18)':'rgba(255,80,80,0.18)';
+  if(baseValue!=null){const baseY=H-pad-((baseValue-min)/range)*(H-pad*2);c.strokeStyle='rgba(255,255,255,0.15)';c.setLineDash([4,4]);c.lineWidth=1;c.beginPath();c.moveTo(0,baseY);c.lineTo(W,baseY);c.stroke();c.setLineDash([]);}
+  c.beginPath();history.forEach((v,i)=>{const x=(i/(history.length-1))*W;const y=H-pad-((v-min)/range)*(H-pad*2);if(i===0)c.moveTo(x,y);else c.lineTo(x,y);});c.lineTo(W,H);c.lineTo(0,H);c.closePath();
+  const grad=c.createLinearGradient(0,0,0,H);grad.addColorStop(0,colorDim);grad.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=grad;c.fill();
+  c.beginPath();history.forEach((v,i)=>{const x=(i/(history.length-1))*W;const y=H-pad-((v-min)/range)*(H-pad*2);if(i===0)c.moveTo(x,y);else c.lineTo(x,y);});
+  c.strokeStyle=color;c.lineWidth=2.2;c.lineJoin='round';c.shadowColor=color;c.shadowBlur=10;c.stroke();c.shadowBlur=0;
   const lastX=W,lastY=H-pad-((history[history.length-1]-min)/range)*(H-pad*2);
-  c.beginPath();c.arc(lastX-3,lastY,3.5,0,Math.PI*2);
-  c.fillStyle=color;c.fill();
-  c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke();
+  c.beginPath();c.arc(lastX-3,lastY,3.5,0,Math.PI*2);c.fillStyle=color;c.fill();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke();
 }
-
 function renderExchange(){
   if(!S.stocks.length)initStocks();
   const grid=$('exchangeGrid');
   grid.innerHTML=S.stocks.map((st,i)=>{
-    const p=st.plate;
-    const pct=((st.current-st.basePrice)/st.basePrice)*100;
-    const up=pct>=0;
-    return `<div class="stock-card ${up?'up':'down'}">
-      <div class="stock-top">
-        <span class="stock-name">ЛОТ #${i+1} · ${p.rarityName.toUpperCase()}</span>
-        <span class="stock-trend ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>
-      </div>
-      ${plateHTML(p)}
-      <canvas class="stock-chart" data-idx="${i}"></canvas>
-      <div class="stock-price ${up?'up':'down'}">${fmt(st.current)} ₽</div>
-      <div class="stock-base">База: <b>${fmt(st.basePrice)} ₽</b> · ${desc(p).split('·')[0]}</div>
-      <button class="stock-buy" data-buy="${st.id}" ${S.balance<st.current?'disabled':''}>КУПИТЬ · ${fmt(st.current)} ₽</button>
-    </div>`;
+    const p=st.plate;const pct=((st.current-st.basePrice)/st.basePrice)*100;const up=pct>=0;
+    return `<div class="stock-card ${up?'up':'down'}"><div class="stock-top"><span class="stock-name">ЛОТ #${i+1} · ${p.rarityName.toUpperCase()}</span><span class="stock-trend ${up?'up':'down'}">${up?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span></div>${plateHTML(p)}<canvas class="stock-chart" data-idx="${i}"></canvas><div class="stock-price ${up?'up':'down'}">${fmt(st.current)} ₽</div><div class="stock-base">База: <b>${fmt(st.basePrice)} ₽</b></div><button class="stock-buy" data-buy="${st.id}" ${S.balance<st.current?'disabled':''}>КУПИТЬ · ${fmt(st.current)} ₽</button></div>`;
   }).join('');
-  // Charts
-  grid.querySelectorAll('.stock-chart').forEach(cv=>{
-    const i=+cv.dataset.idx;
-    requestAnimationFrame(()=>drawChart(cv,S.stocks[i].history,S.stocks[i].basePrice));
-  });
+  grid.querySelectorAll('.stock-chart').forEach(cv=>{const i=+cv.dataset.idx;requestAnimationFrame(()=>drawChart(cv,S.stocks[i].history,S.stocks[i].basePrice));});
   grid.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buyStock(b.dataset.buy));
-  // Index chart
   const mi=$('marketIndexChart');
-  if(mi){
-    requestAnimationFrame(()=>drawChart(mi,S.marketIndex.history,100));
-    const miPct=S.marketIndex.value-100;
-    const t=$('marketIndexTrend');
-    t.textContent=(miPct>=0?'+':'')+miPct.toFixed(1)+' %';
-    t.className='stock-trend '+(miPct>=0?'up':'down');
-    $('marketIndexInfo').innerHTML=`Средний уровень цен относительно базовых. ${miPct>=0?'<b style="color:#c4ff46">Рынок растёт</b> — хорошее время продавать.':'<b style="color:#ff5050">Рынок падает</b> — хорошее время покупать.'}`;
-  }
+  if(mi){requestAnimationFrame(()=>drawChart(mi,S.marketIndex.history,100));const miPct=S.marketIndex.value-100;const t=$('marketIndexTrend');t.textContent=(miPct>=0?'+':'')+miPct.toFixed(1)+' %';t.className='stock-trend '+(miPct>=0?'up':'down');$('marketIndexInfo').innerHTML=`Средний уровень цен. ${miPct>=0?'<b style="color:#c4ff46">Рынок растёт</b> — время продавать.':'<b style="color:#ff5050">Рынок падает</b> — время покупать.'}`;}
 }
 function buyStock(id){
   const st=S.stocks.find(x=>x.id===id);if(!st)return;
@@ -1073,84 +1001,216 @@ function buyStock(id){
   S.collection.unshift(plate);
   flashWallet();sfxCash();coinFly(document.querySelector('.wallet'),8);
   toast(`Куплено за ${fmt(st.current)} ₽`);
-  // Заменить лот новым
-  const idx=S.stocks.indexOf(st);
-  S.stocks[idx]=generateStock();
+  const idx=S.stocks.indexOf(st);S.stocks[idx]=generateStock();
   render();renderExchange();
 }
 window.addEventListener('resize',()=>{if($('exchangeView').classList.contains('active'))renderExchange();});
 
-// ============ МАСТЕРСКАЯ (СПЛАВ) ============
-function calcChance(sum,targetMid){
-  if(sum<=0)return 0;
-  let ch=(sum/targetMid)*30;
-  return Math.max(0.01,Math.min(45,ch));
+// ============ МАСТЕРСКАЯ (СПЛАВ + КОЛЕСО) ============
+function calcChance(sum,targetMid){if(sum<=0)return 0;let ch=(sum/targetMid)*30;return Math.max(0.01,Math.min(45,ch));}
+
+// --- Колесо ---
+let wheelRotation=0;         // текущий угол в градусах
+let wheelSpinning=false;
+let wheelTargetAngle=0;
+let wheelAnimId=null;
+
+function drawWheel(chancePct){
+  const canvas=$('wheelCanvas');
+  if(!canvas)return;
+  const dpr=Math.min(devicePixelRatio||1,2);
+  const size=canvas.clientWidth||300;
+  canvas.width=size*dpr;canvas.height=size*dpr;
+  const c=canvas.getContext('2d');
+  c.setTransform(dpr,0,0,dpr,0,0);
+  const cx=size/2,cy=size/2,R=size/2-4;
+  c.clearRect(0,0,size,size);
+  // Внешнее кольцо
+  c.beginPath();c.arc(cx,cy,R,0,Math.PI*2);c.strokeStyle='rgba(196,255,70,.3)';c.lineWidth=3;c.stroke();
+  c.beginPath();c.arc(cx,cy,R-6,0,Math.PI*2);c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=1;c.stroke();
+  // Сектора (начинаем сверху = -90°, по часовой)
+  const startRad=-Math.PI/2 + (wheelRotation*Math.PI/180);
+  const chanceAngle=(chancePct/100)*Math.PI*2;
+  const failAngle=Math.PI*2-chanceAngle;
+  // Красный (провал) — рисуем полностью
+  c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+Math.PI*2);c.closePath();
+  const failGrad=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);
+  failGrad.addColorStop(0,'#a02020');
+  failGrad.addColorStop(0.7,'#5a1010');
+  failGrad.addColorStop(1,'#2a0808');
+  c.fillStyle=failGrad;c.fill();
+  // Зелёный (успех) — поверх
+  if(chanceAngle>0){
+    c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,startRad,startRad+chanceAngle);c.closePath();
+    const winGrad=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);
+    winGrad.addColorStop(0,'#d0ff5a');
+    winGrad.addColorStop(0.7,'#8ec92a');
+    winGrad.addColorStop(1,'#4d7a10');
+    c.fillStyle=winGrad;c.fill();
+  }
+  // Разделительные линии
+  c.save();
+  c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);c.clip();
+  c.lineWidth=2;c.strokeStyle='rgba(0,0,0,.6)';
+  // Линия между секторами
+  if(chanceAngle>0 && chanceAngle<Math.PI*2){
+    c.beginPath();
+    c.moveTo(cx,cy);
+    const a1=startRad+chanceAngle;
+    c.lineTo(cx+Math.cos(a1)*(R-7),cy+Math.sin(a1)*(R-7));
+    c.stroke();
+    c.beginPath();
+    c.moveTo(cx,cy);
+    const a2=startRad+Math.PI*2;
+    c.lineTo(cx+Math.cos(a2)*(R-7),cy+Math.sin(a2)*(R-7));
+    c.stroke();
+  }
+  c.restore();
+  // Деления
+  const ticks=24;
+  for(let i=0;i<ticks;i++){
+    const a=startRad+(i/ticks)*Math.PI*2;
+    const r1=R-7,r2=R-15;
+    c.beginPath();c.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);c.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);
+    c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1;c.stroke();
+  }
+  // Тексты
+  if(chanceAngle>0.35){
+    c.save();
+    c.translate(cx,cy);
+    c.rotate(startRad+chanceAngle/2+Math.PI/2);
+    c.fillStyle='#0d1a05';
+    c.font=`bold ${Math.min(28,Math.max(11,R*0.09))}px Manrope,Arial`;
+    c.textAlign='center';c.textBaseline='middle';
+    c.fillText('ШАНС',0,-R*0.6);
+    c.restore();
+  }
+  if(failAngle>0.35){
+    c.save();
+    c.translate(cx,cy);
+    c.rotate(startRad+chanceAngle+failAngle/2+Math.PI/2);
+    c.fillStyle='rgba(255,255,255,.85)';
+    c.font=`bold ${Math.min(28,Math.max(11,R*0.09))}px Manrope,Arial`;
+    c.textAlign='center';c.textBaseline='middle';
+    c.fillText('ПРОВАЛ',0,-R*0.6);
+    c.restore();
+  }
+  // Блик сверху
+  const shine=c.createLinearGradient(0,0,0,size);
+  shine.addColorStop(0,'rgba(255,255,255,.15)');
+  shine.addColorStop(0.5,'rgba(255,255,255,0)');
+  c.beginPath();c.arc(cx,cy,R-7,0,Math.PI*2);
+  c.fillStyle=shine;c.fill();
 }
+
+function updateWheelCenter(chancePct){
+  const el=$('wheelCenter');
+  if(!el)return;
+  if(chancePct===null||chancePct===undefined){el.textContent='?';el.style.color='var(--lime)';return;}
+  if(chancePct<0.1){el.textContent='0.03';el.style.fontSize='14px';el.style.color='#ff5050';}
+  else if(chancePct<1){el.textContent=chancePct.toFixed(2);el.style.fontSize='14px';el.style.color='var(--red)';}
+  else if(chancePct<10){el.textContent=chancePct.toFixed(1);el.style.fontSize='16px';el.style.color='var(--gold)';}
+  else {el.textContent=Math.round(chancePct);el.style.fontSize='20px';el.style.color='var(--lime)';}
+}
+
+function spinWheel(chancePct, success, callback){
+  if(wheelSpinning)return;
+  wheelSpinning=true;
+  // Целевой угол в системе колеса (0 = верх, по часовой)
+  let targetAngleDeg;
+  if(success){
+    // попадём в зелёный сектор
+    const greenDeg=Math.max(chancePct*3.6,0.01);
+    targetAngleDeg=Math.random()*greenDeg;
+  } else {
+    const greenDeg=chancePct*3.6;
+    const redDeg=360-greenDeg;
+    targetAngleDeg=greenDeg+Math.random()*redDeg;
+  }
+  // Угол поворота колеса (по часовой): нужно чтобы (targetAngle + rotation) mod 360 === 0 (стрелка сверху)
+  // rotation = -targetAngle mod 360
+  const desiredRotation=(360-targetAngleDeg)%360;
+  // Сколько полных оборотов
+  const turns=5+Math.floor(Math.random()*3);
+  const totalRotation=turns*360+desiredRotation;
+  const startRotation=wheelRotation%360;
+  const startTime=performance.now();
+  const duration=4200+Math.random()*800;
+  let lastTick=0;
+  function easeOutQuart(t){return 1-Math.pow(1-t,4);}
+  function loop(now){
+    const t=Math.min(1,(now-startTime)/duration);
+    const eased=easeOutQuart(t);
+    wheelRotation=startRotation+totalRotation*eased;
+    // Рисуем с текущей chance
+    drawWheel(chancePct);
+    // Тик
+    if(t<0.98 && now-lastTick>(80+1200*t*t*t)){
+      lastTick=now;
+      sfxTick(1.2+Math.random()*0.6);
+    }
+    if(t<1){
+      wheelAnimId=requestAnimationFrame(loop);
+    } else {
+      wheelRotation=startRotation+totalRotation;
+      drawWheel(chancePct);
+      wheelSpinning=false;
+      callback && callback();
+    }
+  }
+  wheelAnimId=requestAnimationFrame(loop);
+}
+
+function renderWheelAndSummary(){
+  const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);
+  const sum=selPlates.reduce((a,p)=>a+p.value,0);
+  const wrap=$('wsWheelWrap');
+  const target=S.workshop.target;
+  if(!selPlates.length||!target){wrap.hidden=true;updateWheelCenter(null);return;}
+  wrap.hidden=false;
+  const r=RARITIES[target];
+  const mid=(r.min+r.max)/2;
+  const chance=calcChance(sum,mid);
+  $('wsSum').textContent=fmt(sum)+' ₽';
+  $('wsTargetName').textContent=r.name;
+  $('wsTargetValue').textContent=fmt(mid)+' ₽';
+  const chEl=$('wsChanceVal');
+  chEl.textContent=chance<0.1?chance.toFixed(3)+' %':chance<1?chance.toFixed(2)+' %':chance.toFixed(1)+' %';
+  chEl.className='ws-chance-val '+(chance<3?'low':chance<15?'mid':'');
+  updateWheelCenter(chance);
+  requestAnimationFrame(()=>drawWheel(chance));
+  const rollBtn=$('wsRoll');
+  rollBtn.disabled=selPlates.length>8||wheelSpinning;
+  rollBtn.textContent=selPlates.length>8?'МАКС 8 НОМЕРОВ':'🎡 ИСПЫТАТЬ СУДЬБУ';
+}
+
 function renderWorkshop(){
   const root=$('wsPlates');
-  if(!S.collection.length){
-    root.innerHTML='<div class="empty" style="grid-column:1/-1">Коллекция пуста — открой кейс.</div>';
-  } else {
-    root.innerHTML=S.collection.map(p=>{
-      const sel=S.workshop.selected.includes(p.id);
-      return `<div class="ws-plate ${sel?'selected':''}" data-ws="${p.id}">
-        ${plateHTML(p)}
-        <div class="ws-val">${p.rarityName} · <b>${fmt(p.value)} ₽</b></div>
-      </div>`;
-    }).join('');
+  if(!S.collection.length){root.innerHTML='<div class="empty" style="grid-column:1/-1">Коллекция пуста — открой кейс.</div>';}
+  else{
+    root.innerHTML=S.collection.map(p=>{const sel=S.workshop.selected.includes(p.id);return `<div class="ws-plate ${sel?'selected':''}" data-ws="${p.id}">${plateHTML(p)}<div class="ws-val">${p.rarityName} · <b>${fmt(p.value)} ₽</b></div></div>`;}).join('');
     root.querySelectorAll('[data-ws]').forEach(el=>el.onclick=()=>togglePlateSelect(el.dataset.ws));
   }
-  // Targets
   const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);
   const sum=selPlates.reduce((a,p)=>a+p.value,0);
   const tgRoot=$('wsTargets');
   const allRarities=Object.values(RARITIES).sort((a,b)=>a.min-b.min);
   tgRoot.innerHTML=allRarities.map(r=>{
-    const mid=(r.min+r.max)/2;
-    const allowed=sum>0&&sum<r.min;
-    const sel=S.workshop.target===r.id;
-    return `<button class="ws-target-btn ${sel?'selected':''}" data-target="${r.id}" ${allowed?'':'disabled'}>
-      <span class="tt-name" style="color:${RARITY_COLORS[r.id]}">${r.name}</span>
-      <span class="tt-range">${fmt(r.min)} – ${fmt(r.max)} ₽</span>
-    </button>`;
+    const allowed=sum>0&&sum<r.min;const sel=S.workshop.target===r.id;
+    return `<button class="ws-target-btn ${sel?'selected':''}" data-target="${r.id}" ${allowed?'':'disabled'}><span class="tt-name" style="color:${RARITY_COLORS[r.id]}">${r.name}</span><span class="tt-range">${fmt(r.min)} – ${fmt(r.max)} ₽</span></button>`;
   }).join('');
-  tgRoot.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>{
-    if(b.disabled)return;
-    S.workshop.target=b.dataset.target;
-    sfxClick();
-    renderWorkshop();
-  });
-  // Summary
-  const summary=$('wsSummary');
-  if(!selPlates.length||!S.workshop.target){
-    summary.hidden=true;
-  } else {
-    summary.hidden=false;
-    const r=RARITIES[S.workshop.target];
-    const mid=(r.min+r.max)/2;
-    const chance=calcChance(sum,mid);
-    $('wsSum').textContent=fmt(sum)+' ₽';
-    $('wsTargetName').textContent=r.name;
-    $('wsTargetValue').textContent=fmt(mid)+' ₽';
-    const chEl=$('wsChance');
-    chEl.textContent=chance<0.1?chance.toFixed(3)+' %':chance<1?chance.toFixed(2)+' %':chance.toFixed(1)+' %';
-    chEl.className='ws-chance '+(chance<3?'low':chance<15?'mid':'');
-    const rollBtn=$('wsRoll');
-    rollBtn.disabled=selPlates.length>8;
-    rollBtn.textContent=selPlates.length>8?'МАКС 8 НОМЕРОВ':'ИСПЫТАТЬ СУДЬБУ';
-  }
+  tgRoot.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>{if(b.disabled)return;S.workshop.target=b.dataset.target;sfxClick();renderWorkshop();});
+  renderWheelAndSummary();
 }
 function togglePlateSelect(id){
   const idx=S.workshop.selected.indexOf(id);
   if(idx>=0)S.workshop.selected.splice(idx,1);
-  else{
-    if(S.workshop.selected.length>=8){toast('Максимум 8 номеров');return;}
-    S.workshop.selected.push(id);
-  }
-  sfxClick();
-  renderWorkshop();
+  else{if(S.workshop.selected.length>=8){toast('Максимум 8 номеров');return;}S.workshop.selected.push(id);}
+  sfxClick();renderWorkshop();
 }
+
 $('wsRoll').onclick=()=>{
+  if(wheelSpinning)return;
   const selPlates=S.workshop.selected.map(id=>S.collection.find(p=>p.id===id)).filter(Boolean);
   if(!selPlates.length||!S.workshop.target)return;
   const r=RARITIES[S.workshop.target];
@@ -1158,50 +1218,31 @@ $('wsRoll').onclick=()=>{
   const sum=selPlates.reduce((a,p)=>a+p.value,0);
   const chance=calcChance(sum,mid);
   const rollBtn=$('wsRoll');
-  rollBtn.classList.add('rolling');
-  rollBtn.textContent='ПЛАВИМ…';
   rollBtn.disabled=true;
-  // Анимация
-  let ticks=0;
-  const anim=setInterval(()=>{
-    ticks++;sfxTick(0.8+Math.random()*1);
-    rollBtn.textContent='ПЛАВИМ… '+'.'.repeat(ticks%4);
-    if(ticks>18){clearInterval(anim);resolveRoll(selPlates,chance,r);}
-  },80);
-  // Напряжение
-  sfxTension(1.8);
-};
-function resolveRoll(selPlates,chance,r){
+  rollBtn.textContent='🎡 КРУТИМ…';
+  sfxTension(3.5);
+  // Определяем результат заранее
   const success=Math.random()*100<chance;
+  spinWheel(chance,success,()=>resolveRoll(selPlates,chance,r,success));
+};
+
+function resolveRoll(selPlates,chance,r,success){
   const rollBtn=$('wsRoll');
-  rollBtn.classList.remove('rolling');
   // Удаляем выбранные
   const ids=selPlates.map(p=>p.id);
   S.collection=S.collection.filter(p=>!ids.includes(p.id));
   if(S.installed&&ids.includes(S.installed))S.installed=S.collection[0]?.id||null;
   S.workshop.selected=[];S.workshop.target=null;
   if(success){
-    // Генерим плашку целевой редкости
-    let newPlate;
-    let attempts=0;
-    do{
-      newPlate=generatePlate();
-      attempts++;
-    } while(newPlate.rarity!==r.id&&attempts<30);
-    if(newPlate.rarity!==r.id){
-      // Force rarity
-      newPlate.rarity=r.id;newPlate.rarityName=r.name;
-      newPlate.value=Math.round((r.min+Math.random()*(r.max-r.min))/50)*50;
-    }
+    let newPlate;let attempts=0;
+    do{newPlate=generatePlate();attempts++;}while(newPlate.rarity!==r.id&&attempts<30);
+    if(newPlate.rarity!==r.id){newPlate.rarity=r.id;newPlate.rarityName=r.name;newPlate.value=Math.round((r.min+Math.random()*(r.max-r.min))/50)*50;}
     S.collection.unshift(newPlate);
     S.stats.crafted++;
-    sfxSuccess();
-    sfxRarity(newPlate.rarity);
-    confetti(120);
-    screenShake();
-    burstFromElement(rollBtn,'#c4ff46',60);
+    sfxSuccess();sfxRarity(newPlate.rarity);
+    confetti(120);screenShake();
+    burstFromElement($('wheelCanvas'),'#c4ff46',60);
     if(newPlate.rarity==='mythic'){confetti(120);screenShake();}
-    // Модалка
     S.pending=newPlate;
     $('modalKicker').textContent='🎉 УСПЕХ · '+newPlate.rarityName.toUpperCase();
     $('modalTitle').textContent=newPlate.notes[0]||'НОВЫЙ НОМЕР';
@@ -1210,23 +1251,19 @@ function resolveRoll(selPlates,chance,r){
     $('modalPrice').textContent=fmt(newPlate.value)+' ₽';
     $('modal').hidden=false;
     sfxModalOpen();
-    showAch('⚗️','Алхимик','Успешный сплав номеров');
+    showAch('⚗️','Алхимик','Успешный сплав');
     if(newPlate.rarity==='mythic')showAch('🔥','СОЗДАН МИФ','Сплав дал мифик');
     if(newPlate.rarity==='legendary')showAch('⭐','СОЗДАНА ЛЕГЕНДА','Сплав дал легендарку');
   } else {
     S.stats.craftFailed++;
-    sfxFail();
-    screenShake();
-    burstFromElement(rollBtn,'#ff5050',40);
+    sfxFail();screenShake();
+    burstFromElement($('wheelCanvas'),'#ff5050',40);
     toast('💀 Сплав провалился. Номера сгорели.');
-    // Красный экран
     document.body.style.transition='box-shadow .3s';
     document.body.style.boxShadow='inset 0 0 200px rgba(255,80,80,.4)';
     setTimeout(()=>{document.body.style.boxShadow='';},600);
   }
   render();renderWorkshop();
-  rollBtn.textContent='ИСПЫТАТЬ СУДЬБУ';
-  rollBtn.disabled=true;
 }
 
 // ============ ДОСУГ ============
@@ -1252,7 +1289,7 @@ function washHandler(){
       clearInterval(interval);
       toast(`Помыто! ${fmt(earned)} ₽ за ${clicks} кликов`);
       sfxCash();
-      if(earned>500)showAch('🚿','Мойщик','Заработал 500+ ₽ на мойке');
+      if(earned>500)showAch('🚿','Мойщик','Заработал 500+ ₽');
       render();renderWash();
       btn.onclick=washHandler;
     }
@@ -1261,7 +1298,6 @@ function washHandler(){
 $('washBtn').onclick=washHandler;
 setInterval(renderWash,1000);
 
-// ============ СОРТИРОВКА ============
 let sg={active:false,score:0,time:0,interval:null,flipped:[],matched:0};
 const SG_PAIRS=6;
 function startSortGame(){
@@ -1404,7 +1440,7 @@ document.querySelectorAll('[data-platform]').forEach(b=>{b.onclick=()=>{startAmb
 document.querySelectorAll('[data-orient]').forEach(b=>{b.onclick=()=>{S.orientation=b.dataset.orient;try{localStorage.setItem('nomerok-orient',S.orientation)}catch(e){}applyOrientation();$('orientationSetup').hidden=true;};});
 function applyOrientation(){if(S.orientation==='landscape'){document.body.classList.add('landscape');if(window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}}else{document.body.classList.remove('landscape');$('rotateHint').classList.remove('show');}}
 window.skipRotate=function(){$('rotateHint').classList.remove('show')};
-window.addEventListener('resize',()=>{if(S.orientation==='landscape'&&window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}setTimeout(resizeCar,150);});
+window.addEventListener('resize',()=>{if(S.orientation==='landscape'&&window.innerWidth<window.innerHeight){$('rotateHint').classList.add('show');}else{$('rotateHint').classList.remove('show');}setTimeout(resizeCar,150);if(!$('workshopView').hidden&&$('workshopView').classList.contains('active'))renderWheelAndSummary();});
 
 // ============ INIT ============
 setupPlatform();
