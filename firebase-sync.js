@@ -1,7 +1,7 @@
 // firebase-sync.js
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getDatabase, ref, set, get, onValue, onDisconnect, update, push } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js';
+import { getDatabase, ref, set, get, onValue, onDisconnect, update, push } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyArIeUFV4grddcwYY8pBoSXQZvDMMKWokc",
@@ -10,8 +10,8 @@ const firebaseConfig = {
   projectId: "nomerok-84a45",
   storageBucket: "nomerok-84a45.firebasestorage.app",
   messagingSenderId: "944992255871",
-  appId: "1:944992255871:web:fe8e6258dda4e45affa44a",
-  measurementId: "G-DNRXZQT70F"
+  appId: "1:944992255871:web:d456d167c7e46e32ffa44a",
+  measurementId: "G-LCWT6J7YYE"
 };
 
 const app = initializeApp(firebaseConfig);
