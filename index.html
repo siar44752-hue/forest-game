@@ -1952,17 +1952,20 @@ window.addEventListener('resize', ()=>setTimeout(resizeCar, 100));
 resetSlots();
 initStocks();
 initDaily();
-initFriends = function() {}; // Заглушка
 render();
 renderFreeCase();
 renderWash();
 renderScratchCd();
 
 // === PEERJS INIT ===
+// === PEERJS INIT ===
 (async function(){
   const fl = $('firebaseLoading');
   const flText = $('flText');
   flText.textContent = "ЗАГРУЗКА P2P СЕТИ...";
+
+  // Принудительно скрываем экран загрузки через 2 секунды
+  setTimeout(() => { fl.classList.add('hide'); }, 2000);
 
   try {
     // Генерируем Peer ID
