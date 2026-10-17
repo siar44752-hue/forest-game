@@ -580,7 +580,7 @@ body.is-mobile .arcade-field{height:240px}
   <div class="top-right">
     <div class="event-badge" id="eventBadge" hidden>🔥 <b id="eventVal">×2</b> <span id="eventTimer"></span></div>
     <div class="passive-badge" id="passiveBadge" hidden>📈 <b id="passiveVal">0</b>/мин</div>
-    <div class="wallet">₽ <b id="balance">1 000 000</b></div>
+    <div class="wallet">₽ <b id="balance">500 000</b></div>
   </div>
 </header>
 
@@ -589,7 +589,7 @@ body.is-mobile .arcade-field{height:240px}
 <main class="wrap">
 <section id="caseView" class="view active">
   <div class="daily-panel" id="dailyPanel"></div>
-  <div class="intro"><div class="kicker">ТВОЯ КОЛЛЕКЦИЯ НАЧИНАЕТСЯ ЗДЕСЬ</div><h1>ПОЙМАЙ СВОЙ НОМЕР</h1><p>Один кейс — 500 000 ₽. Собери номер мечты за миллионы!</p></div>
+  <div class="intro"><div class="kicker">ТВОЯ КОЛЛЕКЦИЯ НАЧИНАЕТСЯ ЗДЕСЬ</div><h1>ПОЙМАЙ СВОЙ НОМЕР</h1><p>Один кейс — 100 000 ₽. Собери номер мечты за миллионы!</p></div>
   <div class="case">
     <div class="casebar"><span>СТАРТОВЫЙ КЕЙС №001</span><span class="pill" id="caseStatus">ГОТОВ</span></div>
     <div class="reelbox">
@@ -608,12 +608,12 @@ body.is-mobile .arcade-field{height:240px}
       <div class="scalehead"><span>ШКАЛА РЕДКОСТИ</span><b id="scaleText">Готов</b></div>
       <div class="bar"><div class="marker" id="marker"></div></div>
       <div class="labels">
-        <span>ОБЫЧНЫЙ<br><b style="color:#aeb6af">8К-80К ₽</b></span><span>РЕДКИЙ<br><b style="color:#57c7ff">100К-500К ₽</b></span>
-        <span>ЭПИЧЕСКИЙ<br><b style="color:#c38bff">500К-3М ₽</b></span><span>ЛЕГЕНДАРНЫЙ<br><b style="color:#ffd95a">3М-20М ₽</b></span>
-        <span>МИФИЧЕСКИЙ<br><b style="color:#ff9b68">20М+ ₽</b></span>
+        <span>ОБЫЧНЫЙ<br><b style="color:#aeb6af">5К-50К ₽</b></span><span>РЕДКИЙ<br><b style="color:#57c7ff">50К-200К ₽</b></span>
+        <span>ЭПИЧЕСКИЙ<br><b style="color:#c38bff">200К-1М ₽</b></span><span>ЛЕГЕНДАРНЫЙ<br><b style="color:#ffd95a">1М-5М ₽</b></span>
+        <span>МИФИЧЕСКИЙ<br><b style="color:#ff9b68">5М+ ₽</b></span>
       </div>
     </div>
-    <div class="actions"><button id="spin" class="btn primary">ОТКРЫТЬ КЕЙС · 500 000 ₽</button><div class="hint" id="hint">На старте 1 000 000 ₽.</div></div>
+    <div class="actions"><button id="spin" class="btn primary">ОТКРЫТЬ КЕЙС · 100 000 ₽</button><div class="hint" id="hint">На старте 500 000 ₽.</div></div>
   </div>
   <nav class="nav">
     <button class="active" data-view="caseView">🎰 Кейс</button><button data-view="garageView">🏎️ Гараж</button>
@@ -753,6 +753,18 @@ body.is-mobile .arcade-field{height:240px}
     <div class="code-attempts" id="codeAttempts"></div>
     <div class="muted" style="margin-top:10px;font-size:11px">Получишь +500 000 ₽, друг +2 % к доходу. 2 неверных попытки — бан.</div>
   </div>
+  
+  <!-- СОХРАНЕНИЕ ПРОГРЕССА -->
+  <div class="enter-code" style="border-color:var(--gold)">
+    <h4>💾 Сохранение прогресса</h4>
+    <p class="muted" style="margin-bottom:10px;font-size:11px">При загрузке кода <b style="color:var(--red)">половина твоих номеров сгорит!</b></p>
+    <div class="ec-row">
+      <input type="text" id="saveCodeInput" placeholder="Вставь код сюда...">
+      <button id="loadSaveBtn" style="background:linear-gradient(145deg,#ffd95a,#e0b637);color:#111">ЗАГРУЗИТЬ</button>
+    </div>
+    <button class="btn secondary" id="genSaveBtn" style="margin-top:10px;width:100%">СГЕНЕРИРОВАТЬ КОД</button>
+  </div>
+
   <div class="rating-panel"><h3>🏆 Рейтинг по доходу</h3><div id="ratingList"></div></div>
   <div style="margin-top:20px"><h3 style="margin:0 0 12px;font:20px 'Russo One'">👥 Мои друзья <span id="friendsCountTag" style="color:var(--lime);font-size:14px"></span></h3><div class="friends-list" id="friendsList"></div></div>
   <nav class="nav">
@@ -955,19 +967,24 @@ body.is-mobile .arcade-field{height:240px}
 
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <script>
-const APP_VERSION = 'v15.0.0-P2P';
+const APP_VERSION = 'v15.0.0-P2P'; // МЕНЯЙ ЭТУ СТРОКУ КАЖДЫЙ РАЗ, КОГДА ОБНОВЛЯЕШЬ ИГРУ НА GITHUB!
 (function checkVersion(){
-  let stored=null;
-  try{stored=localStorage.getItem('nomerok-app-version');}catch(e){}
-  if(stored && stored !== APP_VERSION){
-    const ov=document.createElement('div');
-    ov.className='update-overlay';
-    ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Новая версия: P2P-соединение через WebRTC (PeerJS). Теперь друзья работают без VPN!</p><button id="uoReload">🔄 ОБНОВИТЬ</button>`;
-    document.body.appendChild(ov);
-    document.getElementById('uoReload').onclick=()=>{try{localStorage.setItem('nomerok-app-version', APP_VERSION);}catch(e){}location.reload(true);};
-    document.addEventListener('click', e=>{if(e.target.id==='uoReload')return;e.preventDefault();e.stopPropagation();}, true);
-  }
-  try{localStorage.setItem('nomerok-app-version', APP_VERSION);}catch(e){}
+  setInterval(() => {
+    fetch(window.location.href, { cache: 'no-store' })
+      .then(r => r.text())
+      .then(html => {
+        const match = html.match(/const APP_VERSION = '([^']+)'/);
+        if (match && match[1] !== APP_VERSION) {
+          if(!document.getElementById('myUpdateScreen')){
+            const ov=document.createElement('div');
+            ov.id='myUpdateScreen';
+            ov.className='update-overlay';
+            ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Игра обновилась. Нажми кнопку, чтобы загрузить новую версию.</p><button onclick="location.reload(true)">🔄 ОБНОВИТЬ</button>`;
+            document.body.appendChild(ov);
+          }
+        }
+      }).catch(()=>{});
+  }, 15000); // Проверка каждые 15 секунд
 })();
 </script>
 
@@ -987,7 +1004,6 @@ window.addEventListener('scroll',updateScrollProgress,{passive:true});window.add
 let peer = null;
 let myPeerId = null;
 const activeConns = new Map(); // peerId -> DataConnection
-const pendingFriendCode = null;
 
 function genShortCode() {
   const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1001,22 +1017,26 @@ const LETTERS=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
 const PREMIUM_REGIONS=['77','97','99','177','197','199','777','790','750'];
 const NORMAL_REGIONS=['01','02','03','05','06','07','08','10','11','12','13','14','16','18','19','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','98','100','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','162','163','164','165','166','167','168','169','170','171','172','173','174','175','176','178','179','180','181','182','183','184','185','186','187','188','189','190','191','192','193','194','195','196','198','199'];
 const SEQUENCES=['123','234','345','456','567','678','789'];
-const CASE_PRICE=500000,START_BALANCE=1000000;
+
+// СНИЖЕННЫЕ ЦЕНЫ
+const CASE_PRICE=100000,START_BALANCE=500000;
 
 const RARITIES={
-  common:{id:'common',name:'Обычный',min:8000,max:80000,weight:30,stars:1},
-  rare:{id:'rare',name:'Редкий',min:100000,max:500000,weight:32,stars:2},
-  epic:{id:'epic',name:'Эпический',min:500000,max:3000000,weight:22,stars:3},
-  legendary:{id:'legendary',name:'Легендарный',min:3000000,max:20000000,weight:12,stars:4},
-  mythic:{id:'mythic',name:'Мифический',min:20000000,max:150000000,weight:4,stars:5}
+  common:{id:'common',name:'Обычный',min:5000,max:50000,weight:30,stars:1},
+  rare:{id:'rare',name:'Редкий',min:50000,max:200000,weight:32,stars:2},
+  epic:{id:'epic',name:'Эпический',min:200000,max:1000000,weight:22,stars:3},
+  legendary:{id:'legendary',name:'Легендарный',min:1000000,max:5000000,weight:12,stars:4},
+  mythic:{id:'mythic',name:'Мифический',min:5000000,max:20000000,weight:4,stars:5}
 };
 const RARITY_COLORS={common:'#aeb6af',rare:'#57c7ff',epic:'#c38bff',legendary:'#ffd95a',mythic:'#ff9b68'};
 const SPECIAL_SERIES={'АМР':{boost:15,note:'Правительственная серия АМР',mult:3.5},'ЕКХ':{boost:18,note:'ФСО серия ЕКХ',mult:4.5},'ВОР':{boost:10,note:'Криминальная серия ВОР',mult:2},'АУЕ':{boost:10,note:'Криминальная серия АУЕ',mult:2},'СВО':{boost:8,note:'Патриотическая серия СВО',mult:1.8},'ХАМ':{boost:9,note:'Скандальная серия ХАМ',mult:1.9}};
-const TOP_PLATES={'А777АА777':{price:15000000,note:'Легендарный А777АА 777 (продан за 15 млн)'},'А888АА97':{price:26000000,note:'Рекордный А888АА 97 (26 млн)'},'Х999АН99':{price:120000000,note:'Самый дорогой Х999АН 99 (120 млн)'},'М999ММ77':{price:38000000,note:'Топовый М999ММ 77 (38 млн)'},'А444АА77':{price:22000000,note:'Легендарный А444АА 77 (22 млн)'}};
+const TOP_PLATES={'А777АА777':{price:5000000,note:'Легендарный А777АА 777'},'А888АА97':{price:8000000,note:'Рекордный А888АА 97'},'Х999АН99':{price:15000000,note:'Самый дорогой Х999АН 99'},'М999ММ77':{price:10000000,note:'Топовый М999ММ 77'},'А444АА77':{price:7000000,note:'Легендарный А444АА 77'}};
 
-const UPGRADES={paint:{name:'🎨 Краска',levels:[{name:'Лайм',cost:0,color:'#8aff00'},{name:'Голубой',cost:20000,color:'#1ea8ff'},{name:'Фиолет',cost:50000,color:'#a44cff'},{name:'Красный',cost:80000,color:'#ff2d55'},{name:'Золотой',cost:180000,color:'#ffcc33'}]},wheels:{name:'⚙️ Диски',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:40000},{name:'Хром',cost:120000},{name:'Карбон',cost:280000}]},spoiler:{name:'🪽 Спойлер',levels:[{name:'Нет',cost:0},{name:'Спорт',cost:60000},{name:'Карбон',cost:160000},{name:'GT',cost:420000}]},exhaust:{name:'🔥 Выхлоп',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:50000},{name:'Титан',cost:140000}]},neon:{name:'💡 Неон',levels:[{name:'Нет',cost:0},{name:'Лайм',cost:35000,color:0xc4ff46},{name:'Голубой',cost:70000,color:0x57c7ff},{name:'Розовый',cost:120000,color:0xff6ec7}]}};
-const CARS=[{id:'lambo',name:'Lamborghini',icon:'🏎️',price:0,bonus:0,desc:'Стартовая.',color:'#8aff00'},{id:'porsche',name:'Porsche 911',icon:'🚙',price:5000000,bonus:0.5,desc:'+50 % доход.',color:'#ff2d55'},{id:'ferrari',name:'Ferrari Roma',icon:'🏁',price:50000000,bonus:1.0,desc:'+100 % доход.',color:'#c4a648'}];
-const INTERIER={walls:{name:'🧱 Стены',levels:[{name:'Бетон',cost:0,bonus:0},{name:'Металл',cost:80000,bonus:0.03},{name:'Дерево',cost:250000,bonus:0.06},{name:'Мрамор',cost:800000,bonus:0.10},{name:'Гранит',cost:2500000,bonus:0.18}]},light:{name:'💡 Освещение',levels:[{name:'Лампа',cost:0,bonus:0},{name:'LED',cost:120000,bonus:0.04},{name:'Софиты',cost:400000,bonus:0.08},{name:'Лазеры',cost:1500000,bonus:0.14}]},shelves:{name:'📦 Стеллажи',levels:[{name:'Нет',cost:0,bonus:0},{name:'Простые',cost:150000,bonus:0.04},{name:'Стекло',cost:450000,bonus:0.08},{name:'Премиум',cost:1200000,bonus:0.14}]},stand:{name:'🏆 Стенд',levels:[{name:'Нет',cost:0,bonus:0},{name:'3 номера',cost:200000,bonus:0.05},{name:'6 номеров',cost:600000,bonus:0.10},{name:'12 номеров',cost:2000000,bonus:0.18}]},bar:{name:'🍸 Бар',levels:[{name:'Нет',cost:0,bonus:0},{name:'Мини',cost:500000,bonus:0.08},{name:'Полный',cost:1800000,bonus:0.15}]}};
+// СНИЖЕННЫЕ ЦЕНЫ НА АПГРЕЙДЫ
+const UPGRADES={paint:{name:'🎨 Краска',levels:[{name:'Лайм',cost:0,color:'#8aff00'},{name:'Голубой',cost:2000,color:'#1ea8ff'},{name:'Фиолет',cost:5000,color:'#a44cff'},{name:'Красный',cost:8000,color:'#ff2d55'},{name:'Золотой',cost:18000,color:'#ffcc33'}]},wheels:{name:'⚙️ Диски',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:4000},{name:'Хром',cost:12000},{name:'Карбон',cost:28000}]},spoiler:{name:'🪽 Спойлер',levels:[{name:'Нет',cost:0},{name:'Спорт',cost:6000},{name:'Карбон',cost:16000},{name:'GT',cost:42000}]},exhaust:{name:'🔥 Выхлоп',levels:[{name:'Сток',cost:0},{name:'Спорт',cost:5000},{name:'Титан',cost:14000}]},neon:{name:'💡 Неон',levels:[{name:'Нет',cost:0},{name:'Лайм',cost:3500,color:0xc4ff46},{name:'Голубой',cost:7000,color:0x57c7ff},{name:'Розовый',cost:12000,color:0xff6ec7}]}};
+// СНИЖЕННЫЕ ЦЕНЫ НА МАШИНЫ
+const CARS=[{id:'lambo',name:'Lamborghini',icon:'🏎️',price:0,bonus:0,desc:'Стартовая.',color:'#8aff00'},{id:'porsche',name:'Porsche 911',icon:'🚙',price:500000,bonus:0.5,desc:'+50 % доход.',color:'#ff2d55'},{id:'ferrari',name:'Ferrari Roma',icon:'🏁',price:5000000,bonus:1.0,desc:'+100 % доход.',color:'#c4a648'}];
+const INTERIER={walls:{name:'🧱 Стены',levels:[{name:'Бетон',cost:0,bonus:0},{name:'Металл',cost:8000,bonus:0.03},{name:'Дерево',cost:25000,bonus:0.06},{name:'Мрамор',cost:80000,bonus:0.10},{name:'Гранит',cost:250000,bonus:0.18}]},light:{name:'💡 Освещение',levels:[{name:'Лампа',cost:0,bonus:0},{name:'LED',cost:12000,bonus:0.04},{name:'Софиты',cost:40000,bonus:0.08},{name:'Лазеры',cost:150000,bonus:0.14}]},shelves:{name:'📦 Стеллажи',levels:[{name:'Нет',cost:0,bonus:0},{name:'Простые',cost:15000,bonus:0.04},{name:'Стекло',cost:45000,bonus:0.08},{name:'Премиум',cost:120000,bonus:0.14}]},stand:{name:'🏆 Стенд',levels:[{name:'Нет',cost:0,bonus:0},{name:'3 номера',cost:20000,bonus:0.05},{name:'6 номеров',cost:60000,bonus:0.10},{name:'12 номеров',cost:200000,bonus:0.18}]},bar:{name:'🍸 Бар',levels:[{name:'Нет',cost:0,bonus:0},{name:'Мини',cost:50000,bonus:0.08},{name:'Полный',cost:180000,bonus:0.15}]}};
 const SETS=[{id:'capital',name:'Столица',icon:'🏛️',desc:'Номера регионов 77, 97, 99, 177, 197, 199, 777.',bonus:0.05,check:p=>PREMIUM_REGIONS.includes(p.region)},{id:'triple7',name:'Три семёрки',icon:'🔥',desc:'Три одинаковые цифры.',bonus:0.08,check:p=>p.digits[0]===p.digits[1]&&p.digits[1]===p.digits[2]},{id:'mirror',name:'Зеркала',icon:'💎',desc:'Зеркальные номера.',bonus:0.04,check:p=>p.digits[0]===p.digits[2]&&p.digits[0]!==p.digits[1]},{id:'agent',name:'Агент 007',icon:'🕵️',desc:'007, 001 или 100.',bonus:0.04,check:p=>['007','001','100'].includes(p.digits)},{id:'seq',name:'Последователь',icon:'🎯',desc:'Последовательности.',bonus:0.06,check:p=>SEQUENCES.includes(p.digits)},{id:'letters',name:'Буквоежка',icon:'✍️',desc:'3 одинаковые буквы.',bonus:0.06,check:p=>p.L1===p.L2&&p.L2===p.L3},{id:'legendary',name:'Легенда',icon:'👑',desc:'Легендарные.',bonus:0.10,check:p=>p.rarity==='legendary'},{id:'mythic',name:'Миф',icon:'⭐',desc:'Мифические.',bonus:0.15,check:p=>p.rarity==='mythic'}];
 const SET_TARGET={capital:3,triple7:3,mirror:3,agent:3,seq:3,letters:2,legendary:2,mythic:1};
 const DAILY_TEMPLATES=[{id:'open_cases',icon:'🎰',title:'Открой 3 кейса',goal:3,track:'opened'},{id:'sell_plates',icon:'💸',title:'Продай 3 номера',goal:3,track:'sold'},{id:'craft_success',icon:'⚗️',title:'Успешный сплав',goal:1,track:'crafted'},{id:'lucky_win',icon:'🎯',title:'Собери комбинацию',goal:1,track:'luckyWin'},{id:'scratch_win',icon:'🎫',title:'Сотри карту',goal:1,track:'scratchWin'},{id:'bet_win',icon:'📊',title:'Угадай индекс',goal:1,track:'betWin'},{id:'upgrade_car',icon:'🔧',title:'Купи 2 апгрейда',goal:2,track:'carUpgrade'},{id:'spend_money',icon:'💰',title:'Потрать 1 000 000 ₽',goal:1000000,track:'spentMoney'},{id:'free_case',icon:'🪙',title:'Открой копилку',goal:1,track:'freeCase'},{id:'open_set',icon:'📦',title:'Собери набор',goal:1,track:'setCompleted'},{id:'dice_win',icon:'🎲',title:'Выиграй в кубики',goal:1,track:'diceWin'},{id:'slot_win',icon:'🎰',title:'Слоты: три в ряд',goal:1,track:'slotWin'},{id:'drift_win',icon:'🏁',title:'Пройди дрифт',goal:1,track:'driftWin'},{id:'arcade_win',icon:'🎯',title:'Тир: 10+ попаданий',goal:1,track:'arcadeWin'},{id:'bj_win',icon:'🃏',title:'Выиграй в блэкджек',goal:1,track:'bjWin'}];
@@ -1242,6 +1262,31 @@ async function duel(fid){
 $('copyInviteBtn').onclick=()=>{const text=`Играю в НОМЕРОК! Мой P2P код: ${myPeerId}`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>{toast('📋 Скопировано');sfxFriend();}).catch(()=>toast('Код: '+myPeerId));else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано');}catch(e){}ta.remove();}};
 $('inviteCode').onclick=()=>$('copyInviteBtn').click();
 
+// === СОХРАНЕНИЕ ПРОГРЕССА ===
+$('genSaveBtn').onclick = () => {
+  try {
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+    navigator.clipboard.writeText(code);
+    prompt('Твой код сохранения (Скопируй и сохрани):', code);
+    toast('Код скопирован!');
+  } catch(e) { toast('Ошибка при создании кода'); }
+};
+
+$('loadSaveBtn').onclick = () => {
+  const code = $('saveCodeInput').value.trim();
+  if(!code) return toast('Вставь код');
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(code))));
+    if(!data.collection || !data.balance) throw 'Ошибка';
+    
+    // Забираем половину номеров
+    data.collection = data.collection.sort(() => Math.random() - 0.5).slice(0, Math.floor(data.collection.length / 2));
+    
+    S = { ...S, ...data };
+    save(); render(); toast('Прогресс загружен (-50% номеров)');
+  } catch(e) { toast('Неверный код'); }
+};
+
 async function addFriendByCode(code){
   if(S.friendCodeBlocked){showBanOverlay();return false;}
   code = code.toUpperCase().trim();
@@ -1375,7 +1420,45 @@ function calcChance(sum,tp){if(sum<=0||tp<=0)return 0;if(sum>=tp)return 100;retu
 let wheelRotation=0,wheelSpinning=false;
 function drawWheel(cPct){const canvas=$('wheelCanvas');if(!canvas)return;const dpr=Math.min(devicePixelRatio||1,2);const size=canvas.clientWidth||300;if(size<10)return;canvas.width=size*dpr;canvas.height=size*dpr;const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);const cx=size/2,cy=size/2,R=size/2-4;c.clearRect(0,0,size,size);c.beginPath();c.arc(cx,cy,R,0,Math.PI*2);c.strokeStyle='rgba(196,255,70,.3)';c.lineWidth=3;c.stroke();const sr=-Math.PI/2+(wheelRotation*Math.PI/180);const ca=(cPct/100)*Math.PI*2;c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,sr,sr+Math.PI*2);c.closePath();const fg=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);fg.addColorStop(0,'#a02020');fg.addColorStop(1,'#2a0808');c.fillStyle=fg;c.fill();if(ca>0){c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R-7,sr,sr+ca);c.closePath();const wg=c.createRadialGradient(cx,cy,R*0.2,cx,cy,R);wg.addColorStop(0,'#d0ff5a');wg.addColorStop(1,'#4d7a10');c.fillStyle=wg;c.fill();}}
 function updateWheelCenter(p){const el=$('wheelCenter');if(!el)return;if(p==null){el.textContent='?';el.style.color='var(--lime)';el.style.fontSize='20px';return;}if(p<1){el.textContent=p.toFixed(1);el.style.fontSize='13px';el.style.color='#ff5050';}else if(p<10){el.textContent=p.toFixed(1);el.style.fontSize='16px';el.style.color='var(--gold)';}else{el.textContent=Math.round(p);el.style.fontSize='20px';el.style.color='var(--lime)';}}
-function spinWheel(cPct,success,cb){if(wheelSpinning)return;wheelSpinning=true;let tad;if(success){const g=Math.max(cPct*3.6,0.01);tad=Math.random()*g;}else{const g=cPct*3.6;tad=g+Math.random()*(360-g);}const dr=(360-tad)%360;const turns=5+Math.floor(Math.random()*3);const tr=turns*360+dr;const sr=wheelRotation%360;const st=performance.now();const dur=4000;function loop(now){const t=Math.min(1,(now-st)/dur);const e=1-Math.pow(1-t,4);wheelRotation=sr+tr*e;drawWheel(cPct);if(t<1)requestAnimationFrame(loop);else{wheelRotation=sr+tr;drawWheel(cPct);wheelSpinning=false;cb&&cb();}}requestAnimationFrame(loop);}
+function spinWheel(cPct,success,cb){
+  if(wheelSpinning)return;
+  wheelSpinning=true;
+  
+  const turns = 5 + Math.floor(Math.random()*3); 
+  let targetDeg;
+  
+  if(success){
+    // Зеленая зона 0...cPct*3.6. Берем случайный угол внутри.
+    targetDeg = Math.random() * (cPct * 3.6);
+  } else {
+    // Красная зона cPct*3.6...360. Берем случайный угол.
+    const redSize = 360 - (cPct * 3.6);
+    targetDeg = (cPct * 3.6) + (Math.random() * redSize);
+  }
+
+  const dr = (360 - targetDeg) % 360;
+  const tr = turns * 360 + dr;
+  const sr = wheelRotation % 360;
+  
+  const st = performance.now();
+  const dur = 4000;
+  
+  function loop(now){
+    const t = Math.min(1, (now-st)/dur);
+    const e = 1 - Math.pow(1-t, 4);
+    wheelRotation = sr + tr * e;
+    drawWheel(cPct);
+    if(t<1) {
+      requestAnimationFrame(loop);
+    } else {
+      wheelRotation = sr + tr;
+      drawWheel(cPct);
+      wheelSpinning=false;
+      cb&&cb();
+    }
+  }
+  requestAnimationFrame(loop);
+}
 function renderCraftPool(){const root=$('craftPool');const pool=S.workshop.craftPool;if(!pool.length){root.innerHTML='<div class="cp-empty">Введи цену и нажми «Подобрать».</div>';return;}root.innerHTML=`<div class="cp-head"><b>Найдено: ${pool.length}</b></div><div class="cp-grid">${pool.map((p,idx)=>{const sel=S.workshop.targetPlate&&S.workshop.targetPlate.id===p.id;return `<div class="cp-card ${sel?'selected':''}" data-cp="${idx}">${plateHTML(p)}<div class="cp-info"><span>${p.rarityName}</span><span class="cpv">${fmt(p.value)} ₽</span></div></div>`;}).join('')}</div>`;root.querySelectorAll('[data-cp]').forEach(el=>el.onclick=()=>{const idx=+el.dataset.cp;S.workshop.targetPlate=S.workshop.craftPool[idx];S.workshop.target=S.workshop.targetPlate.rarity;renderCraftPool();renderWheelAndSummary();});}
 function renderWorkshop(){const root=$('wsPlates');if(!S.collection.length){root.innerHTML='<div class="empty" style="grid-column:1/-1">Коллекция пуста.</div>';}else{const bonus=getSetsBonus();root.innerHTML=S.collection.map(p=>{const sel=S.workshop.selected.includes(p.id);return `<div class="ws-plate ${sel?'selected':''}" data-ws="${p.id}">${plateHTML(p)}<div class="ws-val">${p.rarityName} · <b>${fmt(Math.round(p.value*(1+bonus)))} ₽</b></div></div>`;}).join('');root.querySelectorAll('[data-ws]').forEach(el=>el.onclick=()=>togglePlateSelect(el.dataset.ws));}renderCraftPool();renderWheelAndSummary();}
 function togglePlateSelect(id){const idx=S.workshop.selected.indexOf(id);if(idx>=0)S.workshop.selected.splice(idx,1);else{if(S.workshop.selected.length>=8){toast('Макс 8');return;}S.workshop.selected.push(id);}renderWorkshop();}
@@ -1428,8 +1511,78 @@ $('rouletteRed').onclick=()=>playRoulette('red');$('rouletteBlack').onclick=()=>
 
 let shellActive=false;
 $('shellBtn').onclick=()=>{if(!antiCheatOk('shell',12))return;if(S.balance<10000){toast('Нужно 10 000 ₽');return;}S.balance-=10000;trackQuest('spentMoney',10000);flashWallet();$('shellGame').hidden=false;$('shellHint').textContent='Смотри...';$('shellGame').scrollIntoView({behavior:'smooth',block:'center'});shellActive=true;playShellRound();};
-function playShellRound(){const shells=document.querySelectorAll('.shell');shells.forEach(s=>{s.classList.remove('picked','wrong-pick','show-ball');s.style.transform='';s.onclick=null;});const correct=Math.floor(Math.random()*3);const prize=Math.round(30000*eventMult());shells.forEach((s,i)=>{if(i===correct)s.classList.add('show-ball');});setTimeout(()=>{shells.forEach(s=>s.classList.remove('show-ball'));let shuffles=0;const interval=setInterval(()=>{shells.forEach(s=>{s.style.transform='translateX('+(Math.random()*20-10)+'px)';});sfxShell();shuffles++;if(shuffles>=6){clearInterval(interval);shells.forEach(s=>s.style.transform='');finishShellShuffle(correct,prize);}},250);},1200);}
-function finishShellShuffle(correct,prize){$('shellHint').textContent='Где шарик?';const shells=document.querySelectorAll('.shell');let clicked=false;const clickStart=Date.now();shells.forEach((s,i)=>{s.onclick=()=>{if(!shellActive||clicked)return;if(Date.now()-clickStart<150){clicked=true;shellActive=false;toast('🚫 Слишком быстро');acCheck('shell',100);return;}clicked=true;shellActive=false;shells.forEach(x=>{x.onclick=null;if(x.dataset.shell==correct)x.classList.add('show-ball');});if(i===correct){s.classList.add('picked');S.balance+=prize;trackWin();toast('🎉 +'+fmt(prize)+' ₽');sfxCash();confetti(60);}else{s.classList.add('wrong-pick');toast('💀 Мимо.');sfxFail();}render();};});}
+function playShellRound(){
+  const shells=document.querySelectorAll('.shell');
+  shells.forEach(s=>{
+    s.classList.remove('picked','wrong-pick','show-ball');
+    s.style.transform='';
+    s.onclick=null;
+    // Прячем шарик и отключаем клики до конца перемешивания
+    const ball = s.querySelector('.ball');
+    if(ball) ball.style.display = 'none';
+  });
+  const correct=Math.floor(Math.random()*3);
+  const prize=Math.round(30000*eventMult());
+  
+  setTimeout(()=>{
+    let shuffles=0;
+    const interval=setInterval(()=>{
+      shells.forEach(s=>{s.style.transform='translateX('+(Math.random()*20-10)+'px)';});
+      sfxShell();
+      shuffles++;
+      if(shuffles>=6){
+        clearInterval(interval);
+        shells.forEach(s=>s.style.transform='');
+        
+        // Возвращаем шарик на место, но делаем его невидимым для глаз (чтобы нельзя было подсмотреть)
+        shells.forEach((s, i) => {
+          const ball = s.querySelector('.ball');
+          if(ball) {
+            ball.style.display = 'block';
+            ball.style.opacity = (i === correct) ? '0' : '0';
+          }
+        });
+        
+        finishShellShuffle(correct,prize);
+      }
+    },250);
+  },1200);
+}
+function finishShellShuffle(correct,prize){
+  $('shellHint').textContent='Где шарик?';
+  const shells=document.querySelectorAll('.shell');
+  let clicked=false;
+  const clickStart=Date.now();
+  
+  shells.forEach((s,i)=>{
+    s.onclick=()=>{
+      if(!shellActive||clicked)return;
+      // Защита от кликов во время анимации
+      if(Date.now()-clickStart<200){
+        clicked=true;shellActive=false;
+        toast('🚫 Слишком быстро');acCheck('shell',100);
+        return;
+      }
+      clicked=true;shellActive=false;
+      
+      shells.forEach(x=>{
+        x.onclick=null;
+        const ball = x.querySelector('.ball');
+        if(ball) ball.style.opacity = '1'; // Показываем где был шарик
+      });
+      
+      if(i===correct){
+        s.classList.add('picked');
+        S.balance+=prize;
+        trackWin();toast('🎉 +'+fmt(prize)+' ₽');sfxCash();confetti(60);
+      } else {
+        s.classList.add('wrong-pick');
+        toast('💀 Мимо.');sfxFail();
+      }
+      render();
+    };
+  });
+}
 $('shellClose').onclick=()=>{$('shellGame').hidden=true;shellActive=false;};
 
 let diceActive=false;
@@ -1957,7 +2110,6 @@ renderFreeCase();
 renderWash();
 renderScratchCd();
 
-// === PEERJS INIT ===
 // === PEERJS INIT ===
 (async function(){
   const fl = $('firebaseLoading');
