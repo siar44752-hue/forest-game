@@ -338,7 +338,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .drift-target{position:absolute;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,107,.9),rgba(255,214,107,.3));border:2px solid var(--gold);box-shadow:0 0 30px rgba(255,214,107,.7);animation:targetPulse 1s infinite alternate}
 @keyframes targetPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.15);opacity:1}}
 .drift-obstacle{position:absolute;width:50px;height:50px;background:linear-gradient(145deg,#c81010,#5a0808);border-radius:8px;border:2px solid #ff5050;box-shadow:0 0 20px rgba(255,80,80,.5)}
-/* Тир */
 .arcade-wrap{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(20,25,35,.9),rgba(8,12,16,.95));border:2px solid rgba(87,199,255,.4);margin-top:14px}
 .arcade-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px}
 .arcade-timer{font:bold 24px 'Russo One';color:var(--blue)}
@@ -349,7 +348,6 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .arcade-target.hit{animation:targetHit .3s forwards}
 @keyframes targetHit{0%{transform:scale(1);opacity:1}100%{transform:scale(1.5);opacity:0}}
 .arcade-crosshair{position:absolute;width:30px;height:30px;border:2px solid var(--lime);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity .1s}
-/* Блэкджек */
 .bj-wrap{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(15,35,20,.9),rgba(8,15,10,.95));border:2px solid rgba(196,255,70,.4);margin-top:14px}
 .bj-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
 .bj-head h3{margin:0;font:20px 'Russo One';color:var(--lime)}
@@ -424,7 +422,7 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .set-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--lime),var(--blue));transition:width .4s}
 .set-card .set-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800}
 .set-card .set-foot .sf-bonus{color:var(--lime);font-size:13px}
-.friends-hero{padding:24px;border-radius:20px;background:linear-gradient(135deg,rgba(87,199,255,.15),rgba(195,139,255,.1),rgba(196,255,70,.08));border:2px solid rgba(87,199,255,.35);margin-bottom:20px}
+.friends-hero{padding:24px;border-radius:20px;background:linear-gradient(135deg,rgba(87,199,255,.15),rgba(195,139,255,.1),rgba(196,255,70,.08));border:2px solid rgba(87,199,255,.35);margin-bottom:20px;position:relative;overflow:hidden}
 .friends-hero h3{margin:0 0 8px;font:22px 'Russo One';color:var(--blue)}
 .friends-hero p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
 .invite-box{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
@@ -445,11 +443,12 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .code-attempts{font-size:10px;color:var(--red);font-weight:900;margin-top:8px}
 .friends-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .friend-card{padding:16px;border-radius:18px;background:linear-gradient(145deg,rgba(22,30,22,.85),rgba(12,17,13,.95));border:2px solid var(--line)}
-.friend-card.online{border-color:rgba(196,255,70,.5);background:linear-gradient(145deg,rgba(30,44,28,.9),rgba(15,22,16,.95))}
+.friend-card.online{border-color:rgba(196,255,70,.5);background:linear-gradient(145deg,rgba(30,44,28,.9),rgba(15,22,16,.95));box-shadow:0 0 20px rgba(196,255,70,.15)}
 .friend-head{display:flex;gap:12px;align-items:center;margin-bottom:12px}
-.friend-avatar{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3a4d35,#16211a);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
-.friend-avatar .status-dot{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#555;border:2px solid #0a0f0c}
-.friend-card.online .friend-avatar .status-dot{background:var(--lime)}
+.friend-avatar{width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3a4d35,#16211a);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;overflow:hidden}
+.friend-avatar img{width:100%;height:100%;object-fit:cover;}
+.friend-avatar .status-dot{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#555;border:2px solid #0a0f0c;z-index:2}
+.friend-card.online .friend-avatar .status-dot{background:var(--lime);box-shadow:0 0 10px var(--lime)}
 .friend-name{font-size:15px;font-weight:900;margin:0 0 3px}
 .friend-status{font-size:11px;color:var(--muted);font-weight:700}
 .friend-car{padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);margin-bottom:12px;display:flex;gap:10px;align-items:center}
@@ -457,16 +456,11 @@ h1{font:clamp(30px,5vw,53px) 'Russo One';margin:11px 0 8px;line-height:1.1;backg
 .friend-car .fc-info b{display:block;font-size:13px;color:var(--white);margin-bottom:2px}
 .friend-car .fc-info small{font-size:10px;color:var(--muted)}
 .friend-plate{margin-bottom:12px}
-.friend-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.friend-stat{padding:8px;border-radius:9px;background:rgba(0,0,0,.3);text-align:center}
-.friend-stat .fst-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:800;margin-bottom:3px}
-.friend-stat .fst-val{font:bold 14px 'Russo One';color:var(--lime)}
 .friend-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .friend-actions button{padding:10px;border-radius:9px;font-weight:800;font-size:11px;background:rgba(45,58,45,.8);border:1px solid rgba(255,255,255,.08)}
 .friend-actions .gift-btn{background:linear-gradient(145deg,#ffd95a,#e0b637);color:#1a1408;grid-column:1/-1}
 .friend-actions .gift-btn:disabled{background:rgba(45,58,45,.8);color:var(--muted);cursor:not-allowed}
 .friend-actions .duel-btn{background:linear-gradient(145deg,#c38bff,#8c4ec8);color:#fff}
-.friend-actions .test-btn{background:linear-gradient(145deg,#57c7ff,#2a89c4);color:#fff}
 .rating-panel{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(30,44,30,.75),rgba(15,22,16,.9));border:2px solid rgba(255,214,107,.3);margin-bottom:20px}
 .rating-panel h3{margin:0 0 14px;font:18px 'Russo One';color:var(--gold)}
 .rating-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.3);margin-bottom:6px}
@@ -542,12 +536,34 @@ body.is-mobile .daynight button{width:36px;height:36px;font-size:16px}
 body.is-mobile .bj-cards{min-height:80px}
 body.is-mobile .bj-card{width:56px;height:82px;font-size:20px}
 body.is-mobile .arcade-field{height:240px}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Дополнительные стили */
+.bet-panel{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(25,20,35,.9),rgba(10,8,15,.95));border:2px solid rgba(195,139,255,.4);margin-top:14px;text-align:center}
+.bet-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:900;font-size:20px}
+.bi-index{color:var(--lime);font-family:'Russo One'}
+.bi-index.up{color:var(--lime)}.bi-index.down{color:var(--red)}
+.bi-timer{color:var(--gold);font-family:'Russo One'}
+.bet-chart{width:100%;height:120px;display:block;border-radius:10px;background:rgba(0,0,0,.4);margin-bottom:14px}
+.bet-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto}
+.bet-choice{padding:16px;border-radius:12px;font-weight:900;font-size:14px;color:#fff}
+.bet-choice.up{background:linear-gradient(145deg,#c4ff46,#8ec422);color:#111}
+.bet-choice.down{background:linear-gradient(145deg,#ff5050,#a01010)}
+.notif-badge{position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#ff5050;color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px #ff5050;animation:eventPulse 1.2s infinite alternate;pointer-events:none}
+.firebase-loading{position:fixed;inset:0;z-index:99999;background:rgba(5,8,6,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(10px);transition:opacity .5s}
+.firebase-loading.hide{opacity:0;pointer-events:none}
+.firebase-loading .spinner{width:50px;height:50px;border:4px solid rgba(196,255,70,.2);border-top-color:var(--lime);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.firebase-loading .fl-text{font:bold 16px 'Russo One';color:var(--lime);letter-spacing:2px}
 </style>
 </head>
 <body>
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="bg-layer" aria-hidden="true"><div class="bg-aurora"></div><div class="bg-grid"></div><div class="bg-noise"></div><div class="bg-particles" id="bgParticles"></div></div>
+
+<div class="firebase-loading" id="firebaseLoading">
+  <div class="spinner"></div>
+  <div class="fl-text" id="flText">ПОДКЛЮЧЕНИЕ К СЕРВЕРУ...</div>
+</div>
 
 <div class="setup" id="platformSetup">
   <div class="setup-card">
@@ -573,7 +589,6 @@ body.is-mobile .arcade-field{height:240px}
 <div class="trader-banner" id="traderBanner" hidden><div class="tb-icon">🧳</div><div class="tb-info"><b>ПЕРЕКУПЩИК!</b><small>Дороже рынка</small></div><div class="tb-timer" id="traderBannerTimer">45</div></div>
 
 <main class="wrap">
-
 <section id="caseView" class="view active">
   <div class="daily-panel" id="dailyPanel"></div>
   <div class="intro"><div class="kicker">ТВОЯ КОЛЛЕКЦИЯ НАЧИНАЕТСЯ ЗДЕСЬ</div><h1>ПОЙМАЙ СВОЙ НОМЕР</h1><p>Один кейс — 500 000 ₽. Собери номер мечты за миллионы!</p></div>
@@ -841,7 +856,6 @@ body.is-mobile .arcade-field{height:240px}
     <button class="btn primary" id="slotSpin" style="width:100%;margin-top:10px">КРУТИТЬ · 10 000 ₽</button>
     <button class="btn secondary" id="slotClose" style="width:100%;margin-top:6px">ЗАКРЫТЬ</button>
   </div>
-
   <div class="drift-wrap" id="driftGame" hidden style="margin-top:20px">
     <div class="kicker">ДРИФТ-ИСПЫТАНИЕ</div>
     <div class="drift-info">
@@ -942,15 +956,14 @@ body.is-mobile .arcade-field{height:240px}
 <div id="achPopup" class="ach-popup"><div class="ach-icon" id="achIcon">🏆</div><div class="ach-info"><b id="achName">Достижение</b><small id="achDesc">Описание</small></div></div>
 
 <script>
-// Версия и защита от устаревшего кэша
-const APP_VERSION = 'v13.0.0';
+const APP_VERSION = 'v14.0.0';
 (function checkVersion(){
   let stored=null;
   try{stored=localStorage.getItem('nomerok-app-version');}catch(e){}
   if(stored && stored !== APP_VERSION){
     const ov=document.createElement('div');
     ov.className='update-overlay';
-    ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Новая версия: исправлен 3D-гараж, новые игры, цена кейса 500 000 ₽.</p><button id="uoReload">🔄 ОБНОВИТЬ</button>`;
+    ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Новая версия: реальные друзья (Firebase), обновленный дизайн, исправлены баги.</p><button id="uoReload">🔄 ОБНОВИТЬ</button>`;
     document.body.appendChild(ov);
     document.getElementById('uoReload').onclick=()=>{try{localStorage.setItem('nomerok-app-version', APP_VERSION);}catch(e){}location.reload(true);};
     document.addEventListener('click', e=>{if(e.target.id==='uoReload')return;e.preventDefault();e.stopPropagation();}, true);
@@ -961,6 +974,10 @@ const APP_VERSION = 'v13.0.0';
 
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js';
+import { getDatabase, ref, set, get, onValue, onDisconnect, update, push } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js';
+
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 const PLATFORM_KEY='nomerok-platform';
@@ -970,11 +987,73 @@ function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
 function updateScrollProgress(){const h=document.documentElement.scrollHeight-window.innerHeight;const p=h>0?(window.scrollY/h)*100:0;$('scrollProgress').style.width=Math.min(100,p)+'%';}
 window.addEventListener('scroll',updateScrollProgress,{passive:true});window.addEventListener('resize',updateScrollProgress);
 
+// ============ FIREBASE CONFIG ============
+const firebaseConfig = {
+  apiKey: "AIzaSyArIeUFV4grddcwYY8pBoSXQZvDMMKWokc",
+  authDomain: "nomerok-84a45.firebaseapp.com",
+  databaseURL: "https://nomerok-84a45-default-rtdb.firebaseio.com",
+  projectId: "nomerok-84a45",
+  storageBucket: "nomerok-84a45.firebasestorage.app",
+  messagingSenderId: "944992255871",
+  appId: "1:944992255871:web:d456d167c7e46e32ffa44a",
+  measurementId: "G-LCWT6J7YYE"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+const auth = getAuth(fbApp);
+let myUid = null;
+let myInviteCode = null;
+
+function genInviteCode() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s = 'NOM-';
+  for (let i = 0; i < 5; i++) s += c[Math.floor(Math.random()*c.length)];
+  return s;
+}
+function genNickname(id) {
+  const n = ['Игрок','Гонщик','Коллекционер','Охотник','Мастер','Легенда','Профи','Новичок'];
+  return n[Math.floor(Math.random()*n.length)] + ' ' + id.slice(0,4).toUpperCase();
+}
+function avatarUrl(id) {
+  return `https://api.dicebear.com/7.x/bottts/svg?seed=${id}&backgroundColor=c4ff46,57c7ff,c38bff`;
+}
+
+async function ensureProfile() {
+  const r = ref(db, 'users/' + myUid);
+  const snap = await get(r);
+  if (!snap.exists()) {
+    const code = genInviteCode();
+    await set(r, {
+      uid: myUid, name: genNickname(myUid),
+      inviteCode: code,
+      income: 0,
+      plate: { L1:'А', L2:'А', L3:'А', digits:'000', region:'77', rarity:'common', value:0 },
+      carId: 'lambo',
+      avatar: avatarUrl(myUid),
+      online: true,
+      lastSeen: Date.now(),
+      createdAt: Date.now()
+    });
+    await set(ref(db, 'inviteCodes/' + code), { uid: myUid });
+    myInviteCode = code;
+  } else {
+    myInviteCode = snap.val().inviteCode;
+  }
+  onDisconnect(r).update({ online: false, lastSeen: Date.now() });
+  await update(r, { online: true, lastSeen: Date.now() });
+}
+
+function syncMyProfile(data) {
+  if (!myUid) return;
+  update(ref(db, 'users/' + myUid), { ...data, lastSeen: Date.now() }).catch(()=>{});
+}
+
+// ============ GAME STATE ============
 const LETTERS=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
 const PREMIUM_REGIONS=['77','97','99','177','197','199','777','790','750'];
 const NORMAL_REGIONS=['01','02','03','05','06','07','08','10','11','12','13','14','16','18','19','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','98','100','101','102','103','104','105','106','107','108','109','110','111','112','113','114','115','116','117','118','119','120','121','122','123','124','125','126','127','128','129','130','131','132','133','134','135','136','137','138','139','140','141','142','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','161','162','163','164','165','166','167','168','169','170','171','172','173','174','175','176','178','179','180','181','182','183','184','185','186','187','188','189','190','191','192','193','194','195','196','198','199'];
 const SEQUENCES=['123','234','345','456','567','678','789'];
-// 💰 Цена кейса = 500 000 ₽, старт = 1 000 000 ₽ (на 2 кейса)
 const CASE_PRICE=500000,START_BALANCE=1000000;
 
 const RARITIES={
@@ -994,13 +1073,31 @@ const INTERIER={walls:{name:'🧱 Стены',levels:[{name:'Бетон',cost:0,
 const SETS=[{id:'capital',name:'Столица',icon:'🏛️',desc:'Номера регионов 77, 97, 99, 177, 197, 199, 777.',bonus:0.05,check:p=>PREMIUM_REGIONS.includes(p.region)},{id:'triple7',name:'Три семёрки',icon:'🔥',desc:'Три одинаковые цифры.',bonus:0.08,check:p=>p.digits[0]===p.digits[1]&&p.digits[1]===p.digits[2]},{id:'mirror',name:'Зеркала',icon:'💎',desc:'Зеркальные номера.',bonus:0.04,check:p=>p.digits[0]===p.digits[2]&&p.digits[0]!==p.digits[1]},{id:'agent',name:'Агент 007',icon:'🕵️',desc:'007, 001 или 100.',bonus:0.04,check:p=>['007','001','100'].includes(p.digits)},{id:'seq',name:'Последователь',icon:'🎯',desc:'Последовательности.',bonus:0.06,check:p=>SEQUENCES.includes(p.digits)},{id:'letters',name:'Буквоежка',icon:'✍️',desc:'3 одинаковые буквы.',bonus:0.06,check:p=>p.L1===p.L2&&p.L2===p.L3},{id:'legendary',name:'Легенда',icon:'👑',desc:'Легендарные.',bonus:0.10,check:p=>p.rarity==='legendary'},{id:'mythic',name:'Миф',icon:'⭐',desc:'Мифические.',bonus:0.15,check:p=>p.rarity==='mythic'}];
 const SET_TARGET={capital:3,triple7:3,mirror:3,agent:3,seq:3,letters:2,legendary:2,mythic:1};
 const DAILY_TEMPLATES=[{id:'open_cases',icon:'🎰',title:'Открой 3 кейса',goal:3,track:'opened'},{id:'sell_plates',icon:'💸',title:'Продай 3 номера',goal:3,track:'sold'},{id:'craft_success',icon:'⚗️',title:'Успешный сплав',goal:1,track:'crafted'},{id:'lucky_win',icon:'🎯',title:'Собери комбинацию',goal:1,track:'luckyWin'},{id:'scratch_win',icon:'🎫',title:'Сотри карту',goal:1,track:'scratchWin'},{id:'bet_win',icon:'📊',title:'Угадай индекс',goal:1,track:'betWin'},{id:'upgrade_car',icon:'🔧',title:'Купи 2 апгрейда',goal:2,track:'carUpgrade'},{id:'spend_money',icon:'💰',title:'Потрать 1 000 000 ₽',goal:1000000,track:'spentMoney'},{id:'free_case',icon:'🪙',title:'Открой копилку',goal:1,track:'freeCase'},{id:'open_set',icon:'📦',title:'Собери набор',goal:1,track:'setCompleted'},{id:'dice_win',icon:'🎲',title:'Выиграй в кубики',goal:1,track:'diceWin'},{id:'slot_win',icon:'🎰',title:'Слоты: три в ряд',goal:1,track:'slotWin'},{id:'drift_win',icon:'🏁',title:'Пройди дрифт',goal:1,track:'driftWin'},{id:'arcade_win',icon:'🎯',title:'Тир: 10+ попаданий',goal:1,track:'arcadeWin'},{id:'bj_win',icon:'🃏',title:'Выиграй в блэкджек',goal:1,track:'bjWin'}];
-const FRIEND_NAMES=['Макс','Илья','Артём','Дима','Кирилл','Никита','Сергей','Вова','Женя','Стас','Рома','Толя','Гоша','Лёха','Витя','Паша'];
-const FRIEND_ICONS=['😎','🔥','🏎️','😈','🦊','🐺','🦁','🐻','🐯','🦅','🐉','👑'];
+
 const FAKE_PRIZES=[7000000,8000000,9000000,10000000];
 
 let S={balance:START_BALANCE,collection:[],installed:null,offers:[],lastOffer:Date.now(),pending:null,upgrades:{paint:0,wheels:0,spoiler:0,exhaust:0,neon:0},interier:{walls:0,light:0,shelves:0,stand:0,bar:0},cars:{owned:['lambo'],current:'lambo'},lastFreeCase:0,lastWash:0,lastScratch:0,trader:{active:false,expires:0,offers:[]},lastTrader:Date.now(),stocks:[],marketIndex:{history:[100,100,100],value:100},workshop:{selected:[],target:null,targetPlate:null,craftPool:[]},marketFilter:'all',daily:null,friends:[],inviteCode:'',refEarned:0,duelWins:0,lastFriendAdd:'',friendCodeAttempts:0,friendCodeBlocked:false,antiCheat:{},event:{active:false,expires:0,mult:1},lastEvent:Date.now(),dayNight:'day',stats:{opened:0,best:0,sold:0,earned:0,crafted:0,craftFailed:0,driftWins:0,arcadeWins:0,bjWins:0}};
-try{const x=JSON.parse(localStorage.getItem('nomerok-v13'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];if(!S.antiCheat)S.antiCheat={};if(!S.event)S.event={active:false,expires:0,mult:1};S.event.active=false;S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
-function save(){try{localStorage.setItem('nomerok-v13',JSON.stringify(S));}catch(e){}}
+try{const x=JSON.parse(localStorage.getItem('nomerok-v14'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];if(!S.antiCheat)S.antiCheat={};if(!S.event)S.event={active:false,expires:0,mult:1};S.event.active=false;S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
+function save(){
+  try{localStorage.setItem('nomerok-v14',JSON.stringify(S));}catch(e){}
+  if (myUid) {
+    clearTimeout(window.__syncTimeout);
+    window.__syncTimeout = setTimeout(() => {
+      try {
+        const inst = S.collection.find(p => p.id === S.installed);
+        syncMyProfile({
+          income: getPassiveIncome(),
+          carId: S.cars.current,
+          plate: inst ? {
+            L1: inst.L1, L2: inst.L2, L3: inst.L3,
+            digits: inst.digits, region: inst.region,
+            rarity: inst.rarity, value: inst.value
+          } : null
+        });
+      } catch(e){}
+    }, 2000);
+  }
+}
 
 // ============ ЗВУК ============
 let audioCtx=null,masterGain=null;
@@ -1083,12 +1180,8 @@ function initDaily(){const today=getTodayKey();if(!S.daily||S.daily.date!==today
 function trackQuest(type,amount=1){if(!S.daily)initDaily();let ch=false;S.daily.quests.forEach(q=>{if(q.claimed)return;if(q.track===type&&q.progress<q.goal){q.progress=Math.min(q.goal,q.progress+amount);ch=true;}});if(ch){renderDaily();save();}}
 function getSetsBonus(){let b=0;SETS.forEach(set=>{const c=S.collection.filter(set.check).length;if(c>=SET_TARGET[set.id])b+=set.bonus;});return b;}
 
-function genInviteCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='NOM-';for(let i=0;i<5;i++)c+=chars[Math.floor(Math.random()*chars.length)];return c;}
-function initInviteCode(){if(!S.inviteCode)S.inviteCode=genInviteCode();}
 function getRefBonus(){return Math.min(0.20,S.friends.length*0.02);}
-function genFriend(seedName=null){const name=seedName||FRIEND_NAMES[Math.floor(Math.random()*FRIEND_NAMES.length)];const icon=FRIEND_ICONS[Math.floor(Math.random()*FRIEND_ICONS.length)];const carRoll=Math.random();let carId='lambo';if(carRoll>0.92)carId='ferrari';else if(carRoll>0.65)carId='porsche';const plate=generatePlate();const income=Math.round(plate.value*0.004*(1+Math.random()*1.5));const online=Math.random()<0.45;return {id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,icon,carId,plate:{L1:plate.L1,digits:plate.digits,L2:plate.L2,L3:plate.L3,region:plate.region,rarity:plate.rarity,rarityName:plate.rarityName,value:plate.value},income,online,lastGift:0,lastTest:0,joinedAt:Date.now(),inviteCode:genInviteCode()};}
-function initFriends(){if(!S.friends.length){for(let i=0;i<3;i++)S.friends.push(genFriend());}const today=getTodayKey();if(S.lastFriendAdd!==today){S.lastFriendAdd=today;if(Math.random()<0.25&&S.friends.length<12)S.friends.push(genFriend());}S.friends.forEach(f=>{if(Math.random()<0.2)f.online=Math.random()<0.5;});save();}
-function addFriendByCode(code){if(S.friendCodeBlocked){showBanOverlay();return false;}code=code.toUpperCase().trim();if(!code){toast('Введи код');return false;}if(!/^NOM-[A-Z0-9]{5}$/.test(code)){S.friendCodeAttempts++;save();if(S.friendCodeAttempts>=2){S.friendCodeBlocked=true;save();showBanOverlay();return false;}toast(`❌ Осталось: ${2-S.friendCodeAttempts}`);renderCodeAttempts();return false;}if(code===S.inviteCode){toast('Свой код');return false;}if(S.friends.some(f=>f.inviteCode===code)){toast('Уже активирован');return false;}const friend=genFriend();friend.inviteCode=code;friend.online=true;S.friends.push(friend);S.balance+=500000;S.refEarned+=500000;flashWallet();sfxCash();sfxFriend();confetti(80);toast('🎉 +500 000 ₽');render();save();return true;}
+
 function showBanOverlay(){if(document.getElementById('banOverlay'))return;sfxBan();const ov=document.createElement('div');ov.id='banOverlay';ov.style.cssText='position:fixed;inset:0;z-index:99999;background:linear-gradient(145deg,#2a0a0a,#0a0404);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;padding:30px;text-align:center;color:#fff';ov.innerHTML=`<div style="font-size:90px">🚫</div><h1 style="font:900 40px 'Russo One';color:#ff5050;letter-spacing:4px;margin:0">ВЫ ЗАБЛОКИРОВАНЫ</h1><div style="font:900 26px 'Russo One';background:#3a0a0a;padding:20px 40px;border-radius:16px;border:2px solid #ff5050">«СИЯР ГЛАВА»</div>`;document.body.appendChild(ov);}
 function renderCodeAttempts(){const el=$('codeAttempts');if(!el)return;if(S.friendCodeBlocked){el.textContent='🚫 ЗАБЛОКИРОВАНО';el.style.color='var(--red)';}else if(S.friendCodeAttempts>0){el.textContent=`⚠️ Осталось: ${2-S.friendCodeAttempts}`;}else{el.textContent='';}}
 
@@ -1115,7 +1208,7 @@ function render(){
   $('carIncome').textContent=fmt(inc)+' ₽';
   renderDaily();renderCollection();renderGarage();renderOffers();renderUpgrades();renderInterier();renderCarShop();renderTrader();renderSets();renderFriends();updateEventDots();save();updateScrollProgress();
 }
-function updateEventDots(){const hasGift=S.friends.some(f=>{const ld=f.lastGift?new Date(f.lastGift).toDateString():'';return ld!==new Date().toDateString();});document.querySelectorAll('.nav [data-view="friendsView"], .bottom-nav [data-view="friendsView"]').forEach(t=>t.classList.toggle('has-event',hasGift&&!S.friendCodeBlocked));}
+function updateEventDots(){const hasGift=(window.__incomingGifts||[]).length>0;const hasDuel=(window.__incomingDuels||[]).length>0;document.querySelectorAll('.nav [data-view="friendsView"], .bottom-nav [data-view="friendsView"]').forEach(t=>{t.classList.toggle('has-event',(hasGift||hasDuel)&&!S.friendCodeBlocked);let badge=t.querySelector('.notif-badge');const n=(window.__incomingGifts||[]).length+(window.__incomingDuels||[]).length;if(n>0){if(!badge){badge=document.createElement('span');badge.className='notif-badge';t.appendChild(badge);}badge.textContent=n;}else if(badge){badge.remove();}});}
 
 function renderDaily(){const root=$('dailyPanel');if(!root)return;if(!S.daily)initDaily();const qs=S.daily.quests;const allDone=qs.every(q=>q.progress>=q.goal);const now=new Date();const tmr=new Date(now);tmr.setDate(now.getDate()+1);tmr.setHours(0,0,0,0);const hrs=Math.floor((tmr-now)/3600000);const mins=Math.floor(((tmr-now)%3600000)/60000);root.innerHTML=`<div class="daily-head"><h3>📅 Задания</h3><span class="dh-time">Обновление через ${hrs}ч ${mins}м</span></div><div class="quests-list">${qs.map(q=>{const done=q.progress>=q.goal;const pct=Math.min(100,q.progress/q.goal*100);return `<div class="quest ${done?'done':''}"><div class="quest-head"><span class="q-icon">${q.icon}</span><span class="q-status">${done?'ГОТОВО':'В процессе'}</span></div><div class="quest-title">${q.title}</div><div class="quest-bar"><i style="width:${pct}%"></i></div><div class="quest-foot"><span>${fmt(Math.min(q.progress,q.goal))} / ${fmt(q.goal)}</span></div></div>`;}).join('')}</div><div class="daily-reward"><div class="dr-text"><b>${allDone?'🎁 Выполнено!':'🎁 Награда за 3'}</b><small>+1 кейс без оплаты</small></div><button id="dailyClaimBtn" ${(!allDone||S.daily.rewardClaimed)?'disabled':''}>${S.daily.rewardClaimed?'✓':'ЗАБРАТЬ'}</button></div>`;const btn=$('dailyClaimBtn');if(btn)btn.onclick=()=>{if(!allDone||S.daily.rewardClaimed)return;S.daily.rewardClaimed=true;S.balance+=CASE_PRICE;flashWallet();sfxCash();toast('🎁 +'+fmt(CASE_PRICE)+' ₽');renderDaily();render();save();};}
 
@@ -1134,8 +1227,8 @@ function renderGarage(){
   updateCarSwitchers();
 }
 function updateCarSwitchers(){const idx=S.cars.owned.indexOf(S.cars.current);const prev=$('carPrev'),next=$('carNext');if(!prev||!next)return;prev.disabled=idx<=0;next.disabled=idx>=S.cars.owned.length-1;}
-$('carPrev').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i>0){S.cars.current=S.cars.owned[i-1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
-$('carNext').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i<S.cars.owned.length-1){S.cars.current=S.cars.owned[i+1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();}};
+$('carPrev').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i>0){S.cars.current=S.cars.owned[i-1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();save();}};
+$('carNext').onclick=()=>{if(!antiCheatOk('garage',60))return;const i=S.cars.owned.indexOf(S.cars.current);if(i<S.cars.owned.length-1){S.cars.current=S.cars.owned[i+1];haptic([10]);sfxEngine(0.7);render();applyCarUpgrades();applyInterier();renderCarShop();save();}};
 $('btnGas').onclick=()=>{sfxEngine(1.4);haptic([40,30,60]);bounce(0.4);if(carGroup){wheels.forEach(w=>{w.userData.spin=(w.userData.spin||0)+0.6;});}};
 $('btnHorn').onclick=()=>{sfxHorn();haptic([80,40,80]);};
 $('btnDay').onclick=()=>{S.dayNight='day';$('btnDay').classList.add('active');$('btnNight').classList.remove('active');applyDayNight();save();};
@@ -1153,19 +1246,117 @@ function renderCarShop(){const root=$('carShop');if(!root)return;root.innerHTML=
 
 function renderSets(){const root=$('setsGrid');if(!root)return;let completed=0,totalBonus=0;root.innerHTML=SETS.map(set=>{const count=S.collection.filter(set.check).length;const target=SET_TARGET[set.id];const done=count>=target;if(done){completed++;totalBonus+=set.bonus;}const pct=Math.min(100,count/target*100);return `<div class="set-card ${done?'complete':''}"><span class="set-icon">${set.icon}</span><h4>${set.name}</h4><div class="set-desc">${set.desc}</div><div class="set-progress"><i style="width:${pct}%"></i></div><div class="set-foot"><span>${count} / ${target}</span><span class="sf-bonus">+${(set.bonus*100).toFixed(0)}%</span></div></div>`;}).join('');$('setsCompleted').textContent=`${completed} / ${SETS.length}`;$('setsBonus').textContent=`+${(totalBonus*100).toFixed(0)} %`;}
 
-function renderFriends(){initInviteCode();const codeEl=$('inviteCode');if(codeEl)codeEl.textContent=S.inviteCode;const fcEl=$('fsFriendsCount');if(fcEl)fcEl.textContent=S.friends.length;const rbEl=$('fsRefBonus');if(rbEl)rbEl.textContent='+'+Math.round(getRefBonus()*100)+' %';const reEl=$('fsRefEarned');if(reEl)reEl.textContent=fmt(S.refEarned);const dwEl=$('fsDuelWins');if(dwEl)dwEl.textContent=S.duelWins;const fctEl=$('friendsCountTag');if(fctEl)fctEl.textContent=S.friends.length?`(${S.friends.length})`:'';renderCodeAttempts();renderRating();renderFriendsList();}
-function renderRating(){const root=$('ratingList');if(!root)return;const myInc=getPassiveIncome();const all=[{name:'Ты',icon:'👑',value:myInc,me:true},...S.friends.map(f=>({name:f.name,icon:f.icon,value:f.income,me:false}))].sort((a,b)=>b.value-a.value);root.innerHTML=all.map((r,i)=>{const rankCls=i===0?'top1':i===1?'top2':i===2?'top3':'';return `<div class="rating-row ${r.me?'me':''} ${rankCls}"><div class="rr-rank">${i+1}</div><div class="rr-name">${r.icon} ${r.name}${r.me?' (ты)':''}</div><div class="rr-value">${fmt(r.value)} ₽</div></div>`;}).join('');}
-function renderFriendsList(){const root=$('friendsList');if(!root)return;if(!S.friends.length){root.innerHTML='<div class="empty">Пока никого.</div>';return;}const today=new Date().toDateString();root.innerHTML=S.friends.map(f=>{const car=CARS.find(c=>c.id===f.carId)||CARS[0];const giftReady=(!f.lastGift||new Date(f.lastGift).toDateString()!==today);const testReady=(!f.lastTest||new Date(f.lastTest).toDateString()!==today);return `<div class="friend-card ${f.online?'online':''}"><div class="friend-head"><div class="friend-avatar">${f.icon}<span class="status-dot"></span></div><div style="flex:1;min-width:0"><div class="friend-name">${f.name}</div><div class="friend-status">${f.online?'🟢 онлайн':'⚫ офлайн'} · ${fmt(f.income)} ₽/мин</div></div></div><div class="friend-car" style="color:${car.color}"><span class="fc-icon">${car.icon}</span><div class="fc-info"><b>${car.name}</b><small>+${(car.bonus*100).toFixed(0)}%</small></div></div><div class="friend-plate">${plateHTML(f.plate)}</div><div class="friend-actions"><button class="gift-btn" data-gift="${f.id}" ${giftReady?'':'disabled'}>${giftReady?'🎁 Забрать':'✓'}</button><button class="test-btn" data-test="${f.id}" ${testReady?'':'disabled'}>${testReady?'🚙 Тест':'✓'}</button><button class="duel-btn" data-duel="${f.id}">⚔️ Дуэль</button></div></div>`;}).join('');root.querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>claimGift(b.dataset.gift));root.querySelectorAll('[data-test]').forEach(b=>b.onclick=()=>testDrive(b.dataset.test));root.querySelectorAll('[data-duel]').forEach(b=>b.onclick=()=>duel(b.dataset.duel));}
-function claimGift(fid){if(!antiCheatOk('friends',30))return;const f=S.friends.find(x=>x.id===fid);if(!f)return;const today=new Date().toDateString();if(f.lastGift&&new Date(f.lastGift).toDateString()===today){toast('Уже сегодня');return;}const gift=Math.round((50000+Math.random()*200000)/50)*50*eventMult();S.balance+=gift;f.lastGift=Date.now();trackWin();flashWallet();sfxCash();toast(`🎁 +${fmt(gift)} ₽`);renderFriends();render();}
-function testDrive(fid){if(!antiCheatOk('friends',30))return;const f=S.friends.find(x=>x.id===fid);if(!f)return;const today=new Date().toDateString();if(f.lastTest&&new Date(f.lastTest).toDateString()===today){toast('Уже');return;}const reward=Math.round(f.income*0.15/50)*50*eventMult();S.balance+=reward;f.lastTest=Date.now();trackWin();flashWallet();sfxCash();toast(`🚙 +${fmt(reward)} ₽`);renderFriends();render();}
-function duel(fid){if(!antiCheatOk('friends',30))return;const f=S.friends.find(x=>x.id===fid);if(!f)return;const diff=getPassiveIncome()-f.income;if(diff>0){const reward=Math.round((200000+Math.abs(diff)*2)/50)*50*eventMult();S.balance+=reward;S.duelWins++;S.refEarned+=reward;trackWin();flashWallet();sfxCash();confetti(60);toast(`🏆 +${fmt(reward)} ₽`);}else{const loss=Math.min(S.balance,Math.round((50000+Math.abs(diff))/50)*50);S.balance-=loss;sfxFail();toast(`💀 -${fmt(loss)} ₽`);}renderFriends();render();save();}
+function renderFriends(){
+  const codeEl=$('inviteCode');
+  if(codeEl) codeEl.textContent = myUid ? (myInviteCode || 'ЗАГРУЗКА...') : 'ОФЛАЙН';
+  const fcEl=$('fsFriendsCount'); if(fcEl)fcEl.textContent=S.friends.length;
+  const rbEl=$('fsRefBonus'); if(rbEl)rbEl.textContent='+'+Math.round(getRefBonus()*100)+' %';
+  const reEl=$('fsRefEarned'); if(reEl)reEl.textContent=fmt(S.refEarned);
+  const dwEl=$('fsDuelWins'); if(dwEl)dwEl.textContent=S.duelWins;
+  const fctEl=$('friendsCountTag'); if(fctEl)fctEl.textContent=S.friends.length?`(${S.friends.length})`:'';
+  renderCodeAttempts();
+  renderRating();
+  renderFriendsList();
+}
+function renderRating(){const root=$('ratingList');if(!root)return;const myInc=getPassiveIncome();const all=[{name:'Ты',icon:'👑',value:myInc,me:true},...S.friends.map(f=>({name:f.name,icon:'👤',value:f.income,me:false}))].sort((a,b)=>b.value-a.value);root.innerHTML=all.map((r,i)=>{const rankCls=i===0?'top1':i===1?'top2':i===2?'top3':'';return `<div class="rating-row ${r.me?'me':''} ${rankCls}"><div class="rr-rank">${i+1}</div><div class="rr-name">${r.icon} ${r.name}${r.me?' (ты)':''}</div><div class="rr-value">${fmt(r.value)} ₽</div></div>`;}).join('');}
+function renderFriendsList(){
+  const root=$('friendsList');
+  if(!root)return;
+  if(!S.friends.length){root.innerHTML='<div class="empty">Пока никого. Пригласи друга по коду!</div>';return;}
+  const today=new Date().toDateString();
+  root.innerHTML=S.friends.map(f=>{
+    const car=CARS.find(c=>c.id===f.carId)||CARS[0];
+    const giftReady=(window.__incomingGifts || []).some(g => g.fromUid === f.id);
+    return `<div class="friend-card ${f.online?'online':''}"><div class="friend-head"><div class="friend-avatar">${f.avatar?`<img src="${f.avatar}" alt="">`:'👤'}<span class="status-dot"></span></div><div style="flex:1;min-width:0"><div class="friend-name">${f.name}</div><div class="friend-status">${f.online?'🟢 онлайн':'⚫ офлайн'} · ${fmt(f.income)} ₽/мин</div></div></div><div class="friend-car" style="color:${car.color}"><span class="fc-icon">${car.icon}</span><div class="fc-info"><b>${car.name}</b><small>+${(car.bonus*100).toFixed(0)}%</small></div></div><div class="friend-plate">${plateHTML(f.plate)}</div><div class="friend-actions"><button class="gift-btn" data-gift="${f.id}" ${giftReady?'':'disabled'}>${giftReady?'🎁 Забрать подарок':'Нет подарков'}</button><button class="duel-btn" data-duel="${f.id}">⚔️ Дуэль</button></div></div>`;
+  }).join('');
+  root.querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>claimGift(b.dataset.gift));
+  root.querySelectorAll('[data-duel]').forEach(b=>b.onclick=()=>duel(b.dataset.duel));
+}
 
-$('copyInviteBtn').onclick=()=>{initInviteCode();const text=`Играю в НОМЕРОК! Мой код: ${S.inviteCode}`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>{toast('📋 Скопировано');sfxFriend();}).catch(()=>toast('Код: '+S.inviteCode));else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано');}catch(e){}ta.remove();}};
+async function claimGift(fid){
+  if(!antiCheatOk('friends',30))return;
+  const gifts = window.__incomingGifts || [];
+  const gift = gifts.find(g => g.fromUid === fid);
+  if(!gift){ toast('Нет подарков от этого друга'); return; }
+  try {
+    await update(ref(db, 'gifts/' + myUid + '/' + gift.id), { claimed: true });
+    S.balance += gift.amount;
+    trackWin(); flashWallet(); sfxCash();
+    toast(`🎁 +${fmt(gift.amount)} ₽`);
+    render();
+  } catch(e){ toast('Ошибка: '+e.message); }
+}
+
+async function duel(fid){
+  if(!antiCheatOk('friends',30))return;
+  if(!myUid){ toast('⚠️ Нет соединения'); return; }
+  const incoming = (window.__incomingDuels || []).find(d => d.challenger === fid && d.status === 'pending');
+  if (incoming) {
+    try {
+      const winner = getPassiveIncome() > incoming.challengerIncome ? myUid : incoming.challenger;
+      await update(ref(db, 'duels/' + incoming.id), { status: 'finished', opponentIncome: getPassiveIncome(), winner });
+      toast('⚔️ Дуэль принята!');
+      return;
+    } catch(e){ toast('Ошибка: '+e.message); return; }
+  }
+  try {
+    await push(ref(db, 'duels'), {
+      challenger: myUid, opponent: fid, status: 'pending',
+      challengerIncome: getPassiveIncome(), opponentIncome: 0, winner: null, createdAt: Date.now()
+    });
+    toast('⚔️ Вызов отправлен другу');
+  } catch(e){ toast('Ошибка: '+e.message); }
+}
+
+$('copyInviteBtn').onclick=()=>{const text=`Играю в НОМЕРОК! Мой код: ${myInviteCode}`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>{toast('📋 Скопировано');sfxFriend();}).catch(()=>toast('Код: '+myInviteCode));else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано');}catch(e){}ta.remove();}};
 $('inviteCode').onclick=()=>$('copyInviteBtn').click();
-$('activateCodeBtn').onclick=()=>{if(S.friendCodeBlocked){showBanOverlay();return;}const val=($('friendCodeInput').value||'').toUpperCase().trim();if(addFriendByCode(val)){$('friendCodeInput').value='';renderFriends();}};
+
+async function addFriendByCode(code){
+  if(S.friendCodeBlocked){showBanOverlay();return false;}
+  code = code.toUpperCase().trim();
+  if(!code){toast('Введи код');return false;}
+  if(!/^NOM-[A-Z0-9]{5}$/.test(code)){
+    S.friendCodeAttempts++;save();
+    if(S.friendCodeAttempts>=2){S.friendCodeBlocked=true;save();showBanOverlay();return false;}
+    toast(`❌ Неверный формат. Осталось: ${2-S.friendCodeAttempts}`);
+    renderCodeAttempts();return false;
+  }
+  if(!myUid){ toast('⚠️ Нет соединения с сервером'); return false; }
+  try {
+    const clean = code;
+    const cs = await get(ref(db, 'inviteCodes/' + clean));
+    if (!cs.exists()) throw new Error('code not found');
+    const target = cs.val().uid;
+    if (target === myUid) throw new Error('own code');
+    const alr = await get(ref(db, 'friends/' + myUid + '/' + target));
+    if (alr.exists()) throw new Error('already friends');
+    
+    const now = Date.now();
+    await set(ref(db, 'friends/' + myUid + '/' + target), { since: now });
+    await set(ref(db, 'friends/' + target + '/' + myUid), { since: now });
+    
+    S.balance += 500000;
+    S.refEarned += 500000;
+    S.friendCodeAttempts = 0;
+    flashWallet(); sfxCash(); sfxFriend(); confetti(80);
+    toast('🎉 Друг добавлен! +500 000 ₽');
+    save(); render();
+    return true;
+  } catch(e) {
+    const msgs = { 'code not found': '❌ Такого кода нет', 'own code': 'Это твой собственный код', 'already friends': 'Уже в друзьях' };
+    toast(msgs[e.message] || 'Ошибка: '+e.message);
+    if(e.message === 'code not found'){
+      S.friendCodeAttempts++;save();
+      if(S.friendCodeAttempts>=2){S.friendCodeBlocked=true;save();showBanOverlay();}
+      renderCodeAttempts();
+    }
+    return false;
+  }
+}
+$('activateCodeBtn').onclick=async ()=>{if(S.friendCodeBlocked){showBanOverlay();return;}const val=($('friendCodeInput').value||'').toUpperCase().trim();const ok = await addFriendByCode(val);if(ok){$('friendCodeInput').value='';renderFriends();}};
 $('friendCodeInput').addEventListener('keypress',e=>{if(e.key==='Enter')$('activateCodeBtn').click();});
 
-function renderCollection(){const root=$('collection');if(!S.collection.length){root.innerHTML='<div class="empty">Коллекция пуста.</div>';return;}const bonus=getSetsBonus();root.innerHTML=S.collection.map((p,i)=>{const adjusted=Math.round(p.value*(1+bonus));return `<article class="item rar-${p.rarity}">${plateHTML(p)}<div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(adjusted)} ₽</b></div><p class="muted">${desc(p)}</p><button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button></article>`;}).join('');root.querySelectorAll('[data-install]').forEach(b=>b.onclick=()=>{S.installed=b.dataset.install;render();nav('garageView');toast('Установлен');sfxClick();});}
+function renderCollection(){const root=$('collection');if(!S.collection.length){root.innerHTML='<div class="empty">Коллекция пуста.</div>';return;}const bonus=getSetsBonus();root.innerHTML=S.collection.map((p,i)=>{const adjusted=Math.round(p.value*(1+bonus));return `<article class="item rar-${p.rarity}">${plateHTML(p)}<div class="itemrow"><span class="tag ${p.rarity}">${p.rarityName}</span><b>${fmt(adjusted)} ₽</b></div><p class="muted">${desc(p)}</p><button class="${S.installed===p.id?'installed':''}" data-install="${p.id}">${S.installed===p.id?'✓ УСТАНОВЛЕН':'УСТАНОВИТЬ'}</button></article>`;}).join('');root.querySelectorAll('[data-install]').forEach(b=>b.onclick=()=>{S.installed=b.dataset.install;render();nav('garageView');toast('Установлен');sfxClick();save();});}
 
 function resetSlots(){document.querySelectorAll('#livePlate .slot-char, #livePlate .slot-region').forEach(el=>{el.textContent='•';el.classList.remove('locked','active');});document.querySelectorAll('#animProgress span').forEach(el=>el.classList.remove('done','current'));$('slotHint').textContent='Нажми кнопку';$('slotHint').classList.remove('win');$('livePlate').className='plate-live';$('slotStage').classList.remove('spinning');}
 function animateSlot(i,fv,d=800,isR=false){return new Promise(res=>{const el=document.querySelector(`#livePlate [data-i="${i}"]`);if(!el){res();return;}const pb=document.querySelectorAll('#animProgress span')[i];if(!pb){res();return;}el.classList.add('active');pb.classList.add('current');const pool=isR?PREMIUM_REGIONS.concat(NORMAL_REGIONS.slice(0,20)):(i===0||i===4||i===5)?LETTERS:['0','1','2','3','4','5','6','7','8','9'];const start=performance.now();const ni=isMobile()?70:55;let ln=0;let done=false;function loop(now){if(done)return;const e2=now-start;if(e2-ln>ni){ln=e2;el.textContent=pool[Math.floor(Math.random()*pool.length)];if(Math.random()<0.3)sfxTick(0.9+Math.random()*0.4);}if(e2<d){requestAnimationFrame(loop);}else{done=true;el.textContent=fv;el.classList.remove('active');el.classList.add('locked');pb.classList.remove('current');pb.classList.add('done');sfxLock(i);res();}}requestAnimationFrame(loop);setTimeout(()=>{if(!done){done=true;el.textContent=fv;el.classList.remove('active');el.classList.add('locked');pb.classList.remove('current');pb.classList.add('done');res();}},d+2000);});}
@@ -1346,7 +1537,7 @@ function bjDealerTurn(){const dv=handValue(bjDealer);if(dv<17){bjDealer.push(bjD
 function bjCompare(){const pv=handValue(bjPlayer),dv=handValue(bjDealer);if(pv>21)return bjEnd('bust');if(dv>21)return bjEnd('player');if(pv>dv)return bjEnd('player');if(dv>pv)return bjEnd('dealer');bjEnd('tie');}
 function bjEnd(result){bjPhase='end';$('bjHit').disabled=true;$('bjStand').disabled=true;$('bjDeal').disabled=false;renderBjTable();if(result==='player'){const payout=Math.round(20000*eventMult());S.balance+=payout;S.stats.bjWins++;trackQuest('bjWin',1);trackWin();flashWallet();sfxCash();confetti(60);$('bjResult').innerHTML=`<span style="color:var(--lime)">🎉 Победа! +${fmt(payout)} ₽</span>`;}else if(result==='tie'){S.balance+=10000;$('bjResult').innerHTML=`<span style="color:var(--gold)">Ничья — возврат ставки</span>`;}else if(result==='bust'){$('bjResult').innerHTML=`<span style="color:var(--red)">Перебор — ставка сгорела</span>`;sfxFail();}else{$('bjResult').innerHTML=`<span style="color:var(--red)">Дилер победил</span>`;sfxFail();}render();}
 
-// ============ 3D ГАРАЖ (полностью переписан — рабочий) ============
+// ============ 3D ГАРАЖ ============
 let renderer=null,scene=null,camera=null,carGroup=null,carPlate=null,carPlateTexture=null;
 let drag=false,lastX=0,yaw=0;
 let carSuspension=0,carSuspensionV=0,carTilt=0,carTiltV=0,carBobPhase=0;
@@ -1364,8 +1555,7 @@ function resizeCar(){
   const canvas=document.getElementById('car');
   if(!canvas)return;
   const w=canvas.clientWidth, h=canvas.clientHeight;
-  if(w<10||h<10){console.log('⚠️ resizeCar: пропуск, размеры', w, h);return;}
-  console.log('🔧 resizeCar:', w, 'x', h);
+  if(w<10||h<10)return;
   renderer.setSize(w, h, false);
   camera.aspect=w/h;
   camera.updateProjectionMatrix();
@@ -1375,28 +1565,21 @@ function resizeCar(){
 function setupCar(){
   const canvas=document.getElementById('car');
   if(!canvas){console.error('❌ Canvas #car не найден');webglFailed=true;return;}
-  
-  // Проверка WebGL
   try{
     const test=document.createElement('canvas');
     const gl=test.getContext('webgl2')||test.getContext('webgl')||test.getContext('experimental-webgl');
     if(!gl){
-      console.warn('⚠️ WebGL недоступен');
       webglFailed=true;
       if(document.getElementById('carFallback'))document.getElementById('carFallback').classList.add('show');
       return;
     }
   }catch(e){webglFailed=true;return;}
-  
   try{
     scene=new THREE.Scene();
     scene.background=new THREE.Color('#0a0f0c');
-    
     camera=new THREE.PerspectiveCamera(35, 1, 0.1, 200);
     camera.position.set(0, 2.8, 12);
     camera.lookAt(0, 0.2, 0);
-    
-    // alpha:true — критично! без него был чёрный экран на некоторых GPU
     renderer=new THREE.WebGLRenderer({canvas:canvas, antialias:!isMobile(), alpha:true});
     renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile()?1.5:2));
     renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -1404,10 +1587,7 @@ function setupCar(){
     renderer.toneMappingExposure=1.3;
     renderer.shadowMap.enabled=!isMobile();
     renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-    
-    // === СВЕТ ===
     scene.add(new THREE.HemisphereLight(0xd8e8ff, 0x1a2218, 2.5));
-    
     const keyLight=new THREE.DirectionalLight(0xffffff, 3.5);
     keyLight.position.set(3, 8, 10);
     keyLight.castShadow=!isMobile();
@@ -1419,19 +1599,15 @@ function setupCar(){
     keyLight.shadow.camera.near=1;
     keyLight.shadow.camera.far=30;
     scene.add(keyLight);
-    
     const rimLight=new THREE.DirectionalLight(0xc4ff46, 3);
     rimLight.position.set(-6, 4, -3);
     scene.add(rimLight);
-    
     const backLight=new THREE.DirectionalLight(0x57c7ff, 2);
     backLight.position.set(6, 3, 3);
     scene.add(backLight);
-    
     const frontLight=new THREE.PointLight(0xffffff, 1.5, 25);
     frontLight.position.set(0, 4, 5);
     scene.add(frontLight);
-    
     [1,-1].forEach(s=>{
       const sp=new THREE.SpotLight(0xc4ff46, 3, 20, 0.6, 0.4, 1.5);
       sp.position.set(s*5, 6, 3);
@@ -1439,21 +1615,16 @@ function setupCar(){
       scene.add(sp);
       scene.add(sp.target);
     });
-    
-    // === ПОЛ ===
     const floorMat=new THREE.MeshStandardMaterial({color:0x1a1f1a, roughness:0.15, metalness:0.9});
     const floor=new THREE.Mesh(new THREE.CircleGeometry(16, 64), floorMat);
     floor.rotation.x=-Math.PI/2;
     floor.position.y=-0.85;
     floor.receiveShadow=!isMobile();
     scene.add(floor);
-    
     const ring=new THREE.Mesh(new THREE.RingGeometry(4.6, 4.9, 64), new THREE.MeshBasicMaterial({color:0xc4ff46, transparent:true, opacity:0.35, side:THREE.DoubleSide}));
     ring.rotation.x=-Math.PI/2; ring.position.y=-0.84; scene.add(ring);
     const ring2=new THREE.Mesh(new THREE.RingGeometry(6.4, 6.55, 64), new THREE.MeshBasicMaterial({color:0x57c7ff, transparent:true, opacity:0.2, side:THREE.DoubleSide}));
     ring2.rotation.x=-Math.PI/2; ring2.position.y=-0.83; scene.add(ring2);
-    
-    // === ПЛАТФОРМА ===
     platform=new THREE.Group(); scene.add(platform);
     const pd=new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.8, 0.15, 64), new THREE.MeshStandardMaterial({color:0x141a16, roughness:0.3, metalness:0.95}));
     pd.position.y=-0.78; platform.add(pd);
@@ -1466,69 +1637,45 @@ function setupCar(){
       bar.rotation.y=a;
       platform.add(bar);
     }
-    
-    // === МАШИНА ===
     carGroup=new THREE.Group(); scene.add(carGroup);
     buildCar3D();
     update3DPlate({L1:'А',L2:'А',L3:'А',digits:'000',region:'77'});
     applyCarUpgrades();
-    
-    // Размер
     resizeCar();
-    
-    // === ResizeObserver — главный фикс ===
     if(typeof ResizeObserver!=='undefined'){
       const ro=new ResizeObserver(()=>{
         const w=canvas.clientWidth, h=canvas.clientHeight;
-        if(w>10&&h>10){
-          resizeCar();
-        }
+        if(w>10&&h>10){ resizeCar(); }
       });
       ro.observe(canvas);
       ro.observe(canvas.parentElement);
       const gv=document.getElementById('garageView');
       if(gv)ro.observe(gv);
-      console.log('✅ ResizeObserver подключён');
     }
-    
-    // Множественные попытки resize
-    [100, 300, 800, 1500, 3000].forEach(t=>{
-      setTimeout(()=>resizeCar(), t);
-    });
-    
-    // === Анимация ===
+    [100, 300, 800, 1500, 3000].forEach(t=>{ setTimeout(()=>resizeCar(), t); });
     let lastTime=performance.now();
     renderer.setAnimationLoop(()=>{
       const now=performance.now();
       const dt=Math.min(0.05, (now-lastTime)/1000);
       lastTime=now;
-      
       carSuspensionV += (-carSuspension*22 - carSuspensionV*6)*dt;
       carSuspension += carSuspensionV*dt;
       carTiltV += (-carTilt*16 - carTiltV*6)*dt;
       carTilt += carTiltV*dt;
       carBobPhase += dt*2.4;
       const idleBob=Math.sin(carBobPhase)*0.008+Math.sin(carBobPhase*0.7)*0.004;
-      
       carGroup.position.y=carSuspension+idleBob;
       carGroup.rotation.z=carTilt;
       carGroup.rotation.x=Math.sin(carBobPhase*0.5)*0.003;
-      
       if(!drag){yaw*=0.985; carGroup.rotation.y=yaw;}
-      
       wheels.forEach(w=>{
         if(w.userData.spin){w.rotation.x-=w.userData.spin; w.userData.spin*=0.94; if(Math.abs(w.userData.spin)<0.01)w.userData.spin=0;}
         else w.rotation.x-=yaw*0.5;
       });
-      
       platformAngle+=0.003; if(platform)platform.rotation.y=platformAngle;
-      
       headLights.forEach((hl,i)=>{hl.material.emissiveIntensity=2.5+Math.sin(performance.now()*0.003+i)*0.5;});
-      
       renderer.render(scene, camera);
     });
-    
-    // === Управление мышью ===
     canvas.addEventListener('pointerdown', e=>{
       drag=true; lastX=e.clientX;
       try{canvas.setPointerCapture(e.pointerId);}catch(err){}
@@ -1545,13 +1692,9 @@ function setupCar(){
     canvas.addEventListener('pointerup', ()=>{drag=false; bounce(-0.08);});
     canvas.addEventListener('pointercancel', ()=>drag=false);
     canvas.addEventListener('click', ()=>{bounce(0.25);});
-    
     applyDayNight();
-    
     sceneReady=true;
-    console.log('✅ 3D сцена инициализирована');
   }catch(err){
-    console.error('❌ WebGL failed:', err);
     webglFailed=true;
     if(document.getElementById('carFallback'))document.getElementById('carFallback').classList.add('show');
   }
@@ -1567,7 +1710,6 @@ function buildCar3D(){
   const ch=material('#e8e8e8', 0.08, 0.95);
   const gl=new THREE.MeshPhysicalMaterial({color:'#0a1210', roughness:0.05, metalness:0.5, clearcoat:1});
   const hm=new THREE.MeshStandardMaterial({color:'#d7f4ff', emissive:'#8abaff', emissiveIntensity:2.5});
-  
   addBox(carGroup, 5.6, 0.72, 2.4, bm, 0, -0.03, 0);
   addBox(carGroup, 5.0, 0.18, 1.9, bm, 0, 0.42, -0.1);
   const rf=addBox(carGroup, 3.2, 0.15, 1.5, db, 0, 1.15, -0.65); rf.rotation.x=-0.14;
@@ -1575,11 +1717,9 @@ function buildCar3D(){
   const rg=addBox(carGroup, 3.5, 0.06, 0.7, gl, 0, 1.05, -1.25); rg.rotation.x=0.6;
   addBox(carGroup, 5.3, 0.28, 0.25, bm, 0, -0.4, 1.15);
   addBox(carGroup, 5.0, 0.08, 0.32, db, 0, -0.62, 1.22);
-  
   for(const s of [-1,1]){
     const m=addBox(carGroup, 0.18, 0.12, 0.28, bm, s*1.75, 1.0, 0.1); m.rotation.z=s*0.15;
   }
-  
   for(const s of [-1,1]){
     const in1=addBox(carGroup, 1.55, 0.5, 0.14, db, s*1.6, -0.22, 1.28); in1.rotation.z=s*0.06;
     const hb=addBox(carGroup, 0.9, 0.3, 0.14, db, s*1.95, 0.22, 1.26); hb.rotation.z=s*0.12;
@@ -1588,13 +1728,10 @@ function buildCar3D(){
     for(let j=0;j<3;j++)addBox(carGroup, 0.05, 0.16, 0.04, ch, s*(1.75+j*0.13), 0.18, 1.38);
     addSphere(carGroup, 0.18, bm, s*2.75, 0.4, 0.2, 1.2, 0.55, 0.65);
   }
-  
   headLights=[];
   carGroup.traverse(o=>{if(o.material&&o.material.emissiveIntensity===2.5)headLights.push(o);});
-  
   addSphere(carGroup, 0.1, ch, 0, 0.4, 1.22, 1.4, 0.5, 0.3);
   addBox(carGroup, 1.2, 0.06, 0.4, db, 0, -0.5, 1.22);
-  
   wheels=[];
   for(const s of [-1,1]){
     const wx=s*2.6;
@@ -1603,12 +1740,10 @@ function buildCar3D(){
     wheel.position.set(wx, -0.34, 0);
     wheel.castShadow=!isMobile();
     carGroup.add(wheel); wheels.push(wheel);
-    
     const hub=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.36,24), sv);
     hub.rotation.z=Math.PI/2;
     hub.position.set(wx, -0.34, 0);
     carGroup.add(hub);
-    
     for(let k=0;k<5;k++){
       const spoke=new THREE.Mesh(new THREE.BoxGeometry(0.4,0.05,0.06), ch);
       spoke.position.set(wx, Math.sin((k/5)*Math.PI*2)*0.18-0.34, Math.cos((k/5)*Math.PI*2)*0.18);
@@ -1617,10 +1752,8 @@ function buildCar3D(){
       carGroup.add(spoke);
     }
   }
-  
   spoilerGroup=new THREE.Group(); carGroup.add(spoilerGroup);
   exhaustGroup=new THREE.Group(); carGroup.add(exhaustGroup);
-  
   carPlateTexture=document.createElement('canvas');
   carPlateTexture.width=1024; carPlateTexture.height=300;
   carPlate=new THREE.Mesh(
@@ -1636,7 +1769,6 @@ function applyCarUpgrades(){
   const curCar=CARS.find(c=>c.id===S.cars.current)||CARS[0];
   const pc=UPGRADES.paint.levels[S.upgrades.paint].color||curCar.color;
   const finalColor=S.upgrades.paint>0?pc:curCar.color;
-  
   carGroup.traverse(o=>{
     if(o.material&&o.material.color&&!o.material.emissive){
       const hex=o.material.color.getHexString();
@@ -1645,7 +1777,6 @@ function applyCarUpgrades(){
       }
     }
   });
-  
   while(spoilerGroup.children.length){
     const c=spoilerGroup.children.pop();
     c.geometry&&c.geometry.dispose(); c.material&&c.material.dispose();
@@ -1659,7 +1790,6 @@ function applyCarUpgrades(){
     addBox(spoilerGroup, 0.12, 0.5, 0.12, m, -1, 0.4, -1.35);
     addBox(spoilerGroup, 0.12, 0.5, 0.12, m, 1, 0.4, -1.35);
   }
-  
   const nl=S.upgrades.neon;
   if(neonMesh){neonMesh.parent&&neonMesh.parent.remove(neonMesh); neonMesh.geometry&&neonMesh.geometry.dispose(); neonMesh=null;}
   if(nl>0){
@@ -1672,11 +1802,7 @@ function applyCarUpgrades(){
     carGroup.add(neonMesh);
   }
 }
-
-function applyInterier(){
-  // Простая заглушка — интерьер не критичен для отображения машины
-}
-
+function applyInterier(){}
 function applyDayNight(){
   if(!scene||webglFailed)return;
   if(S.dayNight==='night'){
@@ -1701,7 +1827,6 @@ function applyDayNight(){
     });
   }
 }
-
 function update3DPlate(p){
   if(!carPlateTexture||webglFailed)return;
   const c=carPlateTexture.getContext('2d');
@@ -1757,10 +1882,8 @@ function applyOrientation(){const o=localStorage.getItem('nomerok-orient')||'por
 applyPlatformClass();
 setupPlatform();
 
-// Отложенный запуск 3D — важно для правильного размера канваса
 setTimeout(()=>setupCar(), 100);
 
-// Fallback resize при переключении на гараж
 document.querySelectorAll('[data-view="garageView"]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     [50,150,300,600,1200,2500].forEach(t=>{
@@ -1778,29 +1901,102 @@ document.querySelectorAll('[data-view="garageView"]').forEach(btn=>{
     });
   });
 });
-
 window.addEventListener('resize', ()=>setTimeout(resizeCar, 100));
 
 resetSlots();
 initStocks();
 initDaily();
-initInviteCode();
 initFriends();
 render();
 renderFreeCase();
 renderWash();
 renderScratchCd();
 
-if(S.pending){
-  const w=S.pending;
-  $('modalKicker').textContent=w.rarityName.toUpperCase();
-  $('modalTitle').textContent=w.notes[0]||'ТВОЙ НОМЕР';
-  $('modalText').textContent=desc(w);
-  $('modalPlate').innerHTML=plateHTML(w);
-  $('modalPrice').textContent=fmt(w.value)+' ₽';
-  $('modal').hidden=false;
-  document.body.classList.add('no-scroll');
-}
+// === FIREBASE INIT ===
+(async function(){
+  try {
+    const fl = $('firebaseLoading');
+    const flText = $('flText');
+    flText.textContent = "ПОДКЛЮЧЕНИЕ К FIREBASE...";
+    
+    // Авторизация
+    const uid = await new Promise((resolve, reject) => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) resolve(user.uid);
+        else {
+          try { const cred = await signInAnonymously(auth); resolve(cred.user.uid); }
+          catch(e) { reject(e); }
+        }
+      });
+    });
+    
+    myUid = uid;
+    flText.textContent = "ЗАГРУЗКА ПРОФИЛЯ...";
+    await ensureProfile();
+    renderFriends();
+    fl.classList.add('hide');
+
+    // Подписка на друзей
+    onValue(ref(db, 'friends/' + myUid), async (snap) => {
+      const uids = snap.exists() ? Object.keys(snap.val()) : [];
+      if (!uids.length) { S.friends = []; renderFriends(); return; }
+      const profiles = await Promise.all(uids.map(async (fu) => {
+        const ps = await get(ref(db, 'users/' + fu));
+        return ps.exists() ? { uid: fu, ...ps.val() } : null;
+      }));
+      S.friends = profiles.filter(Boolean).map(p => ({
+        id: p.uid, name: p.name, icon: '👤',
+        avatar: p.avatar || avatarUrl(p.uid),
+        carId: p.carId || 'lambo',
+        plate: p.plate || { L1:'А',L2:'А',L3:'А',digits:'000',region:'77',rarity:'common',value:0 },
+        income: p.income || 0, online: !!p.online,
+        lastGift: 0, lastTest: 0, joinedAt: p.createdAt || Date.now(), inviteCode: p.inviteCode
+      }));
+      renderFriends(); renderRating(); updateEventDots();
+    });
+
+    // Подписка на подарки
+    onValue(ref(db, 'gifts/' + myUid), (snap) => {
+      const gifts = snap.exists() ? Object.entries(snap.val()).map(([id, v]) => ({ id, ...v })).filter(g => !g.claimed) : [];
+      window.__incomingGifts = gifts;
+      updateEventDots();
+      if (gifts.length) toast(`🎁 У тебя ${gifts.length} подарков!`);
+      renderFriendsList();
+    });
+
+    // Подписка на дуэли
+    onValue(ref(db, 'duels'), (snap) => {
+      if (!snap.exists()) return;
+      const allDuels = Object.entries(snap.val()).map(([id, v]) => ({ id, ...v }));
+      window.__incomingDuels = allDuels.filter(d => d.opponent === myUid && d.status === 'pending');
+      
+      allDuels.filter(d => d.status === 'finished').forEach(d => {
+        if (d.challenger === myUid && !d.__shown) {
+          d.__shown = true;
+          if (d.winner === myUid) {
+            S.balance += 500000; trackWin(); flashWallet(); sfxCash(); confetti(80);
+            toast('🏆 Дуэль выиграна! +500 000 ₽');
+            save();
+          } else {
+            sfxFail(); toast('💀 Дуэль проиграна');
+          }
+        }
+      });
+      updateEventDots();
+      renderFriends();
+    });
+
+    // Heartbeat
+    setInterval(() => syncMyProfile({}).catch(()=>{}), 30000);
+    
+  } catch(e) {
+    console.warn('⚠️ Firebase недоступен:', e);
+    const fl = $('firebaseLoading');
+    fl.innerHTML = `<div style="font-size:50px">📡</div><div class="fl-text" style="color:#ff5050">ОШИБКА СЕТИ</div><p style="font-size:12px;color:#aaa;margin-top:10px">Проверьте интернет</p>`;
+    setTimeout(()=>fl.classList.add('hide'), 3000);
+  }
+})();
+
 if(S.balance<CASE_PRICE&&!S.collection.length&&!S.pending){S.balance=START_BALANCE;render();}
 if(S.friendCodeBlocked)setTimeout(()=>showBanOverlay(), 500);
 window.addEventListener('error', e=>console.error('Ошибка:', e.message));
