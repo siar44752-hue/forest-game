@@ -536,8 +536,6 @@ body.is-mobile .daynight button{width:36px;height:36px;font-size:16px}
 body.is-mobile .bj-cards{min-height:80px}
 body.is-mobile .bj-card{width:56px;height:82px;font-size:20px}
 body.is-mobile .arcade-field{height:240px}
-
-/* Дополнительные стили */
 .bet-panel{padding:20px;border-radius:18px;background:linear-gradient(145deg,rgba(25,20,35,.9),rgba(10,8,15,.95));border:2px solid rgba(195,139,255,.4);margin-top:14px;text-align:center}
 .bet-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:900;font-size:20px}
 .bi-index{color:var(--lime);font-family:'Russo One'}
@@ -562,7 +560,7 @@ body.is-mobile .arcade-field{height:240px}
 
 <div class="firebase-loading" id="firebaseLoading">
   <div class="spinner"></div>
-  <div class="fl-text" id="flText">ПОДКЛЮЧЕНИЕ К СЕРВЕРУ...</div>
+  <div class="fl-text" id="flText">ЗАГРУЗКА P2P СЕТИ...</div>
 </div>
 
 <div class="setup" id="platformSetup">
@@ -741,7 +739,7 @@ body.is-mobile .arcade-field{height:240px}
   <div class="friends-hero">
     <h3>🎁 Пригласи друга — получи 500 000 ₽</h3>
     <p>Отправь код. Друг введёт — ты получишь +500 000 ₽ и +2 % к пассивному доходу навсегда.</p>
-    <div class="invite-box"><div class="invite-code" id="inviteCode">NOM-XXXXX</div><button class="invite-btn" id="copyInviteBtn">📋 КОПИРОВАТЬ</button></div>
+    <div class="invite-box"><div class="invite-code" id="inviteCode">ЗАГРУЗКА...</div><button class="invite-btn" id="copyInviteBtn">📋 КОПИРОВАТЬ</button></div>
     <div class="friends-stats">
       <div class="fs-card"><div class="fs-label">Друзей</div><div class="fs-value" id="fsFriendsCount">0</div></div>
       <div class="fs-card"><div class="fs-label">Реф. бонус</div><div class="fs-value blue" id="fsRefBonus">+0 %</div></div>
@@ -955,15 +953,16 @@ body.is-mobile .arcade-field{height:240px}
 <div id="toast" class="toast"></div>
 <div id="achPopup" class="ach-popup"><div class="ach-icon" id="achIcon">🏆</div><div class="ach-info"><b id="achName">Достижение</b><small id="achDesc">Описание</small></div></div>
 
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <script>
-const APP_VERSION = 'v14.0.0';
+const APP_VERSION = 'v15.0.0-P2P';
 (function checkVersion(){
   let stored=null;
   try{stored=localStorage.getItem('nomerok-app-version');}catch(e){}
   if(stored && stored !== APP_VERSION){
     const ov=document.createElement('div');
     ov.className='update-overlay';
-    ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Новая версия: реальные друзья (Firebase), обновленный дизайн, исправлены баги.</p><button id="uoReload">🔄 ОБНОВИТЬ</button>`;
+    ov.innerHTML=`<div style="font-size:100px">⬆️</div><h1>ВЫШЛО ОБНОВЛЕНИЕ</h1><p>Новая версия: P2P-соединение через WebRTC (PeerJS). Теперь друзья работают без VPN!</p><button id="uoReload">🔄 ОБНОВИТЬ</button>`;
     document.body.appendChild(ov);
     document.getElementById('uoReload').onclick=()=>{try{localStorage.setItem('nomerok-app-version', APP_VERSION);}catch(e){}location.reload(true);};
     document.addEventListener('click', e=>{if(e.target.id==='uoReload')return;e.preventDefault();e.stopPropagation();}, true);
@@ -974,9 +973,6 @@ const APP_VERSION = 'v14.0.0';
 
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js';
-import { getDatabase, ref, set, get, onValue, onDisconnect, update, push } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js';
 
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
@@ -987,66 +983,17 @@ function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
 function updateScrollProgress(){const h=document.documentElement.scrollHeight-window.innerHeight;const p=h>0?(window.scrollY/h)*100:0;$('scrollProgress').style.width=Math.min(100,p)+'%';}
 window.addEventListener('scroll',updateScrollProgress,{passive:true});window.addEventListener('resize',updateScrollProgress);
 
-// ============ FIREBASE CONFIG ============
-const firebaseConfig = {
-  apiKey: "AIzaSyArIeUFV4grddcwYY8pBoSXQZvDMMKWokc",
-  authDomain: "nomerok-84a45.firebaseapp.com",
-  databaseURL: "https://nomerok-84a45-default-rtdb.firebaseio.com",
-  projectId: "nomerok-84a45",
-  storageBucket: "nomerok-84a45.firebasestorage.app",
-  messagingSenderId: "944992255871",
-  appId: "1:944992255871:web:d456d167c7e46e32ffa44a",
-  measurementId: "G-LCWT6J7YYE"
-};
+// ============ P2P CONFIG ============
+let peer = null;
+let myPeerId = null;
+const activeConns = new Map(); // peerId -> DataConnection
+const pendingFriendCode = null;
 
-const fbApp = initializeApp(firebaseConfig);
-const db = getDatabase(fbApp);
-const auth = getAuth(fbApp);
-let myUid = null;
-let myInviteCode = null;
-
-function genInviteCode() {
+function genShortCode() {
   const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let s = 'NOM-';
+  let s = '';
   for (let i = 0; i < 5; i++) s += c[Math.floor(Math.random()*c.length)];
-  return s;
-}
-function genNickname(id) {
-  const n = ['Игрок','Гонщик','Коллекционер','Охотник','Мастер','Легенда','Профи','Новичок'];
-  return n[Math.floor(Math.random()*n.length)] + ' ' + id.slice(0,4).toUpperCase();
-}
-function avatarUrl(id) {
-  return `https://api.dicebear.com/7.x/bottts/svg?seed=${id}&backgroundColor=c4ff46,57c7ff,c38bff`;
-}
-
-async function ensureProfile() {
-  const r = ref(db, 'users/' + myUid);
-  const snap = await get(r);
-  if (!snap.exists()) {
-    const code = genInviteCode();
-    await set(r, {
-      uid: myUid, name: genNickname(myUid),
-      inviteCode: code,
-      income: 0,
-      plate: { L1:'А', L2:'А', L3:'А', digits:'000', region:'77', rarity:'common', value:0 },
-      carId: 'lambo',
-      avatar: avatarUrl(myUid),
-      online: true,
-      lastSeen: Date.now(),
-      createdAt: Date.now()
-    });
-    await set(ref(db, 'inviteCodes/' + code), { uid: myUid });
-    myInviteCode = code;
-  } else {
-    myInviteCode = snap.val().inviteCode;
-  }
-  onDisconnect(r).update({ online: false, lastSeen: Date.now() });
-  await update(r, { online: true, lastSeen: Date.now() });
-}
-
-function syncMyProfile(data) {
-  if (!myUid) return;
-  update(ref(db, 'users/' + myUid), { ...data, lastSeen: Date.now() }).catch(()=>{});
+  return 'NOM-' + s;
 }
 
 // ============ GAME STATE ============
@@ -1077,26 +1024,10 @@ const DAILY_TEMPLATES=[{id:'open_cases',icon:'🎰',title:'Открой 3 кей
 const FAKE_PRIZES=[7000000,8000000,9000000,10000000];
 
 let S={balance:START_BALANCE,collection:[],installed:null,offers:[],lastOffer:Date.now(),pending:null,upgrades:{paint:0,wheels:0,spoiler:0,exhaust:0,neon:0},interier:{walls:0,light:0,shelves:0,stand:0,bar:0},cars:{owned:['lambo'],current:'lambo'},lastFreeCase:0,lastWash:0,lastScratch:0,trader:{active:false,expires:0,offers:[]},lastTrader:Date.now(),stocks:[],marketIndex:{history:[100,100,100],value:100},workshop:{selected:[],target:null,targetPlate:null,craftPool:[]},marketFilter:'all',daily:null,friends:[],inviteCode:'',refEarned:0,duelWins:0,lastFriendAdd:'',friendCodeAttempts:0,friendCodeBlocked:false,antiCheat:{},event:{active:false,expires:0,mult:1},lastEvent:Date.now(),dayNight:'day',stats:{opened:0,best:0,sold:0,earned:0,crafted:0,craftFailed:0,driftWins:0,arcadeWins:0,bjWins:0}};
-try{const x=JSON.parse(localStorage.getItem('nomerok-v14'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];if(!S.antiCheat)S.antiCheat={};if(!S.event)S.event={active:false,expires:0,mult:1};S.event.active=false;S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
+try{const x=JSON.parse(localStorage.getItem('nomerok-v15'));if(x){S={...S,...x};S.balance=Number.isFinite(S.balance)?S.balance:START_BALANCE;S.upgrades={...S.upgrades,...(x.upgrades||{})};S.interier={...S.interier,...(x.interier||{})};S.cars={owned:['lambo'],current:'lambo',...(x.cars||{})};if(!S.cars.owned||!S.cars.owned.length)S.cars.owned=['lambo'];S.trader={active:false,expires:0,offers:[]};S.lastTrader=Date.now();S.stocks=[];S.marketIndex={history:[100,100,100],value:100};S.workshop={selected:[],target:null,targetPlate:null,craftPool:[]};S.marketFilter='all';if(!S.friends)S.friends=[];if(!S.antiCheat)S.antiCheat={};if(!S.event)S.event={active:false,expires:0,mult:1};S.event.active=false;S.stats={...S.stats,...(x.stats||{})};}}catch(e){}
 function save(){
-  try{localStorage.setItem('nomerok-v14',JSON.stringify(S));}catch(e){}
-  if (myUid) {
-    clearTimeout(window.__syncTimeout);
-    window.__syncTimeout = setTimeout(() => {
-      try {
-        const inst = S.collection.find(p => p.id === S.installed);
-        syncMyProfile({
-          income: getPassiveIncome(),
-          carId: S.cars.current,
-          plate: inst ? {
-            L1: inst.L1, L2: inst.L2, L3: inst.L3,
-            digits: inst.digits, region: inst.region,
-            rarity: inst.rarity, value: inst.value
-          } : null
-        });
-      } catch(e){}
-    }, 2000);
-  }
+  try{localStorage.setItem('nomerok-v15',JSON.stringify(S));}catch(e){}
+  broadcastProfile();
 }
 
 // ============ ЗВУК ============
@@ -1248,7 +1179,7 @@ function renderSets(){const root=$('setsGrid');if(!root)return;let completed=0,t
 
 function renderFriends(){
   const codeEl=$('inviteCode');
-  if(codeEl) codeEl.textContent = myUid ? (myInviteCode || 'ЗАГРУЗКА...') : 'ОФЛАЙН';
+  if(codeEl) codeEl.textContent = myPeerId ? myPeerId : 'ЗАГРУЗКА...';
   const fcEl=$('fsFriendsCount'); if(fcEl)fcEl.textContent=S.friends.length;
   const rbEl=$('fsRefBonus'); if(rbEl)rbEl.textContent='+'+Math.round(getRefBonus()*100)+' %';
   const reEl=$('fsRefEarned'); if(reEl)reEl.textContent=fmt(S.refEarned);
@@ -1263,11 +1194,11 @@ function renderFriendsList(){
   const root=$('friendsList');
   if(!root)return;
   if(!S.friends.length){root.innerHTML='<div class="empty">Пока никого. Пригласи друга по коду!</div>';return;}
-  const today=new Date().toDateString();
   root.innerHTML=S.friends.map(f=>{
     const car=CARS.find(c=>c.id===f.carId)||CARS[0];
     const giftReady=(window.__incomingGifts || []).some(g => g.fromUid === f.id);
-    return `<div class="friend-card ${f.online?'online':''}"><div class="friend-head"><div class="friend-avatar">${f.avatar?`<img src="${f.avatar}" alt="">`:'👤'}<span class="status-dot"></span></div><div style="flex:1;min-width:0"><div class="friend-name">${f.name}</div><div class="friend-status">${f.online?'🟢 онлайн':'⚫ офлайн'} · ${fmt(f.income)} ₽/мин</div></div></div><div class="friend-car" style="color:${car.color}"><span class="fc-icon">${car.icon}</span><div class="fc-info"><b>${car.name}</b><small>+${(car.bonus*100).toFixed(0)}%</small></div></div><div class="friend-plate">${plateHTML(f.plate)}</div><div class="friend-actions"><button class="gift-btn" data-gift="${f.id}" ${giftReady?'':'disabled'}>${giftReady?'🎁 Забрать подарок':'Нет подарков'}</button><button class="duel-btn" data-duel="${f.id}">⚔️ Дуэль</button></div></div>`;
+    const isOnline = activeConns.has(f.id);
+    return `<div class="friend-card ${isOnline?'online':''}"><div class="friend-head"><div class="friend-avatar">${f.avatar?`<img src="${f.avatar}" alt="">`:'👤'}<span class="status-dot"></span></div><div style="flex:1;min-width:0"><div class="friend-name">${f.name}</div><div class="friend-status">${isOnline?'🟢 P2P онлайн':'⚫ офлайн'} · ${fmt(f.income)} ₽/мин</div></div></div><div class="friend-car" style="color:${car.color}"><span class="fc-icon">${car.icon}</span><div class="fc-info"><b>${car.name}</b><small>+${(car.bonus*100).toFixed(0)}%</small></div></div><div class="friend-plate">${plateHTML(f.plate)}</div><div class="friend-actions"><button class="gift-btn" data-gift="${f.id}" ${giftReady?'':'disabled'}>${giftReady?'🎁 Забрать подарок':'Нет подарков'}</button><button class="duel-btn" data-duel="${f.id}">⚔️ Дуэль</button></div></div>`;
   }).join('');
   root.querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>claimGift(b.dataset.gift));
   root.querySelectorAll('[data-duel]').forEach(b=>b.onclick=()=>duel(b.dataset.duel));
@@ -1278,37 +1209,37 @@ async function claimGift(fid){
   const gifts = window.__incomingGifts || [];
   const gift = gifts.find(g => g.fromUid === fid);
   if(!gift){ toast('Нет подарков от этого друга'); return; }
-  try {
-    await update(ref(db, 'gifts/' + myUid + '/' + gift.id), { claimed: true });
+  const conn = activeConns.get(fid);
+  if(conn && conn.open){
+    conn.send({ type: 'gift_received', giftId: gift.id });
     S.balance += gift.amount;
+    window.__incomingGifts = gifts.filter(g => g.id !== gift.id);
     trackWin(); flashWallet(); sfxCash();
     toast(`🎁 +${fmt(gift.amount)} ₽`);
     render();
-  } catch(e){ toast('Ошибка: '+e.message); }
+  } else {
+    toast('Друг офлайн');
+  }
 }
 
 async function duel(fid){
   if(!antiCheatOk('friends',30))return;
-  if(!myUid){ toast('⚠️ Нет соединения'); return; }
+  const conn = activeConns.get(fid);
+  if(!conn || !conn.open){ toast('⚠️ Друг офлайн'); return; }
   const incoming = (window.__incomingDuels || []).find(d => d.challenger === fid && d.status === 'pending');
   if (incoming) {
-    try {
-      const winner = getPassiveIncome() > incoming.challengerIncome ? myUid : incoming.challenger;
-      await update(ref(db, 'duels/' + incoming.id), { status: 'finished', opponentIncome: getPassiveIncome(), winner });
-      toast('⚔️ Дуэль принята!');
-      return;
-    } catch(e){ toast('Ошибка: '+e.message); return; }
+    const myInc = getPassiveIncome();
+    const winner = myInc > incoming.challengerIncome ? myPeerId : incoming.challenger;
+    conn.send({ type: 'duel_response', duelId: incoming.id, accepted: true, opponentIncome: myInc, winner });
+    window.__incomingDuels = window.__incomingDuels.filter(d => d.id !== incoming.id);
+    toast('⚔️ Дуэль принята!');
+    return;
   }
-  try {
-    await push(ref(db, 'duels'), {
-      challenger: myUid, opponent: fid, status: 'pending',
-      challengerIncome: getPassiveIncome(), opponentIncome: 0, winner: null, createdAt: Date.now()
-    });
-    toast('⚔️ Вызов отправлен другу');
-  } catch(e){ toast('Ошибка: '+e.message); }
+  conn.send({ type: 'duel_challenge', challengerIncome: getPassiveIncome(), createdAt: Date.now() });
+  toast('⚔️ Вызов отправлен другу');
 }
 
-$('copyInviteBtn').onclick=()=>{const text=`Играю в НОМЕРОК! Мой код: ${myInviteCode}`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>{toast('📋 Скопировано');sfxFriend();}).catch(()=>toast('Код: '+myInviteCode));else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано');}catch(e){}ta.remove();}};
+$('copyInviteBtn').onclick=()=>{const text=`Играю в НОМЕРОК! Мой P2P код: ${myPeerId}`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>{toast('📋 Скопировано');sfxFriend();}).catch(()=>toast('Код: '+myPeerId));else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('📋 Скопировано');}catch(e){}ta.remove();}};
 $('inviteCode').onclick=()=>$('copyInviteBtn').click();
 
 async function addFriendByCode(code){
@@ -1321,35 +1252,52 @@ async function addFriendByCode(code){
     toast(`❌ Неверный формат. Осталось: ${2-S.friendCodeAttempts}`);
     renderCodeAttempts();return false;
   }
-  if(!myUid){ toast('⚠️ Нет соединения с сервером'); return false; }
+  if(!myPeerId){ toast('⚠️ P2P сеть не готова'); return false; }
+  if(code === myPeerId){ toast('Это твой код'); return false; }
   try {
-    const clean = code;
-    const cs = await get(ref(db, 'inviteCodes/' + clean));
-    if (!cs.exists()) throw new Error('code not found');
-    const target = cs.val().uid;
-    if (target === myUid) throw new Error('own code');
-    const alr = await get(ref(db, 'friends/' + myUid + '/' + target));
-    if (alr.exists()) throw new Error('already friends');
-    
-    const now = Date.now();
-    await set(ref(db, 'friends/' + myUid + '/' + target), { since: now });
-    await set(ref(db, 'friends/' + target + '/' + myUid), { since: now });
-    
-    S.balance += 500000;
-    S.refEarned += 500000;
-    S.friendCodeAttempts = 0;
-    flashWallet(); sfxCash(); sfxFriend(); confetti(80);
-    toast('🎉 Друг добавлен! +500 000 ₽');
-    save(); render();
+    const conn = peer.connect(code, { reliable: true });
+    let timeout = setTimeout(() => {
+      toast('❌ Друг не в сети или неверный код');
+      conn.close();
+    }, 8000);
+
+    conn.on('open', () => {
+      clearTimeout(timeout);
+      activeConns.set(code, conn);
+      
+      conn.send({ 
+        type: 'hello', 
+        name: 'Игрок', 
+        income: getPassiveIncome(),
+        carId: S.cars.current,
+        plate: getInstalledPlate()
+      });
+
+      S.balance += 500000;
+      S.refEarned += 500000;
+      S.friendCodeAttempts = 0;
+      flashWallet(); sfxCash(); sfxFriend(); confetti(80);
+      toast('🎉 Друг добавлен! +500 000 ₽');
+      save(); render();
+    });
+
+    conn.on('data', (data) => {
+      handleIncomingData(conn.peer, data);
+    });
+
+    conn.on('close', () => {
+      activeConns.delete(code);
+      render();
+    });
+
+    conn.on('error', (err) => {
+      clearTimeout(timeout);
+      toast('Ошибка соединения: ' + err.type);
+    });
+
     return true;
   } catch(e) {
-    const msgs = { 'code not found': '❌ Такого кода нет', 'own code': 'Это твой собственный код', 'already friends': 'Уже в друзьях' };
-    toast(msgs[e.message] || 'Ошибка: '+e.message);
-    if(e.message === 'code not found'){
-      S.friendCodeAttempts++;save();
-      if(S.friendCodeAttempts>=2){S.friendCodeBlocked=true;save();showBanOverlay();}
-      renderCodeAttempts();
-    }
+    toast('Ошибка: ' + e.message);
     return false;
   }
 }
@@ -1859,6 +1807,104 @@ function update3DPlate(p){
   carPlate.material.map.needsUpdate=true;
 }
 
+// ============ P2P FUNCTIONS ============
+function getInstalledPlate() {
+  const inst = S.collection.find(p => p.id === S.installed);
+  return inst ? {
+    L1: inst.L1, L2: inst.L2, L3: inst.L3,
+    digits: inst.digits, region: inst.region,
+    rarity: inst.rarity, value: inst.value
+  } : { L1:'А', L2:'А', L3:'А', digits:'000', region:'77', rarity:'common', value:0 };
+}
+
+function broadcastProfile() {
+  if (!myPeerId) return;
+  const msg = {
+    type: 'profile_update',
+    name: 'Игрок',
+    income: getPassiveIncome(),
+    carId: S.cars.current,
+    plate: getInstalledPlate()
+  };
+  activeConns.forEach((conn) => {
+    if (conn.open) conn.send(msg);
+  });
+}
+
+function handleIncomingData(fromPeerId, data) {
+  if (!data || !data.type) return;
+  
+  if (data.type === 'hello') {
+    const existing = S.friends.find(f => f.id === fromPeerId);
+    if (!existing) {
+      S.friends.push({
+        id: fromPeerId,
+        name: data.name || 'Друг',
+        icon: '👤',
+        avatar: null,
+        carId: data.carId || 'lambo',
+        plate: data.plate || { L1:'А',L2:'А',L3:'А',digits:'000',region:'77',rarity:'common',value:0 },
+        income: data.income || 0,
+        online: true
+      });
+    }
+    save();
+    renderFriends();
+    toast(`👋 ${data.name || 'Друг'} присоединился!`);
+  }
+  
+  if (data.type === 'profile_update') {
+    const f = S.friends.find(x => x.id === fromPeerId);
+    if (f) {
+      f.income = data.income;
+      f.carId = data.carId;
+      f.plate = data.plate;
+      save();
+      renderFriends();
+    }
+  }
+  
+  if (data.type === 'gift_received') {
+    // Друг подтвердил получение подарка — ничего не делаем, просто убираем у себя
+    window.__incomingGifts = (window.__incomingGifts || []).filter(g => g.id !== data.giftId);
+    updateEventDots();
+    renderFriendsList();
+  }
+  
+  if (data.type === 'duel_challenge') {
+    window.__incomingDuels = window.__incomingDuels || [];
+    const duelId = Date.now().toString(36);
+    window.__incomingDuels.push({
+      id: duelId,
+      challenger: fromPeerId,
+      challengerIncome: data.challengerIncome,
+      status: 'pending'
+    });
+    updateEventDots();
+    renderFriendsList();
+    toast('⚔️ Входящий вызов на дуэль!');
+  }
+  
+  if (data.type === 'duel_response') {
+    if (data.accepted) {
+      const iWon = data.winner === myPeerId;
+      if (iWon) {
+        S.balance += 500000;
+        S.duelWins++;
+        trackWin(); flashWallet(); sfxCash(); confetti(80);
+        toast('🏆 Дуэль выиграна! +500 000 ₽');
+      } else {
+        sfxFail();
+        toast('💀 Дуэль проиграна');
+      }
+      save();
+      render();
+    } else {
+      toast('Дуэль отклонена');
+    }
+  }
+}
+
 // ============ ИНИЦИАЛИЗАЦИЯ ============
 function setupPlatform(){
   const saved=localStorage.getItem(PLATFORM_KEY);
@@ -1906,94 +1952,88 @@ window.addEventListener('resize', ()=>setTimeout(resizeCar, 100));
 resetSlots();
 initStocks();
 initDaily();
-initFriends();
+initFriends = function() {}; // Заглушка
 render();
 renderFreeCase();
 renderWash();
 renderScratchCd();
 
-// === FIREBASE INIT ===
+// === PEERJS INIT ===
 (async function(){
+  const fl = $('firebaseLoading');
+  const flText = $('flText');
+  flText.textContent = "ЗАГРУЗКА P2P СЕТИ...";
+
   try {
-    const fl = $('firebaseLoading');
-    const flText = $('flText');
-    flText.textContent = "ПОДКЛЮЧЕНИЕ К FIREBASE...";
+    // Генерируем Peer ID
+    myPeerId = genShortCode();
     
-    // Авторизация
-    const uid = await new Promise((resolve, reject) => {
-      onAuthStateChanged(auth, async (user) => {
-        if (user) resolve(user.uid);
-        else {
-          try { const cred = await signInAnonymously(auth); resolve(cred.user.uid); }
-          catch(e) { reject(e); }
-        }
-      });
-    });
-    
-    myUid = uid;
-    flText.textContent = "ЗАГРУЗКА ПРОФИЛЯ...";
-    await ensureProfile();
-    renderFriends();
-    fl.classList.add('hide');
-
-    // Подписка на друзей
-    onValue(ref(db, 'friends/' + myUid), async (snap) => {
-      const uids = snap.exists() ? Object.keys(snap.val()) : [];
-      if (!uids.length) { S.friends = []; renderFriends(); return; }
-      const profiles = await Promise.all(uids.map(async (fu) => {
-        const ps = await get(ref(db, 'users/' + fu));
-        return ps.exists() ? { uid: fu, ...ps.val() } : null;
-      }));
-      S.friends = profiles.filter(Boolean).map(p => ({
-        id: p.uid, name: p.name, icon: '👤',
-        avatar: p.avatar || avatarUrl(p.uid),
-        carId: p.carId || 'lambo',
-        plate: p.plate || { L1:'А',L2:'А',L3:'А',digits:'000',region:'77',rarity:'common',value:0 },
-        income: p.income || 0, online: !!p.online,
-        lastGift: 0, lastTest: 0, joinedAt: p.createdAt || Date.now(), inviteCode: p.inviteCode
-      }));
-      renderFriends(); renderRating(); updateEventDots();
+    peer = new Peer(myPeerId, {
+      debug: 1
     });
 
-    // Подписка на подарки
-    onValue(ref(db, 'gifts/' + myUid), (snap) => {
-      const gifts = snap.exists() ? Object.entries(snap.val()).map(([id, v]) => ({ id, ...v })).filter(g => !g.claimed) : [];
-      window.__incomingGifts = gifts;
-      updateEventDots();
-      if (gifts.length) toast(`🎁 У тебя ${gifts.length} подарков!`);
-      renderFriendsList();
-    });
-
-    // Подписка на дуэли
-    onValue(ref(db, 'duels'), (snap) => {
-      if (!snap.exists()) return;
-      const allDuels = Object.entries(snap.val()).map(([id, v]) => ({ id, ...v }));
-      window.__incomingDuels = allDuels.filter(d => d.opponent === myUid && d.status === 'pending');
-      
-      allDuels.filter(d => d.status === 'finished').forEach(d => {
-        if (d.challenger === myUid && !d.__shown) {
-          d.__shown = true;
-          if (d.winner === myUid) {
-            S.balance += 500000; trackWin(); flashWallet(); sfxCash(); confetti(80);
-            toast('🏆 Дуэль выиграна! +500 000 ₽');
-            save();
-          } else {
-            sfxFail(); toast('💀 Дуэль проиграна');
-          }
-        }
-      });
-      updateEventDots();
+    peer.on('open', (id) => {
+      console.log('✅ P2P подключён:', id);
+      myPeerId = id;
+      fl.classList.add('hide');
       renderFriends();
+      
+      // Периодический broadcast профиля
+      setInterval(() => broadcastProfile(), 30000);
     });
 
-    // Heartbeat
-    setInterval(() => syncMyProfile({}).catch(()=>{}), 30000);
-    
+    peer.on('connection', (conn) => {
+      console.log('📥 Входящее соединение от:', conn.peer);
+      
+      conn.on('open', () => {
+        activeConns.set(conn.peer, conn);
+        // Отправляем свой профиль в ответ
+        conn.send({
+          type: 'hello',
+          name: 'Игрок',
+          income: getPassiveIncome(),
+          carId: S.cars.current,
+          plate: getInstalledPlate()
+        });
+        renderFriends();
+      });
+
+      conn.on('data', (data) => {
+        handleIncomingData(conn.peer, data);
+      });
+
+      conn.on('close', () => {
+        activeConns.delete(conn.peer);
+        renderFriends();
+      });
+
+      conn.on('error', (err) => {
+        console.warn('Connection error:', err);
+      });
+    });
+
+    peer.on('error', (err) => {
+      console.error('PeerJS error:', err);
+      if (err.type === 'peer-unavailable') {
+        toast('❌ Друг не в сети или неверный код');
+      } else {
+        toast('⚠️ Ошибка P2P: ' + err.type);
+      }
+      fl.classList.add('hide');
+    });
+
+    // Таймаут на подключение
+    setTimeout(() => {
+      if (!myPeerId) {
+        fl.innerHTML = `<div style="font-size:50px">📡</div><div class="fl-text" style="color:#ff5050">ОШИБКА P2P СЕТИ</div><p style="font-size:12px;color:#aaa;margin-top:10px">Не удалось подключиться к сигнальному серверу. Попробуйте позже.</p>`;
+        setTimeout(() => fl.classList.add('hide'), 3000);
+      }
+    }, 15000);
+
   } catch(e) {
-    console.warn('⚠️ Firebase недоступен:', e);
-    const fl = $('firebaseLoading');
+    console.warn('⚠️ PeerJS недоступен:', e);
     fl.innerHTML = `<div style="font-size:50px">📡</div><div class="fl-text" style="color:#ff5050">ОШИБКА СЕТИ</div><p style="font-size:12px;color:#aaa;margin-top:10px">Проверьте интернет</p>`;
-    setTimeout(()=>fl.classList.add('hide'), 3000);
+    setTimeout(() => fl.classList.add('hide'), 3000);
   }
 })();
 
