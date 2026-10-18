@@ -4,13 +4,13 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#050a05">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
-<title>DINO LAB — Скрещивание и Битвы</title>
+<title>DINO LAB 2.0 — Скрещивание и Битвы</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Russo+One&display=swap');
 
 :root {
-  --bg: #050a05; --panel: #0d1a0f; --panel-light: #152b18;
-  --border: #2a4a2e; --text: #e2f5e5; --muted: #7a9e80;
+  --bg: #050a05; --panel: #0a120a; --panel-light: #101f12;
+  --border: #1a331c; --text: #e2f5e5; --muted: #5a7a5e;
   --neon: #39ff14; --gold: #fbbf24; --blue: #38bdf8; --purple: #c084fc; --red: #ef4444;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -31,7 +31,7 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
 .top {
   height: 70px; display: flex; justify-content: space-between; align-items: center;
   padding: 0 20px; background: rgba(5, 10, 5, 0.9); backdrop-filter: blur(10px);
-  border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100;
+  border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 10px;
 }
 .logo { font: 24px 'Russo One'; color: var(--neon); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); display: flex; align-items: center; gap: 10px; }
 .stats { display: flex; gap: 10px; }
@@ -41,6 +41,7 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
 }
 .pill.gold { color: var(--gold); border-color: var(--gold); text-shadow: 0 0 5px var(--gold); }
 .pill.dna { color: var(--blue); border-color: var(--blue); text-shadow: 0 0 5px var(--blue); }
+.pill.income { color: var(--neon); border-color: var(--neon); font-size: 14px; }
 
 /* Навигация */
 .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
@@ -55,7 +56,7 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
 .view.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Магазин */
+/* Магазин / Инкубатор */
 .eggs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 .egg-card {
   background: linear-gradient(180deg, var(--panel), var(--bg)); border: 2px solid var(--border);
@@ -95,7 +96,9 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
 .slot {
   width: 140px; height: 180px; border: 2px dashed var(--border); border-radius: 10px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--panel);
+  cursor: pointer; transition: 0.2s;
 }
+.slot:hover { border-color: var(--neon); }
 .slot.filled { border-style: solid; border-color: var(--blue); }
 .fusion-btn {
   padding: 20px 40px; border-radius: 10px; font-size: 20px; font-weight: 900;
@@ -154,17 +157,18 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
 <header class="top">
   <div class="logo">🧬 DINO LAB</div>
   <div class="stats">
-    <div class="pill gold">🪙 <b id="coins">1000</b></div>
+    <div class="pill income">📈 <b id="idleIncome">0</b>/сек</div>
     <div class="pill dna">🧬 <b id="dna">0</b></div>
+    <div class="pill gold">🪙 <b id="coins">1000</b></div>
   </div>
 </header>
 
 <main class="wrap">
   <nav class="nav">
-    <button class="active" onclick="nav('shop')">🧪 Инкубатор</button>
-    <button onclick="nav('collection')">📚 ДНК-Банк</button>
-    <button onclick="nav('lab')">⚗️ Лаборатория</button>
-    <button onclick="nav('arena')">⚔️ Арена</button>
+    <button class="active" onclick="nav('shop', event)">🧪 Инкубатор</button>
+    <button onclick="nav('collection', event)">📚 ДНК-Банк</button>
+    <button onclick="nav('lab', event)">⚗️ Лаборатория</button>
+    <button onclick="nav('arena', event)">⚔️ Арена</button>
   </nav>
 
   <!-- ИНКУБАТОР (МАГАЗИН) -->
@@ -177,7 +181,6 @@ button { font-family: 'Share Tech Mono', monospace; cursor: pointer; border: non
             <path d="M50 5 C20 5 10 60 10 85 C10 105 30 115 50 115 C70 115 90 105 90 85 C90 60 80 5 50 5 Z" fill="#1a3320" stroke="#39ff14" stroke-width="2"/>
             <path d="M30 40 Q50 60 70 40" stroke="#39ff14" stroke-width="1" opacity="0.5"/>
             <path d="M25 70 Q50 90 75 70" stroke="#39ff14" stroke-width="1" opacity="0.5"/>
-            <circle cx="50" cy="80" r="5" fill="#39ff14" opacity="0.8"/>
           </svg>
         </div>
         <h3>Обычная кладка</h3>
@@ -366,12 +369,12 @@ try { const saved = localStorage.getItem('dino_lab'); if (saved) S = JSON.parse(
 function save() { localStorage.setItem('dino_lab', JSON.stringify(S)); updateUI(); }
 
 // ================= НАВИГАЦИЯ =================
-function nav(id) {
+function nav(id, e) {
   if (!checkCheat()) return;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + id).classList.add('active');
-  event.target.classList.add('active');
+  if (e) e.target.classList.add('active');
   if(id === 'arena') renderArena();
   if(id === 'lab') renderLab();
 }
@@ -380,15 +383,34 @@ function nav(id) {
 function updateUI() {
   document.getElementById('coins').textContent = S.coins.toLocaleString();
   document.getElementById('dna').textContent = S.dna.toLocaleString();
+  
+  // Расчет пассивного дохода
+  let maxAtk = 0;
+  S.collection.forEach(m => { if(m.atk > maxAtk) maxAtk = m.atk; });
+  const idle = Math.floor(maxAtk * 0.5);
+  document.getElementById('idleIncome').textContent = idle.toLocaleString();
+
   renderCollection();
   updateSelect();
 }
+
+// Пассивный доход (каждую секунду)
+setInterval(() => {
+  let maxAtk = 0;
+  S.collection.forEach(m => { if(m.atk > maxAtk) maxAtk = m.atk; });
+  const idle = Math.floor(maxAtk * 0.5);
+  if (idle > 0) {
+    S.coins += idle;
+    document.getElementById('coins').textContent = S.coins.toLocaleString();
+    save(); // Сохраняем, чтобы не потерять
+  }
+}, 1000);
 
 // ================= ИНКУБАТОР (GACHA) =================
 function buyEgg(type) {
   if (!checkCheat()) return;
   let cost = type === 'common' ? 100 : type === 'rare' ? 1000 : 10000;
-  if (S.coins < cost) return alert('Мало золота! Иди на арену.');
+  if (S.coins < cost) return alert('Мало золота! Подожди пассивку или иди на арену.');
 
   S.coins -= cost;
   save();
