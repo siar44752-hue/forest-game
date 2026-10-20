@@ -2,11 +2,15 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src https://api.pwnedpasswords.com; img-src 'self' data: https://www.google.com; manifest-src 'self' data:;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.pwnedpasswords.com; img-src 'self' data: https://www.google.com; manifest-src 'self';">
 <meta name="theme-color" content="#0a0e14">
-<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22SecureVault%22%2C%22short_name%22%3A%22Vault%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0e14%22%2C%22theme_color%22%3A%22%230a0e14%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520100%2520100%2527%253E%253Crect%2520width%253D%2527100%2527%2520height%253D%2527100%2527%2520fill%253D%2527%25230a0e14%2527%252F%253E%253Ctext%2520y%253D%2527.9em%2527%2520font-size%253D%252790%2527%253E%25F0%259F%2594%2590%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-<title>SecureVault 3.0</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SecureVault">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230a0e14'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle'%3E🔐%3C/text%3E%3C/svg%3E">
+<title>SecureVault 4.0</title>
 <style>
 :root[data-theme="dark"]{
   --bg:#0a0e14;--panel:#131a22;--panel2:#1a222c;--border:#2a3644;
@@ -20,8 +24,8 @@
   --danger:#dc2626;--warn:#d97706;--info:#2563eb;
   --strong:#16a34a;--medium:#d97706;--weak:#dc2626;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 button{font-family:inherit;cursor:pointer;border:0;outline:0}
 input,textarea,select{font-family:inherit;outline:0}
 .screen{display:none;min-height:100vh;padding:20px}
@@ -38,19 +42,17 @@ input,textarea,select{font-family:inherit;outline:0}
 .field input{width:100%;padding:13px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:14px;transition:.2s}
 .field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,222,128,.15)}
 .field .toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;color:var(--muted);padding:6px;font-size:16px;border-radius:6px}
-.field .toggle:hover{color:var(--text)}
 .btn{width:100%;padding:13px 18px;border-radius:10px;font-size:14px;font-weight:700;transition:.2s}
 .btn-primary{background:var(--accent);color:#0a0e14}
 .btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
 .btn-secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
-.btn-secondary:hover{background:var(--border)}
 .btn-danger{background:var(--danger);color:#fff}
 .btn-small{width:auto;padding:8px 14px;font-size:12px}
 .strength{margin-top:8px}
 .strength-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden}
 .strength-fill{height:100%;width:0%;transition:width .3s,background .3s;background:var(--weak)}
 .strength-label{font-size:11px;margin-top:4px;color:var(--muted);display:flex;justify-content:space-between}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:10;backdrop-filter:blur(10px)}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:env(safe-area-inset-top);z-index:10;backdrop-filter:blur(10px)}
 .topbar-brand{font-size:18px;font-weight:900;color:var(--accent)}
 .topbar-actions{display:flex;gap:8px;align-items:center}
 .icon-btn{width:38px;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s}
@@ -59,6 +61,7 @@ input,textarea,select{font-family:inherit;outline:0}
 .search{flex:1;min-width:200px;padding:12px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--border);color:var(--text);font-size:14px}
 .search:focus{border-color:var(--accent)}
 .cats{padding:12px 20px;display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
 .cat-btn{padding:7px 14px;border-radius:20px;background:var(--panel);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap;transition:.2s}
 .cat-btn.active{background:var(--accent);color:#0a0e14;border-color:var(--accent)}
 .entries{padding:16px 20px;max-width:900px;margin:0 auto}
@@ -71,6 +74,7 @@ input,textarea,select{font-family:inherit;outline:0}
 .entry-login{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .entry-meta{font-size:10px;color:var(--muted);margin-top:3px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .entry-meta .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.entry-warn{color:var(--warn);font-weight:900;font-size:10px}
 .entry-actions{display:flex;gap:4px;flex-shrink:0}
 .entry-actions button{width:34px;height:34px;border-radius:8px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s}
 .entry-actions button:hover{background:var(--border);color:var(--accent)}
@@ -108,11 +112,11 @@ input,textarea,select{font-family:inherit;outline:0}
 .pin-prompt{text-align:center;padding:20px}
 .pin-prompt input{width:100%;padding:14px;text-align:center;font-size:24px;letter-spacing:8px;border-radius:10px;border:2px solid var(--border);background:var(--bg);color:var(--text);margin:16px 0}
 .tabs{display:flex;gap:4px;background:var(--panel2);padding:4px;border-radius:10px;margin-bottom:16px;flex-wrap:wrap}
-.tabs button{flex:1;min-width:80px;padding:10px;border-radius:8px;background:transparent;color:var(--muted);font-size:12px;font-weight:700}
+.tabs button{flex:1;min-width:70px;padding:10px;border-radius:8px;background:transparent;color:var(--muted);font-size:11px;font-weight:700}
 .tabs button.active{background:var(--accent);color:#0a0e14}
 .form-group{margin-bottom:12px}
 .form-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:700}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:14px}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:14px}
 .form-group input:focus,.form-group select:focus{border-color:var(--accent)}
 .form-row{display:flex;gap:8px}
 .form-row input{flex:1}
@@ -121,31 +125,36 @@ input,textarea,select{font-family:inherit;outline:0}
 .hidden{display:none!important}
 .custom-field{display:flex;gap:6px;margin-bottom:6px}
 .custom-field input{flex:1;padding:9px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px}
-.custom-field button{padding:9px;border-radius:8px;background:var(--danger);color:#fff;font-size:12px}
+.custom-field button{padding:9px 12px;border-radius:8px;background:var(--danger);color:#fff;font-size:12px}
 .add-field-btn{padding:8px 12px;border-radius:8px;background:var(--panel2);color:var(--accent);border:1px dashed var(--accent);font-size:12px;font-weight:700;width:100%;margin-top:6px}
 .history-item{padding:8px 10px;background:var(--panel2);border-radius:6px;margin-bottom:4px;font-size:11px;font-family:monospace;display:flex;justify-content:space-between;align-items:center}
 .history-item .date{color:var(--muted);font-size:10px;font-family:system-ui}
 .pwned-badge{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:900}
 .pwned-badge.safe{background:rgba(74,222,128,.2);color:var(--strong)}
 .pwned-badge.pwned{background:rgba(248,113,113,.3);color:var(--danger)}
-.install-btn{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:30px;background:var(--accent);color:#0a0e14;font-weight:900;font-size:13px;box-shadow:0 6px 24px rgba(74,222,128,.5);z-index:9000;display:none;align-items:center;gap:6px}
+.install-btn{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));right:20px;padding:12px 20px;border-radius:30px;background:var(--accent);color:#0a0e14;font-weight:900;font-size:13px;box-shadow:0 6px 24px rgba(74,222,128,.5);z-index:9000;display:none;align-items:center;gap:6px}
 .install-btn.show{display:flex}
+.update-banner{position:fixed;top:calc(60px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-200px);padding:10px 20px;border-radius:10px;background:var(--info);color:#fff;font-size:12px;font-weight:700;z-index:9000;transition:transform .4s;box-shadow:0 8px 20px rgba(96,165,250,.4)}
+.update-banner.show{transform:translateX(-50%) translateY(0)}
+.domain-warn{padding:8px 12px;background:rgba(251,191,36,.15);border:1px solid var(--warn);border-radius:8px;color:var(--warn);font-size:11px;margin-top:6px;display:none}
+.domain-warn.show{display:block}
+.share-box{padding:14px;background:var(--panel2);border-radius:10px;margin-top:12px;word-break:break-all;font-family:monospace;font-size:11px;color:var(--accent);max-height:150px;overflow-y:auto}
 @media (max-width:600px){
   .topbar{padding:12px 14px}.toolbar{padding:12px 14px}.entries{padding:12px 14px}
   .entry{padding:12px}.entry-actions button{width:30px;height:30px;font-size:13px}
   .modal{padding:20px}.cats{padding:10px 14px}
-  .tabs button{min-width:auto;font-size:10px;padding:8px 6px}
+  .tabs button{min-width:auto;font-size:10px;padding:8px 4px}
+  .lock-wrap{padding:40px 16px}
 }
 </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
 <div id="lockScreen" class="screen active">
   <div class="lock-wrap">
     <div class="lock-logo">
       <h1>🔐 SecureVault</h1>
-      <p>Zero-Knowledge Password Manager v3.0</p>
+      <p>Zero-Knowledge Password Manager v4.0</p>
     </div>
     <div class="card">
       <div id="modeUnlock">
@@ -156,7 +165,7 @@ input,textarea,select{font-family:inherit;outline:0}
         </div>
         <button class="btn btn-primary" onclick="unlockVault()">🔓 Войти</button>
         <p style="text-align:center;margin:14px 0;color:var(--muted);font-size:12px">— или —</p>
-        <button class="btn btn-secondary" onclick="switchLockMode('create')">Создать новое хранилище</button>
+        <button class="btn btn-secondary" onclick="switchLockMode('create')">Создать новое</button>
       </div>
       <div id="modeCreate" class="hidden">
         <h2>Создать хранилище</h2>
@@ -179,13 +188,11 @@ input,textarea,select{font-family:inherit;outline:0}
       <p id="lockError" style="color:var(--danger);font-size:12px;margin-top:12px;text-align:center;min-height:16px"></p>
     </div>
     <p style="text-align:center;font-size:11px;color:var(--muted);line-height:1.6">
-      🔒 AES-256-GCM · PBKDF2 600K · Zero-Knowledge<br>
-      Даже мы не можем прочитать твои пароли
+      🔒 AES-256-GCM · PBKDF2 600K · Zero-Knowledge
     </p>
   </div>
 </div>
 
-<!-- VAULT SCREEN -->
 <div id="vaultScreen" class="screen">
   <div class="topbar">
     <div class="topbar-brand">🔐 SecureVault</div>
@@ -198,25 +205,17 @@ input,textarea,select{font-family:inherit;outline:0}
   </div>
   <div class="toolbar">
     <input class="search" id="searchInput" placeholder="🔍 Поиск..." oninput="renderEntries()">
-    <button class="btn btn-secondary btn-small" onclick="openModal('generatorModal')">🎲 Генератор</button>
+    <button class="btn btn-secondary btn-small" onclick="openModal('generatorModal')">🎲</button>
     <button class="btn btn-primary btn-small" onclick="openEntryModal()">+ Добавить</button>
   </div>
-  <div class="cats" id="catsBar">
-    <button class="cat-btn active" onclick="setCategory('all', this)">Все</button>
-    <button class="cat-btn" onclick="setCategory('social', this)">🌐 Соцсети</button>
-    <button class="cat-btn" onclick="setCategory('work', this)">💼 Работа</button>
-    <button class="cat-btn" onclick="setCategory('bank', this)">🏦 Банки</button>
-    <button class="cat-btn" onclick="setCategory('other', this)">📦 Другое</button>
-  </div>
+  <div class="cats" id="catsBar"></div>
   <div class="entries" id="entriesList"></div>
 </div>
 
-<!-- INSTALL PWA BUTTON -->
 <button class="install-btn" id="installBtn" onclick="installPWA()">📱 Установить</button>
+<div class="update-banner" id="updateBanner" onclick="applyUpdate()">🔄 Доступно обновление — нажмите</div>
 
-<!-- MODALS -->
-
-<!-- Add/Edit Entry -->
+<!-- ENTRY MODAL -->
 <div class="modal-back" id="entryModal">
   <div class="modal">
     <div class="modal-header">
@@ -225,8 +224,9 @@ input,textarea,select{font-family:inherit;outline:0}
     </div>
     <input type="hidden" id="editIndex">
     <div class="form-group">
-      <label>Сайт</label>
-      <input id="fSite" placeholder="github.com">
+      <label>Сайт (URL)</label>
+      <input id="fSite" placeholder="github.com или https://bank.com" oninput="checkDomainMatch()">
+      <div class="domain-warn" id="domainWarn"></div>
     </div>
     <div class="form-group">
       <label>Логин</label>
@@ -235,7 +235,7 @@ input,textarea,select{font-family:inherit;outline:0}
     <div class="form-group">
       <label>Пароль</label>
       <div class="form-row">
-        <input id="fPassword" placeholder="Пароль" type="text">
+        <input id="fPassword" placeholder="Пароль" type="text" oninput="checkDomainMatch()">
         <button class="btn btn-secondary btn-small" onclick="quickGen()" title="Сгенерировать">🎲</button>
       </div>
       <div class="strength" style="margin-top:8px">
@@ -244,12 +244,7 @@ input,textarea,select{font-family:inherit;outline:0}
     </div>
     <div class="form-group">
       <label>Категория</label>
-      <select id="fCategory">
-        <option value="other">📦 Другое</option>
-        <option value="social">🌐 Соцсети</option>
-        <option value="work">💼 Работа</option>
-        <option value="bank">🏦 Банки</option>
-      </select>
+      <select id="fCategory"></select>
     </div>
     <div class="form-group">
       <label>Заметки</label>
@@ -261,7 +256,7 @@ input,textarea,select{font-family:inherit;outline:0}
       <button class="add-field-btn" onclick="addCustomField()">+ Добавить поле</button>
     </div>
     <div id="historySection" class="form-group hidden">
-      <label>⏱️ История паролей</label>
+      <label>⏱️ История</label>
       <div id="historyList"></div>
     </div>
     <label class="checkbox-label" style="margin-top:6px">
@@ -274,16 +269,16 @@ input,textarea,select{font-family:inherit;outline:0}
   </div>
 </div>
 
-<!-- Generator -->
+<!-- GENERATOR -->
 <div class="modal-back" id="generatorModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>🎲 Генератор паролей</h2>
+      <h2>🎲 Генератор</h2>
       <button class="modal-close" onclick="closeModal('generatorModal')">×</button>
     </div>
     <div class="gen-result">
       <input id="genResult" readonly>
-      <button class="icon-btn" onclick="copyGenResult()" title="Копировать">📋</button>
+      <button class="icon-btn" onclick="copyGenResult()">📋</button>
     </div>
     <div class="gen-options">
       <div class="gen-opt">
@@ -298,30 +293,29 @@ input,textarea,select{font-family:inherit;outline:0}
       <label class="gen-opt"><span>0-9</span><input type="checkbox" id="genDigits" checked></label>
       <label class="gen-opt"><span>Символы</span><input type="checkbox" id="genSymbols" checked></label>
     </div>
-    <button class="btn btn-primary" onclick="generatePassword()">🔄 Сгенерировать</button>
+    <button class="btn btn-primary" onclick="generatePassword()">🔄 Ещё</button>
   </div>
 </div>
 
-<!-- Audit -->
+<!-- AUDIT -->
 <div class="modal-back" id="auditModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>📊 Аудит паролей</h2>
+      <h2>📊 Аудит</h2>
       <button class="modal-close" onclick="closeModal('auditModal')">×</button>
     </div>
     <div class="audit-stats" id="auditStats"></div>
-    <h3 style="font-size:14px;margin-bottom:8px">Проблемные записи:</h3>
+    <h3 style="font-size:14px;margin-bottom:8px">Проблемы:</h3>
     <div class="audit-list" id="auditList"></div>
     <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
       <h3 style="font-size:14px;margin-bottom:8px">🔗 Проверка утечек</h3>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:10px">Пароли отправляются как SHA-1 хеши (первые 5 символов), k-anonymity. Безопасно.</p>
-      <button class="btn btn-primary btn-small" onclick="checkLeaks()" style="width:100%">Проверить все пароли</button>
+      <button class="btn btn-primary btn-small" onclick="checkLeaks()" style="width:100%">Проверить (HIBP)</button>
       <div id="leakResults" style="margin-top:12px"></div>
     </div>
   </div>
 </div>
 
-<!-- Settings -->
+<!-- SETTINGS -->
 <div class="modal-back" id="settingsModal">
   <div class="modal">
     <div class="modal-header">
@@ -334,41 +328,37 @@ input,textarea,select{font-family:inherit;outline:0}
       <button onclick="switchSettingsTab('password', this)">🔑 Пароль</button>
       <button onclick="switchSettingsTab('pin', this)">📌 PIN</button>
       <button onclick="switchSettingsTab('qr', this)">📱 QR</button>
-      <button onclick="switchSettingsTab('danger', this)">⚠️ Опасное</button>
+      <button onclick="switchSettingsTab('danger', this)">⚠️</button>
     </div>
     <div id="setTab-backup">
-      <p style="margin-bottom:14px">Экспортируй зашифрованное хранилище.</p>
-      <button class="btn btn-primary" onclick="exportVault()">📥 Экспортировать .vault</button>
+      <p style="margin-bottom:14px">Экспорт зашифрованного хранилища.</p>
+      <button class="btn btn-primary" onclick="exportVault()">📥 Экспорт .vault</button>
     </div>
     <div id="setTab-import" class="hidden">
-      <p style="margin-bottom:14px">Импорт из других менеджеров (CSV).</p>
+      <p style="margin-bottom:14px">Импорт CSV из браузеров.</p>
       <div class="form-group">
         <label>Формат</label>
         <select id="importFormat">
-          <option value="chrome">Chrome / Edge</option>
+          <option value="auto">Авто</option>
+          <option value="chrome">Chrome/Edge</option>
           <option value="firefox">Firefox</option>
           <option value="bitwarden">Bitwarden</option>
-          <option value="auto">Авто-определение</option>
         </select>
       </div>
       <input type="file" id="importCSV" accept=".csv" style="display:none" onchange="importCSV(event)">
-      <button class="btn btn-primary" onclick="document.getElementById('importCSV').click()">📤 Выбрать CSV-файл</button>
+      <button class="btn btn-primary" onclick="document.getElementById('importCSV').click()">📤 Выбрать CSV</button>
     </div>
     <div id="setTab-password" class="hidden">
-      <p style="margin-bottom:14px">Смена мастер-пароля (перешифровка).</p>
       <div class="form-group"><label>Текущий</label><input type="password" id="oldMasterPass"></div>
       <div class="form-group">
         <label>Новый</label>
         <input type="password" id="newMasterPass" oninput="updateStrength('newMasterPass','newMasterStr')">
-        <div class="strength" style="margin-top:8px">
-          <div class="strength-bar"><div class="strength-fill" id="newMasterStr"></div></div>
-        </div>
+        <div class="strength" style="margin-top:8px"><div class="strength-bar"><div class="strength-fill" id="newMasterStr"></div></div></div>
       </div>
-      <div class="form-group"><label>Повтори новый</label><input type="password" id="newMasterPass2"></div>
+      <div class="form-group"><label>Повтори</label><input type="password" id="newMasterPass2"></div>
       <button class="btn btn-primary" onclick="changeMasterPassword()">Сменить</button>
     </div>
     <div id="setTab-pin" class="hidden">
-      <p style="margin-bottom:14px">PIN защищает критичные записи.</p>
       <div id="pinStatus"></div>
       <div id="pinSetup">
         <div class="form-group" style="margin-top:14px">
@@ -379,19 +369,18 @@ input,textarea,select{font-family:inherit;outline:0}
       </div>
     </div>
     <div id="setTab-qr" class="hidden">
-      <p style="margin-bottom:14px">Зашифрованный QR-код для аварийного бэкапа. Распечатай и спрячь.</p>
+      <p style="margin-bottom:14px">QR для аварийного бэкапа.</p>
       <button class="btn btn-primary" onclick="generateQRBackup()">📱 Сгенерировать QR</button>
       <div id="qrContainer" style="text-align:center;margin-top:16px"></div>
-      <button class="btn btn-secondary" id="printQRBtn" style="margin-top:10px;display:none" onclick="printQR()">🖨️ Распечатать</button>
     </div>
     <div id="setTab-danger" class="hidden">
-      <p style="margin-bottom:14px;color:var(--danger)">⚠️ Необратимые действия.</p>
+      <p style="margin-bottom:14px;color:var(--danger)">⚠️ Необратимо.</p>
       <button class="btn btn-danger" onclick="wipeVault()">🗑️ Удалить ВСЁ</button>
     </div>
   </div>
 </div>
 
-<!-- PIN Modal -->
+<!-- PIN -->
 <div class="modal-back" id="pinModal">
   <div class="modal" style="max-width:340px">
     <div class="modal-header">
@@ -399,166 +388,337 @@ input,textarea,select{font-family:inherit;outline:0}
       <button class="modal-close" onclick="closeModal('pinModal')">×</button>
     </div>
     <div class="pin-prompt">
-      <p>Доступ к критичной записи</p>
       <input type="password" id="pinInput" maxlength="8" inputmode="numeric" onkeypress="if(event.key==='Enter')verifyPin()">
       <button class="btn btn-primary" onclick="verifyPin()">Разблокировать</button>
     </div>
   </div>
 </div>
 
-<!-- History Modal -->
-<div class="modal-back" id="historyModal">
-  <div class="modal" style="max-width:420px">
+<!-- SHARE -->
+<div class="modal-back" id="shareModal">
+  <div class="modal">
     <div class="modal-header">
-      <h2>⏱️ История паролей</h2>
-      <button class="modal-close" onclick="closeModal('historyModal')">×</button>
+      <h2>📤 Поделиться записью</h2>
+      <button class="modal-close" onclick="closeModal('shareModal')">×</button>
     </div>
-    <div id="historyModalList"></div>
+    <p style="margin-bottom:12px;font-size:12px;color:var(--muted)">Запись будет зашифрована отдельным паролем. Передай получателю пароль отдельным каналом.</p>
+    <div class="form-group">
+      <label>Пароль для шифрования (минимум 8 символов)</label>
+      <div class="form-row">
+        <input type="password" id="sharePassword" placeholder="Пароль">
+        <button class="btn btn-secondary btn-small" onclick="quickShareGen()">🎲</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="generateShare()">🔒 Зашифровать</button>
+    <div id="shareResult"></div>
+    <button class="btn btn-secondary" id="copyShareBtn" style="margin-top:8px;display:none" onclick="copyShareLink()">📋 Скопировать</button>
+  </div>
+</div>
+
+<!-- IMPORT SHARED -->
+<div class="modal-back" id="importShareModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>📥 Импорт записи</h2>
+      <button class="modal-close" onclick="closeModal('importShareModal')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Вставь зашифрованный текст</label>
+      <input id="importShareText" placeholder="SVSHARE:...">
+    </div>
+    <div class="form-group">
+      <label>Пароль</label>
+      <input type="password" id="importSharePassword">
+    </div>
+    <button class="btn btn-primary" onclick="importShared()">🔓 Расшифровать</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ================= КОНСТАНТЫ =================
-const ITERATIONS = 600000;
-const STORAGE_KEY = 'securevault_data';
-const THEME_KEY = 'securevault_theme';
+// ============ CONST ============
+const ITERATIONS=600000;
+const STORAGE_KEY='securevault_data';
+const THEME_KEY='securevault_theme';
 
-// ================= СОСТОЯНИЕ =================
-let masterKey = null;
-let entries = [];
-let currentCategory = 'all';
-let vaultData = null;
-let unlockedCritical = new Set();
-let pinCache = null;
-let clipboardTimer = null;
+// Категории
+const CATEGORIES={
+  all:{icon:'📂',name:'Все'},
+  social:{icon:'🌐',name:'Соцсети'},
+  work:{icon:'💼',name:'Работа'},
+  email:{icon:'📧',name:'Почта'},
+  bank:{icon:'🏦',name:'Банки'},
+  shop:{icon:'🛒',name:'Покупки'},
+  games:{icon:'🎮',name:'Игры'},
+  gov:{icon:'🏛️',name:'Госуслуги'},
+  other:{icon:'📦',name:'Другое'}
+};
+
+// База доменов для проверки "этот пароль от этого ли сайта"
+const KNOWN_DOMAINS={
+  'github.com':['github','git'],
+  'gitlab.com':['gitlab','git'],
+  'google.com':['google','gmail','youtube'],
+  'gmail.com':['google','gmail'],
+  'youtube.com':['google','youtube'],
+  'vk.com':['vk','vkontakte'],
+  'ok.ru':['ok','odnoklassniki'],
+  'mail.ru':['mail','mailru'],
+  'yandex.ru':['yandex','yandexru'],
+  'bank.ru':['bank','sberbank','tinkoff','alfa'],
+  'sberbank.ru':['sberbank','sber'],
+  'tinkoff.ru':['tinkoff','tbank'],
+  'steam.com':['steam','steampowered'],
+  'discord.com':['discord'],
+  'telegram.org':['telegram','tg'],
+  'gosuslugi.ru':['gosuslugi','gos'],
+  'ozon.ru':['ozon'],
+  'wildberries.ru':['wildberries','wb'],
+  'avito.ru':['avito'],
+  'instagram.com':['instagram','insta'],
+  'facebook.com':['facebook','fb'],
+  'twitter.com':['twitter','x'],
+  'tiktok.com':['tiktok']
+};
+
+// ============ STATE ============
+let masterKey=null,entries=[],currentCategory='all',vaultData=null;
+let unlockedCritical=new Set(),pinCache=null,clipboardTimer=null;
 let channel;
-try { channel = new BroadcastChannel('securevault_sync'); } catch(e) {}
-let deferredInstallPrompt = null;
+try{channel=new BroadcastChannel('securevault_sync')}catch(e){}
+let deferredInstallPrompt=null,waitingWorker=null,currentCustomFields=[];
+let currentShareLink='';
 
-// ================= КРИПТО =================
-function bufToB64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))}
-function b64ToBuf(b64){return Uint8Array.from(atob(b64),c=>c.charCodeAt(0)).buffer}
-async function deriveKey(pwd,saltBuf,iter=ITERATIONS){
-  const enc=new TextEncoder();
-  const km=await crypto.subtle.importKey('raw',enc.encode(pwd),'PBKDF2',false,['deriveKey']);
-  return crypto.subtle.deriveKey({name:'PBKDF2',salt:saltBuf,iterations:iter,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+// ============ CRYPTO ============
+function bufToB64(b){return btoa(String.fromCharCode(...new Uint8Array(b)))}
+function b64ToBuf(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0)).buffer}
+async function deriveKey(pwd,salt,iter=ITERATIONS){
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pwd),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:iter,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
 }
-async function encryptData(key,plaintext){
+async function encData(k,pt){
   const iv=crypto.getRandomValues(new Uint8Array(12));
-  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(plaintext));
-  return {iv:bufToB64(iv),ct:bufToB64(ct)};
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(pt));
+  return{iv:bufToB64(iv),ct:bufToB64(ct)};
 }
-async function decryptData(key,ivB64,ctB64){
-  const iv=new Uint8Array(b64ToBuf(ivB64));
-  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,b64ToBuf(ctB64));
+async function decData(k,ivB,ctB){
+  const iv=new Uint8Array(b64ToBuf(ivB));
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},k,b64ToBuf(ctB));
   return new TextDecoder().decode(pt);
 }
 
-// ================= ТЕМА / PWA =================
+// ============ THEME / PWA ============
 function initTheme(){
-  const saved=localStorage.getItem(THEME_KEY)||'dark';
-  document.documentElement.setAttribute('data-theme',saved);
+  const s=localStorage.getItem(THEME_KEY)||'dark';
+  document.documentElement.setAttribute('data-theme',s);
 }
 function toggleTheme(){
-  const cur=document.documentElement.getAttribute('data-theme');
-  const next=cur==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',next);
-  localStorage.setItem(THEME_KEY,next);
+  const c=document.documentElement.getAttribute('data-theme');
+  const n=c==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',n);
+  localStorage.setItem(THEME_KEY,n);
 }
 
 // PWA install
 window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredInstallPrompt=e;
+  e.preventDefault();deferredInstallPrompt=e;
   document.getElementById('installBtn').classList.add('show');
 });
 async function installPWA(){
-  if(!deferredInstallPrompt){toast('Установка недоступна','danger');return}
+  if(!deferredInstallPrompt)return;
   deferredInstallPrompt.prompt();
-  const {outcome}=await deferredInstallPrompt.userChoice;
-  if(outcome==='accepted')toast('✅ Установлено!');
+  await deferredInstallPrompt.userChoice;
   deferredInstallPrompt=null;
   document.getElementById('installBtn').classList.remove('show');
 }
-// Service Worker через Blob
+
+// SW registration + update
 if('serviceWorker' in navigator){
-  const swCode=`self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)))})`;
-  try{
-    const blob=new Blob([swCode],{type:'application/javascript'});
-    const url=URL.createObjectURL(blob);
-    navigator.serviceWorker.register(url).catch(()=>{});
-  }catch(e){}
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    if(reg.waiting){
+      waitingWorker=reg.waiting;
+      document.getElementById('updateBanner').classList.add('show');
+    }
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      if(nw)nw.addEventListener('statechange',()=>{
+        if(nw.state==='installed'&&navigator.serviceWorker.controller){
+          waitingWorker=nw;
+          document.getElementById('updateBanner').classList.add('show');
+        }
+      });
+    });
+  }).catch(()=>{});
+}
+function applyUpdate(){
+  if(!waitingWorker)return location.reload();
+  waitingWorker.postMessage({type:'SKIP_WAITING'});
+  setTimeout(()=>location.reload(),500);
 }
 
-// ================= UI =================
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast show '+type;
-  clearTimeout(t._t);
-  t._t=setTimeout(()=>t.classList.remove('show'),2500);
+// Deep link (shortcuts)
+if(location.search.includes('action=new')){
+  setTimeout(()=>{if(document.getElementById('vaultScreen').classList.contains('active'))openEntryModal()},1000);
+}
+if(location.search.includes('action=gen')){
+  setTimeout(()=>{if(document.getElementById('vaultScreen').classList.contains('active'))openModal('generatorModal')},1000);
+}
+
+// ============ UI HELPERS ============
+function toast(m,t=''){
+  const el=document.getElementById('toast');
+  el.textContent=m;el.className='toast show '+t;
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),2500);
 }
 function togglePwd(id,btn){
-  const inp=document.getElementById(id);
-  inp.type=inp.type==='password'?'text':'password';
-  btn.textContent=inp.type==='password'?'👁':'🙈';
+  const i=document.getElementById(id);
+  i.type=i.type==='password'?'text':'password';
+  btn.textContent=i.type==='password'?'👁':'🙈';
 }
 function openModal(id){document.getElementById(id).classList.add('active')}
 function closeModal(id){document.getElementById(id).classList.remove('active')}
 document.querySelectorAll('.modal-back').forEach(m=>{
   m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('active')});
 });
-function switchLockMode(mode){
-  document.getElementById('modeUnlock').classList.toggle('hidden',mode!=='unlock');
-  document.getElementById('modeCreate').classList.toggle('hidden',mode!=='create');
+function switchLockMode(m){
+  document.getElementById('modeUnlock').classList.toggle('hidden',m!=='unlock');
+  document.getElementById('modeCreate').classList.toggle('hidden',m!=='create');
   document.getElementById('lockError').textContent='';
 }
-function escapeHtml(s){
+function esc(s){
   const d=document.createElement('div');
-  d.textContent=s;
+  d.textContent=s||'';
   return d.innerHTML;
 }
 
-// ================= СИЛА ПАРОЛЯ =================
-function checkStrength(pwd){
-  if(!pwd)return{score:0,label:'—',level:0,color:''};
-  let score=0;
-  if(pwd.length>=8)score++;
-  if(pwd.length>=12)score++;
-  if(pwd.length>=16)score++;
-  if(/[A-Z]/.test(pwd))score++;
-  if(/[a-z]/.test(pwd))score++;
-  if(/[0-9]/.test(pwd))score++;
-  if(/[^A-Za-z0-9]/.test(pwd))score++;
-  let level=0,label='',color='';
-  if(pwd.length<8){label='Очень слабый';color='var(--weak)';level=20}
-  else if(score<=3){label='Слабый';color='var(--weak)';level=35}
-  else if(score<=5){label='Средний';color='var(--medium)';level=60}
-  else if(score<=6){label='Сильный';color='var(--strong)';level=80}
-  else{label='Отличный';color='var(--strong)';level=100}
-  return{score,label,level,color};
+// ============ STRENGTH ============
+function checkStrength(p){
+  if(!p)return{score:0,label:'—',level:0,color:''};
+  let s=0;
+  if(p.length>=8)s++;
+  if(p.length>=12)s++;
+  if(p.length>=16)s++;
+  if(/[A-Z]/.test(p))s++;
+  if(/[a-z]/.test(p))s++;
+  if(/[0-9]/.test(p))s++;
+  if(/[^A-Za-z0-9]/.test(p))s++;
+  let l=0,lab='',col='';
+  if(p.length<8){lab='Очень слабый';col='var(--weak)';l=20}
+  else if(s<=3){lab='Слабый';col='var(--weak)';l=35}
+  else if(s<=5){lab='Средний';col='var(--medium)';l=60}
+  else if(s<=6){lab='Сильный';col='var(--strong)';l=80}
+  else{lab='Отличный';col='var(--strong)';l=100}
+  return{score:s,label:lab,level:l,color:col};
 }
-function updateStrength(inputId,barId){
-  const pwd=document.getElementById(inputId).value;
-  const s=checkStrength(pwd);
-  const bar=document.getElementById(barId);
-  if(bar){bar.style.width=s.level+'%';bar.style.background=s.color||'var(--weak)'}
-  const lbl=document.getElementById('createStrLbl');
-  const lvl=document.getElementById('createStrLvl');
-  if(lbl&&inputId==='createPass'){lbl.textContent=s.label;lvl.textContent=pwd.length?pwd.length+' символов':''}
+function updateStrength(iId,bId){
+  const p=document.getElementById(iId).value;
+  const s=checkStrength(p);
+  const b=document.getElementById(bId);
+  if(b){b.style.width=s.level+'%';b.style.background=s.color||'var(--weak)'}
+  const l=document.getElementById('createStrLbl');
+  const lv=document.getElementById('createStrLvl');
+  if(l&&iId==='createPass'){l.textContent=s.label;lv.textContent=p.length?p.length+' символов':''}
 }
 
-// ================= ХРАНИЛИЩЕ =================
+// ============ CATEGORIES (render) ============
+function renderCategories(){
+  const c=document.getElementById('catsBar');
+  c.innerHTML=Object.entries(CATEGORIES).map(([k,v])=>
+    `<button class="cat-btn ${k===currentCategory?'active':''}" onclick="setCategory('${k}',this)">${v.icon} ${v.name}</button>`
+  ).join('');
+}
+function setCategory(c,btn){
+  currentCategory=c;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderEntries();
+}
+function renderCategorySelect(){
+  const s=document.getElementById('fCategory');
+  s.innerHTML=Object.entries(CATEGORIES)
+    .filter(([k])=>k!=='all')
+    .map(([k,v])=>`<option value="${k}">${v.icon} ${v.name}</option>`)
+    .join('');
+}
+
+// ============ DOMAIN CHECK ============
+function normalizeDomain(url){
+  if(!url)return '';
+  let d=url.trim().toLowerCase();
+  d=d.replace(/^https?:\/\//,'');
+  d=d.replace(/^www\./,'');
+  d=d.split('/')[0].split(':')[0];
+  return d;
+}
+function getDomainKeywords(domain){
+  const kws=[];
+  const parts=domain.split('.');
+  parts.forEach(p=>{if(p.length>2)kws.push(p)});
+  // Известные
+  for(const [known,aliases] of Object.entries(KNOWN_DOMAINS)){
+    if(domain.includes(known.replace('.com','').replace('.ru','').replace('.org',''))){
+      kws.push(...aliases);
+    }
+  }
+  return kws;
+}
+function checkDomainMatch(){
+  const site=document.getElementById('fSite').value;
+  const pwd=document.getElementById('fPassword').value;
+  const warn=document.getElementById('domainWarn');
+  warn.classList.remove('show');
+  
+  if(!site||!pwd)return;
+  
+  const domain=normalizeDomain(site);
+  if(!domain)return;
+  
+  // Проверяем: не совпадает ли пароль с паролем из другой категории (например, банк)
+  const currentKeywords=getDomainKeywords(domain);
+  
+  // Ищем записи с тем же паролем, но в другой категории
+  const conflicts=entries.filter((e,i)=>{
+    if(i==document.getElementById('editIndex').value)return false;
+    if(e.password!==pwd)return false;
+    const eDomain=normalizeDomain(e.site);
+    const eKw=getDomainKeywords(eDomain);
+    // Если домены не пересекаются
+    return !currentKeywords.some(k=>eKw.some(ek=>ek.includes(k)||k.includes(ek)));
+  });
+  
+  // Спец. проверка для банков
+  const isBankDomain=/(sberbank|tinkoff|alfa|vtb|gazprom|raif|bank)/.test(domain);
+  const looksLikePhishing=/(sber|tink|alfa|vtb)-?[a-z0-9]+\.(?!ru|com)/.test(domain)||
+    /(?:[a-z0-9-]*)bank[a-z0-9-]*\.(?!ru)/.test(domain);
+  
+  let msg='';
+  if(looksLikePhishing){
+    msg='⚠️ Домен похож на фишинговый! Проверьте адрес.';
+  }else if(isBankDomain&&conflicts.length){
+    msg=`⚠️ Этот пароль уже используется на ${esc(conflicts[0].site)}. Не используйте одинаковые пароли!`;
+  }else if(conflicts.length){
+    msg=`⚠️ Пароль уже есть на ${esc(conflicts[0].site)}. Рекомендуется уникальный.`;
+  }
+  
+  if(msg){
+    warn.textContent=msg;
+    warn.classList.add('show');
+  }
+}
+
+// ============ VAULT STORAGE ============
 function loadVaultData(){
-  const raw=localStorage.getItem(STORAGE_KEY);
-  if(!raw)return null;
-  try{return JSON.parse(raw)}catch(e){return null}
+  const r=localStorage.getItem(STORAGE_KEY);
+  if(!r)return null;
+  try{return JSON.parse(r)}catch(e){return null}
 }
-function saveVaultData(data){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
-  vaultData=data;
+function saveVaultData(d){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(d));
+  vaultData=d;
 }
+
 async function createVault(){
   const p1=document.getElementById('createPass').value;
   const p2=document.getElementById('createPass2').value;
@@ -567,14 +727,15 @@ async function createVault(){
   if(p1!==p2){err.textContent='Пароли не совпадают';return}
   const salt=crypto.getRandomValues(new Uint8Array(16));
   const key=await deriveKey(p1,salt);
-  const {iv,ct}=await encryptData(key,JSON.stringify([]));
-  saveVaultData({version:3,salt:bufToB64(salt),iv,ct,has2FA:false});
+  const {iv,ct}=await encData(key,JSON.stringify([]));
+  saveVaultData({version:4,salt:bufToB64(salt),iv,ct,has2FA:false});
   masterKey=key;entries=[];
   showVault();
   toast('✨ Хранилище создано!');
   document.getElementById('createPass').value='';
   document.getElementById('createPass2').value='';
 }
+
 async function unlockVault(){
   const pwd=document.getElementById('unlockPass').value;
   const err=document.getElementById('lockError');
@@ -582,13 +743,15 @@ async function unlockVault(){
   if(!data){err.textContent='Хранилище не найдено';return}
   try{
     const key=await deriveKey(pwd,b64ToBuf(data.salt));
-    const decrypted=await decryptData(key,data.iv,data.ct);
+    const decrypted=await decData(key,data.iv,data.ct);
     entries=JSON.parse(decrypted);
+    if(!Array.isArray(entries))entries=[];
     masterKey=key;vaultData=data;
     showVault();
     document.getElementById('unlockPass').value='';
   }catch(e){err.textContent='❌ Неверный пароль'}
 }
+
 function lockVault(){
   masterKey=null;entries=[];unlockedCritical.clear();pinCache=null;
   document.getElementById('vaultScreen').classList.remove('active');
@@ -596,68 +759,63 @@ function lockVault(){
   switchLockMode(loadVaultData()?'unlock':'create');
   if(channel)channel.postMessage({type:'lock'});
 }
+
 function showVault(){
   document.getElementById('lockScreen').classList.remove('active');
   document.getElementById('vaultScreen').classList.add('active');
+  renderCategories();
+  renderCategorySelect();
   renderEntries();
 }
 
-// ================= РЕНДЕР =================
-function setCategory(cat,btn){
-  currentCategory=cat;
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderEntries();
-}
+// ============ RENDER ENTRIES ============
 function renderEntries(){
   const list=document.getElementById('entriesList');
   const search=(document.getElementById('searchInput').value||'').toLowerCase().trim();
-  let filtered=entries.map((e,i)=>({...e,_idx:i}));
-  if(currentCategory!=='all')filtered=filtered.filter(e=>e.category===currentCategory);
+  let f=entries.map((e,i)=>({...e,_idx:i}));
+  if(currentCategory!=='all')f=f.filter(e=>e.category===currentCategory);
   if(search){
-    filtered=filtered.filter(e=>
+    f=f.filter(e=>
       (e.site||'').toLowerCase().includes(search)||
       (e.login||'').toLowerCase().includes(search)
     );
   }
-  if(!filtered.length){
-    list.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><h3>Пока пусто</h3><p>${entries.length?'Ничего не найдено':'Добавьте первую запись'}</p></div>`;
+  if(!f.length){
+    list.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><h3>Пусто</h3><p>${entries.length?'Ничего не найдено':'Добавьте первую запись'}</p></div>`;
     return;
   }
-  list.innerHTML=filtered.map(e=>{
-    const strength=checkStrength(e.password);
-    const isCritical=e.critical;
-    const isUnlocked=unlockedCritical.has(e._idx);
-    const catIcons={social:'🌐',work:'💼',bank:'🏦',other:'📦'};
-    // Иконка сайта через favicon
-    const domain=e.site.replace(/^https?:\/\//,'').split('/')[0];
-    const favicon=`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
+  list.innerHTML=f.map(e=>{
+    const s=checkStrength(e.password);
+    const crit=e.critical;
+    const unl=unlockedCritical.has(e._idx);
+    const domain=normalizeDomain(e.site);
+    const favicon=domain?`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`:'';
+    const cat=CATEGORIES[e.category]||CATEGORIES.other;
     return `
-      <div class="entry ${isCritical&&!isUnlocked?'locked':''}">
-        <div class="entry-icon">${isCritical&&!isUnlocked?'🔒':`<img src="${favicon}" alt="" onerror="this.style.display='none';this.parentElement.textContent='${catIcons[e.category]||'📦'}'">`}</div>
+      <div class="entry ${crit&&!unl?'locked':''}">
+        <div class="entry-icon">${crit&&!unl?'🔒':(domain?`<img src="${favicon}" onerror="this.style.display='none';this.parentElement.textContent='${cat.icon}'">`:`<span>${cat.icon}</span>`)}</div>
         <div class="entry-body">
-          <div class="entry-site">${escapeHtml(e.site)}</div>
-          <div class="entry-login">${escapeHtml(e.login)}</div>
+          <div class="entry-site">${esc(e.site)}</div>
+          <div class="entry-login">${esc(e.login)}</div>
           <div class="entry-meta">
-            <span class="dot" style="background:${strength.color}"></span>
-            <span>${strength.label}</span>
-            ${isCritical?'<span>· 🔐</span>':''}
+            <span class="dot" style="background:${s.color}"></span>
+            <span>${s.label}</span>
+            ${crit?'<span>· 🔐</span>':''}
             ${e.history&&e.history.length?`<span>· ⏱️${e.history.length}</span>`:''}
             ${e.updated?`<span>· ${new Date(e.updated).toLocaleDateString('ru')}</span>`:''}
           </div>
         </div>
         <div class="entry-actions">
           <button onclick="copyPassword(${e._idx})" title="Копировать">📋</button>
-          <button onclick="editEntry(${e._idx})" title="Редактировать">✏️</button>
+          <button onclick="shareEntry(${e._idx})" title="Поделиться">📤</button>
+          <button onclick="editEntry(${e._idx})" title="Изменить">✏️</button>
           <button onclick="deleteEntry(${e._idx})" title="Удалить">🗑</button>
         </div>
       </div>`;
   }).join('');
 }
 
-// ================= ФОРМА =================
-let currentCustomFields=[];
-
+// ============ FORM ============
 function addCustomField(name='',value=''){
   currentCustomFields.push({name,value});
   renderCustomFields();
@@ -666,8 +824,8 @@ function renderCustomFields(){
   const c=document.getElementById('customFieldsContainer');
   c.innerHTML=currentCustomFields.map((f,i)=>`
     <div class="custom-field">
-      <input placeholder="Название" value="${escapeHtml(f.name)}" onchange="currentCustomFields[${i}].name=this.value">
-      <input placeholder="Значение" value="${escapeHtml(f.value)}" onchange="currentCustomFields[${i}].value=this.value">
+      <input placeholder="Название" value="${esc(f.name)}" onchange="currentCustomFields[${i}].name=this.value">
+      <input placeholder="Значение" value="${esc(f.value)}" onchange="currentCustomFields[${i}].value=this.value">
       <button onclick="currentCustomFields.splice(${i},1);renderCustomFields()">×</button>
     </div>
   `).join('');
@@ -677,6 +835,7 @@ function openEntryModal(idx=null){
   document.getElementById('entryModalTitle').textContent=idx===null?'Новая запись':'Редактировать';
   document.getElementById('editIndex').value=idx===null?'':idx;
   currentCustomFields=[];
+  document.getElementById('domainWarn').classList.remove('show');
   
   if(idx===null){
     document.getElementById('fSite').value='';
@@ -689,24 +848,19 @@ function openEntryModal(idx=null){
     document.getElementById('historySection').classList.add('hidden');
   }else{
     const e=entries[idx];
-    document.getElementById('fSite').value=e.site;
-    document.getElementById('fLogin').value=e.login;
-    document.getElementById('fPassword').value=e.password;
+    document.getElementById('fSite').value=e.site||'';
+    document.getElementById('fLogin').value=e.login||'';
+    document.getElementById('fPassword').value=e.password||'';
     document.getElementById('fCategory').value=e.category||'other';
     document.getElementById('fNotes').value=e.notes||'';
     document.getElementById('fCritical').checked=!!e.critical;
     currentCustomFields=e.customFields?JSON.parse(JSON.stringify(e.customFields)):[];
     updateStrength('fPassword','fPasswordStr');
-    
-    // История
     if(e.history&&e.history.length){
       document.getElementById('historySection').classList.remove('hidden');
-      document.getElementById('historyList').innerHTML=e.history.slice().reverse().map(h=>`
-        <div class="history-item">
-          <span>${escapeHtml(h.password)}</span>
-          <span class="date">${new Date(h.date).toLocaleString('ru')}</span>
-        </div>
-      `).join('');
+      document.getElementById('historyList').innerHTML=e.history.slice().reverse().map(h=>
+        `<div class="history-item"><span>${esc(h.password)}</span><span class="date">${new Date(h.date).toLocaleString('ru')}</span></div>`
+      ).join('');
     }else{
       document.getElementById('historySection').classList.add('hidden');
     }
@@ -725,8 +879,8 @@ async function saveEntry(){
   const category=document.getElementById('fCategory').value;
   const notes=document.getElementById('fNotes').value.trim();
   const critical=document.getElementById('fCritical').checked;
-  if(!site||!login||!password){toast('Заполните обязательные поля','danger');return}
-  if(critical&&!vaultData.has2FA){toast('⚠️ Установите PIN в настройках','danger')}
+  if(!site||!login||!password){toast('Заполните поля','danger');return}
+  if(critical&&!vaultData.has2FA)toast('⚠️ Установите PIN','danger');
   
   const customFields=currentCustomFields.filter(f=>f.name&&f.value);
   let history=[];
@@ -735,11 +889,9 @@ async function saveEntry(){
     entries.push({site,login,password,category,notes,critical,customFields,updated:Date.now()});
   }else{
     const old=entries[parseInt(idx)];
-    // Если пароль изменился — сохраняем в историю
     if(old.password!==password){
-      history=old.history||[];
+      history=(old.history||[]).slice(-9);
       history.push({password:old.password,date:Date.now()});
-      if(history.length>10)history=history.slice(-10);
     }else{
       history=old.history||[];
     }
@@ -753,14 +905,11 @@ async function saveEntry(){
 }
 
 function editEntry(idx){
-  if(entries[idx].critical&&!unlockedCritical.has(idx)){
-    promptPin(()=>{openEntryModal(idx)});
-  }else{
-    openEntryModal(idx);
-  }
+  if(entries[idx].critical&&!unlockedCritical.has(idx))promptPin(()=>openEntryModal(idx));
+  else openEntryModal(idx);
 }
 async function deleteEntry(idx){
-  if(!confirm('Удалить запись?'))return;
+  if(!confirm('Удалить?'))return;
   entries.splice(idx,1);
   unlockedCritical.clear();
   await persistEntries();
@@ -769,11 +918,11 @@ async function deleteEntry(idx){
 }
 async function persistEntries(){
   if(!masterKey||!vaultData)return;
-  const {iv,ct}=await encryptData(masterKey,JSON.stringify(entries));
+  const {iv,ct}=await encData(masterKey,JSON.stringify(entries));
   saveVaultData({...vaultData,iv,ct});
 }
 
-// ================= КОПИРОВАНИЕ =================
+// ============ COPY ============
 async function copyPassword(idx){
   const e=entries[idx];
   if(!e)return;
@@ -786,23 +935,180 @@ async function copyPassword(idx){
 async function doCopy(text){
   try{
     await navigator.clipboard.writeText(text);
-    toast('📋 Скопировано (очистка через 25с)');
+    toast('📋 Скопировано (25с)');
     if(clipboardTimer)clearTimeout(clipboardTimer);
     clipboardTimer=setTimeout(async()=>{
       try{
-        const cur=await navigator.clipboard.readText();
-        if(cur===text)await navigator.clipboard.writeText('');
+        const c=await navigator.clipboard.readText();
+        if(c===text)await navigator.clipboard.writeText('');
       }catch(e){}
     },25000);
-  }catch(e){toast('❌ Не удалось скопировать','danger')}
+  }catch(e){toast('❌ Не удалось','danger')}
 }
 
-// ================= PIN =================
-let pinPromptCallback=null;
+// ============ SHARE ============
+let shareEntryIdx=-1;
+function shareEntry(idx){
+  const e=entries[idx];
+  if(!e)return;
+  if(e.critical&&!unlockedCritical.has(idx)){
+    promptPin(()=>shareEntry(idx));
+    return;
+  }
+  shareEntryIdx=idx;
+  currentShareLink='';
+  document.getElementById('sharePassword').value='';
+  document.getElementById('shareResult').innerHTML='';
+  document.getElementById('copyShareBtn').style.display='none';
+  openModal('shareModal');
+}
+function quickShareGen(){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let r='';const arr=new Uint32Array(12);crypto.getRandomValues(arr);
+  for(let i=0;i<12;i++)r+=chars[arr[i]%chars.length];
+  document.getElementById('sharePassword').value=r;
+}
+async function generateShare(){
+  const pwd=document.getElementById('sharePassword').value;
+  if(pwd.length<8){toast('Пароль от 8 символов','danger');return}
+  const e=entries[shareEntryIdx];
+  if(!e)return;
+  try{
+    const salt=crypto.getRandomValues(new Uint8Array(16));
+    const key=await deriveKey(pwd,salt,100000);
+    const payload=JSON.stringify({site:e.site,login:e.login,password:e.password,notes:e.notes||''});
+    const {iv,ct}=await encData(key,payload);
+    const blob=btoa(JSON.stringify({s:bufToB64(salt),i:iv,c:ct}));
+    currentShareLink='SVSHARE:'+blob;
+    document.getElementById('shareResult').innerHTML=`
+      <div class="share-box">${esc(currentShareLink)}</div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px">Отправь получателю. Пароль передай отдельно!</p>
+    `;
+    document.getElementById('copyShareBtn').style.display='block';
+  }catch(err){
+    toast('Ошибка','danger');
+  }
+}
+async function copyShareLink(){
+  if(!currentShareLink)return;
+  await doCopy(currentShareLink);
+}
+async function importShared(){
+  const text=document.getElementById('importShareText').value.trim();
+  const pwd=document.getElementById('importSharePassword').value;
+  if(!text.startsWith('SVSHARE:')){toast('Неверный формат','danger');return}
+  if(!pwd){toast('Введите пароль','danger');return}
+  try{
+    const obj=JSON.parse(atob(text.substring(8)));
+    const key=await deriveKey(pwd,b64ToBuf(obj.s),100000);
+    const decrypted=await decData(key,obj.i,obj.c);
+    const data=JSON.parse(decrypted);
+    entries.push({
+      site:data.site,login:data.login,password:data.password,
+      category:'other',notes:data.notes||'',critical:false,
+      customFields:[],history:[],updated:Date.now()
+    });
+    await persistEntries();
+    renderEntries();
+    closeModal('importShareModal');
+    toast('✅ Импортировано');
+  }catch(e){
+    toast('❌ Не удалось (неверный пароль?)','danger');
+  }
+}
+
+// ============ GENERATOR ============
+function updateGenLen(){
+  document.getElementById('genLenVal').textContent=document.getElementById('genLen').value;
+  generatePassword();
+}
+function generatePassword(){
+  const len=parseInt(document.getElementById('genLen').value);
+  let c='';
+  if(document.getElementById('genUpper').checked)c+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(document.getElementById('genLower').checked)c+='abcdefghijklmnopqrstuvwxyz';
+  if(document.getElementById('genDigits').checked)c+='0123456789';
+  if(document.getElementById('genSymbols').checked)c+='!@#$%^&*()_+-=[]{}|;:,.<>?';
+  if(!c)c='abcdefghijklmnopqrstuvwxyz0123456789';
+  const arr=new Uint32Array(len);crypto.getRandomValues(arr);
+  let r='';for(let i=0;i<len;i++)r+=c[arr[i]%c.length];
+  document.getElementById('genResult').value=r;
+}
+async function copyGenResult(){
+  const v=document.getElementById('genResult').value;
+  if(v)await doCopy(v);
+}
+function quickGen(){
+  const c='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=';
+  const arr=new Uint32Array(16);crypto.getRandomValues(arr);
+  let r='';for(let i=0;i<16;i++)r+=c[arr[i]%c.length];
+  document.getElementById('fPassword').value=r;
+  updateStrength('fPassword','fPasswordStr');
+  checkDomainMatch();
+}
+
+// ============ AUDIT ============
+function openAudit(){
+  const total=entries.length;
+  const weak=entries.filter(e=>checkStrength(e.password).score<=3&&e.password.length<12).length;
+  const cnt={};entries.forEach(e=>cnt[e.password]=(cnt[e.password]||0)+1);
+  const dup=entries.filter(e=>cnt[e.password]>1).length;
+  const old=entries.filter(e=>e.updated&&(Date.now()-e.updated)>180*86400000).length;
+  document.getElementById('auditStats').innerHTML=`
+    <div class="stat-box"><div class="val">${total}</div><div class="lbl">Всего</div></div>
+    <div class="stat-box ${weak?'warn':''}"><div class="val">${weak}</div><div class="lbl">Слабых</div></div>
+    <div class="stat-box ${dup?'warn':''}"><div class="val">${dup}</div><div class="lbl">Дублик.</div></div>
+    <div class="stat-box ${old?'danger':''}"><div class="val">${old}</div><div class="lbl">Старых</div></div>`;
+  const probs=[];
+  entries.forEach(e=>{
+    const s=checkStrength(e.password);
+    if(s.score<=3||e.password.length<12)probs.push({name:e.site,reason:`Слабый (${s.label})`});
+    if(cnt[e.password]>1)probs.push({name:e.site,reason:'Дубликат'});
+    if(e.updated&&(Date.now()-e.updated)>180*86400000)probs.push({name:e.site,reason:'>180 дней'});
+  });
+  document.getElementById('auditList').innerHTML=probs.length?
+    probs.map(p=>`<div class="audit-item"><span class="name">${esc(p.name)}</span><span class="reason">${p.reason}</span></div>`).join(''):
+    '<div style="text-align:center;padding:20px;color:var(--accent)">✅ Всё в порядке</div>';
+  document.getElementById('leakResults').innerHTML='';
+  openModal('auditModal');
+}
+
+async function sha1Hex(t){
+  const b=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(t));
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();
+}
+async function checkLeaks(){
+  const c=document.getElementById('leakResults');
+  if(!entries.length){c.innerHTML='<p style="color:var(--muted);font-size:12px">Нет записей</p>';return}
+  c.innerHTML='<p style="color:var(--muted);font-size:12px">🔍 Проверяю...</p>';
+  const res=[];
+  for(const e of entries){
+    try{
+      const h=await sha1Hex(e.password);
+      const pfx=h.substring(0,5),sfx=h.substring(5);
+      const r=await fetch(`https://api.pwnedpasswords.com/range/${pfx}`);
+      const txt=await r.text();
+      let cnt=0;
+      for(const line of txt.split('\n')){
+        const [s,n]=line.split(':');
+        if(s===sfx){cnt=parseInt(n);break}
+      }
+      res.push({site:e.site,count:cnt});
+    }catch(err){res.push({site:e.site,count:-1})}
+  }
+  c.innerHTML=res.map(r=>{
+    if(r.count===-1)return `<div class="audit-item"><span class="name">${esc(r.site)}</span><span class="pwned-badge">⚠️ ошибка</span></div>`;
+    if(r.count===0)return `<div class="audit-item"><span class="name">${esc(r.site)}</span><span class="pwned-badge safe">✓ безопасен</span></div>`;
+    return `<div class="audit-item"><span class="name">${esc(r.site)}</span><span class="pwned-badge pwned">⚠️ ${r.count}</span></div>`;
+  }).join('');
+}
+
+// ============ PIN ============
+let pinCallback=null;
 function promptPin(cb){
   if(!vaultData.has2FA){cb(null);return}
   if(pinCache){cb(pinCache);return}
-  pinPromptCallback=cb;
+  pinCallback=cb;
   document.getElementById('pinInput').value='';
   openModal('pinModal');
   setTimeout(()=>document.getElementById('pinInput').focus(),100);
@@ -811,13 +1117,13 @@ async function verifyPin(){
   const pin=document.getElementById('pinInput').value.trim();
   if(!pin)return;
   try{
-    const key2=await deriveKey(pin,b64ToBuf(vaultData.pinSalt));
-    const test=await decryptData(key2,vaultData.pinIv,vaultData.pinCt);
-    if(test!=='OK')throw new Error('wrong');
+    const k=await deriveKey(pin,b64ToBuf(vaultData.pinSalt));
+    const t=await decData(k,vaultData.pinIv,vaultData.pinCt);
+    if(t!=='OK')throw new Error();
     pinCache=pin;
     closeModal('pinModal');
-    const cb=pinPromptCallback;
-    pinPromptCallback=null;
+    const cb=pinCallback;
+    pinCallback=null;
     if(cb)cb(pin);
   }catch(e){
     toast('❌ Неверный PIN','danger');
@@ -827,336 +1133,136 @@ async function verifyPin(){
 async function setupPin(){
   const pin=document.getElementById('newPin').value.trim();
   if(!/^\d{4,8}$/.test(pin)){toast('PIN 4-8 цифр','danger');return}
-  const pinSalt=crypto.getRandomValues(new Uint8Array(16));
-  const key2=await deriveKey(pin,pinSalt);
-  const {iv,ct}=await encryptData(key2,'OK');
-  saveVaultData({...vaultData,has2FA:true,pinSalt:bufToB64(pinSalt),pinIv:iv,pinCt:ct});
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const k=await deriveKey(pin,salt);
+  const {iv,ct}=await encData(k,'OK');
+  saveVaultData({...vaultData,has2FA:true,pinSalt:bufToB64(salt),pinIv:iv,pinCt:ct});
   document.getElementById('newPin').value='';
   renderPinStatus();
   toast('✅ PIN установлен');
 }
 function renderPinStatus(){
   const s=document.getElementById('pinStatus');
-  const setup=document.getElementById('pinSetup');
+  const su=document.getElementById('pinSetup');
   if(vaultData.has2FA){
     s.innerHTML='<div style="padding:14px;background:var(--panel2);border-radius:10px;text-align:center"><div style="font-size:32px;margin-bottom:8px">🔐</div><div style="color:var(--accent);font-weight:700">PIN активен</div></div>';
-    setup.classList.add('hidden');
+    su.classList.add('hidden');
   }else{
     s.innerHTML='<div style="padding:14px;background:var(--panel2);border-radius:10px;text-align:center;color:var(--muted);font-size:12px">PIN не установлен</div>';
-    setup.classList.remove('hidden');
+    su.classList.remove('hidden');
   }
 }
 
-// ================= ГЕНЕРАТОР =================
-function updateGenLen(){
-  document.getElementById('genLenVal').textContent=document.getElementById('genLen').value;
-  generatePassword();
-}
-function generatePassword(){
-  const len=parseInt(document.getElementById('genLen').value);
-  let chars='';
-  if(document.getElementById('genUpper').checked)chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  if(document.getElementById('genLower').checked)chars+='abcdefghijklmnopqrstuvwxyz';
-  if(document.getElementById('genDigits').checked)chars+='0123456789';
-  if(document.getElementById('genSymbols').checked)chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';
-  if(!chars)chars='abcdefghijklmnopqrstuvwxyz0123456789';
-  let result='';
-  const arr=new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  for(let i=0;i<len;i++)result+=chars[arr[i]%chars.length];
-  document.getElementById('genResult').value=result;
-}
-async function copyGenResult(){
-  const v=document.getElementById('genResult').value;
-  if(!v)return;
-  await doCopy(v);
-}
-function quickGen(){
-  const len=16;
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=';
-  let result='';
-  const arr=new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  for(let i=0;i<len;i++)result+=chars[arr[i]%chars.length];
-  document.getElementById('fPassword').value=result;
-  updateStrength('fPassword','fPasswordStr');
-}
-
-// ================= АУДИТ =================
-function openAudit(){
-  const total=entries.length;
-  const weak=entries.filter(e=>checkStrength(e.password).score<=3&&e.password.length<12).length;
-  const pwdCount={};
-  entries.forEach(e=>pwdCount[e.password]=(pwdCount[e.password]||0)+1);
-  const dup=entries.filter(e=>pwdCount[e.password]>1).length;
-  const old=entries.filter(e=>e.updated&&(Date.now()-e.updated)>180*86400000).length;
-  document.getElementById('auditStats').innerHTML=`
-    <div class="stat-box"><div class="val">${total}</div><div class="lbl">Всего</div></div>
-    <div class="stat-box ${weak?'warn':''}"><div class="val">${weak}</div><div class="lbl">Слабых</div></div>
-    <div class="stat-box ${dup?'warn':''}"><div class="val">${dup}</div><div class="lbl">Дублик.</div></div>
-    <div class="stat-box ${old?'danger':''}"><div class="val">${old}</div><div class="lbl">Старых</div></div>`;
-  const problems=[];
-  entries.forEach(e=>{
-    const s=checkStrength(e.password);
-    if(s.score<=3||e.password.length<12)problems.push({name:e.site,reason:`Слабый (${s.label})`});
-    if(pwdCount[e.password]>1)problems.push({name:e.site,reason:'Дубликат'});
-    if(e.updated&&(Date.now()-e.updated)>180*86400000)problems.push({name:e.site,reason:'>180 дней'});
-  });
-  if(!problems.length){
-    document.getElementById('auditList').innerHTML='<div style="text-align:center;padding:20px;color:var(--accent)">✅ Всё в порядке</div>';
-  }else{
-    document.getElementById('auditList').innerHTML=problems.map(p=>`
-      <div class="audit-item"><span class="name">${escapeHtml(p.name)}</span><span class="reason">${p.reason}</span></div>
-    `).join('');
-  }
-  document.getElementById('leakResults').innerHTML='';
-  openModal('auditModal');
-}
-
-// ================= ПРОВЕРКА УТЕЧЕК (HIBP k-anonymity) =================
-async function sha1Hex(text){
-  const buf=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();
-}
-async function checkLeaks(){
-  const c=document.getElementById('leakResults');
-  if(!entries.length){c.innerHTML='<p style="color:var(--muted);font-size:12px">Нет записей</p>';return}
-  c.innerHTML='<p style="color:var(--muted);font-size:12px">🔍 Проверяю...</p>';
-  const results=[];
-  for(const e of entries){
-    try{
-      const hash=await sha1Hex(e.password);
-      const prefix=hash.substring(0,5);
-      const suffix=hash.substring(5);
-      const res=await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
-      const text=await res.text();
-      const lines=text.split('\n');
-      let count=0;
-      for(const line of lines){
-        const [suf,cnt]=line.split(':');
-        if(suf===suffix){count=parseInt(cnt);break}
-      }
-      results.push({site:e.site,count});
-    }catch(err){
-      results.push({site:e.site,count:-1});
-    }
-  }
-  c.innerHTML=results.map(r=>{
-    if(r.count===-1)return `<div class="audit-item"><span class="name">${escapeHtml(r.site)}</span><span class="pwned-badge">⚠️ ошибка</span></div>`;
-    if(r.count===0)return `<div class="audit-item"><span class="name">${escapeHtml(r.site)}</span><span class="pwned-badge safe">✓ безопасен</span></div>`;
-    return `<div class="audit-item"><span class="name">${escapeHtml(r.site)}</span><span class="pwned-badge pwned">⚠️ найден ${r.count} раз</span></div>`;
-  }).join('');
-}
-
-// ================= СМЕНА ПАРОЛЯ =================
+// ============ CHANGE MASTER PASSWORD ============
 async function changeMasterPassword(){
   const oldP=document.getElementById('oldMasterPass').value;
   const newP=document.getElementById('newMasterPass').value;
   const newP2=document.getElementById('newMasterPass2').value;
   if(!vaultData)return;
   try{
-    const oldKey=await deriveKey(oldP,b64ToBuf(vaultData.salt));
-    await decryptData(oldKey,vaultData.iv,vaultData.ct);
+    const ok=await deriveKey(oldP,b64ToBuf(vaultData.salt));
+    await decData(ok,vaultData.iv,vaultData.ct);
   }catch(e){toast('❌ Старый неверный','danger');return}
-  if(newP.length<8){toast('Минимум 8 символов','danger');return}
-  if(newP!==newP2){toast('Пароли не совпадают','danger');return}
-  const newSalt=crypto.getRandomValues(new Uint8Array(16));
-  const newKey=await deriveKey(newP,newSalt);
-  const {iv,ct}=await encryptData(newKey,JSON.stringify(entries));
-  const newData={...vaultData,salt:bufToB64(newSalt),iv,ct};
+  if(newP.length<8){toast('Минимум 8','danger');return}
+  if(newP!==newP2){toast('Не совпадают','danger');return}
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const nk=await deriveKey(newP,salt);
+  const {iv,ct}=await encData(nk,JSON.stringify(entries));
+  const nd={...vaultData,salt:bufToB64(salt),iv,ct};
   if(vaultData.has2FA){
-    delete newData.has2FA;delete newData.pinSalt;delete newData.pinIv;delete newData.pinCt;
+    delete nd.has2FA;delete nd.pinSalt;delete nd.pinIv;delete nd.pinCt;
     pinCache=null;
   }
-  saveVaultData(newData);
-  masterKey=newKey;
+  saveVaultData(nd);
+  masterKey=nk;
   document.getElementById('oldMasterPass').value='';
   document.getElementById('newMasterPass').value='';
   document.getElementById('newMasterPass2').value='';
   toast('✅ Пароль изменён');
-  if(vaultData.has2FA)renderPinStatus();
+  renderPinStatus();
 }
 
-// ================= ЭКСПОРТ / ИМПОРТ =================
+// ============ EXPORT / IMPORT ============
 function exportVault(){
   if(!vaultData)return;
-  const blob=new Blob([JSON.stringify(vaultData)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
+  const b=new Blob([JSON.stringify(vaultData)],{type:'application/json'});
+  const u=URL.createObjectURL(b);
   const a=document.createElement('a');
-  a.href=url;
+  a.href=u;
   a.download=`securevault-${new Date().toISOString().slice(0,10)}.vault`;
   a.click();
-  URL.revokeObjectURL(url);
-  toast('📥 Бэкап сохранён');
+  URL.revokeObjectURL(u);
+  toast('📥 Сохранено');
 }
 
-// CSV Импорт
-function parseCSV(text){
-  const rows=[];
-  let cur='',row=[],inQ=false;
-  for(let i=0;i<text.length;i++){
-    const c=text[i];
-    if(inQ){
-      if(c==='"'){
-        if(text[i+1]==='"'){cur+='"';i++}
-        else inQ=false;
-      }else cur+=c;
+function parseCSV(t){
+  const r=[];let cur='',row=[],q=false;
+  for(let i=0;i<t.length;i++){
+    const c=t[i];
+    if(q){
+      if(c==='"'){if(t[i+1]==='"'){cur+='"';i++}else q=false}
+      else cur+=c;
     }else{
-      if(c==='"')inQ=true;
+      if(c==='"')q=true;
       else if(c===','){row.push(cur);cur=''}
-      else if(c==='\n'||c==='\r'){
-        if(cur||row.length){row.push(cur);rows.push(row);row=[];cur=''}
-      }else cur+=c;
+      else if(c==='\n'||c==='\r'){if(cur||row.length){row.push(cur);r.push(row);row=[];cur=''}}
+      else cur+=c;
     }
   }
-  if(cur||row.length){row.push(cur);rows.push(row)}
-  return rows;
+  if(cur||row.length){row.push(cur);r.push(row)}
+  return r;
 }
 
 async function importCSV(ev){
-  const file=ev.target.files[0];
-  if(!file)return;
+  const f=ev.target.files[0];
+  if(!f)return;
   try{
-    const text=await file.text();
-    const rows=parseCSV(text);
+    const t=await f.text();
+    const rows=parseCSV(t);
     if(rows.length<2){toast('Пустой файл','danger');return}
-    const header=rows[0].map(h=>h.toLowerCase().trim());
-    const fmt=document.getElementById('importFormat').value;
-    
-    const getIdx=(names)=>{
-      for(const n of names){
-        const i=header.indexOf(n);
-        if(i>=0)return i;
-      }
-      return -1;
-    };
-    
-    let siteIdx,loginIdx,pwdIdx,notesIdx;
-    if(fmt==='chrome'||fmt==='auto'){
-      siteIdx=getIdx(['name','url','site']);
-      loginIdx=getIdx(['username','login']);
-      pwdIdx=getIdx(['password']);
-      notesIdx=getIdx(['note','notes']);
-    }
-    if(fmt==='firefox'||(fmt==='auto'&&siteIdx<0)){
-      siteIdx=getIdx(['url','name']);
-      loginIdx=getIdx(['username','login']);
-      pwdIdx=getIdx(['password']);
-      notesIdx=getIdx(['notes','note']);
-    }
-    if(fmt==='bitwarden'){
-      siteIdx=getIdx(['name','login_uri']);
-      loginIdx=getIdx(['login_username','username']);
-      pwdIdx=getIdx(['login_password','password']);
-      notesIdx=getIdx(['notes','note']);
-    }
-    
-    if(siteIdx<0||loginIdx<0||pwdIdx<0){
-      toast('Не удалось определить колонки','danger');return;
-    }
-    
-    let added=0;
+    const hdr=rows[0].map(h=>h.toLowerCase().trim());
+    const idx=(names)=>{for(const n of names){const i=hdr.indexOf(n);if(i>=0)return i}return -1};
+    const siteI=idx(['name','url','site','login_uri']);
+    const loginI=idx(['username','login','login_username']);
+    const pwdI=idx(['password','login_password']);
+    const notesI=idx(['notes','note']);
+    if(siteI<0||loginI<0||pwdI<0){toast('Не найдены колонки','danger');return}
+    let n=0;
     for(let i=1;i<rows.length;i++){
       const r=rows[i];
-      if(!r||!r[siteIdx]||!r[loginIdx]||!r[pwdIdx])continue;
-      entries.push({
-        site:r[siteIdx],
-        login:r[loginIdx],
-        password:r[pwdIdx],
-        category:'other',
-        notes:notesIdx>=0?(r[notesIdx]||''):'',
-        critical:false,
-        customFields:[],
-        history:[],
-        updated:Date.now()
-      });
-      added++;
+      if(!r||!r[siteI]||!r[loginI]||!r[pwdI])continue;
+      entries.push({site:r[siteI],login:r[loginI],password:r[pwdI],category:'other',notes:notesI>=0?(r[notesI]||''):'',critical:false,customFields:[],history:[],updated:Date.now()});
+      n++;
     }
     await persistEntries();
     renderEntries();
-    toast(`✅ Импортировано: ${added}`);
-  }catch(e){
-    toast('❌ Ошибка импорта','danger');
-  }
+    toast(`✅ Импортировано: ${n}`);
+  }catch(e){toast('❌ Ошибка','danger')}
   ev.target.value='';
 }
 
-// ================= QR-БЭКАП =================
-let qrCanvas=null;
+// ============ QR ============
 async function generateQRBackup(){
   const c=document.getElementById('qrContainer');
   if(!vaultData){toast('Нет данных','danger');return}
-  // QR содержит JSON с зашифрованным хранилищем
-  const payload=JSON.stringify({v:vaultData.version,s:vaultData.salt,i:vaultData.iv,c:vaultData.ct});
-  c.innerHTML='<p style="color:var(--muted);font-size:11px">Генерирую...</p>';
-  
-  // Простая QR-генерация через canvas (мини-версия)
-  const qr=generateQRMatrix(payload);
-  if(!qr){c.innerHTML='<p style="color:var(--danger);font-size:11px">Данные слишком велики для QR. Используйте экспорт .vault</p>';return}
-  
-  const size=Math.min(320,window.innerWidth-60);
-  const qrSize=qr.length;
-  const cellSize=Math.floor(size/qrSize);
+  // Используем упрощённый QR-код — рекомендуем .vault для больших данных
+  c.innerHTML='<p style="color:var(--warn);font-size:12px">⚠️ Для полного бэкапа используйте экспорт .vault. QR-код хранит только зашифрованный salt+iv (для восстановления нужен мастер-пароль).</p>';
+  const payload=`SVQR:${vaultData.salt}`;
+  // Простая визуализация
   const canvas=document.createElement('canvas');
-  canvas.width=cellSize*qrSize;
-  canvas.height=cellSize*qrSize;
+  canvas.width=200;canvas.height=200;
   const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,200,200);
   ctx.fillStyle='#000';
-  for(let y=0;y<qrSize;y++)for(let x=0;x<qrSize;x++){
-    if(qr[y][x])ctx.fillRect(x*cellSize,y*cellSize,cellSize,cellSize);
+  const seed=payload.split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  for(let y=0;y<25;y++)for(let x=0;x<25;x++){
+    if(((x*7+y*13+seed*3)%3)===0)ctx.fillRect(x*8,y*8,8,8);
   }
-  c.innerHTML='';
   c.appendChild(canvas);
-  qrCanvas=canvas;
-  document.getElementById('printQRBtn').style.display='block';
-}
-function printQR(){
-  if(!qrCanvas)return;
-  const w=window.open('','_blank');
-  w.document.write(`<html><head><title>SecureVault QR Backup</title><style>body{text-align:center;font-family:sans-serif;padding:40px}img{max-width:100%;margin:20px 0}h1{color:#16a34a}p{color:#666;font-size:12px}</style></head><body>`);
-  w.document.write('<h1>🔐 SecureVault Backup</h1>');
-  w.document.write(`<img src="${qrCanvas.toDataURL()}">`);
-  w.document.write('<p>Зашифрованный QR-код. Для восстановления импортируйте его содержимое в SecureVault.</p>');
-  w.document.write('<p>⚠️ Никому не показывайте этот QR без необходимости.</p>');
-  w.document.write('</body></html>');
-  w.document.close();
-  setTimeout(()=>w.print(),500);
+  c.insertAdjacentHTML('beforeend','<p style="font-size:11px;color:var(--muted);margin-top:8px">Это НЕ рабочий QR. Используйте .vault</p>');
 }
 
-// Мини-QR генератор (упрощённый, версия 4-6)
-// Для полной корректности рекомендую использовать библиотеку qrcode.js
-function generateQRMatrix(text){
-  // Заглушка: возвращает null если текст слишком длинный
-  // В реальном проекте здесь должен быть QR-энкодер
-  if(text.length>500)return null;
-  // Возвращаем псевдо-матрицу (для демо) — в реальности нужно использовать библиотеку
-  // Пользователь должен добавить qrcode.min.js из CDN
-  const size=25;
-  const m=Array(size).fill(0).map(()=>Array(size).fill(0));
-  // Маркеры
-  const addFinder=(ox,oy)=>{
-    for(let y=0;y<7;y++)for(let x=0;x<7;x++){
-      if(y===0||y===6||x===0||x===6)m[oy+y][ox+x]=1;
-      else if(y>=2&&y<=4&&x>=2&&x<=4)m[oy+y][ox+x]=1;
-    }
-  };
-  addFinder(0,0);addFinder(size-7,0);addFinder(0,size-7);
-  // Случайные данные (в реальности — из QR-энкодера)
-  const hash=(s)=>{
-    let h=0;
-    for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;
-    return Math.abs(h);
-  };
-  let seed=hash(text);
-  for(let y=8;y<size-8;y++)for(let x=8;x<size-8;x++){
-    seed=(seed*1103515245+12345)|0;
-    if((seed&0x40000000)===0)m[y][x]=1;
-  }
-  return m;
-}
-
-// ================= НАСТРОЙКИ =================
+// ============ SETTINGS TABS ============
 function switchSettingsTab(tab,btn){
   document.querySelectorAll('#settingsModal .tabs button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -1164,18 +1270,17 @@ function switchSettingsTab(tab,btn){
     document.getElementById('setTab-'+t).classList.toggle('hidden',t!==tab);
   });
   if(tab==='pin')renderPinStatus();
-  if(tab==='qr')document.getElementById('printQRBtn').style.display=qrCanvas?'block':'none';
 }
 
 function wipeVault(){
-  if(!confirm('УДАЛИТЬ ВСЁ? Это необратимо!'))return;
-  if(!confirm('Точно уверен?'))return;
+  if(!confirm('УДАЛИТЬ ВСЁ?'))return;
+  if(!confirm('Точно?'))return;
   localStorage.removeItem(STORAGE_KEY);
   lockVault();
   toast('🗑️ Удалено');
 }
 
-// ================= SYNC =================
+// ============ SYNC ============
 if(channel){
   channel.onmessage=e=>{
     if(e.data?.type==='lock'&&document.getElementById('vaultScreen').classList.contains('active')){
@@ -1184,7 +1289,7 @@ if(channel){
   };
 }
 
-// ================= INIT =================
+// ============ INIT ============
 function init(){
   initTheme();
   const data=loadVaultData();
@@ -1192,10 +1297,10 @@ function init(){
   else{vaultData=data;switchLockMode('unlock')}
   document.getElementById('unlockPass').addEventListener('keypress',e=>{if(e.key==='Enter')unlockVault()});
   document.getElementById('createPass2').addEventListener('keypress',e=>{if(e.key==='Enter')createVault()});
-  const genModal=document.getElementById('generatorModal');
+  const gm=document.getElementById('generatorModal');
   new MutationObserver(()=>{
-    if(genModal.classList.contains('active')&&!document.getElementById('genResult').value)generatePassword();
-  }).observe(genModal,{attributes:true,attributeFilter:['class']});
+    if(gm.classList.contains('active')&&!document.getElementById('genResult').value)generatePassword();
+  }).observe(gm,{attributes:true,attributeFilter:['class']});
 }
 init();
 </script>
