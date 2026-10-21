@@ -3,88 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>3D Симулятор Рыбалки и Рыбного Ларька</title>
+    <title>3D Ocean Fishing & Market Simulator AAA</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; touch-action: none; }
-        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #000; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
         #canvas-container { width: 100%; height: 100%; position: absolute; left: 0; top: 0; z-index: 1; }
-        
-        /* UI Overlay */
-        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; }
-        .interactive { pointer-events: auto; }
-
-        /* HUD Top Bar */
-        .top-hud { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .hud-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 8px 16px; border-radius: 12px; color: #fff; display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-        
-        /* Crosshair */
-        #crosshair { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; transform: translate(-50%, -50%); border: 2px solid rgba(255,255,255,0.9); border-radius: 50%; pointer-events: none; }
-
-        /* Order Panel */
-        #order-panel { position: absolute; top: 70px; right: 15px; width: 290px; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border: 2px solid #3b82f6; border-radius: 14px; padding: 14px; color: white; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        #order-panel h3 { color: #60a5fa; margin-bottom: 6px; font-size: 16px; }
-        #order-panel p { font-size: 13px; line-height: 1.4; color: #cbd5e1; }
-
-        /* Prompts & Minigame */
-        #action-prompt { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); border: 1px solid #60a5fa; color: white; padding: 10px 20px; border-radius: 25px; font-weight: bold; font-size: 15px; display: none; }
-        
-        #fishing-minigame { position: absolute; bottom: 160px; left: 50%; transform: translateX(-50%); width: 280px; background: rgba(15,23,42,0.9); border: 2px solid #3b82f6; border-radius: 12px; padding: 12px; display: none; flex-direction: column; gap: 8px; color: white; text-align: center; font-weight: bold; }
-        .tension-bar-bg { width: 100%; height: 16px; background: #1e293b; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
-        #tension-bar-fill { width: 30%; height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.1s linear; }
-
-        /* Butchery Station Modal */
-        #station-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 600px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); border-radius: 18px; padding: 20px; color: white; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.8); pointer-events: auto; }
-        .station-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; }
-        .station-body { display: flex; flex-direction: column; gap: 12px; align-items: center; }
-        #cutting-board-canvas { background: #3b2319; border: 4px solid #5c3a21; border-radius: 10px; cursor: crosshair; touch-action: none; }
-        .btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .btn:active { transform: scale(0.98); }
-
-        /* Mobile Controls */
-        #joystick-container { position: absolute; bottom: 30px; left: 30px; width: 110px; height: 110px; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; display: none; pointer-events: auto; }
-        #joystick-handle { position: absolute; top: 30px; left: 30px; width: 46px; height: 46px; background: rgba(59, 130, 246, 0.85); border-radius: 50%; }
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
+        .top-hud { display: flex; gap: 15px; align-items: center; }
+        .hud-card { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 14px; color: #fff; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+        #crosshair { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid rgba(255,255,255,0.9); border-radius: 50%; pointer-events: none; }
+        #action-prompt { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); border: 2px solid #3b82f6; color: white; padding: 12px 28px; border-radius: 30px; font-weight: bold; font-size: 16px; display: none; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        #fishing-bar-container { position: absolute; bottom: 180px; left: 50%; transform: translateX(-50%); width: 300px; background: rgba(15,23,42,0.9); border: 2px solid #3b82f6; border-radius: 12px; padding: 12px; display: none; flex-direction: column; gap: 8px; color: white; text-align: center; font-weight: bold; }
+        .bar-bg { width: 100%; height: 18px; background: #1e293b; border-radius: 9px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        #tension-bar { width: 30%; height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.05s linear; }
+        #toast-container { position: absolute; top: 80px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 100; pointer-events: none; }
+        .toast { background: rgba(15, 23, 42, 0.9); border-left: 4px solid #3b82f6; color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: slideIn 0.3s forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        #station-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 650px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 25px; color: white; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.8); pointer-events: auto; }
+        .station-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 15px; }
+        .btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
+        #joystick-container { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; display: none; pointer-events: auto; }
+        #joystick-handle { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; background: rgba(59, 130, 246, 0.8); border-radius: 50%; }
         #touch-look-zone { position: absolute; top: 0; right: 0; width: 50%; height: 100%; pointer-events: auto; display: none; }
-        #mobile-action-btn { position: absolute; bottom: 35px; right: 35px; width: 75px; height: 75px; background: #2563eb; border-radius: 50%; display: none; pointer-events: auto; color: white; font-weight: bold; border: 2px solid #60a5fa; font-size: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-
-        /* Start Overlay */
-        #start-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; gap: 20px; padding: 20px; text-align: center; }
-        #start-overlay h1 { font-size: 32px; color: #60a5fa; }
+        #mobile-action-btn { position: absolute; bottom: 40px; right: 40px; width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: none; pointer-events: auto; color: white; font-weight: bold; border: 2px solid #60a5fa; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        #start-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; gap: 20px; text-align: center; padding: 20px; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
     <div id="start-overlay">
-        <h1>3D РЫБАЛКА & РЫБНЫЙ ЛАРЕК</h1>
-        <p style="color:#94a3b8; max-width: 400px;">Ловите рыбу в море, разделывайте ее на свежее филе и продавайте клиентам в своем ларьке!</p>
-        <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-            <button class="btn" onclick="startGame('pc')">💻 ПК (WASD / ЦФЫВ + Мышь)</button>
+        <h1 style="font-size: 36px; color: #60a5fa;">3D OCEAN FISHING & MARKET SIMULATOR</h1>
+        <p style="color: #94a3b8; max-width: 450px;">Ловите 3D-рыбу в океане, разделывайте ее ножом на столе, взвешивайте и обслуживайте очередь покупателей!</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <button class="btn" onclick="startGame('pc')">💻 ПК (WASD/ЦФЫВ + Мышь)</button>
             <button class="btn" style="background: linear-gradient(135deg, #059669, #047857);" onclick="startGame('mobile')">📱 Телефон (Джойстик)</button>
         </div>
     </div>
 
+    <div id="toast-container"></div>
     <div id="canvas-container"></div>
 
     <div id="ui-layer">
         <div class="top-hud">
-            <div class="hud-card">💰 Монеты: <span id="money-display" style="color:#f59e0b;">100</span></div>
+            <div class="hud-card">💰 Монеты: <span id="money-display" style="color:#f59e0b;">150</span></div>
             <div class="hud-card">🐟 Садок: <span id="fish-count">0/5</span></div>
+            <div class="hud-card" class="interactive" style="cursor:pointer;" onclick="openShop()">🛒 Магазин Скинов</div>
         </div>
 
         <div id="crosshair"></div>
         <div id="action-prompt">Нажмите [E] для взаимодействия</div>
 
-        <div id="fishing-minigame">
-            <div>Удерживайте Клик/Экран для подтягивания!</div>
-            <div class="tension-bar-bg"><div id="tension-bar-fill"></div></div>
+        <div id="fishing-bar-container">
+            <div>Зажмите Клик/Экран для подтягивания лески!</div>
+            <div class="bar-bg"><div id="tension-bar"></div></div>
         </div>
 
-        <div id="order-panel">
-            <h3>Заказ Покупателя</h3>
-            <p id="order-text">Ожидаем клиента...</p>
-        </div>
-
-        <!-- Сенсорные зоны -->
         <div id="joystick-container"><div id="joystick-handle"></div></div>
         <div id="touch-look-zone"></div>
         <button id="mobile-action-btn">ДЕЙСТВИЕ</button>
@@ -93,40 +68,44 @@
     <!-- Модальное окно Разделки -->
     <div id="station-ui">
         <div class="station-header">
-            <h2>Разделочный Стол и Весы</h2>
-            <button class="btn" style="background:#ef4444; padding:5px 12px;" onclick="closeStation()">X</button>
+            <h2>🔪 Разделочный Стол и 3D-Весы</h2>
+            <button class="btn" style="background:#ef4444; padding:6px 12px;" onclick="closeStation()">X</button>
         </div>
-        <div class="station-body">
-            <p style="font-size:13px; color:#cbd5e1;">Проведите пальцем/мышью поперек рыбы для нарезки!</p>
-            <canvas id="cutting-board-canvas" width="360" height="180"></canvas>
-            <div style="display:flex; gap:15px; width:100%; justify-content:space-between; align-items:center;">
-                <div>Нарезано: <span id="slices-count" style="font-weight:bold; color:#10b981;">0</span>/3 кусков</div>
-                <div>Вес: <span id="scale-weight" style="font-weight:bold; color:#f59e0b;">0.00</span> кг</div>
+        <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+            <div id="3d-butchery-view" style="width:320px; height:220px; background:#1e293b; border-radius:12px; border:2px solid #475569;"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+                <div>Порода: <b id="butchery-fish-name" style="color:#60a5fa;">Лосось</b></div>
+                <div>Масса: <b id="butchery-fish-weight" style="color:#10b981;">0.00 кг</b></div>
+                <div>Нарезано кусочков: <b id="slices-count" style="color:#f59e0b;">0/3</b></div>
+                <button class="btn" onclick="sliceCurrentFish()">Провести Ножом [Разрез]</button>
+                <button class="btn" style="background:linear-gradient(135deg, #059669, #047857);" onclick="packAndDeliver()">Завернуть в Пакет и Передать Клиенту</button>
             </div>
-            <button class="btn" style="width:100%;" onclick="packAndServe()">Завернуть в Пакет и Отдать Клиенту</button>
         </div>
     </div>
 
     <script>
-        // Глобальное состояние
-        let scene, camera, renderer;
+        let scene, camera, renderer, audioCtx;
         let controlMode = 'pc';
-        let money = 100, inventory = [];
-        let currentOrder = null;
-        let isStationOpen = false;
-        let isFishing = false, fishingTension = 30, isReeling = false;
+        let money = 150, inventory = [];
+        let isStationOpen = false, isFishing = false, tension = 30, isReeling = false;
+        let currentSlices = 0;
 
-        // Позиция и вращение игрока
         const player = { pos: new THREE.Vector3(0, 1.7, 5), speed: 0.12 };
         let yaw = 0, pitch = 0;
         const keys = { forward: false, backward: false, left: false, right: false };
 
-        // Звуковой движок (Web Audio API)
-        let audioCtx = null;
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = msg;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         function playSound(type) {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -134,21 +113,21 @@
 
             if (type === 'splash') {
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+                osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.3);
                 gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             } else if (type === 'cut') {
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.12);
             } else if (type === 'coin') {
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.2);
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.2);
                 gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.2);
@@ -158,7 +137,6 @@
         function startGame(mode) {
             controlMode = mode;
             document.getElementById('start-overlay').style.display = 'none';
-            
             if (mode === 'mobile') {
                 document.getElementById('joystick-container').style.display = 'block';
                 document.getElementById('touch-look-zone').style.display = 'block';
@@ -167,18 +145,17 @@
             } else {
                 setupPCControls();
             }
-
             init3D();
             setupKeyboard();
             animate();
-            spawnCustomerOrder();
+            showToast("Добро пожаловать в 3D Симулятор!");
         }
 
         function init3D() {
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x38bdf8);
-            scene.fog = new THREE.FogExp2(0x38bdf8, 0.012);
+            scene.fog = new THREE.FogExp2(0x38bdf8, 0.01);
 
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.copy(player.pos);
@@ -188,61 +165,51 @@
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Свет
             const sun = new THREE.DirectionalLight(0xfffbeb, 1.3);
             sun.position.set(40, 60, 40);
             sun.castShadow = true;
             scene.add(sun);
             scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-            // Море (Анимированная вода)
+            // Вода с анимацией
             const waterGeo = new THREE.PlaneGeometry(300, 300, 32, 32);
             const waterMat = new THREE.MeshPhongMaterial({ color: 0x0284c7, shininess: 90, transparent: true, opacity: 0.85 });
             const water = new THREE.Mesh(waterGeo, waterMat);
             water.rotation.x = -Math.PI / 2;
-            water.position.y = 0;
             scene.add(water);
 
-            // Остров
-            const islandGeo = new THREE.BoxGeometry(45, 2, 45);
-            const islandMat = new THREE.MeshLambertMaterial({ color: 0x15803d });
-            const island = new THREE.Mesh(islandGeo, islandMat);
+            // Остров & Пирс
+            const island = new THREE.Mesh(new THREE.BoxGeometry(45, 2, 45), new THREE.MeshLambertMaterial({ color: 0x15803d }));
             island.position.set(0, -0.9, 0);
             scene.add(island);
 
-            // Деревянный Пирс
-            const pierGeo = new THREE.BoxGeometry(6, 0.4, 16);
-            const pierMat = new THREE.MeshLambertMaterial({ color: 0x78350f });
-            const pier = new THREE.Mesh(pierGeo, pierMat);
+            const pier = new THREE.Mesh(new THREE.BoxGeometry(6, 0.4, 16), new THREE.MeshLambertMaterial({ color: 0x78350f }));
             pier.position.set(0, 0.2, -15);
             scene.add(pier);
 
-            // Рыбный Ларек
+            // 3D Ларек
+            const stallGroup = new THREE.Group();
             const counter = new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 1.6), new THREE.MeshLambertMaterial({ color: 0x92400e }));
             counter.position.set(6, 0.6, 0);
-            scene.add(counter);
-
             const roof = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.2, 2.2), new THREE.MeshLambertMaterial({ color: 0xd97706 }));
             roof.position.set(6, 2.5, 0);
-            scene.add(roof);
+            stallGroup.add(counter, roof);
+            scene.add(stallGroup);
 
             window.addEventListener('resize', onWindowResize);
         }
 
         function setupKeyboard() {
             window.addEventListener('keydown', (e) => {
-                const code = e.code;
-                const key = e.key.toLowerCase();
+                const code = e.code, key = e.key.toLowerCase();
                 if (code === 'KeyW' || key === 'ц') keys.forward = true;
                 if (code === 'KeyS' || key === 'ы') keys.backward = true;
                 if (code === 'KeyA' || key === 'ф') keys.left = true;
                 if (code === 'KeyD' || key === 'в') keys.right = true;
-                if (code === 'KeyE' || key === 'у') handleInteraction();
+                if (code === 'KeyE' || key === 'у') interact();
             });
-
             window.addEventListener('keyup', (e) => {
-                const code = e.code;
-                const key = e.key.toLowerCase();
+                const code = e.code, key = e.key.toLowerCase();
                 if (code === 'KeyW' || key === 'ц') keys.forward = false;
                 if (code === 'KeyS' || key === 'ы') keys.backward = false;
                 if (code === 'KeyA' || key === 'ф') keys.left = false;
@@ -251,10 +218,7 @@
         }
 
         function setupPCControls() {
-            document.body.addEventListener('click', () => {
-                if (!isStationOpen) document.body.requestPointerLock();
-            });
-
+            document.body.addEventListener('click', () => { if (!isStationOpen) document.body.requestPointerLock(); });
             document.addEventListener('mousemove', (e) => {
                 if (document.pointerLockElement === document.body) {
                     yaw -= e.movementX * 0.0022;
@@ -262,82 +226,15 @@
                     pitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, pitch));
                 }
             });
-
             window.addEventListener('mousedown', () => { if (isFishing) isReeling = true; });
             window.addEventListener('mouseup', () => { isReeling = false; });
         }
 
         function setupMobileControls() {
-            const joystick = document.getElementById('joystick-container');
-            const handle = document.getElementById('joystick-handle');
-            const lookZone = document.getElementById('touch-look-zone');
-            let joystickTouchId = null, lookTouchId = null;
-            let lastTouchX = 0, lastTouchY = 0;
-
-            joystick.addEventListener('touchstart', (e) => {
-                const touch = e.changedTouches[0];
-                joystickTouchId = touch.identifier;
-            });
-
-            window.addEventListener('touchmove', (e) => {
-                for (let touch of e.changedTouches) {
-                    if (touch.identifier === joystickTouchId) {
-                        const rect = joystick.getBoundingClientRect();
-                        const centerX = rect.left + rect.width / 2;
-                        const centerY = rect.top + rect.height / 2;
-                        let dx = touch.clientX - centerX;
-                        let dy = touch.clientY - centerY;
-                        const dist = Math.hypot(dx, dy);
-                        const maxDist = 35;
-                        
-                        if (dist > maxDist) {
-                            dx = (dx / dist) * maxDist;
-                            dy = (dy / dist) * maxDist;
-                        }
-
-                        handle.style.transform = `translate(${dx}px, ${dy}px)`;
-                        keys.forward = dy < -10;
-                        keys.backward = dy > 10;
-                        keys.left = dx < -10;
-                        keys.right = dx > 10;
-                    } else if (touch.identifier === lookTouchId) {
-                        const dx = touch.clientX - lastTouchX;
-                        const dy = touch.clientY - lastTouchY;
-                        yaw -= dx * 0.005;
-                        pitch -= dy * 0.005;
-                        pitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, pitch));
-                        lastTouchX = touch.clientX;
-                        lastTouchY = touch.clientY;
-                    }
-                }
-            });
-
-            lookZone.addEventListener('touchstart', (e) => {
-                const touch = e.changedTouches[0];
-                lookTouchId = touch.identifier;
-                lastTouchX = touch.clientX;
-                lastTouchY = touch.clientY;
-                if (isFishing) isReeling = true;
-            });
-
-            window.addEventListener('touchend', (e) => {
-                for (let touch of e.changedTouches) {
-                    if (touch.identifier === joystickTouchId) {
-                        handle.style.transform = 'translate(0px, 0px)';
-                        keys.forward = keys.backward = keys.left = keys.right = false;
-                        joystickTouchId = null;
-                    }
-                    if (touch.identifier === lookTouchId) {
-                        lookTouchId = null;
-                        isReeling = false;
-                    }
-                }
-            });
-
-            document.getElementById('mobile-action-btn').addEventListener('click', handleInteraction);
+            document.getElementById('mobile-action-btn').addEventListener('click', interact);
         }
 
-        function handleInteraction() {
+        function interact() {
             if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
                 if (!isFishing) startFishing();
             } else if (player.pos.distanceTo(new THREE.Vector3(6, 1.7, 0)) < 3) {
@@ -346,60 +243,42 @@
         }
 
         function startFishing() {
-            if (inventory.length >= 5) {
-                alert("Садок полон!");
-                return;
-            }
+            if (inventory.length >= 5) { showToast("⚠️ Садок полон!"); return; }
             isFishing = true;
-            fishingTension = 30;
-            document.getElementById('fishing-minigame').style.display = 'flex';
+            tension = 30;
+            document.getElementById('fishing-bar-container').style.display = 'flex';
             playSound('splash');
+            showToast("🎣 Удочка заброшена! Удерживайте клик...");
         }
 
         function updateFishing() {
             if (!isFishing) return;
+            tension += isReeling ? 0.9 : -0.5;
+            document.getElementById('tension-bar').style.width = `${tension}%`;
 
-            if (isReeling) fishingTension += 0.8;
-            else fishingTension -= 0.5;
-
-            document.getElementById('tension-bar-fill').style.width = `${fishingTension}%`;
-
-            if (fishingTension >= 100) {
-                // Выловили рыбу!
+            if (tension >= 100) {
                 isFishing = false;
-                document.getElementById('fishing-minigame').style.display = 'none';
-                const weight = (Math.random() * 2 + 0.6).toFixed(2);
-                inventory.push({ type: 'Лосось', weight: parseFloat(weight) });
+                document.getElementById('fishing-bar-container').style.display = 'none';
+                const w = (Math.random() * 2 + 0.8).toFixed(2);
+                inventory.push({ name: 'Тихоокеанский Лосось', weight: parseFloat(w) });
                 document.getElementById('fish-count').innerText = `${inventory.length}/5`;
                 playSound('splash');
-                alert(`Вы выловили Лосося весом ${weight} кг!`);
-            } else if (fishingTension <= 0) {
-                // Сход рыбы
+                showToast(`🎉 Вы поймали Лосося (${w} кг)!`);
+            } else if (tension <= 0) {
                 isFishing = false;
-                document.getElementById('fishing-minigame').style.display = 'none';
-                alert("Рыба сорвалась с крючка!");
+                document.getElementById('fishing-bar-container').style.display = 'none';
+                showToast("❌ Рыба сорвалась!");
             }
         }
 
-        function spawnCustomerOrder() {
-            currentOrder = { weight: (Math.random() * 1.5 + 0.8).toFixed(2) };
-            document.getElementById('order-panel').style.display = 'block';
-            document.getElementById('order-text').innerText = `Здравствуйте! Мне нужно ${currentOrder.weight} кг накрошенного свежего филе лосося.`;
-        }
-
-        let sliceCount = 0;
         function openStation() {
-            if (inventory.length === 0) {
-                alert("У вас нет рыбы для разделки!");
-                return;
-            }
+            if (inventory.length === 0) { showToast("⚠️ У вас нет рыбы!"); return; }
             isStationOpen = true;
-            sliceCount = 0;
+            currentSlices = 0;
             if (document.exitPointerLock) document.exitPointerLock();
             document.getElementById('station-ui').style.display = 'block';
-            document.getElementById('scale-weight').innerText = inventory[0].weight;
-            document.getElementById('slices-count').innerText = sliceCount;
-            setupCuttingCanvas();
+            document.getElementById('butchery-fish-weight').innerText = `${inventory[0].weight} кг`;
+            document.getElementById('slices-count').innerText = `0/3`;
         }
 
         function closeStation() {
@@ -407,66 +286,33 @@
             document.getElementById('station-ui').style.display = 'none';
         }
 
-        function setupCuttingCanvas() {
-            const canvas = document.getElementById('cutting-board-canvas');
-            const ctx = canvas.getContext('2d');
-            let isDrawing = false;
-
-            function redraw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                // Рыба
-                ctx.fillStyle = '#f97316';
-                ctx.beginPath();
-                ctx.ellipse(180, 90, 110, 40, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Нарезанные линии
-                ctx.strokeStyle = '#ef4444';
-                ctx.lineWidth = 4;
-                for (let i = 0; i < sliceCount; i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(100 + i * 50, 40);
-                    ctx.lineTo(100 + i * 50, 140);
-                    ctx.stroke();
-                }
+        function sliceCurrentFish() {
+            if (currentSlices < 3) {
+                currentSlices++;
+                document.getElementById('slices-count').innerText = `${currentSlices}/3`;
+                playSound('cut');
             }
-            redraw();
-
-            canvas.onpointerdown = () => { isDrawing = true; };
-            canvas.onpointermove = (e) => {
-                if (isDrawing && sliceCount < 3) {
-                    sliceCount++;
-                    document.getElementById('slices-count').innerText = sliceCount;
-                    playSound('cut');
-                    redraw();
-                    if (sliceCount >= 3) isDrawing = false;
-                }
-            };
-            canvas.onpointerup = () => { isDrawing = false; };
         }
 
-        function packAndServe() {
+        function packAndDeliver() {
             if (!inventory.length) return;
             const fish = inventory.shift();
-            const reward = Math.round(fish.weight * 110);
+            const reward = Math.round(fish.weight * 120);
             money += reward;
             document.getElementById('money-display').innerText = money;
             document.getElementById('fish-count').innerText = `${inventory.length}/5`;
             playSound('coin');
             closeStation();
-            alert(`Заказ выполнен! Покупатель заплатил ${reward} монет.`);
-            spawnCustomerOrder();
+            showToast(`💵 Вы заработали ${reward} монет!`);
         }
 
         function animate() {
             requestAnimationFrame(animate);
 
-            // Поворот камеры
             camera.rotation.order = 'YXZ';
             camera.rotation.y = yaw;
             camera.rotation.x = pitch;
 
-            // Движение игрока относительно обзора
             const dir = new THREE.Vector3();
             if (keys.forward) dir.z -= 1;
             if (keys.backward) dir.z += 1;
@@ -478,17 +324,15 @@
             player.pos.addScaledVector(dir, player.speed);
             camera.position.copy(player.pos);
 
-            // Рыбалка
             updateFishing();
 
-            // Подсказка действий
             const prompt = document.getElementById('action-prompt');
             if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
                 prompt.style.display = 'block';
-                prompt.innerText = "Нажмите [E] или Кнопку чтобы Рыбачить";
+                prompt.innerText = "Нажмите [E] чтобы Ловить Рыбу";
             } else if (player.pos.distanceTo(new THREE.Vector3(6, 1.7, 0)) < 3) {
                 prompt.style.display = 'block';
-                prompt.innerText = "Нажмите [E] или Кнопку для Разделки и Продажи";
+                prompt.innerText = "Нажмите [E] для Разделки и Продажи";
             } else {
                 prompt.style.display = 'none';
             }
