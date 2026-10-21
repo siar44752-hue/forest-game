@@ -1,1328 +1,338 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none';script-src 'self' 'unsafe-inline';style-src 'self' 'unsafe-inline';img-src 'self' data: https://www.google.com;connect-src 'self' https://api.pwnedpasswords.com;base-uri 'none';form-action 'none';frame-ancestors 'none';object-src 'none';upgrade-insecure-requests">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Referrer-Policy" content="no-referrer">
-<meta http-equiv="Permissions-Policy" content="camera=(),microphone=(),geolocation=(),payment=(),usb=()">
-<meta name="theme-color" content="#0a0e14">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<title>SecureVault Fortress</title>
-<style>
-:root[data-theme="dark"]{--bg:#0a0e14;--panel:#131a22;--panel2:#1a222c;--border:#2a3644;--text:#e2e8f0;--muted:#64748b;--accent:#4ade80;--accent2:#86efac;--danger:#f87171;--warn:#fbbf24;--info:#60a5fa;--strong:#4ade80;--medium:#fbbf24;--weak:#f87171;--glow:rgba(74,222,128,.4)}
-:root[data-theme="light"]{--bg:#f5f7fa;--panel:#fff;--panel2:#f0f3f8;--border:#d0d7e0;--text:#0a0e14;--muted:#64748b;--accent:#16a34a;--accent2:#22c55e;--danger:#dc2626;--warn:#d97706;--info:#2563eb;--strong:#16a34a;--medium:#d97706;--weak:#dc2626;--glow:rgba(22,163,74,.3)}
-:root[data-theme="matrix"]{--bg:#000800;--panel:#001200;--panel2:#001a00;--border:#004a00;--text:#00ff41;--muted:#00aa33;--accent:#00ff41;--accent2:#66ff88;--danger:#ff3355;--warn:#ffcc00;--info:#00aaff;--strong:#00ff41;--medium:#ffcc00;--weak:#ff3355;--glow:rgba(0,255,65,.4)}
-:root[data-theme="neon"]{--bg:#0a0014;--panel:#180028;--panel2:#220033;--border:#4a0080;--text:#f0e0ff;--muted:#a066d9;--accent:#ff2ec4;--accent2:#ff66d9;--danger:#ff4466;--warn:#ffcc00;--info:#00ddff;--strong:#00ffaa;--medium:#ffcc00;--weak:#ff4466;--glow:rgba(255,46,196,.5)}
-:root[data-theme="minimal"]{--bg:#fafafa;--panel:#fff;--panel2:#f0f0f0;--border:#e0e0e0;--text:#1a1a1a;--muted:#888;--accent:#2563eb;--accent2:#3b82f6;--danger:#dc2626;--warn:#d97706;--info:#2563eb;--strong:#059669;--medium:#d97706;--weak:#dc2626;--glow:rgba(37,99,235,.3)}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none}
-input,textarea,[contenteditable]{-webkit-user-select:text!important;-moz-user-select:text!important;-ms-user-select:text!important;user-select:text!important}
-::selection{background:var(--accent);color:#0a0e14}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:var(--accent)}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;padding-top:env(safe-area-inset-top);transition:background .3s,color .3s;font-feature-settings:'cv02','cv03','cv04','cv11';letter-spacing:-0.01em}
-button{font-family:inherit;cursor:pointer;border:0;outline:0;position:relative;overflow:hidden}
-input,textarea,select{font-family:inherit;outline:0}
-.screen{display:none;min-height:100vh;padding:20px}
-.screen.active{display:block;animation:fI .5s cubic-bezier(.16,1,.3,1)}
-@keyframes fI{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.lock-wrap{max-width:440px;margin:0 auto;padding:40px 20px;display:flex;flex-direction:column;justify-content:center;min-height:100vh}
-.lock-logo{text-align:center;margin-bottom:24px;animation:fI .6s}
-.lock-logo h1{font-size:34px;color:var(--accent);letter-spacing:-1.5px;font-weight:900;text-shadow:0 0 30px var(--glow);display:inline-block}
-.lock-logo p{color:var(--muted);font-size:12px;margin-top:6px;letter-spacing:.5px}
-.lock-badge{display:inline-block;margin-top:10px;padding:5px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(74,222,128,.15),rgba(74,222,128,.05));border:1px solid var(--accent);color:var(--accent);font-size:10px;font-weight:900;letter-spacing:2px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--glow)}50%{box-shadow:0 0 20px 4px var(--glow)}}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:26px;margin-bottom:16px;box-shadow:0 4px 24px rgba(0,0,0,.2);animation:fI .5s}
-.card h2{font-size:18px;color:var(--accent);margin-bottom:14px;letter-spacing:-.3px}
-.hint-box{padding:12px 14px;background:linear-gradient(135deg,rgba(96,165,250,.1),rgba(96,165,250,.02));border:1px solid var(--info);border-radius:12px;color:var(--info);font-size:12px;margin:12px 0;line-height:1.55}
-.warn-box{padding:12px 14px;background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(251,191,36,.02));border:1px solid var(--warn);border-radius:12px;color:var(--warn);font-size:12px;margin:12px 0;line-height:1.55}
-.danger-box{padding:12px 14px;background:linear-gradient(135deg,rgba(248,113,113,.15),rgba(248,113,113,.03));border:1px solid var(--danger);border-radius:12px;color:var(--danger);font-size:12px;margin:12px 0;line-height:1.55}
-.profiles-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.profile-card{padding:16px;background:var(--panel2);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);text-align:left;width:100%;position:relative;overflow:hidden}
-.profile-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--glow),transparent);opacity:0;transition:opacity .25s;pointer-events:none}
-.profile-card:hover{border-color:var(--accent);transform:translateX(4px);box-shadow:0 4px 20px var(--glow)}
-.profile-card:hover::before{opacity:1}
-.profile-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;color:#0a0e14;font-weight:900;overflow:hidden;position:relative;box-shadow:0 4px 16px var(--glow)}
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
-.profile-avatar .lock-icon{position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;background:var(--danger);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;border:2px solid var(--panel2)}
-.profile-info{flex:1;min-width:0;position:relative;z-index:1}
-.profile-name{font-weight:900;font-size:15px;margin-bottom:3px;color:var(--text);letter-spacing:-.2px}
-.profile-meta{font-size:11px;color:var(--muted)}
-.profile-card.locked-out{border-color:var(--danger);background:linear-gradient(135deg,rgba(248,113,113,.08),transparent)}
-.arrow{color:var(--muted);font-size:20px;position:relative;z-index:1;transition:transform .25s}
-.profile-card:hover .arrow{transform:translateX(4px);color:var(--accent)}
-.avatar-selector{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
-.avatar-opt{aspect-ratio:1;border-radius:50%;background:var(--panel2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1)}
-.avatar-opt:hover{border-color:var(--accent);transform:scale(1.12) rotate(5deg)}
-.avatar-opt.selected{border-color:var(--accent);background:var(--accent);color:#0a0e14;box-shadow:0 0 20px var(--glow);transform:scale(1.08)}
-.avatar-upload{padding:11px 16px;border-radius:12px;background:var(--panel2);color:var(--accent);border:2px dashed var(--accent);font-size:12px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;display:block;text-align:center;transition:all .25s}
-.avatar-upload:hover{background:rgba(74,222,128,.1);border-style:solid}
-.field{position:relative;margin-bottom:12px}
-.field input{width:100%;padding:14px 14px;border-radius:12px;background:var(--bg);border:2px solid var(--border);color:var(--text);font-size:14px;transition:all .25s}
-.field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
-.toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;color:var(--muted);padding:8px;font-size:16px;border-radius:8px;transition:all .2s}
-.toggle:hover{color:var(--accent);background:var(--panel2)}
-.btn{width:100%;padding:14px 18px;border-radius:12px;font-size:14px;font-weight:800;transition:all .25s cubic-bezier(.4,0,.2,1);letter-spacing:.2px}
-.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e14;box-shadow:0 4px 16px var(--glow)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--glow)}
-.btn-primary:active{transform:translateY(0)}
-.btn-secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border);transition:all .25s}
-.btn-secondary:hover{background:var(--border);transform:translateY(-1px)}
-.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff;box-shadow:0 4px 16px rgba(248,113,113,.3)}
-.btn-danger:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(248,113,113,.5)}
-.btn-small{width:auto;padding:9px 16px;font-size:12px}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important}
-.strength{margin-top:8px}
-.strength-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden}
-.strength-fill{height:100%;width:0;transition:all .4s cubic-bezier(.4,0,.2,1);background:var(--weak);box-shadow:0 0 12px currentColor}
-.strength-label{font-size:11px;margin-top:6px;color:var(--muted);display:flex;justify-content:space-between}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(19,26,34,.85);backdrop-filter:blur(20px);position:sticky;top:env(safe-area-inset-top);z-index:10}
-.topbar-brand{font-size:18px;font-weight:900;color:var(--accent);display:flex;align-items:center;gap:10px;letter-spacing:-.3px}
-.profile-pill{padding:5px 12px;border-radius:20px;background:var(--panel2);color:var(--muted);font-size:11px;font-weight:800;display:flex;align-items:center;gap:5px;border:1px solid var(--border)}
-.topbar-actions{display:flex;gap:6px;align-items:center}
-.icon-btn{width:38px;height:38px;border-radius:11px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .25s cubic-bezier(.4,0,.2,1)}
-.icon-btn:hover{background:var(--border);transform:scale(1.08);color:var(--accent)}
-.icon-btn:active{transform:scale(.95)}
-.icon-btn.panic{color:var(--danger);border-color:var(--danger)}
-.icon-btn.panic:hover{background:var(--danger);color:#fff;box-shadow:0 0 20px var(--danger)}
-.toolbar{padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--border);position:relative;background:var(--panel)}
-.search{flex:1;min-width:200px;padding:13px 18px;border-radius:12px;background:var(--bg);border:2px solid var(--border);color:var(--text);font-size:14px;transition:all .25s}
-.search:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
-.search-history{position:absolute;top:100%;left:20px;right:20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.4);z-index:20;max-height:240px;overflow-y:auto;display:none;margin-top:6px;animation:fI .2s}
-.search-history.show{display:block}
-.sh-item{padding:11px 16px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);transition:background .15s}
-.sh-item:last-child{border-bottom:0}
-.sh-item:hover{background:var(--panel2)}
-.sh-clear{padding:10px 16px;font-size:11px;color:var(--danger);cursor:pointer;text-align:center;background:var(--panel2);font-weight:800;border-radius:0 0 12px 12px}
-.cats{padding:14px 20px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;background:var(--panel)}
-.cats::-webkit-scrollbar{display:none}
-.cat-btn{padding:9px 16px;border-radius:20px;background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap;transition:all .25s cubic-bezier(.4,0,.2,1);letter-spacing:.2px}
-.cat-btn:hover{border-color:var(--accent);color:var(--accent)}
-.cat-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e14;border-color:var(--accent);box-shadow:0 4px 16px var(--glow)}
-.entries{padding:18px 20px;max-width:900px;margin:0 auto}
-.entry{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:center;transition:all .25s cubic-bezier(.4,0,.2,1);animation:fI .3s}
-.entry:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25),0 0 20px var(--glow)}
-.entry-icon{width:44px;height:44px;border-radius:12px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;position:relative;transition:transform .25s}
-.entry:hover .entry-icon{transform:scale(1.08) rotate(-3deg)}
-.entry-icon img{width:32px;height:32px;object-fit:contain}
-.https-badge{position:absolute;bottom:-3px;right:-3px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;border:2px solid var(--panel);background:var(--panel2)}
-.https-badge.secure{color:var(--strong)}
-.https-badge.insecure{color:var(--weak);background:#ffe0e0;animation:pulse 1.5s infinite}
-.entry-body{flex:1;min-width:0}
-.entry-site{font-weight:800;font-size:14px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.2px}
-.entry-login{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.entry-meta{font-size:10px;color:var(--muted);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.entry-meta .dot{width:6px;height:6px;border-radius:50%;display:inline-block;box-shadow:0 0 6px currentColor}
-.entry-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
-.entry-actions button{width:34px;height:34px;border-radius:10px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.entry-actions button:hover{background:var(--accent);color:#0a0e14;border-color:var(--accent);transform:scale(1.1)}
-.entry-actions button:active{transform:scale(.9)}
-.empty{text-align:center;padding:60px 20px;color:var(--muted)}
-.empty-icon{font-size:64px;margin-bottom:14px;opacity:.5;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);padding:14px 24px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e14;font-weight:800;font-size:13px;z-index:10000;opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:calc(100vw - 40px);text-align:center;box-shadow:0 12px 40px var(--glow)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.toast.danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff;box-shadow:0 12px 40px rgba(248,113,113,.5)}
-.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:5000;display:none;align-items:center;justify-content:center;padding:20px;animation:fI .25s}
-.modal-back.active{display:flex}
-.modal{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:26px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;animation:mI .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 20px 60px rgba(0,0,0,.6)}
-@keyframes mI{from{transform:scale(.9) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.modal-header h2{font-size:18px;color:var(--accent);letter-spacing:-.3px}
-.modal-close{width:34px;height:34px;border-radius:10px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:20px;transition:all .2s}
-.modal-close:hover{background:var(--danger);color:#fff;transform:rotate(90deg)}
-.modal-footer{display:flex;gap:8px;margin-top:20px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:800;letter-spacing:.3px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border-radius:12px;background:var(--bg);border:2px solid var(--border);color:var(--text);font-size:14px;resize:vertical;transition:all .25s}
-.form-group input:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
-.form-row{display:flex;gap:8px}
-.form-row input{flex:1}
-.checkbox-label{display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;padding:8px;border-radius:8px;transition:background .2s}
-.checkbox-label:hover{background:var(--panel2)}
-.checkbox-label input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
-.hidden{display:none!important}
-.recovery-box{padding:22px;background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(251,191,36,.03));border:2px solid var(--warn);border-radius:16px;text-align:center;margin:16px 0;position:relative;overflow:hidden}
-.recovery-box::before{content:'';position:absolute;inset:-2px;background:conic-gradient(from 0deg,transparent,var(--warn),transparent 30%);animation:rotate 4s linear infinite;z-index:-1}
-@keyframes rotate{to{transform:rotate(360deg)}}
-.recovery-code{font-family:'SF Mono',Consolas,monospace;font-size:18px;font-weight:900;letter-spacing:3px;color:var(--warn);padding:18px;background:rgba(0,0,0,.5);border-radius:12px;word-break:break-all;user-select:all;-webkit-user-select:all;line-height:1.9;margin:12px 0;text-shadow:0 0 20px var(--warn)}
-.recovery-actions{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.onboard-progress{display:flex;gap:8px;justify-content:center;margin:18px 0}
-.onboard-dot{width:12px;height:12px;border-radius:50%;background:var(--border);transition:all .35s cubic-bezier(.4,0,.2,1)}
-.onboard-dot.active{background:var(--accent);box-shadow:0 0 16px var(--glow);transform:scale(1.2)}
-.onboard-dot.done{background:var(--strong)}
-.lock-timer{padding:16px;background:linear-gradient(135deg,rgba(248,113,113,.15),rgba(248,113,113,.03));border:1px solid var(--danger);border-radius:12px;text-align:center;margin-top:12px;color:var(--danger);font-weight:900;animation:pulse 1.5s infinite}
-.lock-timer .big{font-size:30px;margin:8px 0;font-family:'SF Mono',Consolas,monospace;letter-spacing:1px}
-.lock-timer small{font-size:11px;display:block;margin-top:6px;color:var(--warn)}
-.https-warn{padding:10px 14px;background:rgba(255,80,80,.15);border:1px solid var(--danger);border-radius:10px;color:var(--danger);font-size:12px;margin-top:8px}
-.https-info{padding:10px 14px;background:rgba(74,222,128,.1);border:1px solid var(--strong);border-radius:10px;color:var(--strong);font-size:12px;margin-top:8px}
-.smart-cat{padding:10px 14px;background:linear-gradient(135deg,rgba(96,165,250,.15),rgba(96,165,250,.03));border:1px solid var(--info);border-radius:10px;color:var(--info);font-size:12px;margin-top:8px;cursor:pointer;transition:all .2s}
-.smart-cat:hover{background:rgba(96,165,250,.2);transform:translateX(2px)}
-.theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px}
-.theme-card{padding:12px;border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);text-align:center}
-.theme-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.theme-card.active{border-color:var(--accent);box-shadow:0 0 20px var(--glow)}
-.theme-preview{width:100%;height:44px;border-radius:10px;margin-bottom:8px}
-.theme-name{font-size:11px;font-weight:800;letter-spacing:.3px}
-.audit-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:16px}
-.stat-box{background:var(--panel2);padding:14px;border-radius:12px;text-align:center;transition:all .2s}
-.stat-box:hover{transform:scale(1.03)}
-.stat-box .val{font-size:24px;font-weight:900;color:var(--accent);letter-spacing:-.5px}
-.stat-box .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-weight:800;margin-top:2px}
-.stat-box.warn .val{color:var(--warn)}
-.stat-box.danger .val{color:var(--danger)}
-.audit-list{margin-top:12px;max-height:220px;overflow-y:auto}
-.audit-item{padding:12px 14px;background:var(--panel2);border-radius:10px;margin-bottom:6px;font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;transition:all .2s}
-.audit-item:hover{background:var(--border)}
-.pin-prompt{text-align:center;padding:20px}
-.pin-prompt input{width:100%;padding:16px;text-align:center;font-size:26px;letter-spacing:12px;border-radius:12px;border:2px solid var(--border);background:var(--bg);color:var(--text);margin:16px 0;transition:all .2s}
-.pin-prompt input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
-.detector-warn{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1a0505,#0a0202);z-index:999999;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;color:#fff}
-.detector-warn.show{display:flex}
-.detector-warn h1{font-size:42px;color:#f87171;margin-bottom:20px;animation:shake .5s infinite;letter-spacing:2px}
-.detector-warn p{font-size:14px;color:#c8a0a0;max-width:500px;line-height:1.6;margin-bottom:10px}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);animation:rippleAnim .6s ease-out;pointer-events:none}
-@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-@media (max-width:600px){
-  .topbar{padding:12px 14px}.toolbar{padding:12px 14px}.entries{padding:12px 14px}
-  .entry{padding:12px}.entry-actions button{width:32px;height:32px;font-size:13px}
-  .modal{padding:20px;border-radius:20px 20px 0 0;max-height:92vh}.modal-back{align-items:flex-end;padding:0}
-  .recovery-code{font-size:15px;letter-spacing:2px}
-  .avatar-selector{grid-template-columns:repeat(5,1fr)}
-  .lock-timer .big{font-size:24px}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D Симулятор Рыбалки и Рыбного Ларька</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
+        #canvas-container { width: 100%; height: 100%; position: absolute; left: 0; top: 0; z-index: 1; }
+        
+        /* UI Overlay */
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
+        .interactive { pointer-events: auto; }
+
+        /* HUD Top Bar */
+        .top-hud { display: flex; gap: 15px; align-items: center; }
+        .hud-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 20px; border-radius: 14px; color: #fff; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        
+        /* Crosshair */
+        #crosshair { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid rgba(255,255,255,0.8); border-radius: 50%; pointer-events: none; }
+        #crosshair::after { content: ''; position: absolute; top: 3px; left: 3px; width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+        /* Dialog & Orders */
+        #order-panel { position: absolute; top: 80px; right: 20px; width: 320px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 2px solid #3b82f6; border-radius: 16px; padding: 18px; color: white; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        #order-panel h3 { color: #60a5fa; margin-bottom: 8px; font-size: 18px; }
+        #order-panel p { font-size: 14px; line-height: 1.4; color: #cbd5e1; }
+
+        /* Prompt Action */
+        #action-prompt { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); border: 1px solid #60a5fa; color: white; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 16px; display: none; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+
+        /* Butchery & Scale Station Modal */
+        #station-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 650px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 25px; color: white; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.7); pointer-events: auto; }
+        .station-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 15px; }
+        .station-body { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        #cutting-board-canvas { background: #331f19; border: 4px solid #5c3a21; border-radius: 12px; cursor: crosshair; }
+        .btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
+
+        /* Mobile Controls */
+        #joystick-container { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; display: none; pointer-events: auto; }
+        #joystick-handle { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; background: rgba(59, 130, 246, 0.8); border-radius: 50%; }
+        #mobile-action-btn { position: absolute; bottom: 40px; right: 40px; width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: none; pointer-events: auto; color: white; font-weight: bold; border: none; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+
+        /* Start Screen */
+        #start-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.95); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; gap: 20px; }
+        #start-overlay h1 { font-size: 36px; color: #60a5fa; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.min.js"></script>
 </head>
 <body>
 
-<!-- DEVTOOLS DETECTOR -->
-<div class="detector-warn" id="detectorWarn">
-  <h1>🛑 DEVTOOLS ОБНАРУЖЕНЫ</h1>
-  <p>Закройте инструменты разработчика для продолжения работы.</p>
-  <p style="font-size:11px;color:#888;margin-top:20px">Это защита ваших паролей от возможной компрометации.</p>
-</div>
-
-<!-- LOCK SCREEN -->
-<div id="lockScreen" class="screen active">
-  <div class="lock-wrap">
-    <div class="lock-logo">
-      <h1>🔐 SecureVault</h1>
-      <p>Zero-Knowledge Password Manager</p>
-      <div class="lock-badge">🛡️ FORTRESS</div>
-    </div>
-
-    <div class="card" id="viewProfiles">
-      <h2>Выберите профиль</h2>
-      <div class="profiles-list" id="profilesList"></div>
-      <button class="btn btn-secondary" onclick="showView('create')">+ Создать профиль</button>
-    </div>
-
-    <div class="card hidden" id="viewLogin">
-      <h2 id="loginTitle">Вход</h2>
-      <button class="btn btn-secondary btn-small" style="margin-bottom:14px;width:auto" onclick="showView('profiles')">← Назад</button>
-      <div class="field">
-        <input type="password" id="unlockPass" placeholder="Мастер-пароль" autocomplete="off">
-        <button class="toggle" onclick="togglePwd('unlockPass',this)">👁</button>
-      </div>
-      <button class="btn btn-primary" onclick="unlockVault()" id="unlockBtn">🔓 Войти</button>
-      <div class="lock-timer hidden" id="lockTimer"></div>
-      <div style="text-align:center;margin-top:14px">
-        <a href="#" onclick="event.preventDefault();showView('recovery')" style="color:var(--muted);font-size:12px;text-decoration:underline">Забыли пароль? Recovery Code</a>
-      </div>
-      <p id="lockError" style="color:var(--danger);font-size:12px;margin-top:12px;text-align:center;min-height:16px;font-weight:700"></p>
-    </div>
-
-    <div class="card hidden" id="viewCreate">
-      <h2>Новый профиль</h2>
-      <div class="hint-box">👋 За 2 шага настроим безопасное хранилище.</div>
-      <div class="onboard-progress"><div class="onboard-dot active"></div><div class="onboard-dot"></div></div>
-      <div class="form-group">
-        <label>Название профиля</label>
-        <input type="text" id="profileName" placeholder="Работа / Личное / Семья" maxlength="20" autocomplete="off">
-      </div>
-      <label style="font-size:12px;color:var(--muted);margin-top:8px;display:block;font-weight:800;letter-spacing:.3px">Аватар</label>
-      <div class="avatar-selector" id="avatarSelector"></div>
-      <label class="avatar-upload">📤 Загрузить картинку<input type="file" id="avatarUpload" accept="image/*" style="display:none" onchange="uploadAvatar(event)"></label>
-      <div class="form-group" style="margin-top:14px">
-        <label>Мастер-пароль (от 12 символов)</label>
-        <input type="password" id="createPass" placeholder="Надёжный пароль" autocomplete="new-password" oninput="updateStrength('createPass','createStr')">
-      </div>
-      <div class="strength"><div class="strength-bar"><div class="strength-fill" id="createStr"></div></div><div class="strength-label"><span id="createStrLbl">—</span><span id="createStrLvl"></span></div></div>
-      <div class="form-group" style="margin-top:14px">
-        <label>Повторите пароль</label>
-        <input type="password" id="createPass2" placeholder="Ещё раз" autocomplete="new-password">
-      </div>
-      <div class="danger-box">⚠️ <strong>Единственная защита</strong> — этот пароль. Запомните его!</div>
-      <button class="btn btn-primary" onclick="prepareRecovery()">Далее → Recovery Code</button>
-      <button class="btn btn-secondary" style="margin-top:8px" onclick="showView('profiles')">← Назад</button>
-    </div>
-
-    <div class="card hidden" id="viewShowRecovery">
-      <h2>🔑 Recovery Code</h2>
-      <div class="warn-box">⚠️ <strong>Сохраните этот код!</strong> Он показывается только один раз. С его помощью можно сбросить мастер-пароль, если забудете.</div>
-      <div class="recovery-box">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Ваш код восстановления</div>
-        <div class="recovery-code" id="recoveryCodeDisplay">----</div>
-        <div class="recovery-actions">
-          <button class="btn btn-secondary btn-small" onclick="copyRecovery()">📋 Копировать</button>
-          <button class="btn btn-secondary btn-small" onclick="downloadRecovery()">💾 Скачать</button>
+    <div id="start-overlay">
+        <h1>3D РЫБАЛКА & РЫБНЫЙ ЛАРЕК</h1>
+        <p>Выберите устройство для управления:</p>
+        <div style="display: flex; gap: 20px;">
+            <button class="btn" onclick="startGame('pc')">💻 Компьютер (WASD + Мышь)</button>
+            <button class="btn" onclick="startGame('mobile')">📱 Телефон (Джойстик)</button>
         </div>
-      </div>
-      <div style="padding:14px;background:var(--panel2);border-radius:12px;margin-top:16px;text-align:center">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Для подтверждения — введите код:</div>
-        <input type="text" id="recoveryConfirm" maxlength="24" placeholder="ВВЕДИТЕ КОД" oninput="checkRecoveryConfirm()" style="width:100%;padding:12px;text-align:center;font-family:'SF Mono',monospace;font-size:16px;letter-spacing:2px;border:2px solid var(--border);background:var(--bg);color:var(--text);border-radius:10px;margin-top:8px;text-transform:uppercase">
-      </div>
-      <button class="btn btn-primary" id="finishCreateBtn" onclick="finishCreate()" disabled>✨ Создать хранилище</button>
-      <button class="btn btn-secondary" style="margin-top:8px" onclick="cancelRecovery()">← Отмена</button>
     </div>
 
-    <div class="card hidden" id="viewRecovery">
-      <h2>🔑 Восстановление</h2>
-      <button class="btn btn-secondary btn-small" style="margin-bottom:14px;width:auto" onclick="showView('login')">← Назад</button>
-      <div class="hint-box">Введите Recovery Code. Это <strong>удалит всё хранилище</strong> и позволит создать новое.</div>
-      <div class="form-group">
-        <label>Recovery Code</label>
-        <input type="text" id="recoveryInput" maxlength="24" placeholder="24-символьный код" style="text-align:center;font-family:'SF Mono',monospace;letter-spacing:2px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
-      </div>
-      <div class="danger-box">⚠️ Все пароли будут удалены. Действие необратимо.</div>
-      <button class="btn btn-danger" onclick="doRecoveryReset()">🗑️ Сбросить хранилище</button>
-      <p id="recoveryError" style="color:var(--danger);font-size:12px;margin-top:12px;text-align:center;min-height:16px;font-weight:700"></p>
+    <div id="canvas-container"></div>
+
+    <div id="ui-layer">
+        <div class="top-hud">
+            <div class="hud-card">💰 Монеты: <span id="money-display" style="color:#f59e0b;">100</span></div>
+            <div class="hud-card">🕒 Время: <span id="time-display">09:00</span></div>
+            <div class="hud-card">🐟 Садок: <span id="fish-count">0/5</span></div>
+        </div>
+
+        <div id="crosshair"></div>
+        <div id="action-prompt">Нажмите [E] или Кнопку для взаимодействия</div>
+
+        <div id="order-panel">
+            <h3>Покупатель у Ларька</h3>
+            <p id="order-text">Загрузка заказа...</p>
+        </div>
+
+        <!-- Мобильное управление -->
+        <div id="joystick-container"><div id="joystick-handle"></div></div>
+        <button id="mobile-action-btn">E</button>
     </div>
-  </div>
-</div>
 
-<!-- VAULT SCREEN -->
-<div id="vaultScreen" class="screen">
-  <div class="topbar">
-    <div class="topbar-brand">🔐 Vault <span class="profile-pill" id="activeProfilePill"></span></div>
-    <div class="topbar-actions">
-      <button class="icon-btn panic" onclick="panicMode()" title="Паника">🆘</button>
-      <button class="icon-btn" onclick="openAudit()" title="Аудит">📊</button>
-      <button class="icon-btn" onclick="openModal('settingsModal')" title="Настройки">⚙️</button>
-      <button class="icon-btn" onclick="lockVault()" title="Заблокировать">🔒</button>
+    <!-- Окно Разделки и Взвешивания -->
+    <div id="station-ui">
+        <div class="station-header">
+            <h2>Разделочный Стол и Весы</h2>
+            <button class="btn" style="background:#ef4444; padding:6px 12px;" onclick="closeStation()">X</button>
+        </div>
+        <div class="station-body">
+            <p style="font-size:14px; color:#94a3b8;">Проведите мышью/пальцем поперек рыбы, чтобы нарезать ее на филе!</p>
+            <canvas id="cutting-board-canvas" width="400" height="200"></canvas>
+            <div style="display:flex; gap:20px; width:100%; justify-content:space-between; align-items:center;">
+                <div>Вес: <span id="scale-weight" style="font-weight:bold; color:#10b981;">0.00</span> кг</div>
+                <button class="btn" onclick="packAndServe()">Завернуть в пакет и Отдать</button>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="toolbar">
-    <input class="search" id="searchInput" placeholder="🔍 Поиск..." oninput="renderEntries()" onfocus="showSearchHistory()" onblur="setTimeout(hideSearchHistory,200)" autocomplete="off">
-    <div class="search-history" id="searchHistory"></div>
-    <button class="btn btn-secondary btn-small" onclick="openModal('generatorModal')">🎲</button>
-    <button class="btn btn-primary btn-small" onclick="openEntryModal()">+ Добавить</button>
-  </div>
-  <div class="cats" id="catsBar"></div>
-  <div class="entries" id="entriesList"></div>
-</div>
 
-<!-- MODALS -->
-<div class="modal-back" id="entryModal"><div class="modal">
-  <div class="modal-header"><h2 id="entryModalTitle">Новая запись</h2><button class="modal-close" onclick="closeModal('entryModal')">×</button></div>
-  <input type="hidden" id="editIndex">
-  <div class="form-group">
-    <label>Сайт (URL)</label>
-    <input id="fSite" placeholder="https://github.com" autocomplete="off" oninput="checkHttpsField();smartCategorize()">
-    <div class="https-warn hidden" id="httpsWarn">⚠️ HTTP — незашифрованное соединение</div>
-    <div class="https-info hidden" id="httpsInfo">🔒 HTTPS — защищено</div>
-    <div class="smart-cat hidden" id="smartCat" onclick="applySmartCategory()"></div>
-  </div>
-  <div class="form-group"><label>Логин</label><input id="fLogin" autocomplete="off"></div>
-  <div class="form-group">
-    <label>Пароль</label>
-    <div class="form-row">
-      <input id="fPassword" type="text" autocomplete="off">
-      <button class="btn btn-secondary btn-small" onclick="quickGen()">🎲</button>
-    </div>
-    <div class="strength" style="margin-top:8px"><div class="strength-bar"><div class="strength-fill" id="fPasswordStr"></div></div></div>
-  </div>
-  <div class="form-group"><label>Категория</label><select id="fCategory"></select></div>
-  <div class="form-group"><label>Заметки (**жирный**, *курсив*, `код`)</label><textarea id="fNotes" rows="3"></textarea></div>
-  <div class="form-group"><label>Доп. поля</label><div id="customFieldsContainer"></div><button class="btn btn-secondary btn-small" style="margin-top:6px" onclick="addCustomField()">+ Поле</button></div>
-  <div id="historySection" class="form-group hidden"><label>⏱️ История</label><div id="historyList"></div></div>
-  <label class="checkbox-label"><input type="checkbox" id="fCritical"> 🔐 Критичная (нужен PIN)</label>
-  <div class="modal-footer">
-    <button class="btn btn-primary" onclick="saveEntry()">💾 Сохранить</button>
-    <button class="btn btn-secondary" onclick="closeModal('entryModal')">Отмена</button>
-  </div>
-</div></div>
+    <script>
+        // Игровые Переменные
+        let scene, camera, renderer;
+        let controlType = 'pc';
+        let money = 100, inventory = [], currentCustomerOrder = null;
+        let isStationOpen = false;
+        
+        // Управление ПК (Клавиши W/A/S/D и Ц/Ф/Ы/В)
+        const keys = { forward: false, backward: false, left: false, right: false };
+        let yaw = 0, pitch = 0;
+        const player = { pos: new THREE.Vector3(0, 1.7, 5), speed: 0.12 };
 
-<div class="modal-back" id="generatorModal"><div class="modal">
-  <div class="modal-header"><h2>🎲 Генератор</h2><button class="modal-close" onclick="closeModal('generatorModal')">×</button></div>
-  <div style="display:flex;gap:8px;margin:14px 0">
-    <input id="genResult" readonly style="flex:1;padding:16px;border-radius:12px;background:var(--bg);border:2px solid var(--border);color:var(--text);font-family:'SF Mono',monospace;font-size:16px;letter-spacing:1px">
-    <button class="icon-btn" onclick="copyGenResult()">📋</button>
-  </div>
-  <div style="display:flex;flex-direction:column;gap:10px;margin:14px 0">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:10px;font-size:13px"><span>Длина</span><div style="display:flex;align-items:center;gap:10px"><input type="range" id="genLen" min="8" max="32" value="16" oninput="updateGenLen()" style="width:120px;accent-color:var(--accent)"><span id="genLenVal" style="color:var(--accent);font-weight:800;min-width:24px;text-align:center">16</span></div></div>
-    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:10px;font-size:13px"><span>A-Z</span><input type="checkbox" id="genUpper" checked style="width:18px;height:18px;accent-color:var(--accent)"></label>
-    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:10px;font-size:13px"><span>a-z</span><input type="checkbox" id="genLower" checked style="width:18px;height:18px;accent-color:var(--accent)"></label>
-    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:10px;font-size:13px"><span>0-9</span><input type="checkbox" id="genDigits" checked style="width:18px;height:18px;accent-color:var(--accent)"></label>
-    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--panel2);border-radius:10px;font-size:13px"><span>Символы</span><input type="checkbox" id="genSymbols" checked style="width:18px;height:18px;accent-color:var(--accent)"></label>
-  </div>
-  <button class="btn btn-primary" onclick="generatePassword()">🔄 Ещё</button>
-</div></div>
+        // Инициализация игры
+        function startGame(mode) {
+            controlType = mode;
+            document.getElementById('start-overlay').style.display = 'none';
+            if (mode === 'mobile') {
+                document.getElementById('joystick-container').style.display = 'block';
+                document.getElementById('mobile-action-btn').style.display = 'block';
+                setupTouchControls();
+            } else {
+                setupPointerLock();
+            }
+            init3D();
+            setupEvents();
+            animate();
+            spawnCustomer();
+        }
 
-<div class="modal-back" id="auditModal"><div class="modal">
-  <div class="modal-header"><h2>📊 Аудит</h2><button class="modal-close" onclick="closeModal('auditModal')">×</button></div>
-  <div class="audit-stats" id="auditStats"></div>
-  <h3 style="font-size:13px;margin-bottom:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Проблемы:</h3>
-  <div class="audit-list" id="auditList"></div>
-  <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-    <h3 style="font-size:13px;margin-bottom:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">🔗 Утечки (HIBP)</h3>
-    <button class="btn btn-primary btn-small" onclick="checkLeaks()" style="width:100%">Проверить</button>
-    <div id="leakResults" style="margin-top:12px"></div>
-  </div>
-</div></div>
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87ceeb);
+            scene.fog = new THREE.FogExp2(0x87ceeb, 0.015);
 
-<div class="modal-back" id="settingsModal"><div class="modal">
-  <div class="modal-header"><h2>⚙️ Настройки</h2><button class="modal-close" onclick="closeModal('settingsModal')">×</button></div>
-  <div style="display:flex;gap:4px;background:var(--panel2);padding:4px;border-radius:12px;margin-bottom:18px;flex-wrap:wrap">
-    <button class="btn btn-small" style="flex:1;background:var(--accent);color:#0a0e14" onclick="switchTab('theme',this)">🎨</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('profiles',this)">👥</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('trash',this)">🗑️</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('backup',this)">💾</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('password',this)">🔑</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('pin',this)">📌</button>
-    <button class="btn btn-small" style="flex:1" onclick="switchTab('danger',this)">⚠️</button>
-  </div>
-  <div id="setTab-theme"><p style="margin-bottom:12px;font-size:12px;color:var(--muted)">Оформление</p><div class="theme-grid" id="themeGrid"></div></div>
-  <div id="setTab-profiles" class="hidden"><div id="manageProfiles"></div></div>
-  <div id="setTab-trash" class="hidden"><p style="margin-bottom:14px;font-size:12px;color:var(--muted)">Корзина (30 дней)</p><div id="trashList"></div></div>
-  <div id="setTab-backup" class="hidden"><p style="margin-bottom:14px;font-size:12px;color:var(--muted)">Экспорт профиля</p><button class="btn btn-primary" onclick="exportVault()">📥 .vault</button></div>
-  <div id="setTab-password" class="hidden">
-    <div class="form-group"><label>Текущий</label><input type="password" id="oldMasterPass" autocomplete="off"></div>
-    <div class="form-group"><label>Новый</label><input type="password" id="newMasterPass" autocomplete="new-password" oninput="updateStrength('newMasterPass','newMasterStr')"><div class="strength" style="margin-top:8px"><div class="strength-bar"><div class="strength-fill" id="newMasterStr"></div></div></div></div>
-    <div class="form-group"><label>Повтори</label><input type="password" id="newMasterPass2" autocomplete="new-password"></div>
-    <button class="btn btn-primary" onclick="changeMasterPassword()">Сменить</button>
-  </div>
-  <div id="setTab-pin" class="hidden">
-    <div id="pinStatus"></div>
-    <div id="pinSetup"><div class="form-group" style="margin-top:14px"><label>PIN (4-8 цифр)</label><input type="password" id="newPin" maxlength="8" inputmode="numeric" style="text-align:center;font-size:22px;letter-spacing:10px"></div><button class="btn btn-primary" onclick="setupPin()">📌 Установить</button></div>
-  </div>
-  <div id="setTab-danger" class="hidden"><p style="margin-bottom:14px;color:var(--danger);font-size:12px">⚠️ Удалить профиль</p><button class="btn btn-danger" onclick="deleteCurrentProfile()">🗑️ Удалить</button></div>
-</div></div>
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.copy(player.pos);
 
-<div class="modal-back" id="pinModal"><div class="modal" style="max-width:340px">
-  <div class="modal-header"><h2>🔐 PIN</h2><button class="modal-close" onclick="closeModal('pinModal')">×</button></div>
-  <div class="pin-prompt"><input type="password" id="pinInput" maxlength="8" inputmode="numeric" autocomplete="off"><button class="btn btn-primary" onclick="verifyPin()">Разблокировать</button></div>
-</div></div>
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
 
-<div class="modal-back" id="viewModal"><div class="modal">
-  <div class="modal-header"><h2 id="viewTitle">Запись</h2><button class="modal-close" onclick="closeModal('viewModal')">×</button></div>
-  <div id="viewContent"></div>
-  <div class="modal-footer"><button class="btn btn-primary" onclick="copyViewPassword()">📋 Копировать</button><button class="btn btn-secondary" onclick="closeModal('viewModal')">Закрыть</button></div>
-</div></div>
+            // Освещение (Солнце)
+            const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+            sun.position.set(50, 80, 50);
+            sun.castShadow = true;
+            scene.add(sun);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-<div class="toast" id="toast"></div>
+            // Море (Вода)
+            const waterGeo = new THREE.PlaneGeometry(200, 200, 32, 32);
+            const waterMat = new THREE.MeshPhongMaterial({ color: 0x006699, shininess: 80, transparent: true, opacity: 0.85 });
+            const water = new THREE.Mesh(waterGeo, waterMat);
+            water.rotation.x = -Math.PI / 2;
+            water.position.y = 0;
+            scene.add(water);
 
-<script>
-// === ANTI-DEVTOOLS + ANTI-INSPECT BOOTSTRAP ===
-(function(){
-  // 1. Запрет контекстного меню (ПКМ)
-  document.addEventListener('contextmenu',e=>{e.preventDefault();return false});
-  
-  // 2. Запрет выделения текста и перетаскивания
-  document.addEventListener('selectstart',e=>{
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable)return true;
-    e.preventDefault();return false;
-  });
-  document.addEventListener('dragstart',e=>{
-    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return true;
-    e.preventDefault();return false;
-  });
-  
-  // 3. Запрет горячих клавиш
-  document.addEventListener('keydown',e=>{
-    const k=e.key.toLowerCase();
-    const c=e.ctrlKey||e.metaKey;
-    const s=e.shiftKey;
-    // F12
-    if(k==='f12'){e.preventDefault();return false}
-    // Ctrl+U (view-source), Ctrl+S (save), Ctrl+P (print)
-    if(c&&(k==='u'||k==='s'||k==='p')){e.preventDefault();return false}
-    // Ctrl+Shift+I/J/C (DevTools, Console, Inspect)
-    if(c&&s&&(k==='i'||k==='j'||k==='c')){e.preventDefault();return false}
-    // Ctrl+A в не-input
-    if(c&&k==='a'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();return false}
-  });
-  
-  // 4. Anti-DevTools: debugger + timing
-  let devtoolsOpen=false;
-  setInterval(()=>{
-    const start=performance.now();
-    debugger;
-    const end=performance.now();
-    if(end-start>100){
-      devtoolsOpen=true;
-      document.getElementById('detectorWarn').classList.add('show');
-      // Очищаем sensitive данные
-      if(typeof masterKey!=='undefined'){try{masterKey=null}catch(e){}}
-      if(typeof entries!=='undefined'){try{entries=[]}catch(e){}}
-    }else{
-      if(devtoolsOpen){
-        devtoolsOpen=false;
-        document.getElementById('detectorWarn').classList.remove('show');
-      }
-    }
-  },1500);
-  
-  // 5. Console disable
-  try{window.console={log:()=>{},warn:()=>{},error:()=>{},info:()=>{},debug:()=>{}}}catch(e){}
-  // 6. Block eval/Function/document.write
-  try{window.eval=function(){throw new Error('eval disabled')}}catch(e){}
-  try{window.Function=function(){throw new Error('Function disabled')}}catch(e){}
-  try{document.write=function(){throw new Error('document.write disabled')}}catch(e){}
-  // 7. Iframe block
-  try{if(window.top!==window.self){document.documentElement.innerHTML='<div style="color:red;padding:40px;text-align:center;background:#000;color:#f87171;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:sans-serif"><h1>⚠️ iframe заблокирован</h1></div>';throw 0}}catch(e){}
-  // 8. HTTPS check
-  const isLocal=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)||location.protocol==='file:';
-  if(location.protocol!=='https:'&&!isLocal){
-    document.body.innerHTML='<div style="color:red;padding:40px;text-align:center;background:#000;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:sans-serif"><h1>⚠️ Требуется HTTPS</h1></div>';
-    throw new Error('HTTPS required');
-  }
-  // 9. WebCrypto
-  if(!window.crypto||!window.crypto.subtle){
-    document.body.innerHTML='<div style="color:red;padding:40px;text-align:center;background:#000;height:100vh;display:flex;align-items:center;justify-content:center"><h1>⚠️ Нужен WebCrypto</h1></div>';
-    throw new Error('WebCrypto required');
-  }
-  // 10. Запрет copy для паролей через Ctrl+C (разрешить только через API)
-  document.addEventListener('copy',e=>{
-    const sel=window.getSelection().toString();
-    if(sel.length>20&&/^[!-~]+$/.test(sel)){
-      // Похоже на пароль — блокируем
-      e.preventDefault();
-      return false;
-    }
-  });
-})();
+            // Остров / Окружение
+            const islandGeo = new THREE.BoxGeometry(40, 2, 40);
+            const islandMat = new THREE.MeshLambertMaterial({ color: 0x2e7d32 });
+            const island = new THREE.Mesh(islandGeo, islandMat);
+            island.position.set(0, -0.9, 0);
+            scene.add(island);
 
-// === CONST ===
-const ITERATIONS=900000;
-const PROFILES_KEY='sv_profiles';
-const ACTIVE_KEY='sv_active';
-const PROFILE_DATA_PREFIX='sv_profile_';
-const LOCKOUT_PREFIX='sv_lockout_';
-const THEME_KEY='sv_theme';
-const SEARCH_HISTORY_KEY='sv_search_history';
-const TRASH_PREFIX='sv_trash_';
-const RECOVERY_PREFIX='sv_recovery_';
+            // Пирс
+            const pierGeo = new THREE.BoxGeometry(6, 0.4, 15);
+            const pierMat = new THREE.MeshLambertMaterial({ color: 0x5c3a21 });
+            const pier = new THREE.Mesh(pierGeo, pierMat);
+            pier.position.set(0, 0.2, -15);
+            scene.add(pier);
 
-const CATEGORIES={all:{icon:'📂',name:'Все'},social:{icon:'🌐',name:'Соцсети'},work:{icon:'💼',name:'Работа'},email:{icon:'📧',name:'Почта'},bank:{icon:'🏦',name:'Банки'},shop:{icon:'🛒',name:'Покупки'},games:{icon:'🎮',name:'Игры'},gov:{icon:'🏛️',name:'Госуслуги'},other:{icon:'📦',name:'Другое'}};
-const THEMES=[{id:'dark',name:'Dark',color:'#4ade80'},{id:'light',name:'Light',color:'#16a34a'},{id:'matrix',name:'Matrix',color:'#00ff41'},{id:'neon',name:'Neon',color:'#ff2ec4'},{id:'minimal',name:'Minimal',color:'#2563eb'}];
-const AVATARS=['🦊','🐺','🦁','🐯','🐉','🦅','👑','🎯','🚀','⚡','🔥','💎','🌟','🎮','🧠','🎨'];
-const SMART_CATS={'github.com':'work','gitlab.com':'work','stackoverflow.com':'work','notion.so':'work','slack.com':'work','vk.com':'social','ok.ru':'social','instagram.com':'social','facebook.com':'social','twitter.com':'social','x.com':'social','tiktok.com':'social','telegram.org':'social','discord.com':'social','reddit.com':'social','linkedin.com':'social','gmail.com':'email','mail.ru':'email','yandex.ru':'email','outlook.com':'email','protonmail.com':'email','sberbank.ru':'bank','tinkoff.ru':'bank','alfa-bank.ru':'bank','vtb.ru':'bank','gazprombank.ru':'bank','raiffeisen.ru':'bank','ozon.ru':'shop','wildberries.ru':'shop','avito.ru':'shop','aliexpress.com':'shop','amazon.com':'shop','steamcommunity.com':'games','steampowered.com':'games','epicgames.com':'games','gog.com':'games','roblox.com':'games','gosuslugi.ru':'gov','nalog.ru':'gov','mos.ru':'gov'};
+            // Рыбный Ларек
+            createStall();
+        }
 
-let masterKey=null,entries=[],currentCategory='all';
-let currentProfileData=null,currentProfileMeta=null;
-let unlockedCritical=new Set(),pinCache=null,clipboardTimer=null;
-let currentCustomFields=[],currentTheme='dark';
-let selectedAvatar='🦊',customAvatar=null;
-let searchHistory=[],viewEntryIdx=null;
-let lockTimerInt=null;
-let newRecoveryCode=null,pendingNewProfile=null;
-let channel;
-try{channel=new BroadcastChannel('sv_sync')}catch(e){}
+        function createStall() {
+            const stallGroup = new THREE.Group();
+            
+            // Стойка
+            const counter = new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 1.5), new THREE.MeshLambertMaterial({ color: 0x8b5a2b }));
+            counter.position.set(5, 0.6, 0);
+            stallGroup.add(counter);
 
-// === CRYPTO ===
-function b64(b){return btoa(String.fromCharCode(...new Uint8Array(b)))}
-function ub64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0)).buffer}
-async function deriveKey(pwd,salt,iter=ITERATIONS){
-  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pwd),'PBKDF2',false,['deriveKey']);
-  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:iter,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
-}
-async function encData(k,pt){
-  const iv=crypto.getRandomValues(new Uint8Array(12));
-  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},k,new TextEncoder().encode(pt));
-  return{iv:b64(iv),ct:b64(ct)};
-}
-async function decData(k,ivB,ctB){
-  const iv=new Uint8Array(ub64(ivB));
-  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},k,ub64(ctB));
-  return new TextDecoder().decode(pt);
-}
+            // Навес
+            const roof = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.2, 2f), new THREE.MeshLambertMaterial({ color: 0xef4444 }));
+            roof.position.set(5, 2.5, 0);
+            stallGroup.add(roof);
 
-// === RECOVERY ===
-function genRecoveryCode(){
-  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const a=new Uint32Array(24);crypto.getRandomValues(a);
-  let s='';for(let i=0;i<24;i++)s+=c[a[i]%c.length];
-  return s;
-}
-async function hashRecovery(code){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
+            scene.add(stallGroup);
+        }
 
-// === LOCKOUT ===
-function getLockoutKey(){return LOCKOUT_PREFIX+(currentProfileMeta?.id||'global')}
-function getLockout(){try{const r=localStorage.getItem(getLockoutKey());return r?JSON.parse(r):{until:0,attempts:0}}catch(e){return{until:0,attempts:0}}}
-function saveLockout(d){try{localStorage.setItem(getLockoutKey(),JSON.stringify(d))}catch(e){}}
-function isLockedOut(){return getLockout().until>Date.now()}
-function clearLockout(){try{localStorage.removeItem(getLockoutKey())}catch(e){}}
+        // Управление клавиатурой (Поддержка RU/EN)
+        function setupEvents() {
+            window.addEventListener('keydown', (e) => {
+                const code = e.code;
+                const key = e.key.toLowerCase();
+                if (code === 'KeyW' || key === 'ц') keys.forward = true;
+                if (code === 'KeyS' || key === 'ы') keys.backward = true;
+                if (code === 'KeyA' || key === 'ф') keys.left = true;
+                if (code === 'KeyD' || key === 'в') keys.right = true;
+                if (code === 'KeyE' || key === 'у') interact();
+            });
 
-// === THEME ===
-function applyTheme(t){currentTheme=t;document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem(THEME_KEY,t)}catch(e){}}
-function renderThemeGrid(){
-  const g=document.getElementById('themeGrid');g.textContent='';
-  THEMES.forEach(t=>{
-    const d=document.createElement('div');d.className='theme-card'+(currentTheme===t.id?' active':'');
-    const p=document.createElement('div');p.className='theme-preview';
-    const bg=t.id==='dark'?'#0a0e14':t.id==='light'?'#f5f7fa':t.id==='matrix'?'#000800':t.id==='neon'?'#0a0014':'#fafafa';
-    p.style.cssText='background:'+bg+';border:1px solid '+t.color;
-    const n=document.createElement('div');n.className='theme-name';n.textContent=t.name;
-    d.appendChild(p);d.appendChild(n);
-    d.onclick=()=>{applyTheme(t.id);renderThemeGrid()};
-    g.appendChild(d);
-  });
-}
+            window.addEventListener('keyup', (e) => {
+                const code = e.code;
+                const key = e.key.toLowerCase();
+                if (code === 'KeyW' || key === 'ц') keys.forward = false;
+                if (code === 'KeyS' || key === 'ы') keys.backward = false;
+                if (code === 'KeyA' || key === 'ф') keys.left = false;
+                if (code === 'KeyD' || key === 'в') keys.right = false;
+            });
+        }
 
-// === DOM ===
-function escHtml(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function sanitizeMarkdown(text){
-  if(!text)return'';
-  let c=String(text).replace(/<[^>]*>/g,'');
-  c=c.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  c=c.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/`(.+?)`/g,'<code>$1</code>');
-  return c;
-}
+        function setupPointerLock() {
+            document.body.addEventListener('click', () => {
+                if (!isStationOpen) document.body.requestPointerLock();
+            });
 
-// === STORAGE ===
-function loadProfiles(){try{const r=localStorage.getItem(PROFILES_KEY);return r?JSON.parse(r):[]}catch(e){return[]}}
-function saveProfiles(p){try{localStorage.setItem(PROFILES_KEY,JSON.stringify(p))}catch(e){}}
-function loadProfileData(id){try{const r=localStorage.getItem(PROFILE_DATA_PREFIX+id);return r?JSON.parse(r):null}catch(e){return null}}
-function saveProfileData(id,d){try{localStorage.setItem(PROFILE_DATA_PREFIX+id,JSON.stringify(d))}catch(e){}}
-function loadRecoveryHash(id){try{return localStorage.getItem(RECOVERY_PREFIX+id)}catch(e){return null}}
-function saveRecoveryHash(id,h){try{localStorage.setItem(RECOVERY_PREFIX+id,h)}catch(e){}}
+            document.addEventListener('mousemove', (e) => {
+                if (document.pointerLockElement === document.body) {
+                    yaw -= e.movementX * 0.002;
+                    pitch -= e.movementY * 0.002;
+                    pitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, pitch));
+                }
+            });
+        }
 
-// === UI ===
-function toast(m,t=''){
-  const el=document.getElementById('toast');
-  el.textContent=m;el.className='toast show '+t;
-  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);
-}
-function togglePwd(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🙈'}
-function openModal(id){document.getElementById(id).classList.add('active')}
-function closeModal(id){document.getElementById(id).classList.remove('active')}
-document.querySelectorAll('.modal-back').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('active')})});
+        function interact() {
+            // Дистанция до Пирса (Рыбалка)
+            if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
+                catchFish();
+            }
+            // Дистанция до Ларька (Разделка/Продажа)
+            else if (player.pos.distanceTo(new THREE.Vector3(5, 1.7, 0)) < 3) {
+                openStation();
+            }
+        }
 
-function showView(name){
-  ['viewProfiles','viewLogin','viewCreate','viewShowRecovery','viewRecovery'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  const map={'profiles':'viewProfiles','login':'viewLogin','create':'viewCreate','showRecovery':'viewShowRecovery','recovery':'viewRecovery'};
-  document.getElementById(map[name]).classList.remove('hidden');
-  if(name==='profiles')renderProfilesList();
-  if(name==='login')checkLockoutOnLoad();
-}
+        function catchFish() {
+            if (inventory.length >= 5) {
+                alert("Садок полон!");
+                return;
+            }
+            const weight = (Math.random() * 2 + 0.5).toFixed(2);
+            inventory.push({ type: 'Лосось', weight: parseFloat(weight) });
+            document.getElementById('fish-count').innerText = `${inventory.length}/5`;
+            alert(`Вы поймали Лосося весом ${weight} кг!`);
+        }
 
-function renderProfilesList(){
-  const profiles=loadProfiles();
-  const list=document.getElementById('profilesList');list.textContent='';
-  if(!profiles.length){showView('create');initAvatarSelector();return}
-  profiles.forEach(p=>{
-    const lockout=JSON.parse(localStorage.getItem(LOCKOUT_PREFIX+p.id)||'{"until":0}');
-    const isLocked=lockout.until>Date.now();
-    const btn=document.createElement('button');
-    btn.className='profile-card'+(isLocked?' locked-out':'');
-    btn.onclick=()=>selectProfile(p.id);
-    const av=document.createElement('div');av.className='profile-avatar';
-    if(p.avatarImage){const img=document.createElement('img');img.src=p.avatarImage;av.appendChild(img)}
-    else av.textContent=p.avatar||'👤';
-    if(isLocked){const li=document.createElement('span');li.className='lock-icon';li.textContent='🔒';av.appendChild(li)}
-    const info=document.createElement('div');info.className='profile-info';
-    const nm=document.createElement('div');nm.className='profile-name';nm.textContent=p.name;
-    const mt=document.createElement('div');mt.className='profile-meta';
-    mt.textContent=isLocked?'⏳ Заблокирован':'Создан '+new Date(p.createdAt).toLocaleDateString('ru');
-    info.appendChild(nm);info.appendChild(mt);
-    const ar=document.createElement('div');ar.className='arrow';ar.textContent='→';
-    btn.appendChild(av);btn.appendChild(info);btn.appendChild(ar);
-    list.appendChild(btn);
-  });
-}
-function initAvatarSelector(){
-  const s=document.getElementById('avatarSelector');s.textContent='';
-  AVATARS.forEach(a=>{
-    const d=document.createElement('div');
-    d.className='avatar-opt'+(a===selectedAvatar?' selected':'');
-    d.textContent=a;
-    d.onclick=()=>{selectedAvatar=a;customAvatar=null;initAvatarSelector()};
-    s.appendChild(d);
-  });
-}
-function uploadAvatar(ev){
-  const f=ev.target.files[0];if(!f)return;
-  if(f.size>200000){toast('Файл >200КБ','danger');return}
-  const r=new FileReader();
-  r.onload=e=>{
-    customAvatar=e.target.result;
-    const s=document.getElementById('avatarSelector');s.textContent='';
-    const d=document.createElement('div');d.className='avatar-opt selected';
-    d.style.cssText='grid-column:1/-1;aspect-ratio:auto;height:80px';
-    const img=document.createElement('img');img.src=customAvatar;img.style.cssText='max-height:70px;max-width:100%';
-    d.appendChild(img);s.appendChild(d);
-  };
-  r.readAsDataURL(f);
-}
-function selectProfile(id){
-  const p=loadProfiles().find(x=>x.id===id);if(!p)return;
-  currentProfileMeta=p;
-  document.getElementById('loginTitle').textContent='Вход: '+p.name;
-  document.getElementById('unlockPass').value='';
-  document.getElementById('lockError').textContent='';
-  showView('login');
-  setTimeout(()=>document.getElementById('unlockPass').focus(),100);
-}
+        function spawnCustomer() {
+            currentCustomerOrder = { weight: (Math.random() * 1.5 + 0.5).toFixed(2) };
+            document.getElementById('order-panel').style.display = 'block';
+            document.getElementById('order-text').innerText = `Здравствуйте! Мне нужно ${currentCustomerOrder.weight} кг свежего нарезанного филе лосося.`;
+        }
 
-function checkLockoutOnLoad(){
-  const lockout=getLockout();
-  const timer=document.getElementById('lockTimer');
-  const btn=document.getElementById('unlockBtn');
-  if(lockout.until>Date.now()){
-    btn.disabled=true;timer.classList.remove('hidden');
-    startLockTimer(lockout.until);
-  }else{
-    btn.disabled=false;timer.classList.add('hidden');
-    if(lockTimerInt){clearInterval(lockTimerInt);lockTimerInt=null}
-  }
-}
-function startLockTimer(until){
-  if(lockTimerInt)clearInterval(lockTimerInt);
-  const timer=document.getElementById('lockTimer');
-  const btn=document.getElementById('unlockBtn');
-  const tick=()=>{
-    const left=until-Date.now();
-    if(left<=0){clearInterval(lockTimerInt);lockTimerInt=null;timer.classList.add('hidden');btn.disabled=false;document.getElementById('lockError').textContent='';clearLockout();return}
-    const sec=Math.ceil(left/1000),mm=Math.floor(sec/60),ss=sec%60;
-    timer.innerHTML='<div>🔒 Слишком много попыток</div><div class="big">'+mm+':'+String(ss).padStart(2,'0')+'</div><small>Блокировка сохраняется даже после F5</small>';
-  };
-  tick();lockTimerInt=setInterval(tick,1000);
-}
+        function openStation() {
+            if (inventory.length === 0) {
+                alert("У вас нет рыбы для разделки!");
+                return;
+            }
+            isStationOpen = true;
+            document.exitPointerLock();
+            document.getElementById('station-ui').style.display = 'block';
+            document.getElementById('scale-weight').innerText = inventory[0].weight;
+            drawFishOnBoard();
+        }
 
-async function prepareRecovery(){
-  const name=document.getElementById('profileName').value.trim()||'Профиль';
-  const p1=document.getElementById('createPass').value;
-  const p2=document.getElementById('createPass2').value;
-  if(p1.length<12){toast('Пароль от 12 символов','danger');return}
-  if(p1!==p2){toast('Пароли не совпадают','danger');return}
-  pendingNewProfile={name,password:p1,avatar:selectedAvatar,avatarImage:customAvatar};
-  newRecoveryCode=genRecoveryCode();
-  document.getElementById('recoveryCodeDisplay').textContent=newRecoveryCode;
-  document.getElementById('recoveryConfirm').value='';
-  document.getElementById('finishCreateBtn').disabled=true;
-  document.querySelectorAll('#viewCreate ~ .onboard-dot').forEach(()=>{});
-  const dots=document.querySelectorAll('.onboard-dot');
-  if(dots[0])dots[0].className='onboard-dot done';
-  if(dots[1])dots[1].className='onboard-dot active';
-  showView('showRecovery');
-}
-function checkRecoveryConfirm(){
-  const v=document.getElementById('recoveryConfirm').value.trim().toUpperCase();
-  document.getElementById('finishCreateBtn').disabled=v!==newRecoveryCode;
-}
-async function copyRecovery(){try{await navigator.clipboard.writeText(newRecoveryCode);toast('📋 Скопировано')}catch(e){toast('❌','danger')}}
-function downloadRecovery(){
-  const t='SECUREVAULT RECOVERY CODE\n\nПрофиль: '+(pendingNewProfile?.name||'')+'\n\nКод: '+newRecoveryCode+'\n\nДата: '+new Date().toISOString()+'\n\n⚠️ Храните в надёжном месте. При использовании ВСЕ данные будут удалены.';
-  const b=new Blob([t],{type:'text/plain'});
-  const u=URL.createObjectURL(b);
-  const a=document.createElement('a');a.href=u;a.download='recovery-code-'+Date.now()+'.txt';a.click();URL.revokeObjectURL(u);
-  toast('💾 Скачано');
-}
-function cancelRecovery(){pendingNewProfile=null;newRecoveryCode=null;showView('create')}
+        function closeStation() {
+            isStationOpen = false;
+            document.getElementById('station-ui').style.display = 'none';
+        }
 
-async function finishCreate(){
-  if(!pendingNewProfile||!newRecoveryCode)return;
-  const {name,password,avatar,avatarImage}=pendingNewProfile;
-  const id='p_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  const salt=crypto.getRandomValues(new Uint8Array(16));
-  const key=await deriveKey(password,salt);
-  const {iv,ct}=await encData(key,JSON.stringify([]));
-  saveProfileData(id,{version:7,salt:b64(salt),iv,ct,has2FA:false});
-  saveRecoveryHash(id,await hashRecovery(newRecoveryCode));
-  const profiles=loadProfiles();
-  profiles.push({id,name,createdAt:Date.now(),avatar,avatarImage});
-  saveProfiles(profiles);
-  try{localStorage.setItem(ACTIVE_KEY,id)}catch(e){}
-  pendingNewProfile=null;newRecoveryCode=null;
-  toast('✅ Профиль создан!');
-  showView('profiles');
-}
+        function drawFishOnBoard() {
+            const canvas = document.getElementById('cutting-board-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Рисуем простую рыбу
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.ellipse(200, 100, 120, 45, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
-async function unlockVault(){
-  if(isLockedOut()){toast('⏳ Подождите','danger');return}
-  const pwd=document.getElementById('unlockPass').value;
-  const err=document.getElementById('lockError');
-  if(!currentProfileMeta){err.textContent='Профиль не выбран';return}
-  const data=loadProfileData(currentProfileMeta.id);
-  if(!data){err.textContent='Данные не найдены';return}
-  try{
-    const key=await deriveKey(pwd,ub64(data.salt));
-    const decrypted=await decData(key,data.iv,data.ct);
-    entries=JSON.parse(decrypted);
-    if(!Array.isArray(entries))entries=[];
-    masterKey=key;currentProfileData=data;
-    clearLockout();
-    document.getElementById('unlockPass').value='';
-    err.textContent='';
-    showVault();
-  }catch(e){
-    const lockout=getLockout();
-    lockout.attempts=(lockout.attempts||0)+1;
-    const delays=[0,0,1000,2000,4000,8000,16000,30000,60000,120000,300000,600000,1800000];
-    const delay=delays[Math.min(lockout.attempts,delays.length-1)];
-    if(delay>0){lockout.until=Date.now()+delay;saveLockout(lockout);checkLockoutOnLoad()}
-    else{saveLockout(lockout);err.textContent='❌ Неверный пароль ('+lockout.attempts+'/2)'}
-  }
-}
+        function packAndServe() {
+            if (!inventory.length) return;
+            const fish = inventory.shift();
+            money += Math.round(fish.weight * 120);
+            document.getElementById('money-display').innerText = money;
+            document.getElementById('fish-count').innerText = `${inventory.length}/5`;
+            closeStation();
+            alert("Заказ успешно выполнен! Вы получили деньги.");
+            spawnCustomer();
+        }
 
-async function doRecoveryReset(){
-  const code=document.getElementById('recoveryInput').value.trim().toUpperCase();
-  const err=document.getElementById('recoveryError');
-  if(!currentProfileMeta){err.textContent='Профиль не выбран';return}
-  if(!code){err.textContent='Введите код';return}
-  const storedHash=loadRecoveryHash(currentProfileMeta.id);
-  if(!storedHash){err.textContent='Recovery Code не создан';return}
-  const inputHash=await hashRecovery(code);
-  if(inputHash!==storedHash){err.textContent='❌ Неверный код';return}
-  if(!confirm('Сбросить хранилище? Все пароли будут удалены. Необратимо.'))return;
-  if(!confirm('Точно?'))return;
-  try{
-    localStorage.removeItem(PROFILE_DATA_PREFIX+currentProfileMeta.id);
-    localStorage.removeItem(TRASH_PREFIX+currentProfileMeta.id);
-    localStorage.removeItem(RECOVERY_PREFIX+currentProfileMeta.id);
-    localStorage.removeItem(LOCKOUT_PREFIX+currentProfileMeta.id);
-  }catch(e){}
-  const profiles=loadProfiles().filter(p=>p.id!==currentProfileMeta.id);
-  saveProfiles(profiles);currentProfileMeta=null;
-  document.getElementById('recoveryInput').value='';err.textContent='';
-  toast('🗑️ Хранилище сброшено');
-  showView('profiles');
-}
+        function animate() {
+            requestAnimationFrame(animate);
 
-function lockVault(){
-  masterKey=null;entries=[];unlockedCritical.clear();pinCache=null;currentProfileData=null;
-  if(clipboardTimer)clearTimeout(clipboardTimer);
-  document.getElementById('vaultScreen').classList.remove('active');
-  document.getElementById('lockScreen').classList.add('active');
-  showView('profiles');currentProfileMeta=null;
-  if(channel)channel.postMessage({type:'lock'});
-}
-function showVault(){
-  document.getElementById('lockScreen').classList.remove('active');
-  document.getElementById('vaultScreen').classList.add('active');
-  const pill=document.getElementById('activeProfilePill');pill.textContent='';
-  if(currentProfileMeta.avatarImage){const img=document.createElement('img');img.src=currentProfileMeta.avatarImage;img.style.cssText='width:16px;height:16px;border-radius:50%;object-fit:cover';pill.appendChild(img)}
-  else pill.textContent=(currentProfileMeta.avatar||'👤')+' ';
-  pill.appendChild(document.createTextNode(currentProfileMeta.name||''));
-  renderCategories();renderCategorySelect();renderEntries();loadSearchHistory();resetIdleTimer();
-}
-function panicMode(){
-  try{navigator.clipboard.writeText('').catch(()=>{})}catch(e){}
-  document.querySelectorAll('.modal-back').forEach(m=>m.classList.remove('active'));
-  lockVault();toast('🆘 Паника','danger');
-}
+            // Поворот камеры
+            camera.rotation.order = 'YXZ';
+            camera.rotation.y = yaw;
+            camera.rotation.x = pitch;
 
-// === AUTO-LOCK ===
-const AUTO_LOCK_MS=5*60*1000,HIDDEN_LOCK_MS=60*1000;
-let idleTimer=null,hiddenTimer=null,blurTimer=null;
-function resetIdleTimer(){if(!masterKey)return;if(idleTimer)clearTimeout(idleTimer);idleTimer=setTimeout(()=>{lockVault();toast('🔒 Автоблокировка','danger')},AUTO_LOCK_MS)}
-['mousedown','mousemove','keydown','touchstart','scroll','click'].forEach(ev=>document.addEventListener(ev,resetIdleTimer,{passive:true}));
-document.addEventListener('visibilitychange',()=>{if(!masterKey)return;if(document.hidden)hiddenTimer=setTimeout(()=>{lockVault();toast('🔒 Вкладка скрыта','danger')},HIDDEN_LOCK_MS);else if(hiddenTimer)clearTimeout(hiddenTimer)});
-window.addEventListener('blur',()=>{if(!masterKey)return;blurTimer=setTimeout(()=>{if(!document.hasFocus()&&masterKey)lockVault()},30000)});
-window.addEventListener('focus',()=>{if(blurTimer)clearTimeout(blurTimer)});
-window.addEventListener('beforeunload',()=>{masterKey=null;entries=[];pinCache=null;unlockedCritical.clear()});
+            // Движение игрока относительно взгляда
+            const dir = new THREE.Vector3();
+            if (keys.forward) dir.z -= 1;
+            if (keys.backward) dir.z += 1;
+            if (keys.left) dir.x -= 1;
+            if (keys.right) dir.x += 1;
+            dir.normalize();
+            dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
 
-// === SEARCH ===
-function loadSearchHistory(){try{searchHistory=JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY)||'[]')}catch(e){searchHistory=[]}}
-function saveSearchHistory(q){q=(q||'').trim();if(!q||q.length<2)return;searchHistory=searchHistory.filter(s=>s!==q);searchHistory.unshift(q);if(searchHistory.length>10)searchHistory=searchHistory.slice(0,10);try{localStorage.setItem(SEARCH_HISTORY_KEY,JSON.stringify(searchHistory))}catch(e){}}
-function showSearchHistory(){if(!searchHistory.length)return;const h=document.getElementById('searchHistory');h.textContent='';searchHistory.forEach(s=>{const d=document.createElement('div');d.className='sh-item';const sp=document.createElement('span');sp.textContent='🔍 '+s;d.appendChild(sp);d.onclick=()=>applySearch(s);h.appendChild(d)});const cl=document.createElement('div');cl.className='sh-clear';cl.textContent='Очистить';cl.onclick=clearSearchHistory;h.appendChild(cl);h.classList.add('show')}
-function hideSearchHistory(){document.getElementById('searchHistory').classList.remove('show')}
-function applySearch(q){document.getElementById('searchInput').value=q;saveSearchHistory(q);hideSearchHistory();renderEntries()}
-function clearSearchHistory(){searchHistory=[];try{localStorage.removeItem(SEARCH_HISTORY_KEY)}catch(e){}hideSearchHistory()}
+            player.pos.addScaledVector(dir, player.speed);
+            camera.position.copy(player.pos);
 
-// === STRENGTH ===
-function checkStrength(p){
-  if(!p)return{score:0,label:'—',level:0,color:''};
-  let s=0;if(p.length>=8)s++;if(p.length>=12)s++;if(p.length>=16)s++;
-  if(/[A-Z]/.test(p))s++;if(/[a-z]/.test(p))s++;if(/[0-9]/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;
-  let l=0,lab='',col='';
-  if(p.length<8){lab='Очень слабый';col='var(--weak)';l=20}
-  else if(s<=3){lab='Слабый';col='var(--weak)';l=35}
-  else if(s<=5){lab='Средний';col='var(--medium)';l=60}
-  else if(s<=6){lab='Сильный';col='var(--strong)';l=80}
-  else{lab='Отличный';col='var(--strong)';l=100}
-  return{score:s,label:lab,level:l,color:col};
-}
-function updateStrength(iId,bId){
-  const p=document.getElementById(iId).value;
-  const s=checkStrength(p);
-  const b=document.getElementById(bId);
-  if(b){b.style.width=s.level+'%';b.style.background=s.color||'var(--weak)'}
-  const l=document.getElementById('createStrLbl'),lv=document.getElementById('createStrLvl');
-  if(l&&iId==='createPass'){l.textContent=s.label;lv.textContent=p.length?p.length+' символов':''}
-}
+            // Подсказка взаимодействий
+            const prompt = document.getElementById('action-prompt');
+            if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
+                prompt.style.display = 'block';
+                prompt.innerText = "Нажмите [E] чтобы Ловить Рыбу";
+            } else if (player.pos.distanceTo(new THREE.Vector3(5, 1.7, 0)) < 3) {
+                prompt.style.display = 'block';
+                prompt.innerText = "Нажмите [E] чтобы Разрезать & Продать";
+            } else {
+                prompt.style.display = 'none';
+            }
 
-// === HTTPS ===
-function getHttpsStatus(site){if(!site)return'unknown';const s=site.toLowerCase().trim();if(s.startsWith('https://'))return'secure';if(s.startsWith('http://'))return'insecure';return'assume'}
-function checkHttpsField(){
-  const site=document.getElementById('fSite').value;
-  const warn=document.getElementById('httpsWarn'),info=document.getElementById('httpsInfo');
-  const st=getHttpsStatus(site);
-  warn.classList.add('hidden');info.classList.add('hidden');
-  if(st==='insecure')warn.classList.remove('hidden');
-  else if(st==='secure')info.classList.remove('hidden');
-}
+            renderer.render(scene, camera);
+        }
 
-// === SMART CAT ===
-let suggestedCategory=null;
-function normalizeDomain(url){if(!url)return'';let d=url.toLowerCase().trim();d=d.replace(/^https?:\/\//,'').replace(/^www\./,'');return d.split('/')[0].split(':')[0].split('?')[0]}
-function smartCategorize(){
-  const site=document.getElementById('fSite').value;
-  const domain=normalizeDomain(site);
-  const sc=document.getElementById('smartCat');
-  sc.classList.add('hidden');suggestedCategory=null;
-  if(!domain)return;
-  for(const [known,cat] of Object.entries(SMART_CATS)){
-    if(domain===known||domain.endsWith('.'+known)){
-      suggestedCategory=cat;const c=CATEGORIES[cat];
-      sc.textContent='💡 Определено: '+c.icon+' '+c.name+' — нажмите';
-      sc.classList.remove('hidden');return;
-    }
-  }
-}
-function applySmartCategory(){if(!suggestedCategory)return;document.getElementById('fCategory').value=suggestedCategory;document.getElementById('smartCat').classList.add('hidden');toast('✅ Применено')}
-
-// === CATEGORIES ===
-function renderCategories(){
-  const c=document.getElementById('catsBar');c.textContent='';
-  Object.entries(CATEGORIES).forEach(([k,v])=>{
-    const b=document.createElement('button');
-    b.className='cat-btn'+(k===currentCategory?' active':'');
-    b.textContent=v.icon+' '+v.name;
-    b.onclick=()=>{currentCategory=k;renderCategories();renderEntries()};
-    c.appendChild(b);
-  });
-}
-function renderCategorySelect(){
-  const s=document.getElementById('fCategory');s.textContent='';
-  Object.entries(CATEGORIES).forEach(([k,v])=>{if(k==='all')return;const o=document.createElement('option');o.value=k;o.textContent=v.icon+' '+v.name;s.appendChild(o)});
-}
-
-// === RENDER ===
-function renderEntries(){
-  const list=document.getElementById('entriesList');
-  const search=(document.getElementById('searchInput').value||'').toLowerCase().trim();
-  if(search&&search.length>=2)saveSearchHistory(search);
-  let f=entries.map((e,i)=>({...e,_idx:i}));
-  if(currentCategory!=='all')f=f.filter(e=>e.category===currentCategory);
-  if(search)f=f.filter(e=>(e.site||'').toLowerCase().includes(search)||(e.login||'').toLowerCase().includes(search));
-  list.textContent='';
-  if(!f.length){
-    const d=document.createElement('div');d.className='empty';
-    const ic=document.createElement('div');ic.className='empty-icon';ic.textContent='📭';
-    const h=document.createElement('h3');h.textContent='Пусто';
-    const p=document.createElement('p');p.textContent=entries.length?'Ничего не найдено':'Добавьте первую запись';
-    d.appendChild(ic);d.appendChild(h);d.appendChild(p);list.appendChild(d);return;
-  }
-  f.forEach(e=>{
-    const s=checkStrength(e.password);
-    const crit=e.critical&&!unlockedCritical.has(e._idx);
-    const domain=normalizeDomain(e.site);
-    const cat=CATEGORIES[e.category]||CATEGORIES.other;
-    const https=getHttpsStatus(e.site);
-    const icon=document.createElement('div');icon.className='entry-icon';
-    if(crit)icon.textContent='🔒';
-    else if(domain){const img=document.createElement('img');img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(domain)+'&sz=64';img.onerror=()=>{img.remove();icon.textContent=cat.icon};icon.appendChild(img)}
-    else icon.textContent=cat.icon;
-    const hb=document.createElement('span');hb.className='https-badge '+(https==='insecure'?'insecure':'secure');hb.textContent=https==='insecure'?'⚠️':'🔒';icon.appendChild(hb);
-    const body=document.createElement('div');body.className='entry-body';body.onclick=()=>viewEntry(e._idx);
-    const st=document.createElement('div');st.className='entry-site';st.textContent=e.site||'';
-    const lg=document.createElement('div');lg.className='entry-login';lg.textContent=e.login||'';
-    const mt=document.createElement('div');mt.className='entry-meta';
-    const dot=document.createElement('span');dot.className='dot';dot.style.background=s.color;
-    const lbl=document.createElement('span');lbl.textContent=s.label;
-    mt.appendChild(dot);mt.appendChild(lbl);
-    if(e.critical){const c=document.createElement('span');c.textContent='· 🔐';mt.appendChild(c)}
-    if(e.updated){const u=document.createElement('span');u.textContent='· '+new Date(e.updated).toLocaleDateString('ru');mt.appendChild(u)}
-    body.appendChild(st);body.appendChild(lg);body.appendChild(mt);
-    const acts=document.createElement('div');acts.className='entry-actions';
-    [['📋','Копировать',()=>copyPassword(e._idx)],['🌐','Открыть',()=>openSite(e._idx)],['✏️','Изменить',()=>editEntry(e._idx)],['🗑','Удалить',()=>deleteEntry(e._idx)]].forEach(([t,title,fn])=>{
-      const b=document.createElement('button');b.textContent=t;b.title=title;
-      b.onclick=(ev)=>{ev.stopPropagation();fn()};acts.appendChild(b);
-    });
-    const entry=document.createElement('div');entry.className='entry'+(crit?' locked':'');
-    entry.appendChild(icon);entry.appendChild(body);entry.appendChild(acts);
-    list.appendChild(entry);
-  });
-}
-
-function viewEntry(idx){
-  const e=entries[idx];if(!e)return;
-  if(e.critical&&!unlockedCritical.has(idx)){promptPin(()=>{unlockedCritical.add(idx);viewEntry(idx);renderEntries()});return}
-  viewEntryIdx=idx;
-  document.getElementById('viewTitle').textContent=e.site;
-  const c=document.getElementById('viewContent');c.textContent='';
-  const mk=(label,val,safe)=>{
-    const g=document.createElement('div');g.className='form-group';
-    const l=document.createElement('label');l.textContent=label;
-    const v=document.createElement('div');
-    v.style.cssText='padding:12px;background:var(--panel2);border-radius:10px;font-family:monospace;word-break:break-all';
-    if(safe)v.innerHTML=val;else v.textContent=val;
-    g.appendChild(l);g.appendChild(v);return g;
-  };
-  c.appendChild(mk('Логин',e.login||'',false));
-  const pg=document.createElement('div');pg.className='form-group';
-  const pl=document.createElement('label');pl.textContent='Пароль';
-  const pv=document.createElement('div');
-  pv.style.cssText='padding:12px;background:var(--panel2);border-radius:10px;font-family:monospace;filter:blur(5px);cursor:pointer;transition:filter .3s;word-break:break-all';
-  pv.textContent=e.password;pv.onclick=()=>{pv.style.filter='blur(0)'};
-  pg.appendChild(pl);pg.appendChild(pv);c.appendChild(pg);
-  if(e.notes)c.appendChild(mk('Заметки',sanitizeMarkdown(e.notes),true));
-  openModal('viewModal');
-}
-async function copyViewPassword(){if(viewEntryIdx===null)return;await doCopy(entries[viewEntryIdx].password)}
-function openSite(idx){const e=entries[idx];if(!e||!e.site)return;let url=e.site.trim();if(!/^https?:\/\//i.test(url))url='https://'+url;window.open(url,'_blank','noopener,noreferrer')}
-
-// === FORM ===
-function addCustomField(){currentCustomFields.push({name:'',value:''});renderCustomFields()}
-function renderCustomFields(){
-  const c=document.getElementById('customFieldsContainer');c.textContent='';
-  currentCustomFields.forEach((f,i)=>{
-    const d=document.createElement('div');d.style.cssText='display:flex;gap:6px;margin-bottom:6px';
-    const n=document.createElement('input');n.placeholder='Название';n.value=f.name;
-    n.style.cssText='flex:1;padding:9px;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px';
-    n.onchange=()=>currentCustomFields[i].name=n.value;
-    const v=document.createElement('input');v.placeholder='Значение';v.value=f.value;
-    v.style.cssText='flex:1;padding:9px;border-radius:8px;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px';
-    v.onchange=()=>currentCustomFields[i].value=v.value;
-    const x=document.createElement('button');x.textContent='×';
-    x.style.cssText='padding:9px 12px;border-radius:8px;background:var(--danger);color:#fff';
-    x.onclick=()=>{currentCustomFields.splice(i,1);renderCustomFields()};
-    d.appendChild(n);d.appendChild(v);d.appendChild(x);c.appendChild(d);
-  });
-}
-function openEntryModal(idx=null){
-  document.getElementById('entryModalTitle').textContent=idx===null?'Новая запись':'Редактировать';
-  document.getElementById('editIndex').value=idx===null?'':idx;
-  currentCustomFields=[];
-  document.getElementById('httpsWarn').classList.add('hidden');
-  document.getElementById('httpsInfo').classList.add('hidden');
-  document.getElementById('smartCat').classList.add('hidden');
-  suggestedCategory=null;
-  if(idx===null){
-    ['fSite','fLogin','fPassword','fNotes'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('fCategory').value='other';
-    document.getElementById('fCritical').checked=false;
-    document.getElementById('fPasswordStr').style.width='0%';
-    document.getElementById('historySection').classList.add('hidden');
-  }else{
-    const e=entries[idx];
-    document.getElementById('fSite').value=e.site||'';
-    document.getElementById('fLogin').value=e.login||'';
-    document.getElementById('fPassword').value=e.password||'';
-    document.getElementById('fCategory').value=e.category||'other';
-    document.getElementById('fNotes').value=e.notes||'';
-    document.getElementById('fCritical').checked=!!e.critical;
-    currentCustomFields=e.customFields?JSON.parse(JSON.stringify(e.customFields)):[];
-    updateStrength('fPassword','fPasswordStr');checkHttpsField();
-    if(e.history&&e.history.length){
-      document.getElementById('historySection').classList.remove('hidden');
-      const hl=document.getElementById('historyList');hl.textContent='';
-      e.history.slice().reverse().forEach(h=>{
-        const d=document.createElement('div');
-        d.style.cssText='padding:8px 10px;background:var(--panel2);border-radius:6px;margin-bottom:4px;font-size:11px;font-family:monospace;display:flex;justify-content:space-between';
-        const s=document.createElement('span');s.textContent=h.password;
-        const t=document.createElement('span');t.style.cssText='color:var(--muted);font-size:10px';t.textContent=new Date(h.date).toLocaleString('ru');
-        d.appendChild(s);d.appendChild(t);hl.appendChild(d);
-      });
-    }else document.getElementById('historySection').classList.add('hidden');
-  }
-  renderCustomFields();openModal('entryModal');
-}
-document.getElementById('fPassword').addEventListener('input',()=>updateStrength('fPassword','fPasswordStr'));
-
-async function saveEntry(){
-  const idx=document.getElementById('editIndex').value;
-  const site=document.getElementById('fSite').value.trim();
-  const login=document.getElementById('fLogin').value.trim();
-  const password=document.getElementById('fPassword').value;
-  const category=document.getElementById('fCategory').value;
-  const notes=document.getElementById('fNotes').value.trim();
-  const critical=document.getElementById('fCritical').checked;
-  if(!site||!login||!password){toast('Заполните поля','danger');return}
-  if(critical&&!currentProfileData.has2FA)toast('⚠️ Установите PIN','danger');
-  const https=getHttpsStatus(site);
-  if(https==='insecure'){if(!confirm('⚠️ HTTP. Продолжить?'))return}
-  const customFields=currentCustomFields.filter(f=>f.name&&f.value);
-  let history=[];
-  if(idx==='')entries.push({site,login,password,category,notes,critical,customFields,updated:Date.now()});
-  else{
-    const old=entries[parseInt(idx)];
-    if(old.password!==password){history=(old.history||[]).slice(-9);history.push({password:old.password,date:Date.now()})}
-    else history=old.history||[];
-    entries[parseInt(idx)]={site,login,password,category,notes,critical,customFields,history,updated:Date.now()};
-    unlockedCritical.add(parseInt(idx));
-  }
-  await persistEntries();closeModal('entryModal');renderEntries();toast('💾 Сохранено');
-}
-function editEntry(idx){if(entries[idx].critical&&!unlockedCritical.has(idx))promptPin(()=>openEntryModal(idx));else openEntryModal(idx)}
-
-function getTrashKey(){return TRASH_PREFIX+currentProfileMeta.id}
-function loadTrash(){try{const r=localStorage.getItem(getTrashKey());return r?JSON.parse(r):[]}catch(e){return[]}}
-function saveTrash(t){try{localStorage.setItem(getTrashKey(),JSON.stringify(t))}catch(e){}}
-async function deleteEntry(idx){
-  const e=entries[idx];if(!e)return;
-  if(!confirm('В корзину? (30 дней)'))return;
-  const trash=loadTrash();trash.push({...e,deletedAt:Date.now()});saveTrash(trash);
-  entries.splice(idx,1);unlockedCritical.clear();
-  await persistEntries();renderEntries();toast('🗑️ В корзине');
-}
-function renderTrash(){
-  const list=document.getElementById('trashList');list.textContent='';
-  const trash=loadTrash().filter(t=>Date.now()-t.deletedAt<30*86400000);saveTrash(trash);
-  if(!trash.length){list.innerHTML='<div class="empty" style="padding:30px">Пусто</div>';return}
-  trash.forEach((t,i)=>{
-    const d=document.createElement('div');
-    d.style.cssText='padding:12px;background:var(--panel2);border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap';
-    const info=document.createElement('div');info.style.cssText='flex:1;min-width:150px';
-    const n=document.createElement('div');n.style.cssText='font-weight:800;font-size:13px';n.textContent=t.site;
-    const dt=document.createElement('div');dt.style.cssText='font-size:11px;color:var(--muted)';dt.textContent='Удалено '+new Date(t.deletedAt).toLocaleDateString('ru');
-    info.appendChild(n);info.appendChild(dt);
-    const acts=document.createElement('div');acts.style.cssText='display:flex;gap:6px';
-    const r=document.createElement('button');r.textContent='Восстановить';
-    r.style.cssText='padding:6px 12px;border-radius:6px;background:var(--accent);color:#0a0e14;font-size:11px;font-weight:800';
-    r.onclick=()=>restoreFromTrash(i);
-    const x=document.createElement('button');x.textContent='Удалить';
-    x.style.cssText='padding:6px 12px;border-radius:6px;background:var(--danger);color:#fff;font-size:11px;font-weight:800';
-    x.onclick=()=>permanentDelete(i);
-    acts.appendChild(r);acts.appendChild(x);
-    d.appendChild(info);d.appendChild(acts);list.appendChild(d);
-  });
-}
-async function restoreFromTrash(i){
-  const trash=loadTrash();const item=trash[i];if(!item)return;
-  delete item.deletedAt;entries.push(item);trash.splice(i,1);saveTrash(trash);
-  await persistEntries();renderEntries();renderTrash();toast('♻️ Восстановлено');
-}
-function permanentDelete(i){const trash=loadTrash();trash.splice(i,1);saveTrash(trash);renderTrash();toast('Удалено')}
-
-async function persistEntries(){
-  if(!masterKey||!currentProfileData||!currentProfileMeta)return;
-  const {iv,ct}=await encData(masterKey,JSON.stringify(entries));
-  currentProfileData={...currentProfileData,iv,ct};saveProfileData(currentProfileMeta.id,currentProfileData);
-}
-
-async function copyPassword(idx){
-  const e=entries[idx];if(!e)return;
-  if(e.critical&&!unlockedCritical.has(idx)){promptPin(async()=>{unlockedCritical.add(idx);await doCopy(e.password);renderEntries()});return}
-  await doCopy(e.password);
-}
-async function doCopy(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    toast('📋 Скопировано (25с)');
-    if(clipboardTimer)clearTimeout(clipboardTimer);
-    clipboardTimer=setTimeout(async()=>{try{const c=await navigator.clipboard.readText();if(c===text)await navigator.clipboard.writeText('')}catch(e){}},25000);
-  }catch(e){toast('❌ Не удалось','danger')}
-}
-
-function updateGenLen(){document.getElementById('genLenVal').textContent=document.getElementById('genLen').value;generatePassword()}
-function generatePassword(){
-  const len=parseInt(document.getElementById('genLen').value);
-  let c='';
-  if(document.getElementById('genUpper').checked)c+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  if(document.getElementById('genLower').checked)c+='abcdefghijklmnopqrstuvwxyz';
-  if(document.getElementById('genDigits').checked)c+='0123456789';
-  if(document.getElementById('genSymbols').checked)c+='!@#$%^&*()_+-=[]{}|;:,.<>?';
-  if(!c)c='abcdefghijklmnopqrstuvwxyz0123456789';
-  const arr=new Uint32Array(len);crypto.getRandomValues(arr);
-  let r='';for(let i=0;i<len;i++)r+=c[arr[i]%c.length];
-  document.getElementById('genResult').value=r;
-}
-async function copyGenResult(){const v=document.getElementById('genResult').value;if(v)await doCopy(v)}
-function quickGen(){const c='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=';const arr=new Uint32Array(16);crypto.getRandomValues(arr);let r='';for(let i=0;i<16;i++)r+=c[arr[i]%c.length];document.getElementById('fPassword').value=r;updateStrength('fPassword','fPasswordStr')}
-
-function openAudit(){
-  const total=entries.length;
-  const weak=entries.filter(e=>checkStrength(e.password).score<=3&&e.password.length<12).length;
-  const cnt={};entries.forEach(e=>cnt[e.password]=(cnt[e.password]||0)+1);
-  const dup=entries.filter(e=>cnt[e.password]>1).length;
-  const old=entries.filter(e=>e.updated&&(Date.now()-e.updated)>180*86400000).length;
-  const http=entries.filter(e=>getHttpsStatus(e.site)==='insecure').length;
-  document.getElementById('auditStats').innerHTML='<div class="stat-box"><div class="val">'+total+'</div><div class="lbl">Всего</div></div><div class="stat-box '+(weak?'warn':'')+'"><div class="val">'+weak+'</div><div class="lbl">Слабых</div></div><div class="stat-box '+(dup?'warn':'')+'"><div class="val">'+dup+'</div><div class="lbl">Дубли</div></div><div class="stat-box '+(old?'danger':'')+'"><div class="val">'+old+'</div><div class="lbl">Старых</div></div><div class="stat-box '+(http?'danger':'')+'"><div class="val">'+http+'</div><div class="lbl">HTTP</div></div>';
-  const probs=[];
-  entries.forEach(e=>{const s=checkStrength(e.password);if(s.score<=3||e.password.length<12)probs.push({name:e.site,reason:'Слабый ('+s.label+')'});if(cnt[e.password]>1)probs.push({name:e.site,reason:'Дубликат'});if(e.updated&&(Date.now()-e.updated)>180*86400000)probs.push({name:e.site,reason:'>180 дней'});if(getHttpsStatus(e.site)==='insecure')probs.push({name:e.site,reason:'⚠️ Без HTTPS'})});
-  const al=document.getElementById('auditList');al.textContent='';
-  if(!probs.length)al.innerHTML='<div style="text-align:center;padding:20px;color:var(--accent)">✅ Всё в порядке</div>';
-  else probs.forEach(p=>{const d=document.createElement('div');d.className='audit-item';d.innerHTML='<span>'+escHtml(p.name)+'</span><span style="color:var(--muted);font-size:11px">'+escHtml(p.reason)+'</span>';al.appendChild(d)});
-  document.getElementById('leakResults').textContent='';openModal('auditModal');
-}
-async function sha1Hex(t){const b=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase()}
-async function checkLeaks(){
-  const c=document.getElementById('leakResults');
-  if(!entries.length){c.innerHTML='<p style="color:var(--muted);font-size:12px">Нет записей</p>';return}
-  c.innerHTML='<p style="color:var(--muted);font-size:12px">🔍 Проверяю...</p>';
-  const res=[];
-  for(const e of entries){
-    try{
-      const h=await sha1Hex(e.password);
-      const pfx=h.substring(0,5),sfx=h.substring(5);
-      const r=await fetch('https://api.pwnedpasswords.com/range/'+pfx);
-      const txt=await r.text();let cnt=0;
-      for(const line of txt.split('\n')){const [s,n]=line.split(':');if(s===sfx){cnt=parseInt(n);break}}
-      res.push({site:e.site,count:cnt});
-    }catch(err){res.push({site:e.site,count:-1})}
-  }
-  c.textContent='';
-  res.forEach(r=>{
-    const d=document.createElement('div');d.className='audit-item';
-    const n=document.createElement('span');n.textContent=r.site;
-    const b=document.createElement('span');
-    if(r.count===-1){b.textContent='⚠️ ошибка';b.style.color='var(--warn)'}
-    else if(r.count===0){b.textContent='✓ безопасен';b.style.color='var(--strong)'}
-    else{b.textContent='⚠️ найден '+r.count;b.style.color='var(--danger)'}
-    d.appendChild(n);d.appendChild(b);c.appendChild(d);
-  });
-}
-
-let pinCallback=null;
-function promptPin(cb){
-  if(!currentProfileData.has2FA){cb(null);return}
-  if(pinCache){cb(pinCache);return}
-  pinCallback=cb;document.getElementById('pinInput').value='';openModal('pinModal');
-  setTimeout(()=>document.getElementById('pinInput').focus(),100);
-}
-async function verifyPin(){
-  const pin=document.getElementById('pinInput').value.trim();if(!pin)return;
-  try{
-    const k=await deriveKey(pin,ub64(currentProfileData.pinSalt));
-    const t=await decData(k,currentProfileData.pinIv,currentProfileData.pinCt);
-    if(t!=='OK')throw new Error();
-    pinCache=pin;closeModal('pinModal');
-    const cb=pinCallback;pinCallback=null;if(cb)cb(pin);
-  }catch(e){toast('❌ Неверный PIN','danger');document.getElementById('pinInput').value=''}
-}
-async function setupPin(){
-  const pin=document.getElementById('newPin').value.trim();
-  if(!/^\d{4,8}$/.test(pin)){toast('PIN 4-8 цифр','danger');return}
-  const salt=crypto.getRandomValues(new Uint8Array(16));
-  const k=await deriveKey(pin,salt);
-  const {iv,ct}=await encData(k,'OK');
-  currentProfileData={...currentProfileData,has2FA:true,pinSalt:b64(salt),pinIv:iv,pinCt:ct};
-  saveProfileData(currentProfileMeta.id,currentProfileData);
-  document.getElementById('newPin').value='';renderPinStatus();toast('✅ PIN установлен');
-}
-function renderPinStatus(){
-  const s=document.getElementById('pinStatus'),su=document.getElementById('pinSetup');
-  if(currentProfileData.has2FA){
-    s.innerHTML='<div style="padding:14px;background:var(--panel2);border-radius:10px;text-align:center"><div style="font-size:32px;margin-bottom:8px">🔐</div><div style="color:var(--accent);font-weight:800">PIN активен</div></div>';
-    su.classList.add('hidden');
-  }else{
-    s.innerHTML='<div style="padding:14px;background:var(--panel2);border-radius:10px;text-align:center;color:var(--muted);font-size:12px">PIN не установлен</div>';
-    su.classList.remove('hidden');
-  }
-}
-
-async function changeMasterPassword(){
-  const oldP=document.getElementById('oldMasterPass').value;
-  const newP=document.getElementById('newMasterPass').value;
-  const newP2=document.getElementById('newMasterPass2').value;
-  if(!currentProfileData)return;
-  try{const ok=await deriveKey(oldP,ub64(currentProfileData.salt));await decData(ok,currentProfileData.iv,currentProfileData.ct)}catch(e){toast('❌ Старый неверный','danger');return}
-  if(newP.length<12){toast('Минимум 12','danger');return}
-  if(newP!==newP2){toast('Не совпадают','danger');return}
-  const salt=crypto.getRandomValues(new Uint8Array(16));
-  const nk=await deriveKey(newP,salt);
-  const {iv,ct}=await encData(nk,JSON.stringify(entries));
-  const nd={...currentProfileData,salt:b64(salt),iv,ct};
-  if(currentProfileData.has2FA){delete nd.has2FA;delete nd.pinSalt;delete nd.pinIv;delete nd.pinCt;pinCache=null}
-  currentProfileData=nd;saveProfileData(currentProfileMeta.id,nd);masterKey=nk;
-  document.getElementById('oldMasterPass').value='';
-  document.getElementById('newMasterPass').value='';
-  document.getElementById('newMasterPass2').value='';
-  toast('✅ Пароль изменён');renderPinStatus();
-}
-
-function exportVault(){
-  if(!currentProfileData)return;
-  const b=new Blob([JSON.stringify(currentProfileData)],{type:'application/json'});
-  const u=URL.createObjectURL(b);
-  const a=document.createElement('a');
-  a.href=u;a.download='vault-'+currentProfileMeta.name+'-'+new Date().toISOString().slice(0,10)+'.vault';
-  a.click();URL.revokeObjectURL(u);toast('📥 Сохранено');
-}
-
-function switchTab(tab,btn){
-  document.querySelectorAll('#settingsModal .btn-small').forEach(b=>{b.style.background='';b.style.color=''});
-  btn.style.background='var(--accent)';btn.style.color='#0a0e14';
-  ['theme','profiles','trash','backup','password','pin','danger'].forEach(t=>{const el=document.getElementById('setTab-'+t);if(el)el.classList.toggle('hidden',t!==tab)});
-  if(tab==='theme')renderThemeGrid();
-  if(tab==='profiles')renderManageProfiles();
-  if(tab==='trash')renderTrash();
-  if(tab==='pin')renderPinStatus();
-}
-function renderManageProfiles(){
-  const profiles=loadProfiles();
-  const c=document.getElementById('manageProfiles');c.textContent='';
-  profiles.forEach(p=>{
-    const d=document.createElement('div');
-    d.style.cssText='padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px';
-    const n=document.createElement('div');n.style.cssText='font-weight:900;font-size:13px;flex:1';
-    n.textContent=(p.avatar||'👤')+' '+(p.id===currentProfileMeta?.id?'✓ ':'')+p.name;
-    d.appendChild(n);
-    if(p.id!==currentProfileMeta?.id){
-      const b=document.createElement('button');b.textContent='Переключить';
-      b.style.cssText='padding:6px 10px;background:var(--danger);color:#fff;border-radius:6px;font-size:11px;font-weight:700';
-      b.onclick=()=>switchProfile(p.id);d.appendChild(b);
-    }else{
-      const s=document.createElement('span');s.style.cssText='color:var(--accent);font-size:11px';s.textContent='Активный';d.appendChild(s);
-    }
-    c.appendChild(d);
-  });
-}
-function switchProfile(id){closeModal('settingsModal');lockVault();setTimeout(()=>{const p=loadProfiles().find(x=>x.id===id);if(p)selectProfile(id)},300)}
-function deleteCurrentProfile(){
-  if(!currentProfileMeta)return;
-  const profiles=loadProfiles();
-  const other=profiles.filter(p=>p.id!==currentProfileMeta.id);
-  if(!confirm('Удалить "'+currentProfileMeta.name+'"?'))return;
-  if(!confirm('Точно? Данные потеряются.'))return;
-  try{localStorage.removeItem(PROFILE_DATA_PREFIX+currentProfileMeta.id);localStorage.removeItem(TRASH_PREFIX+currentProfileMeta.id);localStorage.removeItem(RECOVERY_PREFIX+currentProfileMeta.id);localStorage.removeItem(LOCKOUT_PREFIX+currentProfileMeta.id)}catch(e){}
-  saveProfiles(other);try{localStorage.removeItem(ACTIVE_KEY)}catch(e){}
-  if(channel)channel.postMessage({type:'lock'});
-  lockVault();toast('🗑️ Удалён');
-}
-
-if(channel)channel.onmessage=e=>{if(e.data?.type==='lock'&&document.getElementById('vaultScreen').classList.contains('active'))lockVault()};
-
-function init(){
-  applyTheme(localStorage.getItem(THEME_KEY)||'dark');
-  const profiles=loadProfiles();
-  if(profiles.length)showView('profiles');
-  else{showView('create');initAvatarSelector()}
-  document.getElementById('unlockPass').addEventListener('keypress',e=>{if(e.key==='Enter')unlockVault()});
-  document.getElementById('createPass2').addEventListener('keypress',e=>{if(e.key==='Enter')prepareRecovery()});
-  document.getElementById('recoveryConfirm').addEventListener('keypress',e=>{if(e.key==='Enter'&&!document.getElementById('finishCreateBtn').disabled)finishCreate()});
-  document.getElementById('recoveryInput').addEventListener('keypress',e=>{if(e.key==='Enter')doRecoveryReset()});
-  document.getElementById('pinInput').addEventListener('keypress',e=>{if(e.key==='Enter')verifyPin()});
-  const gm=document.getElementById('generatorModal');
-  new MutationObserver(()=>{if(gm.classList.contains('active')&&!document.getElementById('genResult').value)generatePassword()}).observe(gm,{attributes:true,attributeFilter:['class']});
-  // Ripple эффект на кнопках
-  document.addEventListener('click',e=>{
-    const b=e.target.closest('.btn,.icon-btn,.cat-btn,.profile-card');
-    if(!b)return;
-    const r=document.createElement('span');
-    r.className='ripple';
-    const rect=b.getBoundingClientRect();
-    const size=Math.max(rect.width,rect.height);
-    r.style.width=size+'px';r.style.height=size+'px';
-    r.style.left=(e.clientX-rect.left-size/2)+'px';
-    r.style.top=(e.clientY-rect.top-size/2)+'px';
-    b.appendChild(r);
-    setTimeout(()=>r.remove(),600);
-  });
-}
-init();
-</script>
+        function setupTouchControls() {
+            // Простая привязка для мобильных
+            document.getElementById('mobile-action-btn').addEventListener('click', interact);
+        }
+    </script>
 </body>
 </html>
