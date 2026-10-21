@@ -2,336 +2,864 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>3D Симулятор Рыбалки и Рыбного Ларька</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
-        #canvas-container { width: 100%; height: 100%; position: absolute; left: 0; top: 0; z-index: 1; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Inter', sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #070a12; }
+        #webgl-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
         
-        /* UI Overlay */
-        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; }
-        .interactive { pointer-events: auto; }
+        /* Interactive Overlay Guard */
+        .ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
+        .interactive { pointer-events: auto !important; }
 
-        /* HUD Top Bar */
-        .top-hud { display: flex; gap: 15px; align-items: center; }
-        .hud-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 10px 20px; border-radius: 14px; color: #fff; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-        
         /* Crosshair */
-        #crosshair { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid rgba(255,255,255,0.8); border-radius: 50%; pointer-events: none; }
-        #crosshair::after { content: ''; position: absolute; top: 3px; left: 3px; width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+        #crosshair {
+            position: absolute; top: 50%; left: 50%; width: 12px; height: 12px;
+            transform: translate(-50%, -50%); border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%; pointer-events: none; z-index: 20; transition: transform 0.1s;
+        }
+        #crosshair::after {
+            content: ''; position: absolute; top: 3px; left: 3px; width: 2px; height: 2px;
+            background: #fff; border-radius: 50%;
+        }
+        #crosshair.active { transform: translate(-50%, -50%) scale(1.5); border-color: #3b82f6; }
 
-        /* Dialog & Orders */
-        #order-panel { position: absolute; top: 80px; right: 20px; width: 320px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 2px solid #3b82f6; border-radius: 16px; padding: 18px; color: white; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        #order-panel h3 { color: #60a5fa; margin-bottom: 8px; font-size: 18px; }
-        #order-panel p { font-size: 14px; line-height: 1.4; color: #cbd5e1; }
+        /* Cutting Board Canvas */
+        #cutting-canvas { background: #422006; border: 4px solid #78350f; border-radius: 12px; cursor: crosshair; }
 
-        /* Prompt Action */
-        #action-prompt { position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.8); border: 1px solid #60a5fa; color: white; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 16px; display: none; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
-
-        /* Butchery & Scale Station Modal */
-        #station-ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 650px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 25px; color: white; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.7); pointer-events: auto; }
-        .station-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 15px; }
-        .station-body { display: flex; flex-direction: column; gap: 15px; align-items: center; }
-        #cutting-board-canvas { background: #331f19; border: 4px solid #5c3a21; border-radius: 12px; cursor: crosshair; }
-        .btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
-
-        /* Mobile Controls */
-        #joystick-container { position: absolute; bottom: 40px; left: 40px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; display: none; pointer-events: auto; }
-        #joystick-handle { position: absolute; top: 35px; left: 35px; width: 50px; height: 50px; background: rgba(59, 130, 246, 0.8); border-radius: 50%; }
-        #mobile-action-btn { position: absolute; bottom: 40px; right: 40px; width: 80px; height: 80px; background: #2563eb; border-radius: 50%; display: none; pointer-events: auto; color: white; font-weight: bold; border: none; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-
-        /* Start Screen */
-        #start-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.95); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; gap: 20px; }
-        #start-overlay h1 { font-size: 36px; color: #60a5fa; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.min.js"></script>
 </head>
 <body>
 
-    <div id="start-overlay">
-        <h1>3D РЫБАЛКА & РЫБНЫЙ ЛАРЕК</h1>
-        <p>Выберите устройство для управления:</p>
-        <div style="display: flex; gap: 20px;">
-            <button class="btn" onclick="startGame('pc')">💻 Компьютер (WASD + Мышь)</button>
-            <button class="btn" onclick="startGame('mobile')">📱 Телефон (Джойстик)</button>
-        </div>
-    </div>
+    <!-- WebGL Canvas Container -->
+    <div id="webgl-container"></div>
 
-    <div id="canvas-container"></div>
+    <!-- Start & Control Selector Screen (Guaranteed Click Listener) -->
+    <div id="start-overlay" class="fixed inset-0 bg-slate-950/95 z-[100] flex flex-col justify-center items-center p-6 text-white text-center interactive backdrop-blur-md">
+        <div class="max-w-md w-full bg-slate-900/80 border border-slate-800 p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-6">
+            <div class="w-16 h-16 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center text-4xl shadow-lg">
+                🎣
+            </div>
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                    3D РЫБАЛКА & ЛАРЕК
+                </h1>
+                <p class="text-slate-400 text-sm mt-2">Ловите рыбу в океане, нарезайте ножом на филе, взвешивайте на весах и продавайте покупателям!</p>
+            </div>
 
-    <div id="ui-layer">
-        <div class="top-hud">
-            <div class="hud-card">💰 Монеты: <span id="money-display" style="color:#f59e0b;">100</span></div>
-            <div class="hud-card">🕒 Время: <span id="time-display">09:00</span></div>
-            <div class="hud-card">🐟 Садок: <span id="fish-count">0/5</span></div>
-        </div>
+            <div class="flex flex-col w-full gap-3 mt-2">
+                <button onclick="bootGame('pc')" class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition rounded-2xl font-bold flex items-center justify-center gap-3 shadow-lg shadow-blue-500/25">
+                    <span>💻 ПК (WASD / ЦФЫВ + Мышь)</span>
+                </button>
+                <button onclick="bootGame('mobile')" class="w-full py-4 px-6 bg-slate-800 hover:bg-slate-700 active:scale-95 transition rounded-2xl font-bold flex items-center justify-center gap-3 border border-slate-700">
+                    <span>📱 Смартфон (Джойстик)</span>
+                </button>
+            </div>
 
-        <div id="crosshair"></div>
-        <div id="action-prompt">Нажмите [E] или Кнопку для взаимодействия</div>
-
-        <div id="order-panel">
-            <h3>Покупатель у Ларька</h3>
-            <p id="order-text">Загрузка заказа...</p>
-        </div>
-
-        <!-- Мобильное управление -->
-        <div id="joystick-container"><div id="joystick-handle"></div></div>
-        <button id="mobile-action-btn">E</button>
-    </div>
-
-    <!-- Окно Разделки и Взвешивания -->
-    <div id="station-ui">
-        <div class="station-header">
-            <h2>Разделочный Стол и Весы</h2>
-            <button class="btn" style="background:#ef4444; padding:6px 12px;" onclick="closeStation()">X</button>
-        </div>
-        <div class="station-body">
-            <p style="font-size:14px; color:#94a3b8;">Проведите мышью/пальцем поперек рыбы, чтобы нарезать ее на филе!</p>
-            <canvas id="cutting-board-canvas" width="400" height="200"></canvas>
-            <div style="display:flex; gap:20px; width:100%; justify-content:space-between; align-items:center;">
-                <div>Вес: <span id="scale-weight" style="font-weight:bold; color:#10b981;">0.00</span> кг</div>
-                <button class="btn" onclick="packAndServe()">Завернуть в пакет и Отдать</button>
+            <div class="text-xs text-slate-500 mt-2">
+                Управление: W/A/S/D или Ц/Ф/Ы/В - ходьба, E - действие, ЛКМ - подсечка / разрез.
             </div>
         </div>
     </div>
 
-    <script>
-        // Игровые Переменные
-        let scene, camera, renderer;
-        let controlType = 'pc';
-        let money = 100, inventory = [], currentCustomerOrder = null;
-        let isStationOpen = false;
-        
-        // Управление ПК (Клавиши W/A/S/D и Ц/Ф/Ы/В)
-        const keys = { forward: false, backward: false, left: false, right: false };
-        let yaw = 0, pitch = 0;
-        const player = { pos: new THREE.Vector3(0, 1.7, 5), speed: 0.12 };
+    <!-- UI Overlay Layer -->
+    <div class="ui-layer">
+        <!-- HUD Top Header -->
+        <div class="absolute top-6 left-6 right-6 flex justify-between items-start pointer-events-none">
+            <div class="flex gap-3">
+                <div class="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 px-4 py-2.5 rounded-2xl text-white font-bold flex items-center gap-2 shadow-lg">
+                    <span class="text-xl">🪙</span>
+                    <span id="hud-money" class="text-amber-400 text-lg">250</span>
+                </div>
+                <div class="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 px-4 py-2.5 rounded-2xl text-white font-bold flex items-center gap-2 shadow-lg">
+                    <span class="text-xl">🐟</span>
+                    <span id="hud-bucket" class="text-blue-400 text-lg">0 / 8</span>
+                </div>
+            </div>
 
-        // Инициализация игры
-        function startGame(mode) {
-            controlType = mode;
-            document.getElementById('start-overlay').style.display = 'none';
+            <button onclick="toggleShop(true)" class="interactive bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white px-5 py-2.5 rounded-2xl font-bold flex items-center gap-2 shadow-lg active:scale-95 transition">
+                <span>🛒 Магазин Удочек</span>
+            </button>
+        </div>
+
+        <!-- Center Crosshair -->
+        <div id="crosshair"></div>
+
+        <!-- Dynamic Action Prompt -->
+        <div id="action-prompt" class="absolute bottom-28 left-1/2 -translate-x-1/2 bg-slate-900/90 border border-blue-500/50 text-white px-6 py-3 rounded-full font-bold text-sm shadow-2xl backdrop-blur-md hidden flex items-center gap-3 transition-all">
+            <span class="bg-blue-600 text-xs px-2.5 py-1 rounded-md uppercase tracking-wider">E</span>
+            <span id="prompt-text">Ловить рыбу</span>
+        </div>
+
+        <!-- Customer Speech Order Overlay -->
+        <div id="customer-order-card" class="absolute top-24 right-6 w-80 bg-slate-900/90 border border-blue-500/40 rounded-3xl p-5 text-white shadow-2xl backdrop-blur-md hidden transition-all">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-blue-500/20 border border-blue-400/30 rounded-full flex items-center justify-center text-xl">
+                    👤
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-blue-400" id="customer-name">Покупатель</h4>
+                    <p class="text-xs text-slate-400">Очередь у Ларька</p>
+                </div>
+            </div>
+            <p class="text-slate-200 text-sm leading-relaxed bg-slate-800/50 p-3 rounded-xl border border-slate-700/50" id="customer-dialog">
+                "Здравствуйте! Нарежьте мне, пожалуйста, 1.2 кг лосося на куски."
+            </p>
+        </div>
+
+        <!-- Fishing Tension Minigame Bar -->
+        <div id="fishing-minigame" class="absolute bottom-32 left-1/2 -translate-x-1/2 w-72 bg-slate-900/90 border border-slate-700 p-4 rounded-2xl hidden backdrop-blur-md flex-col gap-2">
+            <div class="flex justify-between text-xs font-bold text-slate-300">
+                <span>НАТЯЖЕНИЕ ЛЕСКИ</span>
+                <span id="tension-percent" class="text-blue-400">50%</span>
+            </div>
+            <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden border border-slate-700 relative">
+                <div id="tension-bar" class="h-full bg-gradient-to-r from-blue-500 via-green-400 to-red-500 w-1/2 transition-all duration-75"></div>
+            </div>
+            <p class="text-[11px] text-center text-slate-400 mt-1">Удерживайте ЛКМ / Кнопку, чтобы удержать рыбу!</p>
+        </div>
+
+        <!-- Mobile Touch Joystick & Buttons -->
+        <div id="mobile-controls" class="absolute inset-0 pointer-events-none hidden">
+            <div id="touch-joystick-zone" class="absolute bottom-10 left-10 w-36 h-36 bg-white/5 border-2 border-white/20 rounded-full pointer-events-auto flex items-center justify-center">
+                <div id="touch-joystick-stick" class="w-14 h-14 bg-blue-500/80 rounded-full shadow-lg transform transition-transform"></div>
+            </div>
+            <button id="mobile-interact-btn" class="interactive absolute bottom-12 right-10 w-20 h-20 bg-blue-600 hover:bg-blue-500 active:scale-90 text-white font-extrabold text-xl rounded-full shadow-2xl flex items-center justify-center border-2 border-white/20">
+                E
+            </button>
+            <button id="mobile-action-btn" class="interactive absolute bottom-36 right-10 w-16 h-16 bg-emerald-600 hover:bg-emerald-500 active:scale-90 text-white font-bold text-sm rounded-full shadow-2xl flex items-center justify-center border-2 border-white/20">
+                PULL
+            </button>
+        </div>
+    </div>
+
+    <!-- Interactive Butchery & Scale Station Modal -->
+    <div id="station-modal" class="fixed inset-0 bg-slate-950/80 z-[80] flex justify-center items-center p-4 hidden backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl p-6 text-white shadow-2xl flex flex-col gap-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🔪</span>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-blue-400">Разделочный Стол и Весы Ларька</h3>
+                        <p class="text-xs text-slate-400">Разрежьте рыбу мышью/пальцем на филе и взвесьте для продажи</p>
+                    </div>
+                </div>
+                <button onclick="toggleStation(false)" class="w-8 h-8 bg-slate-800 hover:bg-red-500/20 hover:text-red-400 rounded-full flex items-center justify-center font-bold text-sm transition">✕</button>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+                <!-- Interactive Cutting Board -->
+                <div class="flex flex-col items-center gap-2">
+                    <canvas id="cutting-canvas" width="360" height="220"></canvas>
+                    <span class="text-xs text-slate-500">Зажмите и проведите линию поперек рыбы для разреза</span>
+                </div>
+
+                <!-- Weighing Scale Display & Actions -->
+                <div class="flex-1 w-full bg-slate-950 border border-slate-800 rounded-2xl p-5 flex flex-col gap-4">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-bold uppercase">Электронные весы:</span>
+                        <div class="flex items-baseline gap-1">
+                            <span id="scale-value" class="text-3xl font-black text-emerald-400 tracking-wider">0.00</span>
+                            <span class="text-slate-400 text-sm font-bold">кг</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-xs text-slate-300">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Вид рыбы:</span>
+                            <span id="station-fish-type" class="font-bold text-white">Лосось</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Качество нарезки:</span>
+                            <span id="station-cut-quality" class="font-bold text-blue-400">100% (Целая)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Стоимость за кг:</span>
+                            <span id="station-price-per-kg" class="font-bold text-amber-400">150 🪙</span>
+                        </div>
+                    </div>
+
+                    <button onclick="deliverOrderToCustomer()" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 active:scale-95 transition">
+                        Упаковать в Пакет и Отдать Покупателю
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fishing Shop Modal -->
+    <div id="shop-modal" class="fixed inset-0 bg-slate-950/80 z-[85] flex justify-center items-center p-4 hidden backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl p-6 text-white shadow-2xl flex flex-col gap-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="font-extrabold text-xl text-amber-400 flex items-center gap-2">🛒 Магазин Оборудования</h3>
+                <button onclick="toggleShop(false)" class="w-8 h-8 bg-slate-800 hover:bg-red-500/20 hover:text-red-400 rounded-full flex items-center justify-center font-bold text-sm transition">✕</button>
+            </div>
+
+            <div class="flex flex-col gap-3 max-h-96 overflow-y-auto pr-1">
+                <!-- Shop Item 1 -->
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Удочка "Carbon Pro"</h4>
+                        <p class="text-xs text-slate-400">Увеличивает шанс поимки редкой рыбы на 35%</p>
+                    </div>
+                    <button onclick="buyEquipment(1, 300)" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl transition">
+                        300 🪙
+                    </button>
+                </div>
+                <!-- Shop Item 2 -->
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Усиленная Леска</h4>
+                        <p class="text-xs text-slate-400">Уменьшает скорость натяжения при вываживании</p>
+                    </div>
+                    <button onclick="buyEquipment(2, 150)" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl transition">
+                        150 🪙
+                    </button>
+                </div>
+                <!-- Shop Item 3 -->
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Садок +4 Места</h4>
+                        <p class="text-xs text-slate-400">Расширяет ваш садок для рыбы до 12 слотов</p>
+                    </div>
+                    <button onclick="buyEquipment(3, 200)" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl transition">
+                        200 🪙
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio & Logic Scripts -->
+    <script>
+        /* --- Sound Engine (Web Audio API Procedural Synthesis) --- */
+        class AudioEngine {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            playTone(freq, duration, type = 'sine', vol = 0.1) {
+                if (!this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            }
+            playSplash() {
+                this.playTone(150, 0.4, 'triangle', 0.2);
+                setTimeout(() => this.playTone(90, 0.3, 'sine', 0.15), 50);
+            }
+            playSlice() {
+                this.playTone(800, 0.08, 'sawtooth', 0.1);
+            }
+            playCoin() {
+                this.playTone(987, 0.1, 'sine', 0.15);
+                setTimeout(() => this.playTone(1318, 0.25, 'sine', 0.15), 80);
+            }
+            playBeep() {
+                this.playTone(1200, 0.05, 'sine', 0.08);
+            }
+        }
+        const audio = new AudioEngine();
+
+        /* --- Global State --- */
+        let scene, camera, renderer;
+        let controlMode = 'pc'; // 'pc' or 'mobile'
+        let isStarted = false;
+        let money = 250;
+        let maxBucketSize = 8;
+        let fishBucket = [];
+        let activeCustomer = null;
+        let rodLevel = 1;
+        let isMinigameActive = false;
+        let fishingTension = 50;
+
+        // Player physics & controls
+        const player = {
+            pos: new THREE.Vector3(0, 1.7, 6),
+            velocity: new THREE.Vector3(),
+            yaw: 0,
+            pitch: 0,
+            speed: 0.1,
+            isGrounded: true
+        };
+
+        const keys = { w: false, a: false, s: false, d: false, pull: false };
+        const touchState = { moveX: 0, moveY: 0, lookX: 0, lookY: 0 };
+
+        // World Objects
+        let oceanMesh, rodMesh, bobberMesh, customerMesh;
+        let swimmingFishArray = [];
+
+        /* --- Initialization --- */
+        function bootGame(mode) {
+            audio.init();
+            controlMode = mode;
+            document.getElementById('start-overlay').classList.add('hidden');
+            
             if (mode === 'mobile') {
-                document.getElementById('joystick-container').style.display = 'block';
-                document.getElementById('mobile-action-btn').style.display = 'block';
-                setupTouchControls();
+                document.getElementById('mobile-controls').classList.remove('hidden');
+                setupMobileEvents();
             } else {
                 setupPointerLock();
             }
-            init3D();
-            setupEvents();
+
+            initThreeJS();
+            setupKeyboardEvents();
+            setupCuttingBoard();
+            spawnNewCustomer();
+            
+            isStarted = true;
             animate();
-            spawnCustomer();
         }
 
-        function init3D() {
-            const container = document.getElementById('canvas-container');
+        /* --- Three.js 3D World Setup --- */
+        function initThreeJS() {
+            const container = document.getElementById('webgl-container');
+            
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87ceeb);
-            scene.fog = new THREE.FogExp2(0x87ceeb, 0.015);
+            scene.background = new THREE.Color(0x0f172a);
+            scene.fog = new THREE.FogExp2(0x0f172a, 0.015);
 
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.copy(player.pos);
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
 
-            // Освещение (Солнце)
-            const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-            sun.position.set(50, 80, 50);
+            // Sunlight & Ambient Lighting
+            const sun = new THREE.DirectionalLight(0xfff7ed, 1.3);
+            sun.position.set(40, 60, 20);
             sun.castShadow = true;
+            sun.shadow.mapSize.width = 2048;
+            sun.shadow.mapSize.height = 2048;
             scene.add(sun);
-            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
-            // Море (Вода)
-            const waterGeo = new THREE.PlaneGeometry(200, 200, 32, 32);
-            const waterMat = new THREE.MeshPhongMaterial({ color: 0x006699, shininess: 80, transparent: true, opacity: 0.85 });
-            const water = new THREE.Mesh(waterGeo, waterMat);
-            water.rotation.x = -Math.PI / 2;
-            water.position.y = 0;
-            scene.add(water);
+            const ambient = new THREE.AmbientLight(0x38bdf8, 0.4);
+            scene.add(ambient);
 
-            // Остров / Окружение
-            const islandGeo = new THREE.BoxGeometry(40, 2, 40);
-            const islandMat = new THREE.MeshLambertMaterial({ color: 0x2e7d32 });
+            // Ocean Shader / Mesh
+            const waterGeo = new THREE.PlaneGeometry(300, 300, 64, 64);
+            const waterMat = new THREE.MeshPhongMaterial({
+                color: 0x0284c7,
+                emissive: 0x0369a1,
+                emissiveIntensity: 0.2,
+                shininess: 90,
+                transparent: true,
+                opacity: 0.88,
+                wireframe: false
+            });
+            oceanMesh = new THREE.Mesh(waterGeo, waterMat);
+            oceanMesh.rotation.x = -Math.PI / 2;
+            oceanMesh.position.y = 0;
+            scene.add(oceanMesh);
+
+            // Island Terrain
+            const islandGeo = new THREE.BoxGeometry(36, 4, 36);
+            const islandMat = new THREE.MeshStandardMaterial({ color: 0x15803d, roughness: 0.9 });
             const island = new THREE.Mesh(islandGeo, islandMat);
-            island.position.set(0, -0.9, 0);
+            island.position.set(0, -1.8, 8);
+            island.receiveShadow = true;
             scene.add(island);
 
-            // Пирс
-            const pierGeo = new THREE.BoxGeometry(6, 0.4, 15);
-            const pierMat = new THREE.MeshLambertMaterial({ color: 0x5c3a21 });
+            // Wooden Pier Extension towards the ocean
+            const pierGeo = new THREE.BoxGeometry(6, 0.6, 18);
+            const pierMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.8 });
             const pier = new THREE.Mesh(pierGeo, pierMat);
-            pier.position.set(0, 0.2, -15);
+            pier.position.set(0, 0.2, -6);
+            pier.castShadow = true;
+            pier.receiveShadow = true;
             scene.add(pier);
 
-            // Рыбный Ларек
-            createStall();
+            // Create Market Stall (Ларек)
+            createStall3D();
+
+            // Create First-Person Fishing Rod
+            createRod3D();
+
+            // Create Swimming Underwater Fishes
+            spawnUnderwaterFishes();
+
+            // Window Resize
+            window.addEventListener('resize', onWindowResize);
         }
 
-        function createStall() {
-            const stallGroup = new THREE.Group();
+        /* --- 3D Models Procedural Construction --- */
+        function createStall3D() {
+            const stall = new THREE.Group();
+
+            // Wooden Counter Body
+            const counterGeo = new THREE.BoxGeometry(4.5, 1.3, 1.8);
+            const counterMat = new THREE.MeshStandardMaterial({ color: 0x92400e, roughness: 0.7 });
+            const counter = new THREE.Mesh(counterGeo, counterMat);
+            counter.position.set(6, 0.65, 5);
+            counter.castShadow = true;
+            counter.receiveShadow = true;
+            stall.add(counter);
+
+            // Red Canopy Roof
+            const roofGeo = new THREE.BoxGeometry(5, 0.2, 2.4);
+            const roofMat = new THREE.MeshStandardMaterial({ color: 0xd97706, roughness: 0.4 });
+            const roof = new THREE.Mesh(roofGeo, roofMat);
+            roof.position.set(6, 2.7, 5);
+            roof.castShadow = true;
+            stall.add(roof);
+
+            // Support Pillars
+            for (let dx of [-2, 2]) {
+                const pillarGeo = new THREE.CylinderGeometry(0.08, 0.08, 2);
+                const pillarMat = new THREE.MeshStandardMaterial({ color: 0x451a03 });
+                const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+                pillar.position.set(6 + dx, 1.7, 5.8);
+                stall.add(pillar);
+            }
+
+            // Electronic Scale on Counter
+            const scaleGeo = new THREE.BoxGeometry(0.8, 0.25, 0.8);
+            const scaleMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.5 });
+            const scale = new THREE.Mesh(scaleGeo, scaleMat);
+            scale.position.set(5, 1.4, 5);
+            stall.add(scale);
+
+            scene.add(stall);
+        }
+
+        function createRod3D() {
+            const rodGroup = new THREE.Group();
             
-            // Стойка
-            const counter = new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 1.5), new THREE.MeshLambertMaterial({ color: 0x8b5a2b }));
-            counter.position.set(5, 0.6, 0);
-            stallGroup.add(counter);
+            // Rod Stick
+            const stickGeo = new THREE.CylinderGeometry(0.02, 0.05, 3);
+            const stickMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, metalness: 0.6 });
+            const stick = new THREE.Mesh(stickGeo, stickMat);
+            stick.rotation.x = Math.PI / 3;
+            stick.position.set(0.4, -0.4, -0.8);
+            rodGroup.add(stick);
 
-            // Навес
-            const roof = new THREE.Mesh(new THREE.BoxGeometry(4.5, 0.2, 2f), new THREE.MeshLambertMaterial({ color: 0xef4444 }));
-            roof.position.set(5, 2.5, 0);
-            stallGroup.add(roof);
+            // Floating Bobber
+            const bobberGeo = new THREE.SphereGeometry(0.12, 16, 16);
+            const bobberMat = new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xef4444, emissiveIntensity: 0.3 });
+            bobberMesh = new THREE.Mesh(bobberGeo, bobberMat);
+            bobberMesh.position.set(0, 0, -12);
+            scene.add(bobberMesh);
 
-            scene.add(stallGroup);
+            camera.add(rodGroup);
+            scene.add(camera);
         }
 
-        // Управление клавиатурой (Поддержка RU/EN)
-        function setupEvents() {
+        function spawnUnderwaterFishes() {
+            const fishGeo = new THREE.ConeGeometry(0.2, 0.8, 8);
+            fishGeo.rotateX(Math.PI / 2);
+            const fishMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.3 });
+
+            for (let i = 0; i < 6; i++) {
+                const fish = new THREE.Mesh(fishGeo, fishMat);
+                fish.position.set((Math.random() - 0.5) * 15, -0.6, -10 - Math.random() * 10);
+                fish.userData = { speed: 0.03 + Math.random() * 0.04, offset: Math.random() * 100 };
+                swimmingFishArray.push(fish);
+                scene.add(fish);
+            }
+        }
+
+        function spawnNewCustomer() {
+            if (customerMesh) scene.remove(customerMesh);
+
+            const custGroup = new THREE.Group();
+            // Customer Body
+            const bodyGeo = new THREE.CylinderGeometry(0.35, 0.35, 1.4);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: Math.random() > 0.5 ? 0x0284c7 : 0x16a34a });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 0.7;
+            custGroup.add(body);
+
+            // Head
+            const headGeo = new THREE.SphereGeometry(0.25);
+            const headMat = new THREE.MeshStandardMaterial({ color: 0xfde047 });
+            const head = new THREE.Mesh(headGeo, headMat);
+            head.position.y = 1.6;
+            custGroup.add(head);
+
+            custGroup.position.set(6, 0.2, 8);
+            customerMesh = custGroup;
+            scene.add(customerMesh);
+
+            // Generate Order Requirements
+            const weights = [0.8, 1.2, 1.5, 2.0];
+            const targetW = weights[Math.floor(Math.random() * weights.length)];
+            activeCustomer = {
+                name: "Клиент №" + Math.floor(Math.random() * 90 + 10),
+                targetWeight: targetW,
+                pricePerKg: 150
+            };
+
+            document.getElementById('customer-name').innerText = activeCustomer.name;
+            document.getElementById('customer-dialog').innerText = `"Здравствуйте! Мне нужно примерно ${targetW} кг свежего нарезанного лосося."`;
+            document.getElementById('customer-order-card').classList.remove('hidden');
+        }
+
+        /* --- Controls & Input Handling (PC & Mobile) --- */
+        function setupKeyboardEvents() {
             window.addEventListener('keydown', (e) => {
-                const code = e.code;
                 const key = e.key.toLowerCase();
-                if (code === 'KeyW' || key === 'ц') keys.forward = true;
-                if (code === 'KeyS' || key === 'ы') keys.backward = true;
-                if (code === 'KeyA' || key === 'ф') keys.left = true;
-                if (code === 'KeyD' || key === 'в') keys.right = true;
-                if (code === 'KeyE' || key === 'у') interact();
+                const code = e.code;
+                
+                // Supports both English WASD and Russian ЦФЫВ layouts seamlessly
+                if (code === 'KeyW' || key === 'ц') keys.w = true;
+                if (code === 'KeyS' || key === 'ы') keys.s = true;
+                if (code === 'KeyA' || key === 'ф') keys.a = true;
+                if (code === 'KeyD' || key === 'в') keys.d = true;
+                if (code === 'KeyE' || key === 'у') triggerInteraction();
             });
 
             window.addEventListener('keyup', (e) => {
-                const code = e.code;
                 const key = e.key.toLowerCase();
-                if (code === 'KeyW' || key === 'ц') keys.forward = false;
-                if (code === 'KeyS' || key === 'ы') keys.backward = false;
-                if (code === 'KeyA' || key === 'ф') keys.left = false;
-                if (code === 'KeyD' || key === 'в') keys.right = false;
-            });
-        }
-
-        function setupPointerLock() {
-            document.body.addEventListener('click', () => {
-                if (!isStationOpen) document.body.requestPointerLock();
+                const code = e.code;
+                
+                if (code === 'KeyW' || key === 'ц') keys.w = false;
+                if (code === 'KeyS' || key === 'ы') keys.s = false;
+                if (code === 'KeyA' || key === 'ф') keys.a = false;
+                if (code === 'KeyD' || key === 'в') keys.d = false;
             });
 
-            document.addEventListener('mousemove', (e) => {
+            window.addEventListener('mousedown', (e) => {
                 if (document.pointerLockElement === document.body) {
-                    yaw -= e.movementX * 0.002;
-                    pitch -= e.movementY * 0.002;
-                    pitch = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, pitch));
+                    if (isMinigameActive) {
+                        fishingTension = Math.min(100, fishingTension + 12);
+                    }
                 }
             });
         }
 
-        function interact() {
-            // Дистанция до Пирса (Рыбалка)
-            if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
-                catchFish();
-            }
-            // Дистанция до Ларька (Разделка/Продажа)
-            else if (player.pos.distanceTo(new THREE.Vector3(5, 1.7, 0)) < 3) {
-                openStation();
+        function setupPointerLock() {
+            document.body.addEventListener('click', (e) => {
+                if (isStarted && !document.pointerLockElement && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'CANVAS') {
+                    document.body.requestPointerLock();
+                }
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (document.pointerLockElement === document.body) {
+                    player.yaw -= e.movementX * 0.0025;
+                    player.pitch -= e.movementY * 0.0025;
+                    player.pitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, player.pitch));
+                }
+            });
+        }
+
+        function setupMobileEvents() {
+            const stickZone = document.getElementById('touch-joystick-zone');
+            const stick = document.getElementById('touch-joystick-stick');
+            let joystickTouchId = null;
+
+            stickZone.addEventListener('touchstart', (e) => {
+                const touch = e.changedTouches[0];
+                joystickTouchId = touch.identifier;
+            });
+
+            stickZone.addEventListener('touchmove', (e) => {
+                for (let touch of e.changedTouches) {
+                    if (touch.identifier === joystickTouchId) {
+                        const rect = stickZone.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const dx = touch.clientX - centerX;
+                        const dy = touch.clientY - centerY;
+                        const dist = Math.min(40, Math.hypot(dx, dy));
+                        const angle = Math.atan2(dy, dx);
+
+                        const stickX = Math.cos(angle) * dist;
+                        const stickY = Math.sin(angle) * dist;
+                        stick.style.transform = `translate(${stickX}px, ${stickY}px)`;
+
+                        touchState.moveX = stickX / 40;
+                        touchState.moveY = stickY / 40;
+                    }
+                }
+            });
+
+            const resetJoystick = () => {
+                stick.style.transform = `translate(0px, 0px)`;
+                touchState.moveX = 0;
+                touchState.moveY = 0;
+            };
+
+            stickZone.addEventListener('touchend', resetJoystick);
+            stickZone.addEventListener('touchcancel', resetJoystick);
+
+            document.getElementById('mobile-interact-btn').addEventListener('click', triggerInteraction);
+            document.getElementById('mobile-action-btn').addEventListener('click', () => {
+                if (isMinigameActive) fishingTension = Math.min(100, fishingTension + 15);
+            });
+        }
+
+        /* --- Gameplay Interactions --- */
+        function triggerInteraction() {
+            const distToPier = player.pos.distanceTo(new THREE.Vector3(0, 1.7, -12));
+            const distToStall = player.pos.distanceTo(new THREE.Vector3(6, 1.7, 5));
+
+            if (distToPier < 5) {
+                startFishingMinigame();
+            } else if (distToStall < 4) {
+                toggleStation(true);
             }
         }
 
-        function catchFish() {
-            if (inventory.length >= 5) {
-                alert("Садок полон!");
+        function startFishingMinigame() {
+            if (fishBucket.length >= maxBucketSize) {
+                alert("Садок полон! Сначала продайте рыбу в ларьке.");
                 return;
             }
-            const weight = (Math.random() * 2 + 0.5).toFixed(2);
-            inventory.push({ type: 'Лосось', weight: parseFloat(weight) });
-            document.getElementById('fish-count').innerText = `${inventory.length}/5`;
-            alert(`Вы поймали Лосося весом ${weight} кг!`);
+            if (isMinigameActive) return;
+
+            isMinigameActive = true;
+            fishingTension = 40;
+            audio.playSplash();
+            document.getElementById('fishing-minigame').classList.remove('hidden');
+            document.getElementById('fishing-minigame').classList.add('flex');
+
+            const minigameInterval = setInterval(() => {
+                fishingTension -= 2.5;
+                document.getElementById('tension-bar').style.width = fishingTension + '%';
+                document.getElementById('tension-percent').innerText = Math.round(fishingTension) + '%';
+
+                if (fishingTension <= 0) {
+                    clearInterval(minigameInterval);
+                    isMinigameActive = false;
+                    document.getElementById('fishing-minigame').classList.add('hidden');
+                    alert("Рыба сорвалась!");
+                } else if (fishingTension >= 100) {
+                    clearInterval(minigameInterval);
+                    isMinigameActive = false;
+                    document.getElementById('fishing-minigame').classList.add('hidden');
+                    
+                    // Caught Fish Success
+                    const caughtWeight = +(Math.random() * 1.8 + 0.6).toFixed(2);
+                    fishBucket.push({ type: 'Лосось', weight: caughtWeight, cuts: 1 });
+                    document.getElementById('hud-bucket').innerText = `${fishBucket.length} / ${maxBucketSize}`;
+                    audio.playCoin();
+                    alert(`Отлично! Вы выловили Лосося весом ${caughtWeight} кг!`);
+                }
+            }, 80);
         }
 
-        function spawnCustomer() {
-            currentCustomerOrder = { weight: (Math.random() * 1.5 + 0.5).toFixed(2) };
-            document.getElementById('order-panel').style.display = 'block';
-            document.getElementById('order-text').innerText = `Здравствуйте! Мне нужно ${currentCustomerOrder.weight} кг свежего нарезанного филе лосося.`;
-        }
-
-        function openStation() {
-            if (inventory.length === 0) {
-                alert("У вас нет рыбы для разделки!");
-                return;
-            }
-            isStationOpen = true;
-            document.exitPointerLock();
-            document.getElementById('station-ui').style.display = 'block';
-            document.getElementById('scale-weight').innerText = inventory[0].weight;
-            drawFishOnBoard();
-        }
-
-        function closeStation() {
-            isStationOpen = false;
-            document.getElementById('station-ui').style.display = 'none';
-        }
-
-        function drawFishOnBoard() {
-            const canvas = document.getElementById('cutting-board-canvas');
+        /* --- Interactive Cutting Board Logic --- */
+        let cutProgress = 0;
+        function setupCuttingBoard() {
+            const canvas = document.getElementById('cutting-canvas');
             const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let isDrawing = false;
+
+            function renderBoard() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw Board Texture
+                ctx.fillStyle = '#542605';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (fishBucket.length > 0) {
+                    const currentFish = fishBucket[0];
+                    // Render Fish Shape
+                    ctx.fillStyle = '#f97316';
+                    ctx.beginPath();
+                    ctx.ellipse(180, 110, 110, 40, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Render Cut Lines if sliced
+                    if (cutProgress > 0) {
+                        ctx.strokeStyle = '#ef4444';
+                        ctx.lineWidth = 4;
+                        ctx.beginPath();
+                        ctx.moveTo(180, 70);
+                        ctx.lineTo(180, 150);
+                        ctx.stroke();
+                    }
+                } else {
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = '14px Inter';
+                    ctx.fillText('Садок пуст. Поймайте рыбу!', 90, 115);
+                }
+            }
+
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDrawing && fishBucket.length > 0) {
+                    cutProgress = Math.min(100, cutProgress + 5);
+                    audio.playSlice();
+                    renderBoard();
+                    
+                    if (cutProgress >= 100) {
+                        fishBucket[0].cuts = 2;
+                        document.getElementById('station-cut-quality').innerText = '100% (Филе нарезано)';
+                    }
+                }
+            });
+
+            renderBoard();
+        }
+
+        function toggleStation(show) {
+            if (show && fishBucket.length === 0) {
+                alert("У вас нет рыбы в садке для разделки!");
+                return;
+            }
+            const modal = document.getElementById('station-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                if (document.pointerLockElement) document.exitPointerLock();
+                cutProgress = 0;
+                const fish = fishBucket[0];
+                document.getElementById('scale-value').innerText = fish.weight.toFixed(2);
+                document.getElementById('station-fish-type').innerText = fish.type;
+                setupCuttingBoard();
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function deliverOrderToCustomer() {
+            if (fishBucket.length === 0) return;
+
+            const servedFish = fishBucket.shift();
+            const earnedCoins = Math.round(servedFish.weight * activeCustomer.pricePerKg);
+            money += earnedCoins;
+
+            document.getElementById('hud-money').innerText = money;
+            document.getElementById('hud-bucket').innerText = `${fishBucket.length} / ${maxBucketSize}`;
             
-            // Рисуем простую рыбу
-            ctx.fillStyle = '#f97316';
-            ctx.beginPath();
-            ctx.ellipse(200, 100, 120, 45, 0, 0, Math.PI * 2);
-            ctx.fill();
+            audio.playCoin();
+            toggleStation(false);
+            alert(`Заказ выполнен! Клиент заплатил ${earnedCoins} монет.`);
+
+            // Move customer away and spawn next one after short delay
+            setTimeout(spawnNewCustomer, 1500);
         }
 
-        function packAndServe() {
-            if (!inventory.length) return;
-            const fish = inventory.shift();
-            money += Math.round(fish.weight * 120);
-            document.getElementById('money-display').innerText = money;
-            document.getElementById('fish-count').innerText = `${inventory.length}/5`;
-            closeStation();
-            alert("Заказ успешно выполнен! Вы получили деньги.");
-            spawnCustomer();
+        function toggleShop(show) {
+            const modal = document.getElementById('shop-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                if (document.pointerLockElement) document.exitPointerLock();
+            } else {
+                modal.classList.add('hidden');
+            }
         }
 
+        function buyEquipment(type, cost) {
+            if (money < cost) {
+                alert("Недостаточно монет!");
+                return;
+            }
+            money -= cost;
+            document.getElementById('hud-money').innerText = money;
+            audio.playCoin();
+
+            if (type === 1) rodLevel = 2;
+            if (type === 3) {
+                maxBucketSize = 12;
+                document.getElementById('hud-bucket').innerText = `${fishBucket.length} / ${maxBucketSize}`;
+            }
+            alert("Покупка успешно совершена!");
+            toggleShop(false);
+        }
+
+        /* --- Main Animation & Render Loop --- */
         function animate() {
             requestAnimationFrame(animate);
 
-            // Поворот камеры
+            if (!isStarted) return;
+
+            // Camera View Angle Matrix
             camera.rotation.order = 'YXZ';
-            camera.rotation.y = yaw;
-            camera.rotation.x = pitch;
+            camera.rotation.y = player.yaw;
+            camera.rotation.x = player.pitch;
 
-            // Движение игрока относительно взгляда
-            const dir = new THREE.Vector3();
-            if (keys.forward) dir.z -= 1;
-            if (keys.backward) dir.z += 1;
-            if (keys.left) dir.x -= 1;
-            if (keys.right) dir.x += 1;
-            dir.normalize();
-            dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+            // Calculate Motion Vector
+            const moveVector = new THREE.Vector3();
 
-            player.pos.addScaledVector(dir, player.speed);
+            if (controlMode === 'pc') {
+                if (keys.w) moveVector.z -= 1;
+                if (keys.s) moveVector.z += 1;
+                if (keys.a) moveVector.x -= 1;
+                if (keys.d) moveVector.x += 1;
+            } else {
+                moveVector.z = touchState.moveY;
+                moveVector.x = touchState.moveX;
+            }
+
+            moveVector.normalize();
+            moveVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), player.yaw);
+
+            player.pos.addScaledVector(moveVector, player.speed);
+
+            // Bounds Guard on Island
+            player.pos.x = Math.max(-16, Math.min(16, player.pos.x));
+            player.pos.z = Math.max(-14, Math.min(16, player.pos.z));
             camera.position.copy(player.pos);
 
-            // Подсказка взаимодействий
+            // Animate Ocean Water Mesh Waves
+            if (oceanMesh) {
+                const time = Date.now() * 0.002;
+                const pos = oceanMesh.geometry.attributes.position;
+                for (let i = 0; i < pos.count; i++) {
+                    const u = pos.getX(i);
+                    const v = pos.getY(i);
+                    pos.setZ(i, Math.sin(u * 0.2 + time) * 0.2 + Math.cos(v * 0.2 + time) * 0.2);
+                }
+                oceanMesh.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // Swimming Fishes Movement
+            swimmingFishArray.forEach((fish) => {
+                fish.position.x += Math.sin(Date.now() * 0.001 + fish.userData.offset) * 0.02;
+                fish.position.z += fish.userData.speed;
+                if (fish.position.z > 5) fish.position.z = -18;
+            });
+
+            // Distance UI Action Prompt Trigger Check
             const prompt = document.getElementById('action-prompt');
-            if (player.pos.distanceTo(new THREE.Vector3(0, 1.7, -15)) < 4) {
-                prompt.style.display = 'block';
-                prompt.innerText = "Нажмите [E] чтобы Ловить Рыбу";
-            } else if (player.pos.distanceTo(new THREE.Vector3(5, 1.7, 0)) < 3) {
-                prompt.style.display = 'block';
-                prompt.innerText = "Нажмите [E] чтобы Разрезать & Продать";
+            const promptText = document.getElementById('prompt-text');
+            const distPier = player.pos.distanceTo(new THREE.Vector3(0, 1.7, -12));
+            const distStall = player.pos.distanceTo(new THREE.Vector3(6, 1.7, 5));
+
+            if (distPier < 5) {
+                prompt.classList.remove('hidden');
+                promptText.innerText = "Ловить рыбу (Пирс)";
+            } else if (distStall < 4) {
+                prompt.classList.remove('hidden');
+                promptText.innerText = "Разделка и Продажа (Ларек)";
             } else {
-                prompt.style.display = 'none';
+                prompt.classList.add('hidden');
             }
 
             renderer.render(scene, camera);
         }
 
-        function setupTouchControls() {
-            // Простая привязка для мобильных
-            document.getElementById('mobile-action-btn').addEventListener('click', interact);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
     </script>
 </body>
