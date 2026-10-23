@@ -519,4 +519,499 @@
             <button id="btn-stop" class="btn btn-danger" onclick="stopSpeech()" disabled>⏹ Стоп</button>
             <button id="btn-restart" class="btn btn-secondary" onclick="restartSpeech()" disabled>🔄 Заново</button>
           </div>
-          <button class="btn btn-secondary" onclick="clearText()">
+          <button class="btn btn-secondary" onclick="clearText()">Очистить</button>
+        </div>
+
+      </div>
+
+      <!-- Sidebar Stats -->
+      <div class="glass-card stats-list">
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Статистика текста</h3>
+        <div class="stat-item">
+          <span class="stat-label">Символов (с проб.):</span>
+          <span id="stat-chars" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Символов (без проб.):</span>
+          <span id="stat-chars-nospaces" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Всего слов:</span>
+          <span id="stat-words" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Предложений:</span>
+          <span id="stat-sentences" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Время озвучки (~):</span>
+          <span id="stat-time" class="stat-value">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE 2: DICTATION TEST -->
+    <div id="mode-test" class="glass-card test-section">
+      <h2>Режим «Проверка диктанта»</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Вставьте эталонный текст, нажмите «Скрыть и надиктовать». Слушайте текст и записывайте его в поле ввода, затем нажмите «Проверить».
+      </p>
+
+      <div class="control-group">
+        <label for="test-source">Эталонный текст:</label>
+        <textarea id="test-source" style="min-height: 120px;" placeholder="Введите исходный текст диктанта..."></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button id="btn-test-start" class="btn btn-primary" onclick="startTestDictation()">🔒 Скрыть текст и начать диктовку</button>
+        <button id="btn-test-stop" class="btn btn-danger" onclick="stopSpeech()" disabled>⏹ Остановить диктора</button>
+      </div>
+
+      <div id="user-input-container" style="display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+        <span class="badge badge-info">Запись на слух</span>
+        <textarea id="test-user-input" style="min-height: 150px;" placeholder="Записывайте услышанный текст сюда..."></textarea>
+        
+        <button class="btn btn-primary" style="align-self: flex-start;" onclick="checkDictation()">Check / Проверить результат</button>
+      </div>
+
+      <!-- Diff Results -->
+      <div id="test-results" style="display: none; flex-direction: column; gap: 1rem;">
+        <h3>Результат проверки: <span id="accuracy-score" style="color: var(--accent);">0%</span> точности</h3>
+        <div class="diff-box" id="diff-output"></div>
+        <div style="display: flex; gap: 15px; font-size: 0.85rem;">
+          <span style="color: var(--success);">■ Совпало</span>
+          <span style="color: var(--danger);">■ Пропущено</span>
+          <span style="color: var(--warning);">■ Лишнее</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    VoxType Trainer &copy; 2026. Работает локально в вашем браузере через Web Speech API.
+  </footer>
+
+  <script>
+    // --- STATE MANAGEMENT ---
+    const synth = window.speechSynthesis;
+    let voices = [];
+    let chunks = [];
+    let currentChunkIndex = 0;
+    let isPaused = false;
+    let isSpeaking = false;
+    let animFrameId = null;
+
+    // --- DOM ELEMENTS ---
+    const voiceSelect = document.getElementById('voice-select');
+    const rateRange = document.getElementById('rate-range');
+    const pitchRange = document.getElementById('pitch-range');
+    const volumeRange = document.getElementById('volume-range');
+    const rateVal = document.getElementById('rate-val');
+    const pitchVal = document.getElementById('pitch-val');
+    const volumeVal = document.getElementById('volume-val');
+
+    const sourceText = document.getElementById('source-text');
+    const formattedReader = document.getElementById('formatted-reader');
+    const progressBar = document.getElementById('dictation-progress');
+
+    const btnPlay = document.getElementById('btn-play');
+    const btnPause = document.getElementById('btn-pause');
+    const btnStop = document.getElementById('btn-stop');
+    const btnRestart = document.getElementById('btn-restart');
+
+    const canvas = document.getElementById('equalizer');
+    const ctx = canvas.getContext('2d');
+
+    // --- INIT & VOICE LOADING ---
+    function populateVoices() {
+      if (!synth) {
+        voiceSelect.innerHTML = '<option value="">SpeechSynthesis не поддерживается</option>';
+        return;
+      }
+      voices = synth.getVoices();
+      
+      if (voices.length === 0) return;
+
+      voiceSelect.innerHTML = '';
+      
+      // Group voices by language
+      const langGroups = {};
+      voices.forEach((voice, index) => {
+        const lang = voice.lang || 'Неизвестный';
+        if (!langGroups[lang]) langGroups[lang] = [];
+        langGroups[lang].push({ voice, index });
+      });
+
+      // Populate Select
+      Object.keys(langGroups).sort().forEach(lang => {
+        const groupOpt = document.createElement('optgroup');
+        groupOpt.label = lang;
+        langGroups[lang].forEach(item => {
+          const option = document.createElement('option');
+          option.value = item.index;
+          option.textContent = `${item.voice.name} (${item.voice.lang})${item.voice.default ? ' — По умолчанию' : ''}`;
+          groupOpt.appendChild(option);
+        });
+        voiceSelect.appendChild(groupOpt);
+      });
+
+      // Default select Russian if present, else first
+      const ruIndex = voices.findIndex(v => v.lang.startsWith('ru'));
+      if (ruIndex !== -1) {
+        voiceSelect.value = ruIndex;
+      }
+    }
+
+    populateVoices();
+    if (synth && synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = populateVoices;
+    }
+
+    // Controls Event Listeners
+    rateRange.addEventListener('input', () => {
+      rateVal.textContent = parseFloat(rateRange.value).toFixed(1) + 'x';
+      updateStats();
+    });
+    pitchRange.addEventListener('input', () => {
+      pitchVal.textContent = parseFloat(pitchRange.value).toFixed(1);
+    });
+    volumeRange.addEventListener('input', () => {
+      volumeVal.textContent = Math.round(volumeRange.value * 100) + '%';
+    });
+    sourceText.addEventListener('input', updateStats);
+
+    // --- COUNTERS & STATS ---
+    function updateStats() {
+      const text = sourceText.value;
+      const chars = text.length;
+      const charsNoSpaces = text.replace(/\s/g, '').length;
+      
+      const wordsArr = text.trim().split(/\s+/).filter(w => w.length > 0);
+      const words = wordsArr.length;
+      
+      const sentencesArr = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      const sentences = sentencesArr.length;
+
+      // Estimated speech time in seconds based on ~150 words per minute at 1.0x speed
+      const speed = parseFloat(rateRange.value) || 1.0;
+      const totalSeconds = words > 0 ? Math.ceil((words / (150 * speed)) * 60) : 0;
+      
+      const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      const secs = (totalSeconds % 60).toString().padStart(2, '0');
+
+      document.getElementById('stat-chars').textContent = chars;
+      document.getElementById('stat-chars-nospaces').textContent = charsNoSpaces;
+      document.getElementById('stat-words').textContent = words;
+      document.getElementById('stat-sentences').textContent = sentences;
+      document.getElementById('stat-time').textContent = `${mins}:${secs}`;
+    }
+
+    // --- TEXT CHUNKING (Prevents Chrome long text cut-off) ---
+    function splitTextIntoChunks(text) {
+      // Split by sentence endings keeping delimiters
+      const regex = /([^.!?]+[.!?]+(\s|$)|[^.!?]+$)/g;
+      const matches = text.match(regex);
+      if (!matches) return [text];
+      
+      // Combine small sentences to avoid too short chunks
+      const result = [];
+      let temp = "";
+      matches.forEach(m => {
+        if ((temp + m).length < 200) {
+          temp += m;
+        } else {
+          if (temp) result.push(temp.trim());
+          temp = m;
+        }
+      });
+      if (temp.trim()) result.push(temp.trim());
+      return result;
+    }
+
+    // --- SPEECH ENGINE ---
+    function startSpeech(startFromText = null) {
+      const text = startFromText || sourceText.value.trim();
+      if (!text) return;
+
+      if (isPaused && synth.paused) {
+        synth.resume();
+        isPaused = false;
+        isSpeaking = true;
+        updateUIState();
+        drawEqualizer();
+        return;
+      }
+
+      // Hard Reset
+      stopSpeech();
+
+      chunks = splitTextIntoChunks(text);
+      currentChunkIndex = 0;
+      isSpeaking = true;
+      isPaused = false;
+
+      // Setup Highlight View
+      setupFormattedReader(chunks);
+
+      updateUIState();
+      drawEqualizer();
+      speakNextChunk();
+    }
+
+    function speakNextChunk() {
+      if (currentChunkIndex >= chunks.length || !isSpeaking) {
+        stopSpeech();
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(chunks[currentChunkIndex]);
+      
+      const selectedVoice = voices[voiceSelect.value];
+      if (selectedVoice) utterance.voice = selectedVoice;
+      
+      utterance.rate = parseFloat(rateRange.value);
+      utterance.pitch = parseFloat(pitchRange.value);
+      utterance.volume = parseFloat(volumeRange.value);
+
+      utterance.onstart = () => {
+        highlightCurrentChunk(currentChunkIndex);
+        updateProgress();
+      };
+
+      utterance.onend = () => {
+        currentChunkIndex++;
+        if (isSpeaking && !isPaused) {
+          speakNextChunk();
+        }
+      };
+
+      utterance.onerror = (e) => {
+        console.error("Utterance Error:", e);
+        // Continue to next chunk even if one failed
+        currentChunkIndex++;
+        if (isSpeaking) speakNextChunk();
+      };
+
+      synth.speak(utterance);
+    }
+
+    function pauseSpeech() {
+      if (synth.speaking && !synth.paused) {
+        synth.pause();
+        isPaused = true;
+        updateUIState();
+      }
+    }
+
+    function stopSpeech() {
+      if (synth) {
+        synth.cancel();
+      }
+      isSpeaking = false;
+      isPaused = false;
+      currentChunkIndex = 0;
+      
+      formattedReader.style.display = 'none';
+      sourceText.style.display = 'block';
+      progressBar.style.width = '0%';
+      
+      updateUIState();
+      stopEqualizer();
+    }
+
+    function restartSpeech() {
+      stopSpeech();
+      setTimeout(() => startSpeech(), 100);
+    }
+
+    function clearText() {
+      stopSpeech();
+      sourceText.value = '';
+      updateStats();
+    }
+
+    // --- HIGHLIGHT READER ---
+    function setupFormattedReader(chunksArray) {
+      formattedReader.innerHTML = '';
+      chunksArray.forEach((chunk, idx) => {
+        const span = document.createElement('span');
+        span.id = `chunk-${idx}`;
+        span.textContent = chunk + ' ';
+        formattedReader.appendChild(span);
+      });
+      sourceText.style.display = 'none';
+      formattedReader.style.display = 'block';
+    }
+
+    function highlightCurrentChunk(index) {
+      const spans = formattedReader.querySelectorAll('span');
+      spans.forEach((s, i) => {
+        if (i === index) {
+          s.className = 'sentence-highlight';
+          s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          s.className = '';
+        }
+      });
+    }
+
+    function updateProgress() {
+      if (chunks.length === 0) return;
+      const pct = Math.round(((currentChunkIndex) / chunks.length) * 100);
+      progressBar.style.width = `${pct}%`;
+    }
+
+    function updateUIState() {
+      btnPlay.disabled = isSpeaking && !isPaused;
+      btnPause.disabled = !isSpeaking || isPaused;
+      btnStop.disabled = !isSpeaking && !isPaused;
+      btnRestart.disabled = !isSpeaking && !isPaused;
+      
+      btnPlay.textContent = isPaused ? '▶ Продолжить' : '▶ Старт';
+    }
+
+    // --- EQUALIZER ANIMATION (CANVAS) ---
+    function drawEqualizer() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      const bars = 30;
+      const barWidth = canvas.width / bars;
+
+      function render() {
+        if (!isSpeaking || isPaused) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < bars; i++) {
+          const height = Math.random() * (canvas.height * 0.8);
+          const x = i * barWidth;
+          const y = canvas.height - height;
+
+          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+          gradient.addColorStop(0, '#00f2fe');
+          gradient.addColorStop(1, '#8a2be2');
+
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x, y, barWidth - 2, height);
+        }
+
+        animFrameId = requestAnimationFrame(render);
+      }
+
+      cancelAnimationFrame(animFrameId);
+      render();
+    }
+
+    function stopEqualizer() {
+      cancelAnimationFrame(animFrameId);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // --- MODE SWITCHING ---
+    function switchMode(mode) {
+      stopSpeech();
+      document.getElementById('tab-trainer').classList.toggle('active', mode === 'trainer');
+      document.getElementById('tab-test').classList.toggle('active', mode === 'test');
+
+      document.getElementById('mode-trainer').style.display = mode === 'trainer' ? 'grid' : 'none';
+      const testSec = document.getElementById('mode-test');
+      if (mode === 'test') {
+        testSec.classList.add('active');
+      } else {
+        testSec.classList.remove('active');
+      }
+    }
+
+    // --- DICTATION TEST MODE LOGIC ---
+    function startTestDictation() {
+      const text = document.getElementById('test-source').value.trim();
+      if (!text) {
+        alert("Пожалуйста, введите текст диктанта.");
+        return;
+      }
+
+      document.getElementById('user-input-container').style.display = 'flex';
+      document.getElementById('test-results').style.display = 'none';
+      document.getElementById('btn-test-stop').disabled = false;
+
+      startSpeech(text);
+    }
+
+    function tokenize(text) {
+      return text.toLowerCase()
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .split(" ")
+        .filter(Boolean);
+    }
+
+    // Diff Algorithm based on Longest Common Subsequence (LCS)
+    function checkDictation() {
+      stopSpeech();
+      const origRaw = document.getElementById('test-source').value;
+      const userRaw = document.getElementById('test-user-input').value;
+
+      const orig = tokenize(origRaw);
+      const user = tokenize(userRaw);
+
+      // LCS Matrix
+      const dp = Array(orig.length + 1).fill(null).map(() => Array(user.length + 1).fill(0));
+
+      for (let i = 1; i <= orig.length; i++) {
+        for (let j = 1; j <= user.length; j++) {
+          if (orig[i - 1] === user[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+
+      // Backtrack to build diff
+      let i = orig.length;
+      let j = user.length;
+      const diff = [];
+      let matches = 0;
+
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && orig[i - 1] === user[j - 1]) {
+          diff.push({ type: 'correct', word: orig[i - 1] });
+          matches++;
+          i--;
+          j--;
+        } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          diff.push({ type: 'extra', word: user[j - 1] });
+          j--;
+        } else if (i > 0 && (j === 0 || dp[i][j - 1] < dp[i - 1][j])) {
+          diff.push({ type: 'missing', word: orig[i - 1] });
+          i--;
+        }
+      }
+
+      diff.reverse();
+
+      // Render Diff
+      const diffOutput = document.getElementById('diff-output');
+      diffOutput.innerHTML = '';
+      
+      diff.forEach(item => {
+        const span = document.createElement('span');
+        span.textContent = item.word + ' ';
+        if (item.type === 'correct') span.className = 'word-correct';
+        if (item.type === 'missing') span.className = 'word-missing';
+        if (item.type === 'extra') span.className = 'word-extra';
+        diffOutput.appendChild(span);
+      });
+
+      const accuracy = orig.length > 0 ? Math.round((matches / orig.length) * 100) : 0;
+      document.getElementById('accuracy-score').textContent = `${accuracy}%`;
+      document.getElementById('test-results').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
