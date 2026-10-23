@@ -2,29 +2,30 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VoxType — Тренажёр диктовки в тетрадь</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VoxType Pro — Тренажёр диктовки в тетрадь</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #0b0d17;
-      --card-bg: rgba(22, 26, 46, 0.65);
-      --card-border: rgba(138, 43, 226, 0.2);
+      --bg-color: #080911;
+      --card-bg: rgba(18, 22, 41, 0.75);
+      --card-border: rgba(138, 43, 226, 0.25);
       --primary: #8a2be2;
       --primary-hover: #9d4edd;
       --accent: #00f2fe;
-      --accent-glow: rgba(0, 242, 254, 0.35);
+      --accent-glow: rgba(0, 242, 254, 0.4);
       --text-main: #f0f3fe;
-      --text-muted: #a0a7cc;
+      --text-muted: #8e96c0;
       --danger: #ff4757;
       --success: #2ed573;
+      --warning: #ffa502;
       --radius: 16px;
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
     body {
       background-color: var(--bg-color);
@@ -33,19 +34,19 @@
       display: flex;
       flex-direction: column;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 40%);
+        radial-gradient(circle at 10% 10%, rgba(138, 43, 226, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(0, 242, 254, 0.15) 0%, transparent 45%);
       background-attachment: fixed;
     }
 
     header {
-      padding: 1.5rem 2rem;
+      padding: 1rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      background: rgba(11, 13, 23, 0.7);
+      backdrop-filter: blur(16px);
+      background: rgba(8, 9, 17, 0.8);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -54,42 +55,47 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--text-main), var(--accent));
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .logo-icon {
-      width: 36px; height: 36px;
+      width: 34px; height: 34px;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       color: #fff; font-weight: bold;
-      box-shadow: 0 0 15px var(--accent-glow);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     main {
-      flex: 1; max-width: 1000px; width: 100%;
-      margin: 0 auto; padding: 2rem 1.5rem;
-      display: flex; flex-direction: column; gap: 1.5rem;
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
     }
 
     .glass-card {
       background: var(--card-bg);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      padding: 1.25rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
     }
 
     .controls-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
       margin-bottom: 1rem;
     }
 
@@ -98,13 +104,13 @@
     }
 
     .control-group label {
-      font-size: 0.85rem; color: var(--text-muted); font-weight: 500;
-      display: flex; justify-content: space-between;
+      font-size: 0.8rem; color: var(--text-muted); font-weight: 600;
+      display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px;
     }
 
     select {
-      width: 100%; padding: 10px 14px;
-      background: rgba(11, 13, 23, 0.6);
+      width: 100%; padding: 12px;
+      background: rgba(8, 9, 17, 0.7);
       border: 1px solid var(--card-border);
       border-radius: 10px; color: var(--text-main);
       font-size: 0.9rem; outline: none;
@@ -112,24 +118,64 @@
 
     input[type="range"] {
       -webkit-appearance: none; appearance: none;
-      width: 100%; height: 6px;
+      width: 100%; height: 8px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px; outline: none;
+      border-radius: 4px; outline: none;
     }
 
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 16px; height: 16px;
+      -webkit-appearance: none; width: 20px; height: 20px;
       border-radius: 50%; background: var(--accent);
-      cursor: pointer; box-shadow: 0 0 10px var(--accent);
+      cursor: pointer; box-shadow: 0 0 12px var(--accent);
     }
+
+    /* Checkboxes & Toggles */
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(8, 9, 17, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .toggle-label {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255, 255, 255, 0.2);
+      transition: .3s; border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: .3s; border-radius: 50%;
+    }
+
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(20px); }
 
     .editor-container {
       position: relative; display: flex; flex-direction: column; gap: 10px;
     }
 
     textarea {
-      width: 100%; min-height: 220px;
-      background: rgba(11, 13, 23, 0.5);
+      width: 100%; min-height: 200px;
+      background: rgba(8, 9, 17, 0.6);
       border: 1px solid var(--card-border);
       border-radius: 12px; padding: 1rem;
       color: var(--text-main); font-size: 1.05rem; line-height: 1.6;
@@ -140,7 +186,7 @@
 
     .formatted-reader {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      padding: 1rem; background: rgba(11, 13, 23, 0.95);
+      padding: 1rem; background: rgba(8, 9, 17, 0.95);
       border: 1px solid var(--primary); border-radius: 12px;
       color: var(--text-main); font-size: 1.1rem; line-height: 1.8;
       overflow-y: auto; display: none; white-space: pre-wrap;
@@ -149,46 +195,61 @@
     .sentence-highlight {
       background-color: rgba(0, 242, 254, 0.25);
       border-bottom: 2px solid var(--accent);
-      border-radius: 4px; padding: 2px 0;
+      border-radius: 4px; padding: 2px 4px;
     }
 
     .action-bar {
       display: flex; flex-wrap: wrap; gap: 10px;
-      align-items: center; justify-content: space-between; margin-top: 1rem;
+      align-items: center; justify-content: space-between; margin-top: 0.5rem;
     }
 
-    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; width: 100%; }
 
     .btn {
-      padding: 10px 20px; border-radius: 10px; border: none;
-      font-weight: 600; font-size: 0.9rem; cursor: pointer;
-      display: flex; align-items: center; gap: 8px; transition: var(--transition);
+      flex: 1;
+      min-width: 120px;
+      padding: 14px 18px; border-radius: 12px; border: none;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition);
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: white; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+      color: white; box-shadow: 0 4px 18px rgba(138, 43, 226, 0.4);
     }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08); color: var(--text-main);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .btn-secondary:hover:not(:disabled) { background: rgba(255, 255, 255, 0.15); }
 
     .btn-danger {
       background: rgba(255, 71, 87, 0.2); color: var(--danger);
       border: 1px solid rgba(255, 71, 87, 0.3);
     }
 
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .status-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 12px; background: rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--accent); border-radius: 8px;
-      font-size: 0.9rem; color: var(--accent); font-weight: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--accent); border-radius: 12px;
+      font-size: 0.95rem; color: var(--accent); font-weight: 600;
+    }
+
+    .speed-card {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px; background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.85rem; color: var(--text-muted);
+    }
+
+    /* Mobile Tweaks */
+    @media (max-width: 600px) {
+      main { padding: 0.75rem; }
+      .controls-grid { grid-template-columns: 1fr 1fr; }
+      .btn { padding: 12px; font-size: 0.85rem; }
+      header { padding: 0.8rem 1rem; }
     }
   </style>
 </head>
@@ -197,52 +258,71 @@
   <header>
     <div class="logo">
       <div class="logo-icon">V</div>
-      <span>VoxType — Диктант в тетрадь</span>
+      <span>VoxType Pro</span>
     </div>
   </header>
 
   <main>
     <div class="glass-card" style="display: flex; flex-direction: column; gap: 1rem;">
       
-      <!-- Settings -->
+      <!-- Controls -->
       <div class="controls-grid">
-        <div class="control-group">
+        <div class="control-group" style="grid-column: span 2;">
           <label for="voice-select">Голос диктора</label>
           <select id="voice-select"><option value="">Загрузка голосов...</option></select>
         </div>
 
         <div class="control-group">
-          <label for="pause-range">Пауза между предложениями: <span id="pause-val" class="stat-value" style="color:var(--accent);">5 сек</span></label>
-          <input type="range" id="pause-range" min="1" max="15" step="1" value="5">
+          <label for="pause-range">Пауза: <span id="pause-val" style="color:var(--accent);">5 сек</span></label>
+          <input type="range" id="pause-range" min="1" max="30" step="1" value="5">
         </div>
 
         <div class="control-group">
-          <label for="rate-range">Скорость чтения: <span id="rate-val" class="stat-value" style="color:var(--accent);">1.0x</span></label>
+          <label for="rate-range">Скорость: <span id="rate-val" style="color:var(--accent);">1.0x</span></label>
           <input type="range" id="rate-range" min="0.5" max="1.5" step="0.1" value="1">
+        </div>
+
+        <div class="control-group">
+          <label for="repeat-range">Повтор фразы: <span id="repeat-val" style="color:var(--accent);">1 раз</span></label>
+          <input type="range" id="repeat-range" min="1" max="3" step="1" value="1">
+        </div>
+
+        <div class="toggle-group" style="align-self: flex-end;">
+          <span class="toggle-label">🔔 Сигнал перед чтением</span>
+          <label class="switch">
+            <input type="checkbox" id="beep-toggle" checked>
+            <span class="slider"></span>
+          </label>
         </div>
       </div>
 
-      <!-- Status Indicator -->
-      <div id="dictation-status" style="display: none;" class="status-badge">
-        <span id="status-text">Ожидание...</span>
+      <!-- Stats / Speed Bar -->
+      <div class="speed-card">
+        <span>Требуемая скорость письма: <strong id="req-speed" style="color:var(--accent);">0 сл/мин</strong></span>
+        <span>Всего предложений: <strong id="total-sentences" style="color:var(--text-main);">0</strong></span>
       </div>
 
-      <!-- Text Area / Display -->
+      <!-- Live Status -->
+      <div id="dictation-status" style="display: none;" class="status-badge">
+        <span id="status-text">Готов к диктанту</span>
+        <span id="status-timer">00:00</span>
+      </div>
+
+      <!-- Text Area / Reader -->
       <div class="editor-container">
         <div class="text-area-wrapper">
-          <textarea id="source-text" placeholder="Вставьте текст диктанта сюда. Программа будет читать его предложение за предложением, делая паузы, чтобы вы успевали писать в тетради..."></textarea>
+          <textarea id="source-text" placeholder="Вставьте сюда текст диктанта... Программа прочитает его по предложениям, делая паузы для записи ручкой в тетрадь."></textarea>
           <div id="formatted-reader" class="formatted-reader"></div>
         </div>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Buttons -->
       <div class="action-bar">
         <div class="btn-group">
-          <button id="btn-play" class="btn btn-primary" onclick="startNotebookDictation()">▶ Начать диктант</button>
+          <button id="btn-play" class="btn btn-primary" onclick="startNotebookDictation()">▶ Старт</button>
           <button id="btn-pause" class="btn btn-secondary" onclick="pauseNotebookDictation()" disabled>⏸ Пауза</button>
           <button id="btn-stop" class="btn btn-danger" onclick="stopNotebookDictation()" disabled>⏹ Стоп</button>
         </div>
-        <button class="btn btn-secondary" onclick="clearText()">Очистить</button>
       </div>
 
     </div>
@@ -253,32 +333,55 @@
     let voices = [];
     let sentences = [];
     let currentIndex = 0;
+    let currentRepeatCount = 0;
     let isPlaying = false;
     let isPaused = false;
     let pauseTimer = null;
+    let audioCtx = null;
 
     const voiceSelect = document.getElementById('voice-select');
     const pauseRange = document.getElementById('pause-range');
     const pauseVal = document.getElementById('pause-val');
     const rateRange = document.getElementById('rate-range');
     const rateVal = document.getElementById('rate-val');
-    
+    const repeatRange = document.getElementById('repeat-range');
+    const repeatVal = document.getElementById('repeat-val');
+    const beepToggle = document.getElementById('beep-toggle');
+
     const sourceText = document.getElementById('source-text');
     const formattedReader = document.getElementById('formatted-reader');
     const statusBox = document.getElementById('dictation-status');
     const statusText = document.getElementById('status-text');
+    const reqSpeedEl = document.getElementById('req-speed');
+    const totalSentencesEl = document.getElementById('total-sentences');
 
     const btnPlay = document.getElementById('btn-play');
     const btnPause = document.getElementById('btn-pause');
     const btnStop = document.getElementById('btn-stop');
 
-    // Load Voices
+    // Beep generator via Web Audio API
+    function playBeep() {
+      if (!beepToggle.checked) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 587.33; // D5 note
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch(e){}
+    }
+
     function populateVoices() {
       if (!synth) return;
       voices = synth.getVoices();
       if (voices.length === 0) return;
       voiceSelect.innerHTML = '';
-      
+
       voices.forEach((voice, index) => {
         const option = document.createElement('option');
         option.value = index;
@@ -295,16 +398,38 @@
       synth.onvoiceschanged = populateVoices;
     }
 
-    pauseRange.addEventListener('input', () => {
-      pauseVal.textContent = pauseRange.value + ' сек';
-    });
-    rateRange.addEventListener('input', () => {
-      rateVal.textContent = parseFloat(rateRange.value).toFixed(1) + 'x';
-    });
+    // Input Listeners
+    pauseRange.addEventListener('input', () => { pauseVal.textContent = pauseRange.value + ' сек'; calculateSpeed(); });
+    rateRange.addEventListener('input', () => { rateVal.textContent = parseFloat(rateRange.value).toFixed(1) + 'x'; calculateSpeed(); });
+    repeatRange.addEventListener('input', () => { repeatVal.textContent = repeatRange.value + ' раз'; calculateSpeed(); });
+    sourceText.addEventListener('input', calculateSpeed);
 
-    // Split text into individual sentences
+    function calculateSpeed() {
+      const text = sourceText.value.trim();
+      const wordsArr = text.split(/\s+/).filter(Boolean);
+      const sentencesArr = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [];
+      
+      totalSentencesEl.textContent = sentencesArr.length;
+
+      if (wordsArr.length === 0 || sentencesArr.length === 0) {
+        reqSpeedEl.textContent = '0 сл/мин';
+        return;
+      }
+
+      // Approximate time calculation: Speech time + Pause time * repeats
+      const speed = parseFloat(rateRange.value);
+      const pauses = parseInt(pauseRange.value);
+      const repeats = parseInt(repeatRange.value);
+
+      const estimatedSpeechMinutes = (wordsArr.length / (150 * speed));
+      const totalPauseMinutes = (sentencesArr.length * pauses * repeats) / 60;
+      const totalMinutes = estimatedSpeechMinutes + totalPauseMinutes;
+
+      const wpm = Math.round(wordsArr.length / totalMinutes);
+      reqSpeedEl.textContent = `~${wpm} сл/мин`;
+    }
+
     function splitIntoSentences(text) {
-      // Regex splits text by punctuation (. ! ?) keeping sentence integrity
       const matches = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g);
       if (!matches) return [text];
       return matches.map(s => s.trim()).filter(Boolean);
@@ -313,7 +438,7 @@
     function startNotebookDictation() {
       const text = sourceText.value.trim();
       if (!text) {
-        alert("Пожалуйста, введите текст для диктанта.");
+        alert("Пожалуйста, введите текст диктанта.");
         return;
       }
 
@@ -329,13 +454,14 @@
 
       sentences = splitIntoSentences(text);
       currentIndex = 0;
+      currentRepeatCount = 0;
       isPlaying = true;
       isPaused = false;
 
       setupReaderView();
-      statusBox.style.display = 'inline-flex';
+      statusBox.style.display = 'flex';
       updateUI();
-      
+
       readCurrentSentence();
     }
 
@@ -343,13 +469,17 @@
       if (!isPlaying || isPaused) return;
 
       if (currentIndex >= sentences.length) {
-        statusText.textContent = "✅ Диктант окончен!";
+        statusText.textContent = "🎉 Диктант завершён!";
         stopNotebookDictation();
         return;
       }
 
+      playBeep();
       highlightSentence(currentIndex);
-      statusText.textContent = `Читаю предложение ${currentIndex + 1} из ${sentences.length}...`;
+      
+      const maxRepeats = parseInt(repeatRange.value);
+      const repeatLabel = maxRepeats > 1 ? ` (Повтор ${currentRepeatCount + 1}/${maxRepeats})` : '';
+      statusText.textContent = `📖 Читаю [${currentIndex + 1}/${sentences.length}]${repeatLabel}...`;
 
       const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
       const selectedVoice = voices[voiceSelect.value];
@@ -358,23 +488,32 @@
 
       utterance.onend = () => {
         if (!isPlaying || isPaused) return;
-        
-        // Start waiting pause for writing into notebook
-        const pauseSeconds = parseInt(pauseRange.value);
-        let timeLeft = pauseSeconds;
-        
-        statusText.textContent = `✍️ Пишите в тетрадь... (Следующее через ${timeLeft}с)`;
 
-        pauseTimer = setInterval(() => {
-          timeLeft--;
-          if (timeLeft > 0) {
-            statusText.textContent = `✍️ Пишите в тетрадь... (Следующее через ${timeLeft}с)`;
-          } else {
-            clearInterval(pauseTimer);
-            currentIndex++;
-            readCurrentSentence();
-          }
-        }, 1000);
+        currentRepeatCount++;
+        const maxRepeats = parseInt(repeatRange.value);
+
+        if (currentRepeatCount < maxRepeats) {
+          // If repeat is required, start short pause then re-read same sentence
+          setTimeout(() => readCurrentSentence(), 1500);
+        } else {
+          // Sentence finished all repeats, reset count and enter main pause
+          currentRepeatCount = 0;
+          const pauseSeconds = parseInt(pauseRange.value);
+          let timeLeft = pauseSeconds;
+
+          statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
+
+          pauseTimer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+              statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
+            } else {
+              clearInterval(pauseTimer);
+              currentIndex++;
+              readCurrentSentence();
+            }
+          }, 1000);
+        }
       };
 
       utterance.onerror = () => {
@@ -386,12 +525,8 @@
     }
 
     function pauseNotebookDictation() {
-      if (synth.speaking) {
-        synth.pause();
-      }
-      if (pauseTimer) {
-        clearInterval(pauseTimer);
-      }
+      if (synth.speaking) synth.pause();
+      if (pauseTimer) clearInterval(pauseTimer);
       isPaused = true;
       isPlaying = false;
       statusText.textContent = "⏸ Диктант на паузе";
@@ -401,11 +536,12 @@
     function stopNotebookDictation() {
       if (synth) synth.cancel();
       if (pauseTimer) clearInterval(pauseTimer);
-      
+
       isPlaying = false;
       isPaused = false;
       currentIndex = 0;
-      
+      currentRepeatCount = 0;
+
       formattedReader.style.display = 'none';
       sourceText.style.display = 'block';
       statusBox.style.display = 'none';
@@ -437,14 +573,9 @@
     }
 
     function updateUI() {
-      btnPlay.textContent = isPaused ? '▶ Продолжить' : '▶ Начать диктант';
+      btnPlay.textContent = isPaused ? '▶ Продолжить' : '▶ Старт';
       btnPause.disabled = !isPlaying;
       btnStop.disabled = !isPlaying && !isPaused;
-    }
-
-    function clearText() {
-      stopNotebookDictation();
-      sourceText.value = '';
     }
   </script>
 </body>
