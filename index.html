@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VoxType Pro — Профессиональный диктант</title>
+  <title>VoxType Pro Ultimate — Идеальный школьный диктант</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #080911;
-      --card-bg: rgba(18, 22, 41, 0.75);
-      --card-border: rgba(138, 43, 226, 0.25);
+      --bg-color: #06070c;
+      --card-bg: rgba(15, 18, 35, 0.85);
+      --card-border: rgba(138, 43, 226, 0.3);
       --primary: #8a2be2;
       --primary-hover: #9d4edd;
       --accent: #00f2fe;
@@ -34,8 +34,8 @@
       display: flex;
       flex-direction: column;
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(138, 43, 226, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 90% 90%, rgba(0, 242, 254, 0.15) 0%, transparent 45%);
+        radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.15) 0%, transparent 40%);
       background-attachment: fixed;
     }
 
@@ -46,7 +46,7 @@
       align-items: center;
       border-bottom: 1px solid var(--card-border);
       backdrop-filter: blur(16px);
-      background: rgba(8, 9, 17, 0.8);
+      background: rgba(6, 7, 12, 0.85);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -74,7 +74,7 @@
 
     main {
       flex: 1;
-      max-width: 1000px;
+      max-width: 1050px;
       width: 100%;
       margin: 0 auto;
       padding: 1.25rem 1rem;
@@ -89,12 +89,12 @@
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       padding: 1.25rem;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     }
 
     .controls-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
       margin-bottom: 1rem;
     }
@@ -110,7 +110,7 @@
 
     select {
       width: 100%; padding: 10px 12px;
-      background: rgba(8, 9, 17, 0.7);
+      background: rgba(6, 7, 12, 0.8);
       border: 1px solid var(--card-border);
       border-radius: 10px; color: var(--text-main);
       font-size: 0.85rem; outline: none;
@@ -134,7 +134,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 12px;
-      background: rgba(8, 9, 17, 0.5);
+      background: rgba(6, 7, 12, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 10px;
     }
@@ -174,7 +174,7 @@
 
     textarea {
       width: 100%; min-height: 180px;
-      background: rgba(8, 9, 17, 0.6);
+      background: rgba(6, 7, 12, 0.7);
       border: 1px solid var(--card-border);
       border-radius: 12px; padding: 1rem;
       color: var(--text-main); font-size: 1rem; line-height: 1.6;
@@ -185,14 +185,14 @@
 
     .formatted-reader {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      padding: 1rem; background: rgba(8, 9, 17, 0.95);
+      padding: 1rem; background: rgba(6, 7, 12, 0.96);
       border: 1px solid var(--primary); border-radius: 12px;
       color: var(--text-main); font-size: 1.05rem; line-height: 1.8;
       overflow-y: auto; display: none; white-space: pre-wrap;
     }
 
     .clause-highlight {
-      background-color: rgba(138, 43, 226, 0.35);
+      background-color: rgba(138, 43, 226, 0.4);
       border-bottom: 2px solid var(--accent);
       border-radius: 4px; padding: 2px 4px;
     }
@@ -250,7 +250,7 @@
     @media (max-width: 600px) {
       main { padding: 0.5rem; }
       .controls-grid { grid-template-columns: 1fr 1fr; }
-      .btn { padding: 10px 6px; font-size: 0.75rem; }
+      .btn { padding: 10px 4px; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -259,7 +259,7 @@
   <header>
     <div class="logo">
       <div class="logo-icon">V</div>
-      <span>VoxType Pro</span>
+      <span>VoxType Pro Ultimate</span>
     </div>
   </header>
 
@@ -269,32 +269,32 @@
       <!-- Controls -->
       <div class="controls-grid">
         <div class="control-group" style="grid-column: span 2;">
-          <label for="voice-select">Голос диктора (Отфильтрованы четкие голоса)</label>
-          <select id="voice-select"><option value="">Поиск лучших голосов...</option></select>
+          <label for="voice-select">Русский голос диктора (Лучшие сверху)</label>
+          <select id="voice-select"><option value="">Поиск русских голосов...</option></select>
         </div>
 
         <div class="control-group">
-          <label for="sentence-pause">Пауза между предлож.: <span id="sent-pause-val" style="color:var(--accent);">5 сек</span></label>
+          <label for="sentence-pause">Пауза в тетрадь: <span id="sent-pause-val" style="color:var(--accent);">5 сек</span></label>
           <input type="range" id="sentence-pause" min="1" max="30" step="1" value="5">
         </div>
 
         <div class="control-group">
           <label for="punct-pause">Пауза на знаках: <span id="punct-pause-val" style="color:var(--accent);">1.5 сек</span></label>
-          <input type="range" id="punct-pause" min="0.5" max="5" step="0.5" value="1.5">
+          <input type="range" id="punct-pause" min="0.5" max="4" step="0.5" value="1.5">
         </div>
 
         <div class="control-group">
-          <label for="rate-range">Скорость: <span id="rate-val" style="color:var(--accent);">0.9x</span></label>
-          <input type="range" id="rate-range" min="0.5" max="1.5" step="0.1" value="0.9">
+          <label for="rate-range">Скорость чтения: <span id="rate-val" style="color:var(--accent);">0.85x</span></label>
+          <input type="range" id="rate-range" min="0.4" max="1.2" step="0.05" value="0.85">
         </div>
 
         <div class="control-group">
-          <label for="repeat-range">Повтор предложения: <span id="repeat-val" style="color:var(--accent);">1 раз</span></label>
-          <input type="range" id="repeat-range" min="1" max="3" step="1" value="1">
+          <label for="pitch-range">Тон голоса: <span id="pitch-val" style="color:var(--accent);">1.0</span></label>
+          <input type="range" id="pitch-range" min="0.5" max="1.5" step="0.1" value="1.0">
         </div>
 
         <div class="toggle-group">
-          <span class="toggle-label">🗣 Говорить знаки вслух</span>
+          <span class="toggle-label">🗣 Знаки голосом</span>
           <label class="switch">
             <input type="checkbox" id="speak-punct-toggle" checked>
             <span class="slider"></span>
@@ -312,7 +312,7 @@
 
       <!-- Info Bar -->
       <div class="speed-card">
-        <span>Скорость письма: <strong id="req-speed" style="color:var(--accent);">~0 сл/мин</strong></span>
+        <span>Комфорт письма: <strong id="req-speed" style="color:var(--accent);">~0 сл/мин</strong></span>
         <span>Предложений: <strong id="total-sentences" style="color:var(--text-main);">0</strong></span>
       </div>
 
@@ -325,7 +325,7 @@
       <!-- Text Area / Display -->
       <div class="editor-container">
         <div class="text-area-wrapper">
-          <textarea id="source-text" placeholder="Вставьте сюда текст диктанта... Диктор будет проговаривать знаки препинания голосом (например, «запятая», «тире») и делать необходимые паузы!"></textarea>
+          <textarea id="source-text" placeholder="Вставьте русский текст диктанта сюда... Диктор сделает чёткие паузы на запятых, озвучит знаки и даст время записать всё в тетрадь."></textarea>
           <div id="formatted-reader" class="formatted-reader"></div>
         </div>
       </div>
@@ -351,7 +351,6 @@
     let sentences = [];
     let currentSentIdx = 0;
     let currentClauseIdx = 0;
-    let currentRepeatCount = 0;
     let isPlaying = false;
     let isPaused = false;
     let pauseTimeout = null;
@@ -364,8 +363,8 @@
     const punctPauseVal = document.getElementById('punct-pause-val');
     const rateRange = document.getElementById('rate-range');
     const rateVal = document.getElementById('rate-val');
-    const repeatRange = document.getElementById('repeat-range');
-    const repeatVal = document.getElementById('repeat-val');
+    const pitchRange = document.getElementById('pitch-range');
+    const pitchVal = document.getElementById('pitch-val');
     const speakPunctToggle = document.getElementById('speak-punct-toggle');
     const beepToggle = document.getElementById('beep-toggle');
 
@@ -384,7 +383,6 @@
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
 
-    // Dictionary for speaking punctuation aloud
     const punctSpokenMap = {
       ',': 'запятая',
       '—': 'тире',
@@ -412,37 +410,42 @@
       } catch(e){}
     }
 
-    // Sort & Filter best voices (Natural / Google / Premium first)
+    // Filter STRICTLY Russian voices and sort by natural quality
     function populateVoices() {
       if (!synth) return;
-      voices = synth.getVoices();
-      if (voices.length === 0) return;
+      const allVoices = synth.getVoices();
+      
+      // Keep ONLY Russian language voices
+      voices = allVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('ru'));
 
       voiceSelect.innerHTML = '';
 
-      // Priority sorting
-      const sortedVoices = voices.slice().sort((a, b) => {
-        const aName = a.name.toLowerCase();
-        const bName = b.name.toLowerCase();
-        const aScore = (aName.includes('natural') || aName.includes('google') || aName.includes('premium')) ? 2 : 1;
-        const bScore = (bName.includes('natural') || bName.includes('google') || bName.includes('premium')) ? 2 : 1;
-        return bScore - aScore;
+      if (voices.length === 0) {
+        const option = document.createElement('option');
+        option.value = "";
+        option.textContent = "Русские голоса не найдены в системе!";
+        voiceSelect.appendChild(option);
+        return;
+      }
+
+      // Sort with preference to Google / Microsoft Natural / Premium
+      voices.sort((a, b) => {
+        const an = a.name.toLowerCase();
+        const bn = b.name.toLowerCase();
+        const scoreA = (an.includes('google') || an.includes('natural') || an.includes('premium')) ? 2 : 1;
+        const scoreB = (bn.includes('google') || bn.includes('natural') || bn.includes('premium')) ? 2 : 1;
+        return scoreB - scoreA;
       });
 
-      sortedVoices.forEach((voice) => {
-        const originalIndex = voices.indexOf(voice);
+      voices.forEach((voice, index) => {
         const option = document.createElement('option');
-        option.value = originalIndex;
+        option.value = index;
         option.textContent = `${voice.name} (${voice.lang})`;
         voiceSelect.appendChild(option);
       });
 
-      // Prefer Russian Natural/Google or fallback
-      const bestRu = sortedVoices.find(v => v.lang.startsWith('ru') && (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural')));
-      const fallbackRu = sortedVoices.find(v => v.lang.startsWith('ru'));
-      
-      if (bestRu) voiceSelect.value = voices.indexOf(bestRu);
-      else if (fallbackRu) voiceSelect.value = voices.indexOf(fallbackRu);
+      // Default select best available Russian voice
+      voiceSelect.value = 0;
     }
 
     populateVoices();
@@ -452,8 +455,8 @@
 
     sentPauseRange.addEventListener('input', () => { sentPauseVal.textContent = sentPauseRange.value + ' сек'; calculateSpeed(); });
     punctPauseRange.addEventListener('input', () => { punctPauseVal.textContent = punctPauseRange.value + ' сек'; calculateSpeed(); });
-    rateRange.addEventListener('input', () => { rateVal.textContent = parseFloat(rateRange.value).toFixed(1) + 'x'; calculateSpeed(); });
-    repeatRange.addEventListener('input', () => { repeatVal.textContent = repeatRange.value + ' раз'; calculateSpeed(); });
+    rateRange.addEventListener('input', () => { rateVal.textContent = parseFloat(rateRange.value).toFixed(2) + 'x'; calculateSpeed(); });
+    pitchRange.addEventListener('input', () => { pitchVal.textContent = parseFloat(pitchRange.value).toFixed(1); });
     sourceText.addEventListener('input', calculateSpeed);
 
     function calculateSpeed() {
@@ -472,10 +475,9 @@
       const speed = parseFloat(rateRange.value);
       const sPause = parseInt(sentPauseRange.value);
       const pPause = parseFloat(punctPauseRange.value);
-      const repeats = parseInt(repeatRange.value);
 
-      const speechMin = (wordsArr.length / (150 * speed));
-      const pauseMin = ((sentencesArr.length * sPause * repeats) + (commasCount * pPause)) / 60;
+      const speechMin = (wordsArr.length / (130 * speed));
+      const pauseMin = ((sentencesArr.length * sPause) + (commasCount * pPause)) / 60;
       const totalMin = speechMin + pauseMin;
 
       const wpm = Math.round(wordsArr.length / totalMin);
@@ -514,7 +516,6 @@
       sentences = parseTextDetailed(text);
       currentSentIdx = 0;
       currentClauseIdx = 0;
-      currentRepeatCount = 0;
       isPlaying = true;
       isPaused = false;
 
@@ -541,24 +542,20 @@
       const pct = Math.round((currentSentIdx / sentences.length) * 100);
       statusTimer.textContent = `${pct}%`;
 
-      if (currentClauseIdx === 0 && currentRepeatCount === 0) {
+      if (currentClauseIdx === 0) {
         playBeep();
       }
 
       highlightClause(currentSentIdx, currentClauseIdx);
 
-      const maxR = parseInt(repeatRange.value);
-      const repLabel = maxR > 1 ? ` (Повтор ${currentRepeatCount + 1}/${maxR})` : '';
-      statusText.textContent = `📖 [Предложение ${currentSentIdx + 1}/${sentences.length}]${repLabel}...`;
+      statusText.textContent = `📖 Предложение ${currentSentIdx + 1} из ${sentences.length}`;
 
-      // Extract punctuation mark at the end if present
       const matchPunct = clauseText.match(/([,:;\u2014-]|[.!?])$/);
       let punctMark = matchPunct ? matchPunct[0] : null;
 
       let textToRead = clauseText;
       if (speakPunctToggle.checked && punctMark && punctSpokenMap[punctMark]) {
-        // Strip ending punctuation and append spoken text
-        textToRead = clauseText.replace(/([,:;\u2014-]|[.!?])$/, '') + ' ' + punctSpokenMap[punctMark];
+        textToRead = clauseText.replace(/([,:;\u2014-]|[.!?])$/, '') + ', ' + punctSpokenMap[punctMark];
       }
 
       const utterance = new SpeechSynthesisUtterance(textToRead);
@@ -566,11 +563,11 @@
       if (selectedVoice) utterance.voice = selectedVoice;
       
       utterance.rate = parseFloat(rateRange.value);
+      utterance.pitch = parseFloat(pitchRange.value);
 
-      // Pitch intonation adjustment
-      if (clauseText.endsWith('?')) utterance.pitch = 1.3;
-      else if (clauseText.endsWith('!')) utterance.pitch = 1.2;
-      else utterance.pitch = 1.0;
+      // Natural intonation tuning on sentence ends
+      if (clauseText.endsWith('?')) utterance.pitch += 0.2;
+      else if (clauseText.endsWith('!')) utterance.pitch += 0.15;
 
       utterance.onend = () => {
         if (!isPlaying || isPaused) return;
@@ -579,38 +576,29 @@
 
         if (!isLastClauseInSentence) {
           const pPauseMs = parseFloat(punctPauseRange.value) * 1000;
-          statusText.textContent = `⏸ Пауза на знаке препинания...`;
+          statusText.textContent = `⏸ Пауза на знаке...`;
           pauseTimeout = setTimeout(() => {
             currentClauseIdx++;
             playNextClause();
           }, pPauseMs);
         } else {
-          currentRepeatCount++;
-          if (currentRepeatCount < maxR) {
-            currentClauseIdx = 0;
-            statusText.textContent = `⏳ Повторное чтение предложения...`;
-            pauseTimeout = setTimeout(() => playNextClause(), 1200);
-          } else {
-            currentRepeatCount = 0;
-            currentClauseIdx = 0;
-            
-            const mainPauseSec = parseInt(sentPauseRange.value);
-            let timeLeft = mainPauseSec;
-            statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
+          currentClauseIdx = 0;
+          const mainPauseSec = parseInt(sentPauseRange.value);
+          let timeLeft = mainPauseSec;
+          statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
 
-            const countdownInterval = setInterval(() => {
-              timeLeft--;
-              if (timeLeft > 0 && isPlaying && !isPaused) {
-                statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
-              } else {
-                clearInterval(countdownInterval);
-                if (isPlaying && !isPaused) {
-                  currentSentIdx++;
-                  playNextClause();
-                }
+          const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0 && isPlaying && !isPaused) {
+              statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
+            } else {
+              clearInterval(countdownInterval);
+              if (isPlaying && !isPaused) {
+                currentSentIdx++;
+                playNextClause();
               }
-            }, 1000);
-          }
+            }
+          }, 1000);
         }
       };
 
@@ -626,7 +614,6 @@
     function repeatCurrentPhrase() {
       if (synth) synth.cancel();
       if (pauseTimeout) clearTimeout(pauseTimeout);
-      
       currentClauseIdx = 0;
       isPaused = false;
       isPlaying = true;
@@ -637,10 +624,8 @@
     function stepSentence(direction) {
       if (synth) synth.cancel();
       if (pauseTimeout) clearTimeout(pauseTimeout);
-
       currentSentIdx = Math.max(0, Math.min(sentences.length - 1, currentSentIdx + direction));
       currentClauseIdx = 0;
-      currentRepeatCount = 0;
       isPaused = false;
       isPlaying = true;
       updateUI();
@@ -659,12 +644,10 @@
     function stopNotebookDictation() {
       if (synth) synth.cancel();
       if (pauseTimeout) clearTimeout(pauseTimeout);
-
       isPlaying = false;
       isPaused = false;
       currentSentIdx = 0;
       currentClauseIdx = 0;
-      currentRepeatCount = 0;
 
       formattedReader.style.display = 'none';
       sourceText.style.display = 'block';
@@ -677,14 +660,12 @@
       sentences.forEach((sent, sIdx) => {
         const sentSpan = document.createElement('span');
         sentSpan.id = `sent-${sIdx}`;
-        
         sent.clauses.forEach((clause, cIdx) => {
           const clauseSpan = document.createElement('span');
           clauseSpan.id = `clause-${sIdx}-${cIdx}`;
           clauseSpan.textContent = clause + ' ';
           sentSpan.appendChild(clauseSpan);
         });
-
         formattedReader.appendChild(sentSpan);
       });
       sourceText.style.display = 'none';
@@ -694,7 +675,6 @@
     function highlightClause(sIdx, cIdx) {
       const allClauses = formattedReader.querySelectorAll('span[id^="clause-"]');
       allClauses.forEach(el => el.className = '');
-
       const activeClause = document.getElementById(`clause-${sIdx}-${cIdx}`);
       if (activeClause) {
         activeClause.className = 'clause-highlight';
