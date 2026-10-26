@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>НЕОБЫЧНЫЙ СЛУЧАЙ — 3D Психологический Квест</title>
-    <!-- Tailwind CSS for UI styling -->
+    <title>НЕОБЫЧНЫЙ СЛУЧАЙ — 3D Психологический Квест & Конструктор</title>
+    <!-- Tailwind CSS for modern Glassmorphism UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,9 +26,9 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #050508;
+            background-color: #030712;
             font-family: 'Inter', sans-serif;
-            color: #e2e8f0;
+            color: #f3f4f6;
         }
         #webgl-container {
             width: 100%;
@@ -40,16 +40,23 @@
         }
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* Mobile Joystick Area */
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15);
+        }
+        /* Mobile Joystick Zone */
         #touch-joystick-zone {
             position: absolute;
             bottom: 30px;
@@ -59,7 +66,7 @@
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            z-index: 20;
+            z-index: 25;
             display: none;
         }
         #touch-joystick-stick {
@@ -72,43 +79,40 @@
             border-radius: 50%;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-        /* Scanline Horror FX */
+        /* Horror / Ambient Scanline FX */
         .scanlines {
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
             background-size: 100% 3px, 6px 100%;
             pointer-events: none;
         }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.6); }
+
+        /* Menu Card Selection Dynamic Glow */
+        .menu-tab-active {
+            background: rgba(245, 158, 11, 0.15) !important;
+            border-color: rgba(245, 158, 11, 0.8) !important;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.25) !important;
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 select-none overflow-hidden">
+<body class="bg-gray-950 text-slate-100 select-none overflow-hidden">
 
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white transition-opacity duration-500">
+    <div id="loading-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-950 text-white transition-opacity duration-700">
         <div class="text-center max-w-md p-6">
-            <h1 class="text-4xl font-extrabold tracking-wider mb-2 font-serif text-red-500">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-            <p class="text-slate-400 text-sm mb-6">Трехмерный психологический триллер & Конструктор историй</p>
+            <h1 class="text-4xl font-extrabold tracking-widest mb-2 font-serif text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-400 to-red-600">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
+            <p class="text-slate-400 text-xs mb-6 uppercase tracking-widest">3D Психологический Триллер & Игровой Конструктор</p>
             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-4">
-                <div id="loading-bar" class="bg-red-600 h-full w-0 transition-all duration-300"></div>
+                <div id="loading-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
             </div>
-            <p id="loading-text" class="text-xs text-slate-500">Загрузка графического движка Three.js...</p>
-            <div id="error-fallback" class="hidden mt-4 p-4 bg-red-950 border border-red-800 rounded text-red-200 text-xs text-left">
-                <strong class="block text-red-400 font-bold mb-1">Ошибка инициализации WebGL/Three.js!</strong>
-                Не удалось загрузить 3D графику. Пожалуйста, убедитесь, что WebGL включен и ваш браузер поддерживает HTML5.
+            <p id="loading-text" class="text-xs text-slate-500">Инициализация 3D сцены и генератора звука...</p>
+            <div id="error-fallback" class="hidden mt-4 p-4 bg-red-950/80 border border-red-800 rounded-xl text-red-200 text-xs text-left">
+                <strong class="block text-red-400 font-bold mb-1">Ошибка WebGL / Three.js!</strong>
+                Не удалось инициализировать 3D графику. Пожалуйста, убедитесь, что ваш браузер поддерживает WebGL.
             </div>
         </div>
     </div>
@@ -117,44 +121,150 @@
     <div id="webgl-container"></div>
     <div class="scanlines fixed inset-0 z-10 pointer-events-none opacity-40"></div>
 
-    <!-- Main Game HUD Overlay -->
-    <div id="hud-layer" class="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 hidden">
-        <!-- Top Bar -->
+    <!-- Dynamic 3D Diorama Main Menu Layer -->
+    <div id="main-menu-hud" class="fixed inset-0 z-30 flex flex-col justify-between p-6 md:p-10 pointer-events-none">
+        <!-- Top Title Bar -->
+        <div class="flex justify-between items-start w-full pointer-events-auto">
+            <div>
+                <h1 class="text-3xl md:text-5xl font-black font-serif tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-200 to-amber-500 drop-shadow-md">
+                    НЕОБЫЧНЫЙ СЛУЧАЙ
+                </h1>
+                <p class="text-xs text-slate-400 tracking-widest uppercase mt-1">Интерактивное 3D Расследование</p>
+            </div>
+            <div class="flex space-x-3">
+                <button id="btn-toggle-sound" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2 border border-slate-700">
+                    <i class="fa-solid fa-volume-high text-amber-400" id="sound-icon"></i>
+                    <span id="sound-status">Звук: Вкл</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Center Interactive 3D Menu Selection Cards (Bottom Horizontal Bar) -->
+        <div class="w-full max-w-5xl mx-auto pointer-events-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            
+            <!-- Diorama Card 1: Story -->
+            <div id="menu-card-story" class="glass-card p-4 rounded-2xl cursor-pointer menu-tab-active border border-amber-500/40" data-diorama="story">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-red-950/80 border border-red-500/50 flex items-center justify-center text-red-400">
+                        <i class="fa-solid fa-book-skull text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Странный стук</h3>
+                        <span class="text-[10px] text-amber-400 tracking-wide font-mono">ГЛАВА 1 • КВЕСТ</span>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 line-clamp-2">Ночной стук в чугунную батарею. Изучите тайну 402 квартиры.</p>
+                <button id="btn-launch-story" class="w-full py-2 bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 font-bold rounded-xl text-xs text-white transition shadow-lg shadow-red-950/50 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Начать Историю</span>
+                </button>
+            </div>
+
+            <!-- Diorama Card 2: Build Mode -->
+            <div id="menu-card-build" class="glass-card p-4 rounded-2xl cursor-pointer" data-diorama="build">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-500/50 flex items-center justify-center text-cyan-400">
+                        <i class="fa-solid fa-drafting-compass text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Архитектор</h3>
+                        <span class="text-[10px] text-cyan-400 tracking-wide font-mono">3D САНДБОКС</span>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 line-clamp-2">Проектируйте локации, расставляйте мебель и настраивайте свет.</p>
+                <button id="btn-launch-build" class="w-full py-2 bg-slate-800 hover:bg-cyan-600 font-bold rounded-xl text-xs text-cyan-200 hover:text-white transition border border-cyan-500/30 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-hammer"></i>
+                    <span>Открыть Редактор</span>
+                </button>
+            </div>
+
+            <!-- Diorama Card 3: Story Constructor -->
+            <div id="menu-card-constructor" class="glass-card p-4 rounded-2xl cursor-pointer" data-diorama="constructor">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-purple-950/80 border border-purple-500/50 flex items-center justify-center text-purple-400">
+                        <i class="fa-solid fa-diagram-project text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Конструктор</h3>
+                        <span class="text-[10px] text-purple-400 tracking-wide font-mono">ВЕТВЛЕНИЕ УЗЛОВ</span>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 line-clamp-2">Создавайте собственные сюжетные развилки, реплики и диалоги.</p>
+                <button id="btn-launch-constructor" class="w-full py-2 bg-slate-800 hover:bg-purple-600 font-bold rounded-xl text-xs text-purple-200 hover:text-white transition border border-purple-500/30 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Конструктор Узлов</span>
+                </button>
+            </div>
+
+            <!-- Diorama Card 4: Load / Save -->
+            <div id="menu-card-load" class="glass-card p-4 rounded-2xl cursor-pointer" data-diorama="load">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-floppy-disk text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Сохранения</h3>
+                        <span class="text-[10px] text-emerald-400 tracking-wide font-mono">АВТО / JSON</span>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mb-3 line-clamp-2">Продолжить прохождение или импортировать данные.</p>
+                <button id="btn-launch-load" class="w-full py-2 bg-slate-800 hover:bg-emerald-600 font-bold rounded-xl text-xs text-emerald-200 hover:text-white transition border border-emerald-500/30 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Загрузить Данные</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Bottom Controls Indicator -->
+        <div class="w-full flex justify-between items-center text-[11px] text-slate-400 font-mono pointer-events-auto border-t border-slate-800/80 pt-3">
+            <div class="flex space-x-4">
+                <span><i class="fa-solid fa-keyboard text-amber-400 mr-1"></i> WASD: Ходьба</span>
+                <span><i class="fa-solid fa-mouse text-amber-400 mr-1"></i> Зажать ЛКМ: Поворот камеры</span>
+                <span><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> [F]: Фонарь</span>
+                <span><i class="fa-solid fa-hand-pointer text-amber-400 mr-1"></i> [E]: Взаимодействие</span>
+            </div>
+            <div>Three.js R128 • Web Audio Engine</div>
+        </div>
+    </div>
+
+    <!-- Main Game Gameplay HUD Overlay -->
+    <div id="hud-layer" class="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between p-4 md:p-6 hidden">
+        <!-- Top Gameplay Bar -->
         <div class="flex justify-between items-start w-full">
-            <!-- Game Info & Mode Indicator -->
-            <div class="glass-panel p-3 rounded-xl pointer-events-auto flex items-center space-x-3">
+            <div class="glass-panel p-3 rounded-2xl pointer-events-auto flex items-center space-x-3 border border-slate-700">
                 <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse" id="status-indicator"></div>
                 <div>
-                    <h2 class="text-xs font-bold uppercase tracking-widest text-slate-400">Глава 1</h2>
+                    <h2 class="text-[10px] font-bold uppercase tracking-widest text-amber-400">Глава 1</h2>
                     <p class="text-sm font-semibold text-white" id="story-chapter-title">Странный стук</p>
                 </div>
             </div>
 
             <!-- Quick Action Buttons -->
             <div class="flex space-x-2 pointer-events-auto">
-                <button id="btn-journal" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2">
-                    <i class="fa-solid font-bold fa-book-open text-amber-400"></i>
+                <button id="btn-journal" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2 border border-slate-700">
+                    <i class="fa-solid fa-book-open text-amber-400"></i>
                     <span>Журнал (<span id="clue-count">0</span>)</span>
                 </button>
-                <button id="btn-phone" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2 relative">
+                <button id="btn-phone" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2 relative border border-slate-700">
                     <i class="fa-solid fa-mobile-screen text-blue-400"></i>
                     <span>Телефон</span>
-                    <span id="phone-badge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">!</span>
+                    <span id="phone-badge" class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold animate-ping">!</span>
                 </button>
-                <button id="btn-toggle-light" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2">
+                <button id="btn-toggle-light" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition flex items-center space-x-2 border border-slate-700">
                     <i class="fa-solid fa-lightbulb text-yellow-400" id="light-icon"></i>
                     <span id="light-btn-text">Свет [F]</span>
                 </button>
-                <button id="btn-pause-menu" class="glass-panel px-3 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition">
-                    <i class="fa-solid fa-bars"></i>
+                <button id="btn-pause-menu" class="glass-panel px-3 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition border border-slate-700 text-amber-400">
+                    <i class="fa-solid fa-house"></i> Меню
                 </button>
             </div>
         </div>
 
-        <!-- Center Aim Dot / Interaction Prompt -->
+        <!-- Center Crosshair & Interaction Prompt -->
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div id="crosshair" class="w-2 h-2 bg-white/50 rounded-full transition-all duration-200"></div>
-            <div id="interaction-prompt" class="hidden absolute top-1/2 mt-6 glass-panel px-4 py-2 rounded-xl text-center pointer-events-auto animate-bounce border border-white/20">
+            <div id="crosshair" class="w-2 h-2 bg-white/70 rounded-full transition-all duration-200 border border-black/50"></div>
+            <div id="interaction-prompt" class="hidden absolute top-1/2 mt-8 glass-panel px-5 py-2.5 rounded-2xl text-center pointer-events-auto animate-bounce border border-amber-500/40 shadow-2xl">
                 <p class="text-xs font-bold text-amber-400" id="prompt-title">Предмет</p>
                 <p class="text-[11px] text-slate-300" id="prompt-action">Нажмите [E] для взаимодействия</p>
             </div>
@@ -166,14 +276,14 @@
                 <div id="touch-joystick-stick"></div>
             </div>
             <div class="flex flex-col space-y-3 mb-4 mr-2">
-                <button id="touch-btn-interact" class="w-14 h-14 rounded-full bg-amber-600/80 text-white flex items-center justify-center font-bold text-xl border-2 border-amber-300 shadow-lg active:scale-95">E</button>
-                <button id="touch-btn-flashlight" class="w-12 h-12 rounded-full bg-slate-800/80 text-white flex items-center justify-center text-lg border border-slate-600 active:scale-95"><i class="fa-solid fa-lightbulb"></i></button>
+                <button id="touch-btn-interact" class="w-14 h-14 rounded-full bg-amber-600/90 text-white flex items-center justify-center font-bold text-xl border-2 border-amber-300 shadow-xl active:scale-95">E</button>
+                <button id="touch-btn-flashlight" class="w-12 h-12 rounded-full bg-slate-800/90 text-white flex items-center justify-center text-lg border border-slate-600 active:scale-95"><i class="fa-solid fa-lightbulb text-yellow-400"></i></button>
             </div>
         </div>
 
         <!-- Bottom Notification Toast -->
         <div class="flex justify-center w-full">
-            <div id="toast-notification" class="hidden glass-panel px-6 py-3 rounded-2xl text-xs font-medium border border-amber-500/30 text-amber-200 shadow-xl transition-all duration-300 transform translate-y-4">
+            <div id="toast-notification" class="hidden glass-panel px-6 py-3 rounded-2xl text-xs font-semibold border border-amber-500/40 text-amber-200 shadow-2xl transition-all duration-300 transform translate-y-4">
                 Заметка обновлена
             </div>
         </div>
@@ -181,38 +291,38 @@
 
     <!-- Interactive Phone Screen Modal -->
     <div id="phone-modal" class="fixed inset-0 z-40 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="w-full max-w-sm h-[560px] bg-slate-900 border-4 border-slate-700 rounded-[36px] shadow-2xl flex flex-col overflow-hidden relative">
-            <!-- Phone Top Notch -->
+        <div class="w-full max-w-sm h-[580px] bg-slate-900 border-4 border-slate-700 rounded-[38px] shadow-2xl flex flex-col overflow-hidden relative border-amber-500/20">
+            <!-- Phone Notch -->
             <div class="w-full bg-slate-950 h-7 flex items-center justify-between px-6 text-[10px] text-slate-400 font-mono">
                 <span>02:14</span>
-                <div class="w-16 h-3 bg-slate-900 rounded-full mx-auto"></div>
-                <div class="flex space-x-1"><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-three-quarters"></i></div>
+                <div class="w-16 h-3.5 bg-slate-900 rounded-full mx-auto"></div>
+                <div class="flex space-x-1.5"><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-three-quarters text-emerald-400"></i></div>
             </div>
 
             <!-- Phone App Header -->
             <div class="bg-slate-800/90 p-3 border-b border-slate-700 flex justify-between items-center">
                 <h3 class="font-bold text-sm text-white flex items-center"><i class="fa-solid fa-comments text-blue-400 mr-2"></i>Мессенджер</h3>
-                <button id="btn-close-phone" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <button id="btn-close-phone" class="text-slate-400 hover:text-white text-base"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Phone Content Tabs / Chat Window -->
-            <div id="phone-chat-body" class="flex-1 p-3 overflow-y-auto space-y-3 text-xs bg-slate-950/60">
+            <!-- Phone Chat Area -->
+            <div id="phone-chat-body" class="flex-1 p-3 overflow-y-auto space-y-3 text-xs bg-slate-950/80">
                 <div class="text-center text-[10px] text-slate-500 my-2">Сегодня, 02:10</div>
-                <!-- Chat messages appended dynamically -->
+                <!-- Chat messages dynamically rendered -->
             </div>
 
-            <!-- Phone Incoming Call Screen (Overlay inside phone) -->
-            <div id="phone-incoming-call" class="absolute inset-0 bg-slate-900/95 flex flex-col items-center justify-between p-8 hidden z-10 animate-fade-in">
-                <div class="text-center mt-8">
-                    <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-amber-400 border border-amber-500/30 animate-pulse">
+            <!-- Incoming Call Screen -->
+            <div id="phone-incoming-call" class="absolute inset-0 bg-slate-950/95 flex flex-col items-center justify-between p-8 hidden z-20">
+                <div class="text-center mt-10">
+                    <div class="w-20 h-20 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-amber-400 border border-amber-500/40 animate-pulse shadow-xl shadow-amber-500/20">
                         <i class="fa-solid fa-user"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white" id="caller-name">Марка (Сосед)</h3>
-                    <p class="text-xs text-slate-400 mt-1">Входящий вызов...</p>
+                    <h3 class="text-xl font-bold text-white" id="caller-name">Марк (Квартира 402)</h3>
+                    <p class="text-xs text-amber-400/80 mt-1 animate-pulse">Входящий вызов...</p>
                 </div>
                 <div class="flex justify-around w-full mb-8">
-                    <button id="btn-decline-call" class="w-16 h-16 rounded-full bg-red-600 text-white flex items-center justify-center text-xl shadow-lg hover:bg-red-500"><i class="fa-solid fa-phone-slash"></i></button>
-                    <button id="btn-accept-call" class="w-16 h-16 rounded-full bg-green-600 text-white flex items-center justify-center text-xl shadow-lg hover:bg-green-500 animate-bounce"><i class="fa-solid fa-phone"></i></button>
+                    <button id="btn-decline-call" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center text-xl shadow-lg transition active:scale-95"><i class="fa-solid fa-phone-slash"></i></button>
+                    <button id="btn-accept-call" class="w-16 h-16 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center text-xl shadow-lg animate-bounce transition active:scale-95"><i class="fa-solid fa-phone"></i></button>
                 </div>
             </div>
 
@@ -224,168 +334,133 @@
         </div>
     </div>
 
-    <!-- Dialog / Story Narrative Overlay Modal -->
-    <div id="story-dialog-modal" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-11/12 max-w-2xl z-30 hidden">
-        <div class="glass-panel p-5 rounded-2xl border border-slate-700 shadow-2xl relative">
-            <div class="flex items-center space-x-3 mb-2">
-                <span id="dialog-speaker-avatar" class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center font-bold text-xs">?</span>
+    <!-- Dialog / Narrative Modal -->
+    <div id="story-dialog-modal" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 w-11/12 max-w-2xl z-30 hidden">
+        <div class="glass-panel p-6 rounded-3xl border border-amber-500/30 shadow-2xl relative">
+            <div class="flex items-center space-x-3 mb-3">
+                <span id="dialog-speaker-avatar" class="w-8 h-8 rounded-xl bg-amber-600 flex items-center justify-center font-bold text-xs text-white shadow-md">?</span>
                 <h4 id="dialog-speaker" class="font-bold text-amber-400 text-sm">Марк</h4>
             </div>
-            <p id="dialog-text" class="text-sm text-slate-200 mb-4 leading-relaxed">Ты тоже это слышишь? Батарея стучит уже 10 минут...</p>
+            <p id="dialog-text" class="text-sm text-slate-200 mb-4 leading-relaxed font-normal">Стук повторяется каждые несколько минут...</p>
             
             <div id="dialog-choices" class="flex flex-col space-y-2">
-                <!-- Choice buttons generated dynamically -->
+                <!-- Choice buttons dynamically rendered -->
             </div>
         </div>
     </div>
 
     <!-- Journal / Clues Modal -->
     <div id="journal-modal" class="fixed inset-0 z-40 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 border border-slate-700 flex flex-col max-h-[80vh]">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 border border-slate-700 flex flex-col max-h-[80vh]">
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
-                <h3 class="text-lg font-bold text-amber-400 flex items-center"><i class="fa-solid fa-book-open mr-2"></i> Дневник наблюдений</h3>
-                <button id="btn-close-journal" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="text-lg font-bold text-amber-400 flex items-center"><i class="fa-solid fa-book-open mr-2"></i> Дневник Наблюдений</h3>
+                <button id="btn-close-journal" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div id="journal-list" class="flex-1 overflow-y-auto space-y-3 text-xs pr-2">
-                <!-- Journal entries added dynamically -->
+                <!-- Clue entries -->
             </div>
         </div>
     </div>
 
-    <!-- Build Mode Controls (Overlay Top Left in Decorator Mode) -->
-    <div id="build-mode-hud" class="fixed top-4 left-4 z-30 hidden flex flex-col space-y-3">
-        <div class="glass-panel p-4 rounded-xl border border-cyan-500/30 w-72">
-            <h3 class="font-bold text-sm text-cyan-400 mb-2 flex items-center"><i class="fa-solid fa-hammer mr-2"></i>Режим Редактора Квартиры</h3>
-            <p class="text-[11px] text-slate-300 mb-3">Выберите объект для добавления или кликните по объекту на сцене для трансформации.</p>
+    <!-- Build Mode Controls (Overlay Top Left) -->
+    <div id="build-mode-hud" class="fixed top-6 left-6 z-30 hidden flex flex-col space-y-3">
+        <div class="glass-panel p-5 rounded-2xl border border-cyan-500/40 w-80 shadow-2xl">
+            <h3 class="font-bold text-sm text-cyan-400 mb-2 flex items-center"><i class="fa-solid fa-drafting-compass mr-2"></i> Редактор Квартиры</h3>
+            <p class="text-[11px] text-slate-300 mb-4">Выберите предмет для спавна. Кликайте мышью для перемещения.</p>
             
             <label class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Каталог мебели</label>
-            <select id="build-catalog" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs text-white mb-3">
+            <select id="build-catalog" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white mb-3 focus:outline-none focus:border-cyan-500">
                 <option value="chair">Кресло</option>
                 <option value="table">Стол</option>
                 <option value="lamp">Торшер / Лампа</option>
-                <option value="plant">Комнатное растение</option>
+                <option value="plant">Растение</option>
                 <option value="box">Коробка / Ящик</option>
-                <option value="sofa">Диван</option>
             </select>
             
             <div class="flex space-x-2 mb-3">
-                <button id="btn-build-add" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs py-2 rounded font-semibold"><i class="fa-solid fa-plus mr-1"></i> Добавить</button>
-                <button id="btn-build-delete" class="bg-red-600/80 hover:bg-red-500 text-white text-xs px-3 py-2 rounded"><i class="fa-solid fa-trash"></i></button>
+                <button id="btn-build-add" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white text-xs py-2.5 rounded-xl font-bold transition flex items-center justify-center"><i class="fa-solid fa-plus mr-1"></i> Добавить</button>
+                <button id="btn-build-delete" class="bg-red-600/80 hover:bg-red-500 text-white text-xs px-3 py-2.5 rounded-xl transition"><i class="fa-solid fa-trash"></i></button>
             </div>
 
             <div class="border-t border-slate-800 pt-3 space-y-2">
                 <div class="flex justify-between items-center text-xs">
-                    <span>Поворот:</span>
-                    <button id="btn-build-rotate" class="bg-slate-800 px-3 py-1 rounded text-cyan-300 font-mono">+45°</button>
-                </div>
-                <div class="flex justify-between items-center text-xs">
-                    <span>Привязка к сетке:</span>
-                    <input type="checkbox" id="chk-grid-snap" checked class="rounded border-slate-700 bg-slate-900 text-cyan-500">
+                    <span class="text-slate-400">Поворот:</span>
+                    <button id="btn-build-rotate" class="bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded-lg text-cyan-300 font-mono">+45°</button>
                 </div>
             </div>
         </div>
-        <button id="btn-exit-build" class="glass-panel px-4 py-2 rounded-xl text-xs font-bold text-red-400 hover:bg-red-950/50 border border-red-500/30">
-            <i class="fa-solid fa-door-open mr-2"></i>Выйти из редактора
+        <button id="btn-exit-build" class="glass-panel px-5 py-3 rounded-2xl text-xs font-bold text-red-400 hover:bg-red-950/60 border border-red-500/40 flex items-center space-x-2 transition w-fit">
+            <i class="fa-solid fa-door-open"></i><span>Выйти из редактора</span>
         </button>
     </div>
 
-    <!-- Visual Story Editor Node Modal -->
-    <div id="story-editor-modal" class="fixed inset-0 z-40 bg-slate-950/90 backdrop-blur-lg hidden flex flex-col p-6">
+    <!-- Visual Story Node Editor Modal -->
+    <div id="story-editor-modal" class="fixed inset-0 z-40 bg-slate-950/90 backdrop-blur-xl hidden flex flex-col p-6">
         <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
             <div>
-                <h2 class="text-xl font-bold text-amber-400 flex items-center"><i class="fa-solid fa-diagram-project mr-2"></i> Визуальный Редактор Историй</h2>
-                <p class="text-xs text-slate-400">Создавайте свои ветвящиеся психологические квесты и развилки</p>
+                <h2 class="text-xl font-bold text-purple-400 flex items-center"><i class="fa-solid fa-diagram-project mr-2"></i> Визуальный Редактор Сюжетов</h2>
+                <p class="text-xs text-slate-400">Проектируйте ветвящиеся психологические диалоги и логику квеста</p>
             </div>
             <div class="flex space-x-3">
-                <button id="btn-editor-export" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs font-semibold text-white"><i class="fa-solid fa-download mr-1"></i> Экспорт JSON</button>
-                <button id="btn-editor-import" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs font-semibold text-white"><i class="fa-solid fa-upload mr-1"></i> Импорт JSON</button>
+                <button id="btn-editor-export" class="bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold text-white border border-slate-700 flex items-center"><i class="fa-solid fa-download mr-1.5 text-purple-400"></i> Экспорт JSON</button>
+                <button id="btn-editor-import" class="bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold text-white border border-slate-700 flex items-center"><i class="fa-solid fa-upload mr-1.5 text-purple-400"></i> Импорт JSON</button>
                 <input type="file" id="file-import-input" class="hidden" accept=".json">
-                <button id="btn-editor-close" class="bg-red-600 hover:bg-red-500 px-4 py-1.5 rounded text-xs font-semibold text-white"><i class="fa-solid fa-xmark mr-1"></i> Закрыть</button>
+                <button id="btn-editor-close" class="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-xl text-xs font-bold text-white transition"><i class="fa-solid fa-xmark mr-1"></i> Закрыть</button>
             </div>
         </div>
 
         <div class="flex-1 flex space-x-4 overflow-hidden">
-            <!-- Left Panel: Node List & Topology -->
-            <div class="w-1/3 glass-panel rounded-xl p-4 flex flex-col">
+            <!-- Left Node List -->
+            <div class="w-1/3 glass-panel rounded-2xl p-4 flex flex-col">
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-xs font-bold uppercase text-slate-400">Список Узлов (Событий)</h3>
-                    <button id="btn-add-node" class="bg-amber-600 hover:bg-amber-500 px-2 py-1 rounded text-xs font-semibold text-white"><i class="fa-solid fa-plus mr-1"></i> Узел</button>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Узлы Сюжета</h3>
+                    <button id="btn-add-node" class="bg-purple-600 hover:bg-purple-500 px-2.5 py-1 rounded-lg text-xs font-semibold text-white transition"><i class="fa-solid fa-plus mr-1"></i> Новый Узел</button>
                 </div>
                 <div id="editor-nodes-list" class="flex-1 overflow-y-auto space-y-2 pr-1">
-                    <!-- Dynamic list of story nodes -->
+                    <!-- Dynamic nodes list -->
                 </div>
             </div>
 
-            <!-- Right Panel: Node Details Editor -->
-            <div class="w-2/3 glass-panel rounded-xl p-5 flex flex-col overflow-y-auto" id="node-edit-panel">
-                <h3 class="text-sm font-bold text-amber-400 mb-4 border-b border-slate-800 pb-2">Редактирование Узла <span id="edit-node-id-display" class="font-mono text-slate-400">#start</span></h3>
+            <!-- Right Node Detail Editor -->
+            <div class="w-2/3 glass-panel rounded-2xl p-6 flex flex-col overflow-y-auto" id="node-edit-panel">
+                <h3 class="text-sm font-bold text-purple-400 mb-4 border-b border-slate-800 pb-2">Редактирование Узла <span id="edit-node-id-display" class="font-mono text-slate-400">#start</span></h3>
                 
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="text-[11px] font-bold text-slate-400 block mb-1">ID Узла</label>
-                        <input type="text" id="edit-node-id" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs font-mono">
+                        <input type="text" id="edit-node-id" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs font-mono text-amber-300">
                     </div>
                     <div>
                         <label class="text-[11px] font-bold text-slate-400 block mb-1">Тип События</label>
-                        <select id="edit-node-type" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                        <select id="edit-node-type" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
                             <option value="dialog">Диалог / Текст</option>
-                            <option value="call">Входящий Звонок</option>
+                            <option value="call">Звонок на телефон</option>
                             <option value="ending">Финал / Концовка</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="text-[11px] font-bold text-slate-400 block mb-1">Персонаж / Имя Говорящего</label>
-                    <input type="text" id="edit-node-speaker" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs">
+                    <label class="text-[11px] font-bold text-slate-400 block mb-1">Персонаж</label>
+                    <input type="text" id="edit-node-speaker" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs">
                 </div>
 
                 <div class="mb-4">
-                    <label class="text-[11px] font-bold text-slate-400 block mb-1">Текст реплики или описания</label>
-                    <textarea id="edit-node-text" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-xs leading-relaxed"></textarea>
+                    <label class="text-[11px] font-bold text-slate-400 block mb-1">Текст описания или реплики</label>
+                    <textarea id="edit-node-text" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs leading-relaxed"></textarea>
                 </div>
 
                 <div class="border-t border-slate-800 pt-4">
-                    <label class="text-[11px] font-bold text-amber-400 block mb-2">Варианты Ответа / Ветвления</label>
+                    <label class="text-[11px] font-bold text-purple-400 block mb-2">Варианты ответов / ветвления</label>
                     <div id="choices-edit-container" class="space-y-2 mb-3">
-                        <!-- Choices inputs -->
+                        <!-- Choice fields dynamically added -->
                     </div>
-                    <button id="btn-add-choice-input" class="text-xs text-cyan-400 hover:underline"><i class="fa-solid fa-plus mr-1"></i> Добавить вариант ответа</button>
+                    <button id="btn-add-choice-input" class="text-xs text-cyan-400 hover:underline flex items-center"><i class="fa-solid fa-plus mr-1"></i> Добавить вариант ответа</button>
                 </div>
 
-                <div class="mt-auto pt-4 border-t border-slate-800 flex justify-end space-x-3">
-                    <button id="btn-save-node" class="bg-amber-600 hover:bg-amber-500 px-6 py-2 rounded text-xs font-bold text-white"><i class="fa-solid fa-floppy-disk mr-1"></i> Сохранить Узел</button>
+                <div class="mt-auto pt-6 border-t border-slate-800 flex justify-end">
+                    <button id="btn-save-node" class="bg-purple-600 hover:bg-purple-500 px-6 py-2.5 rounded-xl text-xs font-bold text-white transition shadow-lg"><i class="fa-solid fa-floppy-disk mr-1.5"></i> Сохранить изменения</button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Game Menu Overlay -->
-    <div id="main-menu" class="fixed inset-0 z-50 glass-panel flex flex-col items-center justify-center p-6 bg-slate-950/90">
-        <div class="max-w-md w-full text-center space-y-6">
-            <div class="space-y-2">
-                <h1 class="text-5xl font-extrabold tracking-wider font-serif text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-300 to-red-600">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-                <p class="text-slate-400 text-xs tracking-widest uppercase">Психологический 3D-детектив & Игровой Конструктор</p>
-            </div>
-
-            <div class="space-y-3 pt-4">
-                <button id="btn-start-game" class="w-full py-3 bg-red-700 hover:bg-red-600 font-bold rounded-xl text-sm transition shadow-lg shadow-red-950/50 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-play"></i>
-                    <span>Начальная История: «Странный стук»</span>
-                </button>
-                <button id="btn-open-builder" class="w-full py-3 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm transition border border-slate-700 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-hammer text-cyan-400"></i>
-                    <span>Режим Редактора Квартиры</span>
-                </button>
-                <button id="btn-open-story-editor" class="w-full py-3 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm transition border border-slate-700 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-diagram-project text-amber-400"></i>
-                    <span>Конструктор Историй (Редактор)</span>
-                </button>
-            </div>
-
-            <div class="pt-6 border-t border-slate-800 text-[11px] text-slate-500 flex justify-between items-center">
-                <span>Управление: WASD + Зажать ЛКМ</span>
-                <span>Three.js WebGL Engine</span>
             </div>
         </div>
     </div>
@@ -393,84 +468,129 @@
     <!-- GAME ENGINE SCRIPT -->
     <script>
         /**
-         *  НЕОБЫЧНЫЙ СЛУЧАЙ - Full Interactive 3D Game Core Architecture
+         *  НЕОБЫЧНЫЙ СЛУЧАЙ - Full Interactive 3D Architecture & Synthesizer Game
          */
         window.addEventListener('DOMContentLoaded', () => {
-            // --- AUDIO SYNTHESIZER MODULE ---
+            
+            // --- SOUND SYNTHESIZER (Web Audio API) ---
             const AudioFX = {
                 ctx: null,
+                enabled: true,
                 init() {
                     if (!this.ctx) {
                         const AudioCtx = window.AudioContext || window.webkitAudioContext;
                         if (AudioCtx) this.ctx = new AudioCtx();
                     }
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
                 },
                 playKnock() {
-                    if (!this.ctx) return;
+                    if (!this.ctx || !this.enabled) return;
+                    const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(120, this.ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.8, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+                    osc.frequency.setValueAtTime(110, now);
+                    osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
+                    gain.gain.setValueAtTime(0.9, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
                 },
                 playSwitch() {
-                    if (!this.ctx) return;
+                    if (!this.ctx || !this.enabled) return;
+                    const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'square';
-                    osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-                    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+                    osc.frequency.setValueAtTime(900, now);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.04);
                 },
                 playPhoneRing() {
-                    if (!this.ctx) return;
+                    if (!this.ctx || !this.enabled) return;
                     const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.setValueAtTime(480, now + 0.1);
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
                     gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
                     osc.start(now);
-                    osc.stop(now + 0.4);
+                    osc.stop(now + 0.35);
+                },
+                playMenuHover() {
+                    if (!this.ctx || !this.enabled) return;
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(500, now + 0.05);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
                 }
             };
 
             // --- GAME STATE ---
             const GameState = {
                 mode: 'menu', // 'menu', 'story', 'build'
+                activeDiorama: 'story',
                 lightsOn: false,
-                flashlightOn: false,
                 journal: [],
-                variables: {
-                    radiatorInspected: false,
-                    knowsMark: true,
-                    trustMark: 0,
-                    foundClues: 0
-                },
                 currentStoryNode: 'start',
-                buildModeSelected: null
+                buildSelected: null,
+                buildRotation: 0
             };
 
-            // --- BUILT-IN INITIAL STORY ("Странный стук") ---
+            // --- DIORAMA CAMERA TARGET CONFIGURATIONS ---
+            const DioramaTargets = {
+                story: {
+                    pos: new THREE.Vector3(-3.2, 1.2, -1.0),
+                    lookAt: new THREE.Vector3(-4.5, 0.5, -2.0),
+                    lightColor: 0xef4444, // Atmospheric Red Tint
+                    lightIntensity: 1.5
+                },
+                build: {
+                    pos: new THREE.Vector3(0, 4.5, 0.1),
+                    lookAt: new THREE.Vector3(0, 0, 0),
+                    lightColor: 0x06b6d4, // Cyan Architect Tint
+                    lightIntensity: 2.0
+                },
+                constructor: {
+                    pos: new THREE.Vector3(2.8, 1.2, -2.4),
+                    lookAt: new THREE.Vector3(3.8, 0.77, -3.5),
+                    lightColor: 0xa855f7, // Purple Hologram Tint
+                    lightIntensity: 1.8
+                },
+                load: {
+                    pos: new THREE.Vector3(3.0, 1.1, -2.8),
+                    lookAt: new THREE.Vector3(3.8, 0.77, -3.5),
+                    lightColor: 0x10b981, // Emerald Save Tint
+                    lightIntensity: 1.5
+                }
+            };
+
+            // --- STORY TREE DATA ---
             let StoryTree = {
                 "start": {
                     id: "start",
-                    speaker: "Сюжет",
-                    text: "Вы просыпаетесь ночью в 02:14 от глубокого гулкого стука. Источник звука явно в районе чугунной батареи в спальне.",
+                    speaker: "Повествование",
+                    text: "Вы просыпаетесь в 02:14 от вибрирующего гула. Кто-то равномерно стучит по чугунной батарее отопления.",
                     choices: [
                         { text: "Осмотреть батарею", nextId: "inspect_radiator" },
                         { text: "Проверить телефон", nextId: "check_phone" }
@@ -479,84 +599,94 @@
                 "inspect_radiator": {
                     id: "inspect_radiator",
                     speaker: "Наблюдение",
-                    text: "Батарея холодная. Вибрация идет снизу, но ритм аномальный — по 3 стука с равным интервалом. Это Морзе?",
+                    text: "Батарея холодная. Стук идет снизу: 3 коротких удара, пауза, 3 длинных. Это похоже на код Морзе.",
                     choices: [
-                        { text: "Записать наблюдение в журнал", nextId: "note_clue" },
-                        { text: "Постучать в ответ 3 раза", nextId: "knock_back" }
+                        { text: "Записать в дневник", nextId: "note_clue" },
+                        { text: "Постучать в ответ", nextId: "knock_back" }
                     ]
                 },
                 "note_clue": {
                     id: "note_clue",
                     speaker: "Дневник",
-                    text: "Вы внесли запись о ритмичном стуке. Вдруг на телефон приходит сообщение от Марка из 402 квартиры.",
+                    text: "Вы сделали заметку о ритме. Внезапно мобильный телефон в комнате начинает вибрировать.",
                     choices: [
-                        { text: "Открыть мессенджер", nextId: "mark_call" }
+                        { text: "Ответить на звонок", nextId: "mark_call" }
                     ]
                 },
                 "knock_back": {
                     id: "knock_back",
                     speaker: "Событие",
-                    text: "Вы постучали по трубе. Стук снизу мгновенно прекратился... Проходит 5 секунд и в дверь квартиры кто-то громко звонит!",
+                    text: "Вы постучали трубой. Стук мгновенно прекратился... Проходит 5 секунд и в дверь вашей квартиры громко звонят!",
                     choices: [
                         { text: "Подойти к двери", nextId: "ending_1" }
+                    ]
+                },
+                "check_phone": {
+                    id: "check_phone",
+                    speaker: "Телефон",
+                    text: "На экране высвечивается пропущенный вызов от Марка из 402 квартиры.",
+                    choices: [
+                        { text: "Перезвонить Марку", nextId: "mark_call" }
                     ]
                 },
                 "mark_call": {
                     id: "mark_call",
                     speaker: "Марк (Сосед)",
                     type: "call",
-                    text: "Эй! Ты спишь? Наш подвал заперт изнутри, но там горит свет. Помоги мне проверить водомерную станцию!",
+                    text: "Ты слышишь стук? Подвал заперт изнутри, но там горит свет! Помоги мне проверить бойлерную!",
                     choices: [
-                        { text: "Согласиться и спуститься", nextId: "ending_2" },
-                        { text: "Отказать и запереть дверь", nextId: "ending_3" }
+                        { text: "Спуститься к подвалу", nextId: "ending_2" },
+                        { text: "Запереться в квартире", nextId: "ending_3" }
                     ]
                 },
                 "ending_1": {
                     id: "ending_1",
-                    speaker: "Концовка 1из5",
+                    speaker: "Концовка 1 из 3",
                     type: "ending",
-                    text: "ФИНАЛ: «Незваный гость». Вы открыли дверь ночному незнакомцу... Некоторые тайны лучше было оставить без ответа.",
+                    text: "ФИНАЛ: «Незваный гость». Вы открыли дверь ночному незнакомцу. Ошибки в темноте стоят дорого.",
                     choices: []
                 },
                 "ending_2": {
                     id: "ending_2",
-                    speaker: "Концовка 2из5",
+                    speaker: "Концовка 2 из 3",
                     type: "ending",
-                    text: "ФИНАЛ: «Тайна подвала». Вместе с Марком вы обнаружили забытый исследовательский бункер под домом.",
+                    text: "ФИНАЛ: «Тайна подвала». Вместе с Марком вы нашли заброшенную станцию слежения под домом.",
                     choices: []
                 },
                 "ending_3": {
                     id: "ending_3",
-                    speaker: "Концовка 3из5",
+                    speaker: "Концовка 3 из 3",
                     type: "ending",
-                    text: "ФИНАЛ: «Паранойя». Вы остались в запертой квартире до утра. Стук прекратился, но чувство тревоги осталась навсегда.",
+                    text: "ФИНАЛ: «Изоляция». Вы остались в запертой квартире до рассвета. Стук прекратился, но тревога осталась.",
                     choices: []
                 }
             };
 
-            // --- THREE.JS ENGINE SETUP ---
+            // --- THREE.JS ENGINE VARS ---
             let scene, camera, renderer;
             let interactiveObjects = [];
-            let flashlight;
-            let roomLights = [];
-            
-            // Camera & Movement controls (No pointerLock)
+            let flashlight, ambientLight, dioramaPointLight;
+            let particlesMesh;
+            let targetCamPos = new THREE.Vector3();
+            let targetCamLook = new THREE.Vector3();
+            let currentCamLook = new THREE.Vector3();
+
+            // First Person Movement & Mouse look state
             let isMouseDown = false;
             let mouseX = 0, mouseY = 0;
             let yaw = 0, pitch = 0;
             const moveState = { forward: false, backward: false, left: false, right: false, speed: 0.08 };
-            const cameraPos = new THREE.Vector3(0, 1.6, 3);
+            const playerPos = new THREE.Vector3(0, 1.6, 2.5);
 
             function initThree() {
                 const container = document.getElementById('webgl-container');
                 
                 try {
                     scene = new THREE.Scene();
-                    scene.background = new THREE.Color(0x050508);
-                    scene.fog = new THREE.FogExp2(0x050508, 0.15);
+                    scene.background = new THREE.Color(0x030712);
+                    scene.fog = new THREE.FogExp2(0x030712, 0.12);
 
                     camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 50);
-                    camera.position.copy(cameraPos);
 
                     renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
                     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -566,7 +696,7 @@
                     container.appendChild(renderer.domElement);
 
                     // Flashlight attached to camera
-                    flashlight = new THREE.SpotLight(0xfff5ea, 0, 12, Math.PI / 6, 0.5, 1);
+                    flashlight = new THREE.SpotLight(0xfff5ea, 0, 12, Math.PI / 5, 0.5, 1);
                     flashlight.position.set(0, 0, 0);
                     camera.add(flashlight);
                     flashlight.target = new THREE.Object3D();
@@ -574,40 +704,62 @@
                     flashlight.target.position.set(0, 0, -1);
                     scene.add(camera);
 
-                    // Build Room Geometry & Furniture
+                    // Dynamic Ambient & Diorama Spotlights
+                    ambientLight = new THREE.AmbientLight(0x1e1b4b, 0.3);
+                    scene.add(ambientLight);
+
+                    dioramaPointLight = new THREE.PointLight(0xef4444, 1.5, 8);
+                    dioramaPointLight.position.set(-4.5, 1.5, -2.0);
+                    scene.add(dioramaPointLight);
+
+                    // Create 3D Scene Components
                     buildApartment();
+                    createParticles();
 
-                    // Hide loading screen
-                    const loadScreen = document.getElementById('loading-screen');
-                    loadScreen.classList.add('opacity-0');
-                    setTimeout(() => loadScreen.style.display = 'none', 500);
+                    // Initial Diorama Camera setup
+                    setDiorama('story');
+                    camera.position.copy(targetCamPos);
+                    currentCamLook.copy(targetCamLook);
 
-                    // Event Listeners
+                    // Hide Loading Screen
+                    const loadBar = document.getElementById('loading-bar');
+                    loadBar.style.width = '100%';
+                    setTimeout(() => {
+                        const loadScreen = document.getElementById('loading-screen');
+                        loadScreen.classList.add('opacity-0');
+                        setTimeout(() => loadScreen.style.display = 'none', 700);
+                    }, 400);
+
+                    // Wire Up Interactions & Control Listeners
                     setupEvents();
 
-                    // Start Loop
+                    // Start Render Loop
                     animate();
 
                 } catch (e) {
-                    console.error("Three.js Init Error:", e);
+                    console.error("3D Canvas Engine Error:", e);
                     document.getElementById('error-fallback').classList.remove('hidden');
-                    document.getElementById('loading-text').innerText = "Ошибка запуска 3D графика.";
+                    document.getElementById('loading-text').innerText = "Ошибка запуска 3D графики.";
                 }
             }
 
-            // --- BUILD 3D ENVIRONMENT ---
+            // --- BUILD 3D ROOM GEOMETRY & ASSETS ---
             function buildApartment() {
-                // Materials
-                const wallMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
-                const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.4 });
-                const woodMat = new THREE.MeshStandardMaterial({ color: 0x331e11, roughness: 0.6 });
-                const metalMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 });
+                const wallMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.8 });
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.4 });
+                const woodMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.5 });
+                const metalMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.2 });
 
                 // Floor
                 const floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), floorMat);
                 floor.rotation.x = -Math.PI / 2;
                 floor.receiveShadow = true;
                 scene.add(floor);
+
+                // Grid Helper for Build Mode
+                const gridHelper = new THREE.GridHelper(10, 10, 0x06b6d4, 0x1e293b);
+                gridHelper.position.y = 0.01;
+                scene.add(gridHelper);
 
                 // Ceiling
                 const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), wallMat);
@@ -628,64 +780,135 @@
                 createWall(10, 3, -5, 1.5, 0, Math.PI/2); // Left
                 createWall(10, 3, 5, 1.5, 0, -Math.PI/2); // Right
 
-                // Ambient Light
-                const ambientLight = new THREE.AmbientLight(0x1e1b4b, 0.2);
-                scene.add(ambientLight);
-
-                // Main Room Ceiling Lamp (PointLight)
-                const roomLight = new THREE.PointLight(0xffb74d, 0, 8);
-                roomLight.position.set(0, 2.7, 0);
-                roomLight.castShadow = true;
-                scene.add(roomLight);
-                roomLights.push(roomLight);
-
-                // --- INTERACTIVE FURNITURE ---
-                // 1. Radiator (Батарея)
+                // --- INTERACTIVE FURNITURE OBJECTS ---
+                
+                // 1. Ominous Radiator (Батарея)
                 const radiatorGroup = new THREE.Group();
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < 6; i++) {
                     const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.8), metalMat);
-                    pipe.position.x = i * 0.1;
+                    pipe.position.x = i * 0.12;
+                    pipe.castShadow = true;
                     radiatorGroup.add(pipe);
                 }
-                radiatorGroup.position.set(-4.5, 0.5, -2);
-                radiatorGroup.userData = { name: "Чугунная батарея", action: "Осмотреть и послушать стук", id: "radiator" };
+                radiatorGroup.position.set(-4.6, 0.5, -2);
+                radiatorGroup.userData = { name: "Чугунная батарея", action: "Послушать стук", id: "radiator" };
                 scene.add(radiatorGroup);
                 interactiveObjects.push(radiatorGroup);
 
-                // 2. Desk & Laptop (Стол и Ноутбук)
+                // 2. Desk & Glowing Laptop Screen (Стол и Ноутбук)
                 const desk = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.75, 0.8), woodMat);
                 desk.position.set(3.8, 0.375, -3.5);
+                desk.castShadow = true;
                 scene.add(desk);
 
                 const laptop = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.03, 0.3), metalMat);
                 laptop.position.set(3.8, 0.77, -3.5);
-                laptop.userData = { name: "Ноутбук", action: "Открыть заметочник и редактор", id: "laptop" };
+                
+                // Hologram Screen effect
+                const screenMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
+                const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.38, 0.25), screenMat);
+                screen.position.set(3.8, 0.92, -3.64);
+                screen.rotation.x = 0.2;
+                scene.add(screen);
+
+                laptop.userData = { name: "Ноутбук", action: "Открыть конструктор сюжета", id: "laptop" };
                 scene.add(laptop);
                 interactiveObjects.push(laptop);
 
-                // 3. Bed (Кровать)
-                const bed = new THREE.Mesh(new THREE.BoxGeometry(2, 0.5, 1.4), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+                // 3. Smartphone on desk
+                const phone = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.01, 0.18), new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.9 }));
+                phone.position.set(3.3, 0.76, -3.4);
+                phone.userData = { name: "Смартфон", action: "Открыть мессенджер", id: "phone" };
+                scene.add(phone);
+                interactiveObjects.push(phone);
+
+                // 4. Bed
+                const bed = new THREE.Mesh(new THREE.BoxGeometry(2, 0.5, 1.4), new THREE.MeshStandardMaterial({ color: 0x1f2937 }));
                 bed.position.set(-3.5, 0.25, 3.5);
+                bed.castShadow = true;
                 scene.add(bed);
 
-                // 4. Interactive Door
+                // 5. Entrance Door
                 const door = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.1, 0.05), woodMat);
                 door.position.set(0, 1.05, -4.95);
-                door.userData = { name: "Входная дверь", action: "Подойти и проверить замок", id: "door" };
+                door.userData = { name: "Входная дверь", action: "Проверить замок", id: "door" };
                 scene.add(door);
                 interactiveObjects.push(door);
             }
 
-            // --- INPUT & CAMERA CONTROLS ---
+            // --- FLOATING PARTICLES ---
+            function createParticles() {
+                const particleCount = 150;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+
+                for (let i = 0; i < particleCount * 3; i += 3) {
+                    positions[i] = (Math.random() - 0.5) * 10;
+                    positions[i + 1] = Math.random() * 3;
+                    positions[i + 2] = (Math.random() - 0.5) * 10;
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                const material = new THREE.PointsMaterial({
+                    color: 0xf59e0b,
+                    size: 0.03,
+                    transparent: true,
+                    opacity: 0.5
+                });
+
+                particlesMesh = new THREE.Points(geometry, material);
+                scene.add(particlesMesh);
+            }
+
+            // --- DIORAMA MODE SWITCHER ---
+            function setDiorama(key) {
+                if (!DioramaTargets[key]) return;
+                GameState.activeDiorama = key;
+                const target = DioramaTargets[key];
+                
+                targetCamPos.copy(target.pos);
+                targetCamLook.copy(target.lookAt);
+
+                // Smooth Light Color Shift
+                dioramaPointLight.color.setHex(target.lightColor);
+                dioramaPointLight.intensity = target.lightIntensity;
+                dioramaPointLight.position.copy(target.lookAt).add(new THREE.Vector3(0, 0.5, 0.5));
+            }
+
+            // --- INPUT & CONTROLS SETUP ---
             function setupEvents() {
-                // Window Resize
                 window.addEventListener('resize', () => {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(window.innerWidth, window.innerHeight);
                 });
 
-                // Mouse look without pointer lock
+                // Diorama Menu Cards Click & Hover handlers
+                document.querySelectorAll('.glass-card[data-diorama]').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        AudioFX.init();
+                        AudioFX.playMenuHover();
+                        const key = card.getAttribute('data-diorama');
+                        document.querySelectorAll('.glass-card[data-diorama]').forEach(c => c.classList.remove('menu-tab-active'));
+                        card.classList.add('menu-tab-active');
+                        setDiorama(key);
+                    });
+                });
+
+                // Launch Buttons
+                document.getElementById('btn-launch-story').addEventListener('click', startGame);
+                document.getElementById('btn-launch-build').addEventListener('click', startBuildMode);
+                document.getElementById('btn-launch-constructor').addEventListener('click', openStoryEditor);
+                document.getElementById('btn-launch-load').addEventListener('click', openJournal);
+
+                // Sound Toggle
+                document.getElementById('btn-toggle-sound').addEventListener('click', () => {
+                    AudioFX.enabled = !AudioFX.enabled;
+                    document.getElementById('sound-status').innerText = AudioFX.enabled ? "Звук: Вкл" : "Звук: Выкл";
+                    document.getElementById('sound-icon').className = AudioFX.enabled ? "fa-solid fa-volume-high text-amber-400" : "fa-solid fa-volume-xmark text-slate-500";
+                });
+
+                // First-Person Drag Navigation
                 const container = document.getElementById('webgl-container');
                 container.addEventListener('mousedown', (e) => {
                     if (GameState.mode === 'menu') return;
@@ -697,7 +920,7 @@
 
                 window.addEventListener('mouseup', () => isMouseDown = false);
                 window.addEventListener('mousemove', (e) => {
-                    if (!isMouseDown) return;
+                    if (!isMouseDown || GameState.mode === 'menu') return;
                     const deltaX = e.clientX - mouseX;
                     const deltaY = e.clientY - mouseY;
                     mouseX = e.clientX;
@@ -708,14 +931,14 @@
                     pitch = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, pitch));
                 });
 
-                // Keyboard Controls
+                // Key Movement
                 window.addEventListener('keydown', (e) => {
                     if (e.code === 'KeyW') moveState.forward = true;
                     if (e.code === 'KeyS') moveState.backward = true;
                     if (e.code === 'KeyA') moveState.left = true;
                     if (e.code === 'KeyD') moveState.right = true;
-                    if (e.code === 'KeyF') toggleLight();
-                    if (e.code === 'KeyE') triggerInteraction();
+                    if (e.code === 'KeyF') toggleFlashlight();
+                    if (e.code === 'KeyE') triggerRaycastAction();
                 });
 
                 window.addEventListener('keyup', (e) => {
@@ -725,33 +948,39 @@
                     if (e.code === 'KeyD') moveState.right = false;
                 });
 
-                // UI Button Listeners
-                document.getElementById('btn-start-game').addEventListener('click', startGame);
-                document.getElementById('btn-open-builder').addEventListener('click', startBuildMode);
-                document.getElementById('btn-open-story-editor').addEventListener('click', openStoryEditor);
-                document.getElementById('btn-editor-close').addEventListener('click', () => document.getElementById('story-editor-modal').classList.add('hidden'));
-                document.getElementById('btn-toggle-light').addEventListener('click', toggleLight);
+                // Gameplay UI Listeners
+                document.getElementById('btn-toggle-light').addEventListener('click', toggleFlashlight);
+                document.getElementById('btn-pause-menu').addEventListener('click', returnToMenu);
                 document.getElementById('btn-phone').addEventListener('click', openPhone);
                 document.getElementById('btn-close-phone').addEventListener('click', () => document.getElementById('phone-modal').classList.add('hidden'));
                 document.getElementById('btn-journal').addEventListener('click', openJournal);
                 document.getElementById('btn-close-journal').addEventListener('click', () => document.getElementById('journal-modal').classList.add('hidden'));
                 document.getElementById('btn-accept-call').addEventListener('click', acceptIncomingCall);
-                document.getElementById('btn-exit-build').addEventListener('click', () => {
-                    document.getElementById('build-mode-hud').classList.add('hidden');
-                    document.getElementById('main-menu').classList.remove('hidden');
-                });
+                document.getElementById('btn-editor-close').addEventListener('click', () => document.getElementById('story-editor-modal').classList.add('hidden'));
+                document.getElementById('btn-exit-build').addEventListener('click', returnToMenu);
             }
 
-            // --- GAME LOGIC & ENGINE LOOP ---
+            // --- MAIN ANIMATION & RENDER LOOP ---
             function animate() {
                 requestAnimationFrame(animate);
 
-                // Update Camera Rotation
-                const euler = new THREE.Euler(pitch, yaw, 0, 'YXZ');
-                camera.quaternion.setFromEuler(euler);
+                // Floating Particle Animation
+                if (particlesMesh) {
+                    particlesMesh.rotation.y += 0.0005;
+                }
 
-                // Update Movement
-                if (GameState.mode === 'story' || GameState.mode === 'build') {
+                if (GameState.mode === 'menu') {
+                    // Smooth Camera Transition in Menu Dioramas (Lerp)
+                    camera.position.lerp(targetCamPos, 0.04);
+                    currentCamLook.lerp(targetCamLook, 0.04);
+                    camera.lookAt(currentCamLook);
+
+                } else if (GameState.mode === 'story' || GameState.mode === 'build') {
+                    // FPS Camera Quaternion
+                    const euler = new THREE.Euler(pitch, yaw, 0, 'YXZ');
+                    camera.quaternion.setFromEuler(euler);
+
+                    // Player Movement Logic
                     const dir = new THREE.Vector3();
                     if (moveState.forward) dir.z -= 1;
                     if (moveState.backward) dir.z += 1;
@@ -759,28 +988,30 @@
                     if (moveState.right) dir.x += 1;
                     dir.normalize();
                     dir.applyQuaternion(camera.quaternion);
-                    dir.y = 0; // Lock to floor
+                    dir.y = 0; // Lock to floor plane
 
-                    camera.position.addScaledVector(dir, moveState.speed);
+                    playerPos.addScaledVector(dir, moveState.speed);
                     
-                    // Simple Room Collision Constraints
-                    camera.position.x = Math.max(-4.5, Math.min(4.5, camera.position.x));
-                    camera.position.z = Math.max(-4.5, Math.min(4.5, camera.position.z));
-                }
+                    // Room Boundary Bounds
+                    playerPos.x = Math.max(-4.5, Math.min(4.5, playerPos.x));
+                    playerPos.z = Math.max(-4.5, Math.min(4.5, playerPos.z));
+                    camera.position.copy(playerPos);
 
-                // Raycast Interaction Check
-                checkRaycastInteraction();
+                    // Crosshair Raycast Interaction Check
+                    checkRaycastPrompt();
+                }
 
                 renderer.render(scene, camera);
             }
 
-            function checkRaycastInteraction() {
+            // --- RAYCASTING & INTERACTION ---
+            function checkRaycastPrompt() {
                 if (GameState.mode !== 'story') return;
 
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-
                 const intersects = raycaster.intersectObjects(interactiveObjects, true);
+
                 const prompt = document.getElementById('interaction-prompt');
 
                 if (intersects.length > 0 && intersects[0].distance < 2.5) {
@@ -789,7 +1020,7 @@
 
                     if (obj.userData && obj.userData.name) {
                         document.getElementById('prompt-title').innerText = obj.userData.name;
-                        document.getElementById('prompt-action').innerText = obj.userData.action;
+                        document.getElementById('prompt-action').innerText = obj.userData.action + " [E]";
                         prompt.classList.remove('hidden');
                         return;
                     }
@@ -797,7 +1028,7 @@
                 prompt.classList.add('hidden');
             }
 
-            function triggerInteraction() {
+            function triggerRaycastAction() {
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
                 const intersects = raycaster.intersectObjects(interactiveObjects, true);
@@ -811,41 +1042,52 @@
                         showStoryNode('inspect_radiator');
                     } else if (obj.userData.id === 'laptop') {
                         openStoryEditor();
+                    } else if (obj.userData.id === 'phone') {
+                        openPhone();
                     } else if (obj.userData.id === 'door') {
                         showStoryNode('ending_1');
                     }
                 }
             }
 
-            // --- GAME MODES & FLOW ---
+            // --- GAME MODES SWITCHING ---
             function startGame() {
                 GameState.mode = 'story';
-                document.getElementById('main-menu').classList.add('hidden');
+                playerPos.set(0, 1.6, 2.5);
+                pitch = 0; yaw = 0;
+                document.getElementById('main-menu-hud').classList.add('hidden');
                 document.getElementById('hud-layer').classList.remove('hidden');
                 showStoryNode('start');
             }
 
             function startBuildMode() {
                 GameState.mode = 'build';
-                document.getElementById('main-menu').classList.add('hidden');
+                document.getElementById('main-menu-hud').classList.add('hidden');
                 document.getElementById('build-mode-hud').classList.remove('hidden');
             }
 
-            function toggleLight() {
+            function returnToMenu() {
+                GameState.mode = 'menu';
+                document.getElementById('hud-layer').classList.add('hidden');
+                document.getElementById('build-mode-hud').classList.add('hidden');
+                document.getElementById('main-menu-hud').classList.remove('hidden');
+                setDiorama('story');
+            }
+
+            function toggleFlashlight() {
                 AudioFX.playSwitch();
                 GameState.lightsOn = !GameState.lightsOn;
-                roomLights.forEach(l => l.intensity = GameState.lightsOn ? 1.2 : 0);
+                flashlight.intensity = GameState.lightsOn ? 2.5 : 0;
                 document.getElementById('light-btn-text').innerText = GameState.lightsOn ? "Свет [ВКЛ]" : "Свет [ВЫКЛ]";
             }
 
-            // --- STORY ENGINE & UI ---
+            // --- STORY NARRATIVE SYSTEM ---
             function showStoryNode(nodeId) {
                 const node = StoryTree[nodeId];
                 if (!node) return;
 
                 GameState.currentStoryNode = nodeId;
 
-                // Handle Call type nodes
                 if (node.type === 'call') {
                     AudioFX.playPhoneRing();
                     document.getElementById('phone-badge').classList.remove('hidden');
@@ -860,13 +1102,13 @@
                 const speakerElem = document.getElementById('dialog-speaker');
                 const choicesContainer = document.getElementById('dialog-choices');
 
-                speakerElem.innerText = node.speaker || "Повествование";
+                speakerElem.innerText = node.speaker || "Сюжет";
                 textElem.innerText = node.text;
                 choicesContainer.innerHTML = '';
 
                 node.choices.forEach(choice => {
                     const btn = document.createElement('button');
-                    btn.className = "w-full text-left bg-slate-800/80 hover:bg-slate-700 p-2.5 rounded-xl text-xs font-semibold text-amber-200 transition border border-slate-700";
+                    btn.className = "w-full text-left bg-slate-900/80 hover:bg-amber-950/60 p-3 rounded-2xl text-xs font-semibold text-amber-200 transition border border-amber-500/30 shadow-lg";
                     btn.innerText = "► " + choice.text;
                     btn.onclick = () => {
                         modal.classList.add('hidden');
@@ -889,14 +1131,14 @@
                 const node = StoryTree[GameState.currentStoryNode];
 
                 if (node) {
-                    chatBody.innerHTML += `<div class="bg-amber-950/60 p-3 rounded-xl border border-amber-600/30 text-slate-200">
+                    chatBody.innerHTML += `<div class="bg-amber-950/60 p-3 rounded-2xl border border-amber-600/30 text-slate-200">
                         <strong class="text-amber-400 block mb-1">${node.speaker}:</strong>
                         ${node.text}
                     </div>`;
 
                     node.choices.forEach(choice => {
                         const btn = document.createElement('button');
-                        btn.className = "w-full text-left bg-blue-900/40 hover:bg-blue-800/60 p-2 rounded text-xs text-blue-200 border border-blue-500/30 mt-2";
+                        btn.className = "w-full text-left bg-blue-900/50 hover:bg-blue-800/70 p-2.5 rounded-xl text-xs text-blue-200 border border-blue-500/40 mt-2";
                         btn.innerText = choice.text;
                         btn.onclick = () => {
                             showStoryNode(choice.nextId);
@@ -910,17 +1152,17 @@
                 document.getElementById('journal-modal').classList.remove('hidden');
                 const list = document.getElementById('journal-list');
                 list.innerHTML = GameState.journal.length === 0 ? 
-                    '<p class="text-slate-500 italic">Записей пока нет. Исследуйте предметы в квартире.</p>' : '';
+                    '<p class="text-slate-500 italic p-4 text-center">Записей пока нет. Осмотрите батарею или телефон в комнате.</p>' : '';
                 
                 GameState.journal.forEach(entry => {
-                    list.innerHTML += `<div class="p-3 bg-slate-900 rounded-xl border border-slate-800">
+                    list.innerHTML += `<div class="p-3 bg-slate-900/80 rounded-2xl border border-slate-700">
                         <p class="font-bold text-amber-400 mb-1">${entry.title}</p>
                         <p class="text-slate-300">${entry.text}</p>
                     </div>`;
                 });
             }
 
-            // --- VISUAL STORY EDITOR ---
+            // --- STORY VISUAL NODE EDITOR ---
             function openStoryEditor() {
                 document.getElementById('story-editor-modal').classList.remove('hidden');
                 renderEditorNodeList();
@@ -932,10 +1174,10 @@
                 Object.keys(StoryTree).forEach(id => {
                     const node = StoryTree[id];
                     const div = document.createElement('div');
-                    div.className = "p-2.5 bg-slate-900/80 hover:bg-slate-800 rounded-lg cursor-pointer border border-slate-800 flex justify-between items-center text-xs";
+                    div.className = "p-3 bg-slate-900/90 hover:bg-slate-800 rounded-xl cursor-pointer border border-slate-800 flex justify-between items-center text-xs transition";
                     div.innerHTML = `<div>
-                        <strong class="font-mono text-amber-400">#${id}</strong>
-                        <p class="text-[10px] text-slate-400 truncate max-w-[160px]">${node.text}</p>
+                        <strong class="font-mono text-purple-400">#${id}</strong>
+                        <p class="text-[10px] text-slate-400 truncate max-w-[150px]">${node.text}</p>
                     </div>`;
                     div.onclick = () => editStoryNode(id);
                     container.appendChild(div);
@@ -951,7 +1193,7 @@
                 document.getElementById('edit-node-text').value = node.text || '';
             }
 
-            // Initialize
+            // Initialize Engine On Window Load
             initThree();
         });
     </script>
