@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Необычный случай — 3D Психологический Триллер & Редактор Карт</title>
+    <title>Необычный случай — Премиум 3D Триллер</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js R128 CDN -->
@@ -14,9 +14,7 @@
             overflow: hidden; background-color: #030407; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #f1f5f9; user-select: none;
         }
-        #canvas-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-        }
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 10; pointer-events: none; display: flex; flex-direction: column;
@@ -24,9 +22,9 @@
         }
         .interactive { pointer-events: auto; }
         .glass-panel {
-            background: rgba(12, 14, 22, 0.85);
+            background: rgba(12, 14, 22, 0.88);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
         }
         ::-webkit-scrollbar { width: 6px; }
@@ -41,54 +39,46 @@
 </head>
 <body>
 
-    <!-- 3D Canvas -->
     <div id="canvas-container"></div>
 
-    <!-- UI Layer -->
     <div class="ui-layer" id="ui-layer">
         
-        <!-- Loading Screen -->
+        <!-- Loading -->
         <div id="loading-screen" class="absolute inset-0 bg-[#05060a] z-50 flex flex-col items-center justify-center transition-opacity duration-1000">
             <div class="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-6"></div>
             <h1 class="text-3xl font-bold tracking-widest text-white mb-2">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-            <p id="loading-status" class="text-sm text-gray-400">Загрузка высокополигональных моделей и движка...</p>
+            <p class="text-sm text-gray-400">Генерация детализированной 3D-квартиры...</p>
         </div>
 
-        <!-- Top Status Bar (In-Game) -->
+        <!-- In-Game Top Bar -->
         <div id="game-top-bar" class="hidden flex justify-between items-center w-full">
             <div class="glass-panel px-5 py-2.5 rounded-2xl flex items-center space-x-4">
                 <span class="inline-block w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
-                <span id="current-objective" class="text-sm font-medium tracking-wide">Исследуйте квартиру. Найдите улики и ключи.</span>
+                <span id="current-objective" class="text-sm font-medium tracking-wide">Исследуйте комнаты. Найдите ключ и откройте дверь.</span>
             </div>
             <div class="flex space-x-3">
-                <button onclick="toggleLight()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition flex items-center space-x-2">
-                    <span>💡 Свет [F]</span>
-                </button>
-                <button onclick="openJournal()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition">
-                    📖 Дневник & Ключи
-                </button>
-                <button onclick="returnToMainMenu()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-red-500/20 text-red-400 transition">
-                    ✕ В меню
-                </button>
+                <button onclick="toggleLight()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition">💡 Свет [F]</button>
+                <button onclick="openJournal()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition">📖 Инвентарь</button>
+                <button onclick="returnToMainMenu()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-red-500/20 text-red-400 transition">✕ В меню</button>
             </div>
         </div>
 
-        <!-- Crosshair & Interaction Prompt -->
+        <!-- Crosshair -->
         <div id="crosshair-container" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
-            <div class="w-2 h-2 bg-white/70 rounded-full transition-transform"></div>
+            <div class="w-2 h-2 bg-white/70 rounded-full"></div>
             <div id="interaction-prompt" class="absolute mt-12 bg-black/80 border border-white/20 text-white text-xs px-3.5 py-2 rounded-xl opacity-0 transition-opacity">
-                Нажмите [E] чтобы взаимодействовать
+                [E] Взаимодействовать
             </div>
         </div>
 
         <!-- Main Menu -->
-        <div id="main-menu" class="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-40 transition-opacity duration-500">
+        <div id="main-menu" class="absolute inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-45 transition-opacity duration-500">
             <div class="glass-panel p-10 rounded-3xl max-w-lg w-full mx-4 flex flex-col items-center text-center glow-effect">
                 <h1 class="text-4xl font-extrabold tracking-wider text-white mb-2">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-                <p class="text-xs text-blue-400 uppercase tracking-widest mb-6">Психологический 3D Триллер • Интерактивный редактор карт</p>
+                <p class="text-xs text-blue-400 uppercase tracking-widest mb-6">3D Триллер • Полная версия интерьера</p>
                 
-                <!-- Google Auth Status Box -->
-                <div id="auth-box" class="w-full mb-6 p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between">
+                <!-- Google Auth -->
+                <div class="w-full mb-6 p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between">
                     <div class="flex items-center space-x-3">
                         <div id="auth-avatar" class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white text-sm">?</div>
                         <div class="text-left">
@@ -100,106 +90,65 @@
                 </div>
 
                 <div class="flex flex-col space-y-3 w-full">
-                    <button onclick="startStoryMode()" class="interactive py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg transition transform hover:-translate-y-0.5">
-                        ▶ Сюжет: «Странный стук»
-                    </button>
-                    <button onclick="openCommunityMaps()" class="interactive py-3.5 px-6 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 font-semibold text-white shadow-lg transition">
-                        🌐 Истории от игроков (Корпус карт)
-                    </button>
-                    <button onclick="openMapBuilder()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition flex items-center justify-center space-x-2">
-                        <span>🛠 Создать свою карту / ловушки</span>
-                    </button>
-                    <button onclick="openSettings()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition">
-                        ⚙ Настройки графики & Звука
-                    </button>
+                    <button onclick="startStoryMode()" class="interactive py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg transition">▶ Начать расследование</button>
+                    <button onclick="openCommunityMaps()" class="interactive py-3.5 px-6 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 font-semibold text-white transition">🌐 Истории от игроков</button>
+                    <button onclick="openMapBuilder()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition">🛠 Создать свою карту (Конструктор)</button>
+                    <button onclick="openSettings()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition">⚙ Настройки графики</button>
                 </div>
-                <p class="text-xs text-gray-500 mt-6">Управление: WASD + мышь (зажать ЛКМ для обзора) • [E] — действие</p>
             </div>
         </div>
 
-        <!-- Community Maps Modal (Корпус историй от пользователей) -->
+        <!-- Community Maps Modal -->
         <div id="community-modal" class="absolute inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50 pointer-events-auto">
             <div class="glass-panel w-full max-w-2xl rounded-3xl p-8 flex flex-col max-h-[85vh]">
                 <div class="flex justify-between items-center mb-6 pb-3 border-b border-white/10">
-                    <div>
-                        <h2 class="text-2xl font-bold">🌐 Истории от игроков (Корпус карт)</h2>
-                        <p class="text-xs text-gray-400">Исследуйте пользовательские карты с уникальными ловушками, замками и сюжетами.</p>
-                    </div>
+                    <h2 class="text-2xl font-bold">🌐 Истории от игроков (Корпус карт)</h2>
                     <button onclick="closeCommunityMaps()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
                 </div>
-                <div id="community-maps-list" class="overflow-y-auto space-y-4 flex-grow pr-2">
-                    <!-- Injected maps -->
-                </div>
+                <div id="community-maps-list" class="overflow-y-auto space-y-4 flex-grow pr-2"></div>
             </div>
         </div>
 
-        <!-- Map Builder Modal / UI -->
-        <div id="builder-ui" class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-2xl hidden flex items-center space-x-3 pointer-events-auto shadow-2xl border border-blue-500/40">
-            <span class="text-xs font-bold text-blue-400">🛠 Конструктор:</span>
+        <!-- Builder UI -->
+        <div id="builder-ui" class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-2xl hidden flex items-center space-x-3 pointer-events-auto shadow-2xl">
+            <span class="text-xs font-bold text-blue-400">🛠 Редактор:</span>
             <button onclick="setBuilderTool('wall')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Стена</button>
-            <button onclick="setBuilderTool('door')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Запертая дверь</button>
+            <button onclick="setBuilderTool('door')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Дверь</button>
             <button onclick="setBuilderTool('key')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Ключ</button>
             <button onclick="setBuilderTool('trap')" class="px-3 py-1.5 bg-red-600/50 hover:bg-red-600 rounded-xl text-xs font-semibold">Ловушка</button>
-            <button onclick="saveAndPublishMapModal()" class="px-4 py-1.5 bg-green-600 hover:bg-green-500 rounded-xl text-xs font-bold ml-3">💾 Опубликовать карту</button>
+            <button onclick="saveAndPublishMapModal()" class="px-4 py-1.5 bg-green-600 hover:bg-green-500 rounded-xl text-xs font-bold ml-3">💾 Опубликовать</button>
             <button onclick="closeMapBuilder()" class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xs font-semibold">Выйти</button>
         </div>
 
-        <!-- Publish Map Modal -->
+        <!-- Publish Modal -->
         <div id="publish-modal" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 pointer-events-auto">
             <div class="glass-panel w-full max-w-md rounded-3xl p-6 flex flex-col space-y-4">
-                <h3 class="text-xl font-bold">Публикация вашей карты</h3>
-                <div>
-                    <label class="text-xs text-gray-400">Название истории / карты</label>
-                    <input id="pub-title" type="text" class="w-full mt-1 px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-blue-500" placeholder="Загадочный особняк...">
-                </div>
-                <div>
-                    <label class="text-xs text-gray-400">Описание и задание</label>
-                    <textarea id="pub-desc" rows="3" class="w-full mt-1 px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-blue-500" placeholder="Найдите ключ и избегайте ловушек..."></textarea>
-                </div>
+                <h3 class="text-xl font-bold">Публикация карты</h3>
+                <input id="pub-title" type="text" class="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm" placeholder="Название карты...">
+                <textarea id="pub-desc" rows="3" class="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm" placeholder="Описание..."></textarea>
                 <div class="flex space-x-3 pt-2">
-                    <button onclick="publishMapAction()" class="flex-grow py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-semibold text-sm transition">Опубликовать в корпус</button>
-                    <button onclick="document.getElementById('publish-modal').classList.add('hidden')" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl font-semibold text-sm transition">Отмена</button>
+                    <button onclick="publishMapAction()" class="flex-grow py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-semibold text-sm">Опубликовать</button>
+                    <button onclick="document.getElementById('publish-modal').classList.add('hidden')" class="px-4 py-2.5 bg-white/10 rounded-xl text-sm">Отмена</button>
                 </div>
             </div>
         </div>
 
-        <!-- Phone / Dialogue Modal -->
-        <div id="phone-modal" class="absolute inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center z-50 pointer-events-auto">
-            <div class="glass-panel w-full max-w-md rounded-3xl overflow-hidden flex flex-col max-h-[85vh] border border-blue-500/30">
-                <div class="bg-blue-900/40 px-6 py-4 flex justify-between items-center border-b border-white/10">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white">M</div>
-                        <div>
-                            <h3 class="font-bold text-sm">Марк</h3>
-                            <span class="text-xs text-green-400 flex items-center"><span class="w-2 h-2 bg-green-400 rounded-full mr-1.5 animate-pulse"></span> В сети</span>
-                        </div>
-                    </div>
-                    <button onclick="closePhoneModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
-                </div>
-                <div id="phone-messages" class="p-6 overflow-y-auto flex-grow space-y-4 text-sm max-h-[50vh]"></div>
-                <div id="phone-choices" class="p-4 bg-black/40 border-t border-white/10 flex flex-col space-y-2"></div>
-            </div>
-        </div>
-
-        <!-- Journal & Inventory Modal -->
+        <!-- Journal / Inventory Modal -->
         <div id="journal-modal" class="absolute inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center z-50 pointer-events-auto">
             <div class="glass-panel w-full max-w-lg rounded-3xl p-6 flex flex-col max-h-[80vh]">
                 <div class="flex justify-between items-center mb-4 pb-3 border-b border-white/10">
-                    <h2 class="text-xl font-bold">📖 Журнал улик, инвентарь и ключи</h2>
+                    <h2 class="text-xl font-bold">📖 Инвентарь и улики</h2>
                     <button onclick="closeJournal()" class="text-gray-400 hover:text-white">✕</button>
                 </div>
-                <div id="inventory-slots" class="grid grid-cols-4 gap-3 mb-4">
-                    <!-- Inventory items -->
-                </div>
+                <div id="inventory-slots" class="grid grid-cols-4 gap-3 mb-4"></div>
                 <div id="journal-list" class="overflow-y-auto space-y-3 flex-grow pr-2"></div>
             </div>
         </div>
 
     </div>
 
-    <!-- Script Game Engine -->
     <script>
-        // --- SOUND ENGINE (Web Audio API) ---
+        // Sound Engine
         class SoundEngine {
             constructor() { this.ctx = null; this.enabled = true; }
             init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -225,8 +174,7 @@
             playPickup() {
                 if (!this.enabled) return; this.init();
                 const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
                 osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.08);
                 gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
@@ -236,19 +184,10 @@
         }
         const audio = new SoundEngine();
 
-        // --- GLOBAL USER STATE ---
-        const userState = {
-            isLoggedIn: false,
-            username: 'Гость',
-            avatar: '?',
-            inventory: [],
-            clues: []
-        };
+        const userState = { isLoggedIn: false, username: 'Гость', avatar: '?', inventory: [], clues: [] };
 
-        // --- GOOGLE AUTH SIMULATION ---
         function toggleGoogleAuth() {
             if (!userState.isLoggedIn) {
-                // Simulate Google popup login
                 userState.isLoggedIn = true;
                 userState.username = 'Siyar Bodurov';
                 userState.avatar = 'SB';
@@ -271,17 +210,14 @@
             }
         }
 
-        // --- COMMUNITY MAPS STORAGE ---
         let communityMaps = JSON.parse(localStorage.getItem('community_maps') || JSON.stringify([
-            { id: '1', title: 'Таинственный Бункер', author: 'Alex_99', desc: 'Найдите ключ от стальной двери и избегайте лаву-ловушку.', objects: [] },
-            { id: '2', title: 'Заброшенная Квартира №404', author: 'Elena_3D', desc: 'Странные звуки из стены и запертый кодовый замок.', objects: [] }
+            { id: '1', title: 'Таинственный Бункер', author: 'Alex_99', desc: 'Найдите ключ от двери и избегайте ловушки.', objects: [] },
+            { id: '2', title: 'Заброшенная Квартира №404', author: 'Elena_3D', desc: 'Странные звуки и запертый кодовый замок.', objects: [] }
         ]));
 
-        function saveCommunityMaps() {
-            localStorage.setItem('community_maps', JSON.stringify(communityMaps));
-        }
+        function saveCommunityMaps() { localStorage.setItem('community_maps', JSON.stringify(communityMaps)); }
 
-        // --- GAME & THREE.JS ENGINE ---
+        // Three.js Engine & Detailed Apartment
         let scene, camera, renderer, clock;
         let playerPos = new THREE.Vector3(0, 1.6, 2);
         let yaw = 0, pitch = 0;
@@ -291,7 +227,7 @@
         let interactableObjects = [];
         let roomLight, ambientLight;
         let interactiveGroup;
-        let currentMode = 'menu'; // menu, story, sandbox, builder, community_play
+        let currentMode = 'menu';
         let builderTool = 'wall';
         let customBuiltObjects = [];
 
@@ -299,7 +235,7 @@
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x040508);
-            scene.fog = new THREE.FogExp2(0x040508, 0.06);
+            scene.fog = new THREE.FogExp2(0x040508, 0.05);
 
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
             camera.position.copy(playerPos);
@@ -313,34 +249,27 @@
 
             clock = new THREE.Clock();
 
-            // Lighting
-            ambientLight = new THREE.AmbientLight(0x151b2b, 0.5);
+            ambientLight = new THREE.AmbientLight(0x182030, 0.6);
             scene.add(ambientLight);
 
-            roomLight = new THREE.PointLight(0xffeedd, 1.4, 18);
-            roomLight.position.set(0, 3.5, 0);
+            roomLight = new THREE.PointLight(0xffeedd, 1.5, 20);
+            roomLight.position.set(0, 3.8, 0);
             roomLight.castShadow = true;
             scene.add(roomLight);
 
             interactiveGroup = new THREE.Group();
             scene.add(interactiveGroup);
 
-            buildHighDetailApartment();
+            buildFullyDetailedApartment();
 
-            // Event Listeners
             window.addEventListener('resize', onWindowResize);
             window.addEventListener('keydown', (e) => { keys[e.code] = true; if(e.code === 'KeyF') toggleLight(); if(e.code === 'KeyE') checkInteraction(); });
             window.addEventListener('keyup', (e) => { keys[e.code] = false; });
 
             const canvas = renderer.domElement;
             canvas.addEventListener('mousedown', (e) => {
-                if(currentMode !== 'menu') {
-                    isMouseDown = true;
-                    prevMousePos = { x: e.clientX, y: e.clientY };
-                }
-                if(currentMode === 'builder') {
-                    placeBuilderObject(e);
-                }
+                if(currentMode !== 'menu') { isMouseDown = true; prevMousePos = { x: e.clientX, y: e.clientY }; }
+                if(currentMode === 'builder') placeBuilderObject();
             });
             window.addEventListener('mouseup', () => { isMouseDown = false; });
             canvas.addEventListener('mousemove', (e) => {
@@ -359,12 +288,13 @@
             animate();
         }
 
-        // --- HIGH DETAIL 3D APARTMENT ---
-        function buildHighDetailApartment() {
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1f1a17, roughness: 0.7 });
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x2d3440, roughness: 0.9 });
-            const woodMat = new THREE.MeshStandardMaterial({ color: 0x4a3319, roughness: 0.5 });
-            const metalMat = new THREE.MeshStandardMaterial({ color: 0x777788, metalness: 0.8, roughness: 0.2 });
+        // FULLY DETAILED 3D APARTMENT
+        function buildFullyDetailedApartment() {
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a1512, roughness: 0.7 });
+            const wallMat = new THREE.MeshStandardMaterial({ color: 0x2e3542, roughness: 0.9 });
+            const woodMat = new THREE.MeshStandardMaterial({ color: 0x5c4033, roughness: 0.5 });
+            const metalMat = new THREE.MeshStandardMaterial({ color: 0x888899, metalness: 0.8, roughness: 0.2 });
+            const sofaMat = new THREE.MeshStandardMaterial({ color: 0x283b58, roughness: 0.8 });
 
             // Floor & Ceiling
             const floor = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), floorMat);
@@ -373,7 +303,7 @@
             const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), wallMat);
             ceiling.position.y = 4.5; ceiling.rotation.x = Math.PI / 2; scene.add(ceiling);
 
-            // Detailed Walls & Rooms
+            // Walls
             const w1 = new THREE.Mesh(new THREE.BoxGeometry(16, 4.5, 0.3), wallMat);
             w1.position.set(0, 2.25, -8); w1.castShadow = true; w1.receiveShadow = true; scene.add(w1);
 
@@ -383,71 +313,77 @@
             const w3 = new THREE.Mesh(new THREE.BoxGeometry(16, 4.5, 0.3), wallMat);
             w3.position.set(0, 2.25, 8); w3.castShadow = true; w3.receiveShadow = true; scene.add(w3);
 
-            // 1. Interactive Radiator (Батарея со стуком)
+            // --- FURNITURE & DETAILS ---
+            // Sofa in Living Room
+            const sofa = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 1.2), sofaMat);
+            sofa.position.set(3, 0.4, 2); sofa.castShadow = true; scene.add(sofa);
+
+            // Bed in Bedroom
+            const bed = new THREE.Mesh(new THREE.BoxGeometry(2, 0.6, 2.5), new THREE.MeshStandardMaterial({ color: 0x334455 }));
+            bed.position.set(-5, 0.3, -5); bed.castShadow = true; scene.add(bed);
+
+            // 1. Interactive Radiator
             const radGroup = new THREE.Group();
-            radGroup.position.set(-7.5, 1.2, -3);
+            radGroup.position.set(-7.5, 1.2, 0);
             const radBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 2.0, 1.5), metalMat);
             radBody.castShadow = true; radGroup.add(radBody);
-            radGroup.userData = { id: 'radiator', name: 'Чугунная батарея', action: () => inspectRadiator() };
+            radGroup.userData = { id: 'radiator', name: 'Чугунная батарея (Стук Морзе)', action: () => inspectRadiator() };
             interactiveGroup.add(radGroup);
             interactableObjects.push(radGroup);
 
-            // 2. Desk with Key & Phone
+            // 2. Desk with Key
             const deskGroup = new THREE.Group();
-            deskGroup.position.set(4, 0, -5);
+            deskGroup.position.set(-5, 0, 5);
             const deskTop = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.12, 1.2), woodMat);
             deskTop.position.y = 1.1; deskTop.castShadow = true; deskGroup.add(deskTop);
-            
-            const phone = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.06, 0.7), new THREE.MeshStandardMaterial({ color: 0x111115, metalness: 0.9 }));
-            phone.position.set(-0.6, 1.18, 0); deskGroup.add(phone);
 
             // Key on desk
-            const keyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.02, 16), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9 }));
-            keyMesh.position.set(0.6, 1.18, 0); keyMesh.rotation.x = Math.PI / 2;
+            const keyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.03, 16), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9 }));
+            keyMesh.position.set(0, 1.18, 0); keyMesh.rotation.x = Math.PI / 2;
             deskGroup.add(keyMesh);
             
-            deskGroup.userData = { id: 'desk', name: 'Письменный стол (Ключ и Телефон)', action: () => openDeskInteraction() };
+            deskGroup.userData = { id: 'desk', name: 'Письменный стол (Забрать Ключ)', action: () => pickupKey() };
             interactiveGroup.add(deskGroup);
             interactableObjects.push(deskGroup);
 
-            // 3. Locked Door
+            // 3. Exit Door
             const doorGroup = new THREE.Group();
-            doorGroup.position.set(-8, 2, 4);
-            const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(0.2, 3.8, 1.6), woodMat);
+            doorGroup.position.set(8, 2, 0);
+            const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3.8, 1.6), woodMat);
             doorMesh.castShadow = true; doorGroup.add(doorMesh);
-            doorGroup.userData = { id: 'door', name: 'Входная дверь (Заперта)', action: () => tryOpenDoor() };
+            doorGroup.userData = { id: 'door', name: 'Выходная дверь (Заперта)', action: () => tryOpenDoor() };
             interactiveGroup.add(doorGroup);
             interactableObjects.push(doorGroup);
         }
 
-        // --- GAMEPLAY ACTIONS ---
+        // Gameplay interactions
         function inspectRadiator() {
             audio.playKnock();
-            userState.clues.push('Холодная батарея со стуком Морзе');
-            alert('Вы прислушались к батарее. Металлический стук отбивает шифр: 3 коротких, 3 длинных. Улика записана в журнал!');
+            userState.clues.push('Холодная батарея: стук отбивает шифр Морзе.');
+            alert('Вы подошли к батарее. Металлический стук идет изнутри трубы. Улика записана в журнал!');
         }
 
-        function openDeskInteraction() {
-            if (!userState.inventory.includes('Ключ от двери')) {
-                userState.inventory.push('Ключ от двери');
+        function pickupKey() {
+            if (!userState.inventory.includes('Ключ от выхода')) {
+                userState.inventory.push('Ключ от выхода');
                 audio.playPickup();
-                alert('Вы обыскали стол и нашли старинный Ключ от двери! Теперь вы можете открыть выход.');
+                alert('Вы подобрали Ключ от выхода со стола!');
             } else {
-                openPhoneModal();
+                alert('На столе больше ничего нет.');
             }
         }
 
         function tryOpenDoor() {
-            if (userState.inventory.includes('Ключ от двери')) {
-                alert('Вы вставили ключ в замок, провернули его... Дверь открылась! Вы прошли игру! Поздравляем!');
+            if (userState.inventory.includes('Ключ от выхода')) {
+                alert('Вы открыли дверь ключом и успешно выбрались из квартиры! Поздравляем с победой!');
                 returnToMainMenu();
             } else {
                 audio.playClick();
-                alert('Дверь заперта на тяжелый замок. Нужен ключ! Осмотрите письменный стол.');
+                alert('Дверь заперта. Нужен ключ со стола!');
             }
         }
 
-        // --- LOOP & CONTROLS ---
+        // Loop & Controls
         function animate() {
             requestAnimationFrame(animate);
             const delta = clock.getDelta();
@@ -486,7 +422,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // --- RAYCASTING INTERACTIONS ---
         const raycaster = new THREE.Raycaster();
         function checkRaycast() {
             raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
@@ -513,7 +448,7 @@
             if(e.code === 'KeyE' && window.currentInteractable) window.currentInteractable();
         });
 
-        // --- NAVIGATION & MENUS ---
+        // Menus
         function startStoryMode() {
             currentMode = 'story';
             audio.init();
@@ -521,7 +456,7 @@
             setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
             document.getElementById('game-top-bar').classList.remove('hidden');
             document.getElementById('crosshair-container').classList.remove('hidden');
-            openPhoneModal();
+            alert('Вы очнулись в ночной квартире. Осмотрите батарею и стол, найдите ключ и откройте дверь!');
         }
 
         function returnToMainMenu() {
@@ -529,7 +464,6 @@
             document.getElementById('game-top-bar').classList.add('hidden');
             document.getElementById('crosshair-container').classList.add('hidden');
             document.getElementById('builder-ui').classList.add('hidden');
-            document.getElementById('phone-modal').classList.add('hidden');
             document.getElementById('community-modal').classList.add('hidden');
             document.getElementById('main-menu').style.display = 'flex';
             document.getElementById('main-menu').style.opacity = '1';
@@ -540,25 +474,6 @@
             audio.playClick();
         }
 
-        // --- PHONE DIALOGUE ---
-        function openPhoneModal() {
-            const modal = document.getElementById('phone-modal');
-            const messages = document.getElementById('phone-messages');
-            const choices = document.getElementById('phone-choices');
-            
-            messages.innerHTML = `<div class="bg-blue-600/30 p-4 rounded-2xl border border-blue-500/20"><b>Марк:</b> Ты проснулся? Внизу в подъезде кто-то ходит. Обыщи стол, я оставил тебе подсказку и ключ!</div>`;
-            choices.innerHTML = `
-                <button onclick="closePhoneModal(); audio.playClick();" class="py-2.5 px-4 bg-white/10 hover:bg-white/20 rounded-xl text-left text-sm transition">Понял, ищу улики и ключ</button>
-            `;
-            modal.classList.remove('hidden');
-            audio.playRing();
-        }
-
-        function closePhoneModal() {
-            document.getElementById('phone-modal').classList.add('hidden');
-        }
-
-        // --- JOURNAL & INVENTORY ---
         function openJournal() {
             const modal = document.getElementById('journal-modal');
             const invSlots = document.getElementById('inventory-slots');
@@ -577,14 +492,12 @@
             modal.classList.remove('hidden');
         }
 
-        function closeJournal() {
-            document.getElementById('journal-modal').classList.add('hidden');
-        }
+        function closeJournal() { document.getElementById('journal-modal').classList.add('hidden'); }
 
-        // --- MAP BUILDER & COMMUNITY MODES ---
+        // Builder & Community
         function openMapBuilder() {
             if (!userState.isLoggedIn) {
-                alert('Для создания и публикации карт требуется авторизация через Google! Пожалуйста, войдите в аккаунт в главном меню.');
+                alert('Для создания и публикации карт требуется авторизация через Google! Нажмите кнопку "Войти через Google" в меню.');
                 return;
             }
             currentMode = 'builder';
@@ -592,7 +505,7 @@
             setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
             document.getElementById('builder-ui').classList.remove('hidden');
             document.getElementById('crosshair-container').classList.remove('hidden');
-            alert('Режим конструктора активен! Кликайте по сцене левой кнопкой мыши, чтобы размещать выбранные объекты (стены, ловушки, ключи).');
+            alert('Режим конструктора активен! Кликайте ЛКМ для расстановки объектов.');
         }
 
         function closeMapBuilder() {
@@ -603,18 +516,14 @@
             document.getElementById('main-menu').style.opacity = '1';
         }
 
-        function setBuilderTool(tool) {
-            builderTool = tool;
-            audio.playClick();
-        }
+        function setBuilderTool(tool) { builderTool = tool; audio.playClick(); }
 
-        function placeBuilderObject(e) {
+        function placeBuilderObject() {
             if (currentMode !== 'builder') return;
             const colors = { wall: 0x445566, door: 0x5c4033, key: 0xd4af37, trap: 0xff3333 };
             const geo = builderTool === 'key' ? new THREE.CylinderGeometry(0.15, 0.15, 0.03, 16) : new THREE.BoxGeometry(1, 1, 1);
             const mat = new THREE.MeshStandardMaterial({ color: colors[builderTool] || 0xffffff });
             const mesh = new THREE.Mesh(geo, mat);
-            
             mesh.position.copy(playerPos).add(new THREE.Vector3(0, 0, -3).applyQuaternion(camera.quaternion));
             mesh.position.y = 0.5;
             mesh.castShadow = true;
@@ -625,35 +534,25 @@
 
         function saveAndPublishMapModal() {
             if(customBuiltObjects.length === 0) {
-                alert('Ваша карта пуста! Разместите хотя бы несколько объектов перед публикацией.');
+                alert('Карта пуста! Разместите объекты.');
                 return;
             }
             document.getElementById('publish-modal').classList.remove('hidden');
         }
 
         function publishMapAction() {
-            const title = document.getElementById('pub-title').value || 'Моя новая карта';
-            const desc = document.getElementById('pub-desc').value || 'Интересная пользовательская история.';
-            
-            const newMap = {
-                id: 'map_' + Date.now(),
-                title,
-                author: userState.username,
-                desc,
-                objects: [...customBuiltObjects]
-            };
-
-            communityMaps.push(newMap);
+            const title = document.getElementById('pub-title').value || 'Моя карта';
+            const desc = document.getElementById('pub-desc').value || 'Пользовательская история.';
+            communityMaps.push({ id: 'map_' + Date.now(), title, author: userState.username, desc, objects: [...customBuiltObjects] });
             saveCommunityMaps();
             document.getElementById('publish-modal').classList.add('hidden');
-            alert('Карта успешно опубликована в корпус историй от игроков!');
+            alert('Карта успешно опубликована в корпус историй игроков!');
             closeMapBuilder();
         }
 
         function openCommunityMaps() {
             const modal = document.getElementById('community-modal');
             const list = document.getElementById('community-maps-list');
-            
             list.innerHTML = communityMaps.map(m => `
                 <div class="glass-panel p-5 rounded-2xl flex justify-between items-center border border-white/10">
                     <div>
@@ -664,13 +563,10 @@
                     <button onclick="playCommunityMap('${m.id}')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-bold transition">Играть</button>
                 </div>
             `).join('');
-
             modal.classList.remove('hidden');
         }
 
-        function closeCommunityMaps() {
-            document.getElementById('community-modal').classList.add('hidden');
-        }
+        function closeCommunityMaps() { document.getElementById('community-modal').classList.add('hidden'); }
 
         function playCommunityMap(id) {
             const map = communityMaps.find(m => m.id === id);
@@ -681,14 +577,11 @@
             setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
             document.getElementById('game-top-bar').classList.remove('hidden');
             document.getElementById('crosshair-container').classList.remove('hidden');
-            alert(`Загружена пользовательская карта: "${map.title}" от ${map.author}. Исследуйте мир!`);
+            alert(`Загружена пользовательская карта: "${map.title}"`);
         }
 
-        function openSettings() {
-            alert('Настройки графики и звука. Движок Web Audio API и тени включены на максимальное качество.');
-        }
+        function openSettings() { alert('Настройки: максимальное качество графики и тени активированы.'); }
 
-        // Initialize
         window.onload = () => { initThree(); };
     </script>
 </body>
