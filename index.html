@@ -1,695 +1,698 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VoxType Pro Ultimate — Идеальный школьный диктант</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #06070c;
-      --card-bg: rgba(15, 18, 35, 0.85);
-      --card-border: rgba(138, 43, 226, 0.3);
-      --primary: #8a2be2;
-      --primary-hover: #9d4edd;
-      --accent: #00f2fe;
-      --accent-glow: rgba(0, 242, 254, 0.4);
-      --text-main: #f0f3fe;
-      --text-muted: #8e96c0;
-      --danger: #ff4757;
-      --success: #2ed573;
-      --warning: #ffa502;
-      --radius: 16px;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.15) 0%, transparent 40%);
-      background-attachment: fixed;
-    }
-
-    header {
-      padding: 1rem 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(16px);
-      background: rgba(6, 7, 12, 0.85);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.25rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #fff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .logo-icon {
-      width: 34px; height: 34px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: bold;
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    main {
-      flex: 1;
-      max-width: 1050px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 1.25rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .control-group {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-
-    .control-group label {
-      font-size: 0.75rem; color: var(--text-muted); font-weight: 600;
-      display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-
-    select {
-      width: 100%; padding: 10px 12px;
-      background: rgba(6, 7, 12, 0.8);
-      border: 1px solid var(--card-border);
-      border-radius: 10px; color: var(--text-main);
-      font-size: 0.85rem; outline: none;
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none; appearance: none;
-      width: 100%; height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px; outline: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 18px; height: 18px;
-      border-radius: 50%; background: var(--accent);
-      cursor: pointer; box-shadow: 0 0 10px var(--accent);
-    }
-
-    .toggle-group {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-      background: rgba(6, 7, 12, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-    }
-
-    .toggle-label {
-      font-size: 0.8rem;
-      color: var(--text-main);
-      font-weight: 500;
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 40px;
-      height: 22px;
-    }
-
-    .switch input { opacity: 0; width: 0; height: 0; }
-
-    .slider {
-      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: rgba(255, 255, 255, 0.2);
-      transition: .3s; border-radius: 22px;
-    }
-
-    .slider:before {
-      position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-      background-color: white; transition: .3s; border-radius: 50%;
-    }
-
-    input:checked + .slider { background-color: var(--primary); }
-    input:checked + .slider:before { transform: translateX(18px); }
-
-    .editor-container {
-      position: relative; display: flex; flex-direction: column; gap: 10px;
-    }
-
-    textarea {
-      width: 100%; min-height: 180px;
-      background: rgba(6, 7, 12, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 1rem;
-      color: var(--text-main); font-size: 1rem; line-height: 1.6;
-      resize: vertical; outline: none; transition: var(--transition);
-    }
-
-    textarea:focus { border-color: var(--primary); }
-
-    .formatted-reader {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      padding: 1rem; background: rgba(6, 7, 12, 0.96);
-      border: 1px solid var(--primary); border-radius: 12px;
-      color: var(--text-main); font-size: 1.05rem; line-height: 1.8;
-      overflow-y: auto; display: none; white-space: pre-wrap;
-    }
-
-    .clause-highlight {
-      background-color: rgba(138, 43, 226, 0.4);
-      border-bottom: 2px solid var(--accent);
-      border-radius: 4px; padding: 2px 4px;
-    }
-
-    .action-bar {
-      display: flex; flex-direction: column; gap: 10px; margin-top: 0.5rem;
-    }
-
-    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
-
-    .btn {
-      flex: 1;
-      min-width: 90px;
-      padding: 12px 14px; border-radius: 12px; border: none;
-      font-weight: 700; font-size: 0.85rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: white; box-shadow: 0 4px 18px rgba(138, 43, 226, 0.4);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08); color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .btn-warning {
-      background: rgba(255, 165, 2, 0.2); color: var(--warning);
-      border: 1px solid rgba(255, 165, 2, 0.3);
-    }
-
-    .btn-danger {
-      background: rgba(255, 71, 87, 0.2); color: var(--danger);
-      border: 1px solid rgba(255, 71, 87, 0.3);
-    }
-
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    .status-badge {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 16px; background: rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--accent); border-radius: 12px;
-      font-size: 0.9rem; color: var(--accent); font-weight: 600;
-    }
-
-    .speed-card {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 14px; background: rgba(255, 255, 255, 0.03);
-      border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 0.8rem; color: var(--text-muted);
-    }
-
-    @media (max-width: 600px) {
-      main { padding: 0.5rem; }
-      .controls-grid { grid-template-columns: 1fr 1fr; }
-      .btn { padding: 10px 4px; font-size: 0.75rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>НЕОБЫЧНЫЙ СЛУЧАЙ — 3D Story Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#10131c;color:#f3f3fa;font:14px Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{background:#282d40;color:white;border:1px solid #ffffff25;border-radius:9px;padding:10px;cursor:pointer}
+button:hover{background:#454263;border-color:#b8a5ff}
+input,textarea,select{width:100%;padding:10px;background:#111522;color:white;border:1px solid #ffffff30;border-radius:8px;margin:5px 0}
+#game{position:fixed;inset:0}
+canvas{display:block;touch-action:none}
+#hud{position:fixed;inset:0;pointer-events:none}
+.panel{background:#121725eF;border:1px solid #ffffff20;border-radius:12px;padding:12px;backdrop-filter:blur(10px)}
+#top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:8px}
+#mission{position:absolute;top:68px;left:12px;width:min(300px,75vw)}
+#mission p{color:#bfc4d8;line-height:1.5;margin:6px 0 0}
+#cross{position:absolute;left:50%;top:50%;width:12px;height:12px;border:1px solid white;border-radius:50%;transform:translate(-50%,-50%)}
+#hint{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);background:#111725eF;padding:10px;border-radius:9px;display:none;white-space:nowrap}
+#buttons{position:absolute;bottom:12px;left:12px;right:12px;display:flex;justify-content:center;gap:7px;flex-wrap:wrap;pointer-events:auto}
+#builder{position:absolute;right:12px;top:125px;width:205px;display:none;pointer-events:auto}
+#builder button{width:100%;margin:3px 0;text-align:left}
+.overlay{position:fixed;inset:0;z-index:10;background:#060810d9;backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:14px}
+.dialog{background:linear-gradient(145deg,#242940,#111521);border:1px solid #ffffff25;border-radius:18px;padding:24px;width:min(680px,100%);max-height:92vh;overflow:auto;box-shadow:0 20px 80px #0008}
+.dialog.small{width:min(480px,100%)}
+h1{font-size:clamp(38px,7vw,65px);line-height:.95;margin:18px 0;letter-spacing:-2px}
+h2{margin:8px 0 14px}
+h3{font-size:14px}
+.muted{color:#b8bfd2;line-height:1.6}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#b8a5ff;font-weight:bold}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.row>*{flex:1}
+.primary{background:#b8a5ff;color:#171426;font-weight:bold}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.card{border:1px solid #ffffff20;padding:12px;border-radius:10px;background:#ffffff06}
+.card small{display:block;color:#b8bfd2;line-height:1.5;margin-top:7px}
+#event,#phone,#pause,#editor,#ending{display:none}
+.choice{display:block;width:100%;text-align:left;margin:8px 0;padding:12px}
+.choice small{display:block;color:#b8bfd2;margin-top:5px}
+#eventText{white-space:pre-line;line-height:1.7}
+.node{border:1px solid #ffffff20;padding:10px;border-radius:8px;margin:7px 0}
+.node small{display:block;color:#b8bfd2;margin-top:5px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#notice{position:fixed;z-index:30;top:20%;left:50%;transform:translateX(-50%);background:#20263a;padding:12px 18px;border-radius:10px;display:none}
+#fatal{display:none;position:fixed;z-index:99;inset:0;background:#17111a;color:white;padding:30px;overflow:auto}
+@media(max-width:650px){
+ .cards,.columns{grid-template-columns:1fr}
+ .dialog{padding:18px}
+ #builder{top:auto;bottom:75px;right:8px;width:155px;max-height:45vh;overflow:auto}
+ #builder button{padding:7px;font-size:12px}
+ #mission{width:220px}
+ #buttons{gap:4px}
+ #buttons button{font-size:11px;padding:8px}
+}
+</style>
 </head>
 <body>
-
-  <header>
-    <div class="logo">
-      <div class="logo-icon">V</div>
-      <span>VoxType Pro Ultimate</span>
-    </div>
-  </header>
-
-  <main>
-    <div class="glass-card" style="display: flex; flex-direction: column; gap: 1rem;">
-      
-      <!-- Controls -->
-      <div class="controls-grid">
-        <div class="control-group" style="grid-column: span 2;">
-          <label for="voice-select">Русский голос диктора (Лучшие сверху)</label>
-          <select id="voice-select"><option value="">Поиск русских голосов...</option></select>
-        </div>
-
-        <div class="control-group">
-          <label for="sentence-pause">Пауза в тетрадь: <span id="sent-pause-val" style="color:var(--accent);">5 сек</span></label>
-          <input type="range" id="sentence-pause" min="1" max="30" step="1" value="5">
-        </div>
-
-        <div class="control-group">
-          <label for="punct-pause">Пауза на знаках: <span id="punct-pause-val" style="color:var(--accent);">1.5 сек</span></label>
-          <input type="range" id="punct-pause" min="0.5" max="4" step="0.5" value="1.5">
-        </div>
-
-        <div class="control-group">
-          <label for="rate-range">Скорость чтения: <span id="rate-val" style="color:var(--accent);">0.85x</span></label>
-          <input type="range" id="rate-range" min="0.4" max="1.2" step="0.05" value="0.85">
-        </div>
-
-        <div class="control-group">
-          <label for="pitch-range">Тон голоса: <span id="pitch-val" style="color:var(--accent);">1.0</span></label>
-          <input type="range" id="pitch-range" min="0.5" max="1.5" step="0.1" value="1.0">
-        </div>
-
-        <div class="toggle-group">
-          <span class="toggle-label">🗣 Знаки голосом</span>
-          <label class="switch">
-            <input type="checkbox" id="speak-punct-toggle" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-group">
-          <span class="toggle-label">🔔 Звуковой сигнал</span>
-          <label class="switch">
-            <input type="checkbox" id="beep-toggle" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Info Bar -->
-      <div class="speed-card">
-        <span>Комфорт письма: <strong id="req-speed" style="color:var(--accent);">~0 сл/мин</strong></span>
-        <span>Предложений: <strong id="total-sentences" style="color:var(--text-main);">0</strong></span>
-      </div>
-
-      <!-- Status Indicator -->
-      <div id="dictation-status" style="display: none;" class="status-badge">
-        <span id="status-text">Готов к диктанту</span>
-        <span id="status-timer">0%</span>
-      </div>
-
-      <!-- Text Area / Display -->
-      <div class="editor-container">
-        <div class="text-area-wrapper">
-          <textarea id="source-text" placeholder="Вставьте русский текст диктанта сюда... Диктор сделает чёткие паузы на запятых, озвучит знаки и даст время записать всё в тетрадь."></textarea>
-          <div id="formatted-reader" class="formatted-reader"></div>
-        </div>
-      </div>
-
-      <!-- Buttons -->
-      <div class="action-bar">
-        <div class="btn-group">
-          <button id="btn-prev" class="btn btn-secondary" onclick="stepSentence(-1)" disabled>⏮ Назад</button>
-          <button id="btn-play" class="btn btn-primary" onclick="startNotebookDictation()">▶ Начать</button>
-          <button id="btn-repeat-phrase" class="btn btn-warning" onclick="repeatCurrentPhrase()" disabled>🔂 Повторить</button>
-          <button id="btn-next" class="btn btn-secondary" onclick="stepSentence(1)" disabled>Вперёд ⏭</button>
-          <button id="btn-pause" class="btn btn-secondary" onclick="pauseNotebookDictation()" disabled>⏸ Пауза</button>
-          <button id="btn-stop" class="btn btn-danger" onclick="stopNotebookDictation()" disabled>⏹</button>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <script>
-    const synth = window.speechSynthesis;
-    let voices = [];
-    let sentences = [];
-    let currentSentIdx = 0;
-    let currentClauseIdx = 0;
-    let isPlaying = false;
-    let isPaused = false;
-    let pauseTimeout = null;
-    let audioCtx = null;
-
-    const voiceSelect = document.getElementById('voice-select');
-    const sentPauseRange = document.getElementById('sentence-pause');
-    const sentPauseVal = document.getElementById('sent-pause-val');
-    const punctPauseRange = document.getElementById('punct-pause');
-    const punctPauseVal = document.getElementById('punct-pause-val');
-    const rateRange = document.getElementById('rate-range');
-    const rateVal = document.getElementById('rate-val');
-    const pitchRange = document.getElementById('pitch-range');
-    const pitchVal = document.getElementById('pitch-val');
-    const speakPunctToggle = document.getElementById('speak-punct-toggle');
-    const beepToggle = document.getElementById('beep-toggle');
-
-    const sourceText = document.getElementById('source-text');
-    const formattedReader = document.getElementById('formatted-reader');
-    const statusBox = document.getElementById('dictation-status');
-    const statusText = document.getElementById('status-text');
-    const statusTimer = document.getElementById('status-timer');
-    const reqSpeedEl = document.getElementById('req-speed');
-    const totalSentencesEl = document.getElementById('total-sentences');
-
-    const btnPlay = document.getElementById('btn-play');
-    const btnPause = document.getElementById('btn-pause');
-    const btnStop = document.getElementById('btn-stop');
-    const btnRepeatPhrase = document.getElementById('btn-repeat-phrase');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnNext = document.getElementById('btn-next');
-
-    const punctSpokenMap = {
-      ',': 'запятая',
-      '—': 'тире',
-      '-': 'тире',
-      ':': 'двоеточие',
-      ';': 'точка с запятой',
-      '?': 'вопросительный знак',
-      '!': 'восклицательный знак',
-      '.': 'точка'
-    };
-
-    function playBeep() {
-      if (!beepToggle.checked) return;
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = 620;
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.12);
-      } catch(e){}
-    }
-
-    // Filter STRICTLY Russian voices and sort by natural quality
-    function populateVoices() {
-      if (!synth) return;
-      const allVoices = synth.getVoices();
-      
-      // Keep ONLY Russian language voices
-      voices = allVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('ru'));
-
-      voiceSelect.innerHTML = '';
-
-      if (voices.length === 0) {
-        const option = document.createElement('option');
-        option.value = "";
-        option.textContent = "Русские голоса не найдены в системе!";
-        voiceSelect.appendChild(option);
-        return;
-      }
-
-      // Sort with preference to Google / Microsoft Natural / Premium
-      voices.sort((a, b) => {
-        const an = a.name.toLowerCase();
-        const bn = b.name.toLowerCase();
-        const scoreA = (an.includes('google') || an.includes('natural') || an.includes('premium')) ? 2 : 1;
-        const scoreB = (bn.includes('google') || bn.includes('natural') || bn.includes('premium')) ? 2 : 1;
-        return scoreB - scoreA;
-      });
-
-      voices.forEach((voice, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${voice.name} (${voice.lang})`;
-        voiceSelect.appendChild(option);
-      });
-
-      // Default select best available Russian voice
-      voiceSelect.value = 0;
-    }
-
-    populateVoices();
-    if (synth && synth.onvoiceschanged !== undefined) {
-      synth.onvoiceschanged = populateVoices;
-    }
-
-    sentPauseRange.addEventListener('input', () => { sentPauseVal.textContent = sentPauseRange.value + ' сек'; calculateSpeed(); });
-    punctPauseRange.addEventListener('input', () => { punctPauseVal.textContent = punctPauseRange.value + ' сек'; calculateSpeed(); });
-    rateRange.addEventListener('input', () => { rateVal.textContent = parseFloat(rateRange.value).toFixed(2) + 'x'; calculateSpeed(); });
-    pitchRange.addEventListener('input', () => { pitchVal.textContent = parseFloat(pitchRange.value).toFixed(1); });
-    sourceText.addEventListener('input', calculateSpeed);
-
-    function calculateSpeed() {
-      const text = sourceText.value.trim();
-      const wordsArr = text.split(/\s+/).filter(Boolean);
-      const sentencesArr = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [];
-      const commasCount = (text.match(/[,:;\u2014-]/g) || []).length;
-      
-      totalSentencesEl.textContent = sentencesArr.length;
-
-      if (wordsArr.length === 0) {
-        reqSpeedEl.textContent = '~0 сл/мин';
-        return;
-      }
-
-      const speed = parseFloat(rateRange.value);
-      const sPause = parseInt(sentPauseRange.value);
-      const pPause = parseFloat(punctPauseRange.value);
-
-      const speechMin = (wordsArr.length / (130 * speed));
-      const pauseMin = ((sentencesArr.length * sPause) + (commasCount * pPause)) / 60;
-      const totalMin = speechMin + pauseMin;
-
-      const wpm = Math.round(wordsArr.length / totalMin);
-      reqSpeedEl.textContent = `~${wpm} сл/мин`;
-    }
-
-    function parseTextDetailed(text) {
-      const rawSentences = text.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [text];
-      
-      return rawSentences.map(sentStr => {
-        const clauseMatches = sentStr.match(/[^,:;\u2014-]+[,:;\u2014-]?/g) || [sentStr];
-        return {
-          fullText: sentStr.trim(),
-          clauses: clauseMatches.map(c => c.trim()).filter(Boolean)
-        };
-      });
-    }
-
-    function startNotebookDictation() {
-      const text = sourceText.value.trim();
-      if (!text) {
-        alert("Пожалуйста, введите текст диктанта.");
-        return;
-      }
-
-      if (isPaused) {
-        synth.resume();
-        isPaused = false;
-        isPlaying = true;
-        updateUI();
-        return;
-      }
-
-      stopNotebookDictation();
-
-      sentences = parseTextDetailed(text);
-      currentSentIdx = 0;
-      currentClauseIdx = 0;
-      isPlaying = true;
-      isPaused = false;
-
-      setupReaderView();
-      statusBox.style.display = 'flex';
-      updateUI();
-
-      playNextClause();
-    }
-
-    function playNextClause() {
-      if (!isPlaying || isPaused) return;
-
-      if (currentSentIdx >= sentences.length) {
-        statusText.textContent = "🎉 Диктант завершён!";
-        statusTimer.textContent = "100%";
-        stopNotebookDictation();
-        return;
-      }
-
-      const currentSentence = sentences[currentSentIdx];
-      const clauseText = currentSentence.clauses[currentClauseIdx];
-
-      const pct = Math.round((currentSentIdx / sentences.length) * 100);
-      statusTimer.textContent = `${pct}%`;
-
-      if (currentClauseIdx === 0) {
-        playBeep();
-      }
-
-      highlightClause(currentSentIdx, currentClauseIdx);
-
-      statusText.textContent = `📖 Предложение ${currentSentIdx + 1} из ${sentences.length}`;
-
-      const matchPunct = clauseText.match(/([,:;\u2014-]|[.!?])$/);
-      let punctMark = matchPunct ? matchPunct[0] : null;
-
-      let textToRead = clauseText;
-      if (speakPunctToggle.checked && punctMark && punctSpokenMap[punctMark]) {
-        textToRead = clauseText.replace(/([,:;\u2014-]|[.!?])$/, '') + ', ' + punctSpokenMap[punctMark];
-      }
-
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      const selectedVoice = voices[voiceSelect.value];
-      if (selectedVoice) utterance.voice = selectedVoice;
-      
-      utterance.rate = parseFloat(rateRange.value);
-      utterance.pitch = parseFloat(pitchRange.value);
-
-      // Natural intonation tuning on sentence ends
-      if (clauseText.endsWith('?')) utterance.pitch += 0.2;
-      else if (clauseText.endsWith('!')) utterance.pitch += 0.15;
-
-      utterance.onend = () => {
-        if (!isPlaying || isPaused) return;
-
-        const isLastClauseInSentence = (currentClauseIdx >= currentSentence.clauses.length - 1);
-
-        if (!isLastClauseInSentence) {
-          const pPauseMs = parseFloat(punctPauseRange.value) * 1000;
-          statusText.textContent = `⏸ Пауза на знаке...`;
-          pauseTimeout = setTimeout(() => {
-            currentClauseIdx++;
-            playNextClause();
-          }, pPauseMs);
-        } else {
-          currentClauseIdx = 0;
-          const mainPauseSec = parseInt(sentPauseRange.value);
-          let timeLeft = mainPauseSec;
-          statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
-
-          const countdownInterval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0 && isPlaying && !isPaused) {
-              statusText.textContent = `✍️ Пишите в тетрадь... (${timeLeft}с)`;
-            } else {
-              clearInterval(countdownInterval);
-              if (isPlaying && !isPaused) {
-                currentSentIdx++;
-                playNextClause();
-              }
-            }
-          }, 1000);
-        }
-      };
-
-      utterance.onerror = () => {
-        currentSentIdx++;
-        currentClauseIdx = 0;
-        playNextClause();
-      };
-
-      synth.speak(utterance);
-    }
-
-    function repeatCurrentPhrase() {
-      if (synth) synth.cancel();
-      if (pauseTimeout) clearTimeout(pauseTimeout);
-      currentClauseIdx = 0;
-      isPaused = false;
-      isPlaying = true;
-      updateUI();
-      playNextClause();
-    }
-
-    function stepSentence(direction) {
-      if (synth) synth.cancel();
-      if (pauseTimeout) clearTimeout(pauseTimeout);
-      currentSentIdx = Math.max(0, Math.min(sentences.length - 1, currentSentIdx + direction));
-      currentClauseIdx = 0;
-      isPaused = false;
-      isPlaying = true;
-      updateUI();
-      playNextClause();
-    }
-
-    function pauseNotebookDictation() {
-      if (synth.speaking) synth.pause();
-      if (pauseTimeout) clearTimeout(pauseTimeout);
-      isPaused = true;
-      isPlaying = false;
-      statusText.textContent = "⏸ На паузе";
-      updateUI();
-    }
-
-    function stopNotebookDictation() {
-      if (synth) synth.cancel();
-      if (pauseTimeout) clearTimeout(pauseTimeout);
-      isPlaying = false;
-      isPaused = false;
-      currentSentIdx = 0;
-      currentClauseIdx = 0;
-
-      formattedReader.style.display = 'none';
-      sourceText.style.display = 'block';
-      statusBox.style.display = 'none';
-      updateUI();
-    }
-
-    function setupReaderView() {
-      formattedReader.innerHTML = '';
-      sentences.forEach((sent, sIdx) => {
-        const sentSpan = document.createElement('span');
-        sentSpan.id = `sent-${sIdx}`;
-        sent.clauses.forEach((clause, cIdx) => {
-          const clauseSpan = document.createElement('span');
-          clauseSpan.id = `clause-${sIdx}-${cIdx}`;
-          clauseSpan.textContent = clause + ' ';
-          sentSpan.appendChild(clauseSpan);
-        });
-        formattedReader.appendChild(sentSpan);
-      });
-      sourceText.style.display = 'none';
-      formattedReader.style.display = 'block';
-    }
-
-    function highlightClause(sIdx, cIdx) {
-      const allClauses = formattedReader.querySelectorAll('span[id^="clause-"]');
-      allClauses.forEach(el => el.className = '');
-      const activeClause = document.getElementById(`clause-${sIdx}-${cIdx}`);
-      if (activeClause) {
-        activeClause.className = 'clause-highlight';
-        activeClause.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-
-    function updateUI() {
-      btnPlay.textContent = isPaused ? '▶ Продолжить' : '▶ Начать';
-      btnPause.disabled = !isPlaying;
-      btnStop.disabled = !isPlaying && !isPaused;
-      btnRepeatPhrase.disabled = !isPlaying && !isPaused;
-      btnPrev.disabled = !isPlaying && !isPaused;
-      btnNext.disabled = !isPlaying && !isPaused;
-    }
-  </script>
+<div id="game"></div>
+<div id="hud">
+ <div id="top">
+  <div class="panel"><b>НЕОБЫЧНЫЙ СЛУЧАЙ</b><br><small>3D STORY STUDIO</small></div>
+  <div class="panel" id="clock">02:17 · НОЧЬ</div>
+ </div>
+ <div id="mission" class="panel"><b id="missionTitle">Странный стук</b><p id="missionText">Осмотрись. Наведи прицел на предмет и нажми E.</p></div>
+ <div id="cross"></div><div id="hint"></div>
+ <div id="builder" class="panel">
+  <b>СТРОИТЕЛЬСТВО</b>
+  <p class="muted">Выбери предмет и нажми на пол. Нажми на предмет, чтобы выбрать его.</p>
+  <button data-prop="chair">＋ Кресло</button>
+  <button data-prop="box">＋ Коробка</button>
+  <button data-prop="phone">＋ Телефон</button>
+  <button data-prop="lamp">＋ Лампа</button>
+  <button data-prop="plant">＋ Растение</button>
+  <button data-prop="table">＋ Стол</button>
+  <button id="rotate">Повернуть предмет</button>
+  <button id="delete">Удалить предмет</button>
+  <button class="primary" id="doneBuild">Вернуться в игру</button>
+ </div>
+ <div id="buttons">
+  <button id="playBtn" class="primary">Играть</button>
+  <button id="buildBtn">Строить</button>
+  <button id="editorBtn">Мои истории</button>
+  <button id="callBtn">Позвонить Марку</button>
+  <button id="lightBtn">Включить свет</button>
+  <button id="saveBtn">Сохранить</button>
+  <button id="pauseBtn">Пауза</button>
+ </div>
+</div>
+
+<div class="overlay" id="intro"><div class="dialog">
+ <div class="eyebrow">ИНТЕРАКТИВНОЕ 3D-ПРИКЛЮЧЕНИЕ</div>
+ <h1>НЕОБЫЧНЫЙ<br>СЛУЧАЙ</h1>
+ <p class="muted">Обычная квартира. Странные звуки. Неожиданные звонки. Ты решаешь, что произойдёт дальше.</p>
+ <div class="cards">
+  <div class="card"><b>Исследуй</b><small>Осматривай предметы, комнату и ищи подсказки.</small></div>
+  <div class="card"><b>Создавай</b><small>Расставляй мебель и собирай собственные сцены.</small></div>
+  <div class="card"><b>Придумывай</b><small>Добавляй события, выборы и несколько концовок.</small></div>
+ </div>
+ <div class="row"><button id="start" class="primary">Начать историю</button><button id="startBuild">Создать свою сцену</button><button id="load">Загрузить сохранение</button></div>
+ <p class="muted">WASD — движение · мышь — осмотр · E — взаимодействие · F — свет · Esc — пауза. Для осмотра зажми левую кнопку мыши и перемещай её.</p>
+</div></div>
+
+<div class="overlay" id="event"><div class="dialog small">
+ <div class="eyebrow" id="eventTag">СОБЫТИЕ</div><h2 id="eventTitle"></h2>
+ <p id="eventText"></p><div id="choices"></div>
+ <button id="closeEvent">Продолжить осмотр</button>
+</div></div>
+
+<div class="overlay" id="phone"><div class="dialog small" style="text-align:center">
+ <div class="eyebrow">ВХОДЯЩИЙ ВЫЗОВ</div>
+ <div style="font-size:45px;margin:20px">☎</div>
+ <h2 id="caller">Марк</h2><p id="callText" class="muted">«Ты не спишь? У меня тут кое-что странное»</p>
+ <div class="row"><button id="answer" class="primary">Ответить</button><button id="decline">Сбросить</button><button id="textMessage">Сообщение</button></div>
+</div></div>
+
+<div class="overlay" id="pause"><div class="dialog small">
+ <div class="eyebrow">ПАУЗА</div><h2>Передышка</h2>
+ <div class="row"><button class="primary" id="resume">Продолжить</button><button id="pauseEditor">Редактор историй</button><button id="toMenu">В меню</button></div>
+</div></div>
+
+<div class="overlay" id="editor"><div class="dialog">
+ <div class="eyebrow">STORY LAB</div><h2>Конструктор историй</h2>
+ <p class="muted">Каждое событие получает ID. Укажи ID события, куда ведёт выбор, или END для завершения. Начинается история с первого события в списке.</p>
+ <div class="columns">
+  <div>
+   <h3>Новое событие</h3>
+   <label>Название</label><input id="nTitle" value="Неизвестный звонок" maxlength="100">
+   <label>Тип</label><select id="nType"><option value="story">Событие</option><option value="call">Звонок</option><option value="ending">Концовка</option></select>
+   <label>Текст события</label><textarea id="nText">Телефон внезапно зазвонил. Что ты сделаешь?</textarea>
+   <label>Вариант 1</label><input id="c1" value="Ответить">
+   <label>ID продолжения 1</label><input id="next1" value="2">
+   <label>Вариант 2</label><input id="c2" value="Сбросить вызов">
+   <label>ID продолжения 2</label><input id="next2" value="3">
+   <button class="primary" id="addNode">Добавить событие</button>
+  </div>
+  <div>
+   <h3>События истории</h3><div id="nodeList"></div>
+   <label>Название истории</label><input id="storyName" value="Моя история">
+   <div class="row"><button id="runStory" class="primary">Запустить</button><button id="saveStory">Сохранить</button></div>
+   <div class="row"><button id="exportStory">Экспорт JSON</button><button id="importStory">Импорт JSON</button></div>
+   <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </div>
+ </div>
+ <div class="row"><button id="closeEditor">Закрыть редактор</button><button id="clearNodes">Очистить события</button></div>
+</div></div>
+
+<div class="overlay" id="ending"><div class="dialog small">
+ <div class="eyebrow">КОНЕЦ ИСТОРИИ</div><h2 id="endingTitle">Концовка</h2><p id="endingText" class="muted"></p>
+ <div class="row"><button class="primary" id="continueGame">В квартиру</button><button id="editEnding">Изменить историю</button><button id="replay">Сначала</button></div>
+</div></div>
+<div id="notice"></div>
+<div id="fatal"><h2>Не удалось запустить 3D</h2><p id="fatalText"></p><p>Проверь интернет, браузер и поддержку WebGL. Подробности доступны в консоли браузера (F12 → Console).</p></div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from "three";
+
+const $=id=>document.getElementById(id);
+const hide=id=>$(id).style.display="none";
+const show=id=>$(id).style.display="flex";
+function notify(text){
+ const n=$("notice");n.textContent=text;n.style.display="block";
+ clearTimeout(notify.timer);notify.timer=setTimeout(()=>n.style.display="none",2300);
+}
+
+let scene,camera,renderer,raycaster;
+let yaw=0,pitch=0,dragging=false,downX=0,downY=0,dragged=false;
+let started=false,paused=false,buildMode=false,lightOn=false;
+let selected=null,placeType=null,callTimer=null;
+let nodes=[],nextId=1,customObjects=[],sound=null;
+const keys={};
+const interactive=[];
+const center=new THREE.Vector2(0,0);
+const clock=new THREE.Clock();
+
+const mats={};
+function material(color,roughness=.8,metalness=0,extra={}){
+ return new THREE.MeshStandardMaterial({color,roughness,metalness,...extra});
+}
+function box(name,x,y,z,sx,sy,sz,mat,extra={}){
+ const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat);
+ m.name=name;m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;
+ m.userData={...extra,baseName:name};
+ scene.add(m);
+ if(extra.interact)interactive.push(m);
+ if(extra.custom)customObjects.push(m);
+ return m;
+}
+function cylinder(name,x,y,z,r1,r2,h,mat,extra={}){
+ const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,18),mat);
+ m.name=name;m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;
+ m.userData={...extra,baseName:name};scene.add(m);
+ if(extra.interact)interactive.push(m);
+ if(extra.custom)customObjects.push(m);
+ return m;
+}
+function init(){
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color(0x101522);
+ scene.fog=new THREE.Fog(0x101522,13,32);
+
+ camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.1,100);
+ camera.rotation.order="YXZ";
+ camera.position.set(0,1.65,3.3);
+
+ renderer=new THREE.WebGLRenderer({antialias:true});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+ renderer.setSize(innerWidth,innerHeight);
+ renderer.shadowMap.enabled=true;
+ renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.toneMapping=THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure=1.05;
+ $("game").appendChild(renderer.domElement);
+
+ scene.add(new THREE.HemisphereLight(0xa8b9d9,0x332832,.7));
+ const moon=new THREE.DirectionalLight(0x9eafff,1.1);
+ moon.position.set(-4,8,-3);moon.castShadow=true;scene.add(moon);
+
+ const ceiling=new THREE.PointLight(0xffd7a0,0,16,1.4);
+ ceiling.position.set(0,2.7,0);scene.add(ceiling);window.ceilingLight=ceiling;
+ const deskLight=new THREE.PointLight(0xffb76a,0,8,2);
+ deskLight.position.set(2.7,1.8,-2);scene.add(deskLight);window.deskLight=deskLight;
+
+ mats.wall=material(0x777c8e);
+ mats.side=material(0x4a5064);
+ mats.floor=material(0x51463e);
+ mats.wood=material(0x694932);
+ mats.dark=material(0x292936);
+ mats.metal=material(0xa7aeb8,.35,.6);
+ mats.white=material(0xd7d5d0);
+ mats.fabric=material(0x536681);
+ mats.blanket=material(0x353953);
+ mats.glass=material(0x243d5c,.3,.1,{emissive:0x101a2d});
+ mats.screen=material(0x273d5e,.25,0,{emissive:0x243c68});
+ mats.plant=material(0x39714d);
+
+ // Комната
+ box("Пол",0,-.13,0,10,.25,10,mats.floor);
+ box("Левая стена",-5,1.5,0,.2,3,10,mats.side);
+ box("Правая стена",5,1.5,0,.2,3,10,mats.side);
+ box("Задняя стена",0,1.5,-5,10,3,.2,mats.wall);
+ box("Передняя стена слева",-3.3,1.5,5,3.4,3,.2,mats.wall);
+ box("Передняя стена справа",3.3,1.5,5,3.4,3,.2,mats.wall);
+
+ // Окно и батарея
+ box("Окно",0,1.8,-4.86,2.8,1.6,.05,mats.glass,{interact:true,event:"window"});
+ box("Рама окна",0,1.8,-4.79,.08,1.72,.08,mats.white);
+ box("Рама окна",0,1.8,-4.79,2.95,.08,.08,mats.white);
+ box("Подоконник",0,.96,-4.67,3.05,.12,.3,mats.white);
+ box("Батарея отопления",0,.67,-4.3,2,.7,.35,mats.metal,{interact:true,event:"radiator"});
+ for(let i=0;i<9;i++){
+  box("Секция батареи",-.83+i*.207,.67,-4.09,.13,.63,.1,mats.white,{interact:true,event:"radiator"});
+ }
+
+ // Кровать
+ box("Каркас кровати",-2,.38,-.8,2.4,.35,2.9,mats.wood);
+ box("Матрас",-2,.61,-.8,2.3,.18,2.8,mats.fabric);
+ box("Одеяло",-2,.73,-.1,2.2,.1,1.45,mats.blanket);
+ box("Подушка",-2,.74,-1.83,1.05,.13,.6,mats.white);
+
+ // Тумбочка и телефон
+ box("Тумбочка",-3.7,.42,-2.4,.7,.8,.65,mats.wood);
+ box("Телефон Марка",-3.7,.86,-2.4,.28,.06,.43,mats.screen,{interact:true,event:"phone"});
+ box("Экран телефона",-3.7,.9,-2.4,.21,.01,.3,material(0x5b7fc2,.3,0,{emissive:0x385d9f}));
+
+ // Стол, ноутбук, лампа
+ box("Стол",2.3,.82,-2,2,.12,1,mats.wood);
+ for(const x of [1.5,3.1])for(const z of [-2.4,-1.6])box("Ножка стола",x,.4,z,.08,.8,.08,mats.dark);
+ box("Ноутбук",2.2,.91,-2,.65,.035,.45,mats.dark);
+ box("Экран ноутбука",2.2,1.12,-2.2,.65,.38,.04,mats.screen,{interact:true,event:"laptop"});
+ cylinder("Основание лампы",2.85,.93,-2,.15,.15,.05,mats.metal);
+ cylinder("Ножка лампы",2.85,1.15,-2,.025,.025,.4,mats.metal);
+ cylinder("Абажур лампы",2.85,1.42,-2,.25,.15,.25,mats.wood,{interact:true,event:"lamp"});
+
+ // Кресло
+ box("Кресло",2.25,.45,-.65,.85,.2,.8,mats.fabric);
+ box("Спинка кресла",2.25,.85,-.28,.85,.7,.16,mats.fabric);
+ // Шкаф
+ box("Шкаф",4.3,1.3,1.2,1,2.6,1,mats.wood,{interact:true,event:"wardrobe"});
+ box("Дверца шкафа",4.3,1.3,.68,.9,2.4,.05,mats.dark);
+ // Дверь и ковёр
+ box("Входная дверь",0,1.1,4.84,1.3,2.2,.12,mats.dark,{interact:true,event:"door"});
+ box("Ручка двери",.45,1.05,4.73,.1,.1,.1,mats.metal);
+ box("Ковёр",-.8,.015,.8,3.3,.025,3,mats.blanket);
+ // Картина
+ box("Рамка картины",-4.87,1.9,-1.4,.05,.9,1.3,mats.dark);
+ box("Картина",-4.83,1.9,-1.4,.03,.78,1.16,material(0x53617a));
+
+ raycaster=new THREE.Raycaster();raycaster.far=7;
+ setLight();animate();
+}
+
+function setLight(){
+ if(!window.ceilingLight)return;
+ window.ceilingLight.intensity=lightOn?2.2:0;
+ window.deskLight.intensity=lightOn?1.1:0;
+ $("lightBtn").textContent=lightOn?"Выключить свет":"Включить свет";
+ $("clock").textContent=lightOn?"02:17 · СВЕТ ВКЛЮЧЁН":"02:17 · НОЧЬ";
+ scene.background.set(lightOn?0x353746:0x101522);
+ scene.fog.color.set(lightOn?0x353746:0x101522);
+}
+function currentHit(x=0,y=0){
+ camera.updateMatrixWorld();
+ raycaster.setFromCamera(new THREE.Vector2(x,y),camera);
+ const hits=raycaster.intersectObjects(interactive.filter(o=>o.visible),false);
+ return hits.find(h=>h.distance<7)||null;
+}
+function groundPoint(clientX,clientY){
+ const r=renderer.domElement.getBoundingClientRect();
+ const p=new THREE.Vector2((clientX-r.left)/r.width*2-1,-((clientY-r.top)/r.height*2-1));
+ raycaster.setFromCamera(p,camera);
+ const plane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
+ const out=new THREE.Vector3();
+ return raycaster.ray.intersectPlane(plane,out)?out:null;
+}
+function addProp(type,x,z,rotation=0,restoring=false){
+ const common={custom:true,interact:true,propType:type};
+ let o;
+ if(type==="chair")o=box("Кресло",x,.48,z,.85,.8,.8,mats.fabric,common);
+ else if(type==="box")o=box("Коробка",x,.3,z,.58,.58,.58,mats.wood,common);
+ else if(type==="phone")o=box("Телефон",x,.85,z,.25,.06,.4,mats.screen,{...common,event:"phone"});
+ else if(type==="lamp"){
+  o=cylinder("Лампа",x,.7,z,.18,.24,.7,mats.wood,{...common,event:"lamp"});
+ }
+ else if(type==="plant"){
+  o=cylinder("Горшок",x,.2,z,.2,.15,.3,mats.wood,common);
+  const leaves=new THREE.Mesh(new THREE.IcosahedronGeometry(.38,1),mats.plant);
+  leaves.position.set(x,.62,z);leaves.castShadow=true;leaves.userData={...common,baseName:"Растение"};
+  scene.add(leaves);interactive.push(leaves);customObjects.push(leaves);o.userData.linked=leaves;
+ }
+ else if(type==="table")o=box("Стол",x,.65,z,1.2,.12,.75,mats.wood,common);
+ if(o){o.rotation.y=rotation;if(!restoring)notify("Предмет добавлен");}
+ return o;
+}
+function notify(text){
+ const el=$("notice");el.textContent=text;el.style.display="block";
+ clearTimeout(notify.timer);notify.timer=setTimeout(()=>el.style.display="none",2200);
+}
+const objectEvents={
+ radiator:{title:"Стук в батарее",text:"Тук… тук-тук… Металлический звук повторяется. По одному звуку нельзя точно определить причину. Не разбирай батарею самостоятельно.",choices:[
+ ["Послушать ещё","Запомнить, когда появляется звук.","listen"],
+ ["Позвонить взрослому","Попросить помощи.","adult"],
+ ["Продолжить историю","Открыть редактор собственных событий.","editor"]]},
+ phone:{title:"Телефон Марка",text:"На экране сообщение: «Ты тоже слышишь странный стук? Что происходит у тебя?»",choices:[
+ ["Позвонить Марку","Узнать подробности.","call"],
+ ["Написать сообщение","Ответить сообщением.","message"],
+ ["Осмотреть комнату","Вернуться к исследованию.","close"]]},
+ window:{title:"Окно",text:"За окном ночная улица. В стекле отражается тусклый свет комнаты.",choices:[
+ ["Включить свет","Осмотреть квартиру.","light"],
+ ["Продолжить","Вернуться к осмотру.","close"]]},
+ lamp:{title:"Лампа",text:"Небольшая настольная лампа стоит рядом с ноутбуком.",choices:[
+ ["Переключить свет","Изменить освещение комнаты.","light"],
+ ["Осмотреть стол","Посмотреть на ноутбук.","close"]]},
+ laptop:{title:"Ноутбук",text:"На экране можно записать наблюдения: когда возник звук и как долго он продолжался.",choices:[
+ ["Записать наблюдение","Сохранить заметку в истории.","note"],
+ ["Закрыть","Вернуться к осмотру.","close"]]},
+ wardrobe:{title:"Шкаф",text:"Внутри обычные вещи. Никаких загадочных подсказок не видно.",choices:[
+ ["Закрыть шкаф","Продолжить осмотр.","close"],
+ ["Позвонить Марку","Обсудить события.","call"]]},
+ door:{title:"Входная дверь",text:"За дверью тихо. Ты можешь остаться в комнате и продолжить исследование.",choices:[
+ ["Проверить дверь","Дверь закрыта.","close"],
+ ["Открыть сценарий","Создать продолжение истории.","editor"]]},
+ custom:{title:"Твой предмет",text:"Ты сам добавил этот предмет. Придумай, что может произойти при взаимодействии с ним.",choices:[
+ ["Создать событие","Открыть редактор историй.","editor"],
+ ["Продолжить","Вернуться к осмотру.","close"]}
+};
+function showEvent(title,text,choices=[],tag="СОБЫТИЕ"){
+ $("eventTag").textContent=tag;$("eventTitle").textContent=title;$("eventText").textContent=text;
+ const list=$("choices");list.replaceChildren();
+ for(const [label,desc,action] of choices){
+  const b=document.createElement("button");b.className="choice";
+  const strong=document.createElement("b");strong.textContent=label;
+  const small=document.createElement("small");small.textContent=desc;
+  b.append(strong,small);b.onclick=()=>{hide("event");doAction(action)};list.append(b);
+ }
+ $("closeEvent").style.display=choices.length?"none":"block";show("event");
+}
+function doAction(action){
+ if(action==="close")return;
+ if(action==="editor"){openEditor();return}
+ if(action==="light"){lightOn=!lightOn;setLight();return}
+ if(action==="call"){incomingCall("Марк","«У меня тоже стучит батарея. Ты нашёл что-нибудь?»");return}
+ if(action==="adult"){incomingCall("Взрослый","Ты рассказываешь о звуке и просишь помочь безопасно разобраться.");return}
+ if(action==="message"){showEvent("Сообщение Марку","Ты пишешь: «Слышу стук. Не буду разбирать батарею, попробую выяснить, когда он появляется».",[["Отправить","Сообщение отправлено.","close"]]);return}
+ if(action==="listen"){setMission("Наблюдение записано","Ты заметил звук. Можно осмотреть телефон или поговорить со взрослым.");notify("Новая запись в истории");return}
+ if(action==="note"){notify("Наблюдение сохранено");return}
+}
+function interact(){
+ if(!started||paused||$("event").style.display==="flex"||$("phone").style.display==="flex")return;
+ const hit=currentHit();
+ if(!hit){notify("Наведи прицел на предмет и подойди ближе");return}
+ const o=hit.object;
+ if(buildMode){selectObject(o);return}
+ const ev=objectEvents[o.userData.event]||objectEvents.custom;
+ showEvent(ev.title,ev.text,ev.choices);
+}
+function incomingCall(name="Марк",text="«Ты не спишь? У меня кое-что странное»"){
+ if(paused||!started)return;
+ $("caller").textContent=name;$("callText").textContent=text;show("phone");
+}
+$("answer").onclick=()=>{
+ const t=$("callText").textContent;hide("phone");
+ showEvent("Разговор",t+"\n\nВы обсуждаете, что произошло, и решаете действовать спокойно.",[
+ ["Попросить помощи","Поговорить со взрослым.","adult"],
+ ["Завершить разговор","Вернуться к осмотру.","close"]
+ ],"ТЕЛЕФОННЫЙ ЗВОНОК");
+};
+$("decline").onclick=()=>{hide("phone");notify("Вызов сброшен")};
+$("textMessage").onclick=()=>{hide("phone");showEvent("Сообщение","Ты отправил сообщение. Можно продолжить исследование.",[["Продолжить","Назад в квартиру.","close"]])};
+$("callBtn").onclick=()=>incomingCall("Марк","«Ты не спишь? Я услышал странный звук. Можешь поговорить?»");
+
+function selectObject(o){
+ if(selected?.material?.emissive)selected.material.emissive.setHex(selected.userData.oldGlow||0);
+ selected=o;
+ if(o.material?.emissive){
+  selected.userData.oldGlow=o.material.emissive.getHex();
+  o.material.emissive.setHex(0x29234c);
+ }
+ notify("Выбран предмет: "+(o.userData.baseName||o.name));
+}
+function setBuild(v){
+ buildMode=v;placeType=null;
+ $("builder").style.display=v?"block":"none";
+ $("buildBtn").classList.toggle("primary",v);
+ $("playBtn").classList.toggle("primary",!v);
+ $("hint").style.display="none";
+ notify(v?"Выбери предмет и нажми на пол":"Режим игры");
+}
+$("buildBtn").onclick=()=>setBuild(true);
+$("playBtn").onclick=()=>setBuild(false);
+$("doneBuild").onclick=()=>setBuild(false);
+document.querySelectorAll("[data-prop]").forEach(b=>b.onclick=()=>{
+ placeType=b.dataset.prop;selected=null;notify("Теперь нажми на место в комнате");
+});
+$("rotate").onclick=()=>{if(selected){selected.rotation.y+=Math.PI/4;notify("Предмет повёрнут")}else notify("Сначала выбери предмет")};
+$("delete").onclick=()=>{
+ if(!selected){notify("Сначала выбери предмет");return}
+ const linked=selected.userData.linked;
+ for(const o of [selected,linked].filter(Boolean)){
+  scene.remove(o);
+  const a=interactive.indexOf(o);if(a>=0)interactive.splice(a,1);
+  const b=customObjects.indexOf(o);if(b>=0)customObjects.splice(b,1);
+ }
+ selected=null;notify("Предмет удалён");
+};
+function begin(){
+ started=true;paused=false;hide("intro");
+ setMission("История: Стук в батарее","Осмотрись. Наведи прицел на предмет и нажми E.");
+ if(callTimer)clearTimeout(callTimer);
+ callTimer=setTimeout(()=>{if(started&&!paused)incomingCall()},18000);
+}
+function setMission(title,text){$("missionTitle").textContent=title;$("missionText").textContent=text}
+$("start").onclick=begin;
+$("startBuild").onclick=()=>{begin();setBuild(true)};
+$("lightBtn").onclick=()=>{lightOn=!lightOn;setLight()};
+$("closeEvent").onclick=()=>hide("event");
+$("pauseBtn").onclick=()=>{if(!started)return;paused=true;show("pause")};
+$("resume").onclick=()=>{paused=false;hide("pause")};
+$("toMenu").onclick=()=>{paused=false;started=false;hide("pause");show("intro")};
+$("pauseEditor").onclick=()=>{hide("pause");openEditor()};
+document.addEventListener("keydown",e=>{
+ const k=e.key.toLowerCase();keys[k]=true;
+ if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright"," "].includes(k))e.preventDefault();
+ if(k==="e")interact();
+ if(k==="f"){lightOn=!lightOn;setLight()}
+ if(k==="escape"){
+  if($("editor").style.display==="flex")hide("editor");
+  else if($("event").style.display==="flex")hide("event");
+  else if($("phone").style.display==="flex")hide("phone");
+  else if(started&&!paused){paused=true;show("pause")}
+  else if(paused){paused=false;hide("pause")}
+ }
+});
+document.addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
+
+let downAt=null;
+rendererMouseSetup();
+function rendererMouseSetup(){
+ const canvas=renderer.domElement;
+ canvas.addEventListener("pointerdown",e=>{
+  if(!started||paused||$("intro").style.display==="flex"||$("event").style.display==="flex"||$("phone").style.display==="flex")return;
+  dragging=true;dragged=false;downX=e.clientX;downY=e.clientY;downAt={x:e.clientX,y:e.clientY};
+  canvas.setPointerCapture?.(e.pointerId);
+ });
+ canvas.addEventListener("pointermove",e=>{
+  if(!dragging||!started||paused)return;
+  const dx=e.clientX-downX,dy=e.clientY-downY;
+  if(Math.abs(e.clientX-downAt.x)+Math.abs(e.clientY-downAt.y)>4)dragged=true;
+  if(buildMode&&selected&&e.buttons===1){
+   const p=groundPoint(e.clientX,e.clientY);
+   if(p){selected.position.x=THREE.MathUtils.clamp(p.x,-4.3,4.3);selected.position.z=THREE.MathUtils.clamp(p.z,-4.3,4.3)}
+   downX=e.clientX;downY=e.clientY;return;
+  }
+  yaw-=dx*.004;pitch=THREE.MathUtils.clamp(pitch-dy*.004,-1.25,1.25);
+  camera.rotation.set(pitch,yaw,0);downX=e.clientX;downY=e.clientY;
+ });
+ canvas.addEventListener("pointerup",e=>{
+  dragging=false;
+  if(!started||paused)return;
+  const moved=dragged;
+  if(buildMode){
+   const r=canvas.getBoundingClientRect();
+   const pxy=new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height*2-1));
+   raycaster.setFromCamera(pxy,camera);
+   const hits=raycaster.intersectObjects(interactive.filter(o=>o.visible),false);
+   const hit=hits.find(h=>h.distance<8);
+   if(hit&&hit.object.userData.custom){selectObject(hit.object);return}
+   if(moved)return;
+   const p=groundPoint(e.clientX,e.clientY);
+   if(!p)return;
+   if(placeType){
+    addProp(placeType,THREE.MathUtils.clamp(p.x,-4.3,4.3),THREE.MathUtils.clamp(p.z,-4.3,4.3));
+    placeType=null;return;
+   }
+   if(selected){
+    selected.position.x=THREE.MathUtils.clamp(p.x,-4.3,4.3);
+    selected.position.z=THREE.MathUtils.clamp(p.z,-4.3,4.3);
+   }
+   return;
+  }
+  if(!moved&&Math.hypot(e.clientX-innerWidth/2,e.clientY-innerHeight/2)<65)interact();
+ });
+ canvas.addEventListener("pointercancel",()=>dragging=false);
+ canvas.addEventListener("contextmenu",e=>e.preventDefault());
+}
+function move(dt){
+ if(!started||paused||$("event").style.display==="flex"||$("phone").style.display==="flex")return;
+ let f=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0);
+ let s=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0);
+ if(!f&&!s)return;
+ const len=Math.hypot(f,s),speed=(keys.shift?4:2.5)*dt;
+ const dx=(-Math.sin(yaw)*f+Math.cos(yaw)*s)/len*speed;
+ const dz=(-Math.cos(yaw)*f-Math.sin(yaw)*s)/len*speed;
+ camera.position.x=THREE.MathUtils.clamp(camera.position.x+dx,-4.45,4.45);
+ camera.position.z=THREE.MathUtils.clamp(camera.position.z+dz,-4.45,4.45);
+}
+function updateHint(){
+ if(!started||paused||buildMode||$("event").style.display==="flex"||$("phone").style.display==="flex"){
+  $("hint").style.display="none";return;
+ }
+ const hit=currentHit();
+ $("hint").style.display=hit?"block":"none";
+ if(hit)$("hint").textContent="E — "+(hit.object.userData.baseName||hit.object.name);
+}
+function animate(){
+ requestAnimationFrame(animate);
+ const dt=Math.min(clock.getDelta(),.04);
+ move(dt);updateHint();renderer.render(scene,camera);
+}
+
+ // Редактор ветвящихся историй
+function renderNodes(){
+ const list=$("nodeList");list.replaceChildren();
+ nodes.forEach((n,i)=>{
+  const d=document.createElement("div");d.className="node";
+  const b=document.createElement("b");b.textContent="ID "+n.id+" · "+n.title;
+  const s=document.createElement("small");s.textContent=n.type==="ending"?"Концовка":n.choices.length+" варианта продолжения";
+  const del=document.createElement("button");del.textContent="Удалить";
+  del.onclick=()=>{nodes.splice(i,1);renderNodes()};
+  d.append(b,s,del);list.append(d);
+ });
+}
+function openEditor(){show("editor");renderNodes()}
+$("editorBtn").onclick=openEditor;
+$("closeEditor").onclick=()=>hide("editor");
+$("addNode").onclick=()=>{
+ const type=$("nType").value;
+ const n={
+  id:nextId++,
+  title:$("nTitle").value.trim()||"Новое событие",
+  type,
+  text:$("nText").value.trim(),
+  choices:type==="ending"?[]:[
+   {text:$("c1").value.trim()||"Продолжить",next:$("next1").value.trim()||"END"},
+   {text:$("c2").value.trim()||"Завершить",next:$("next2").value.trim()||"END"}
+  ]
+ };
+ nodes.push(n);renderNodes();notify("Событие добавлено: ID "+n.id);
+};
+$("clearNodes").onclick=()=>{
+ if(confirm("Удалить все события сценария?")){nodes=[];nextId=1;renderNodes()}
+};
+function runStory(){
+ if(!nodes.length){notify("Сначала добавь событие");return}
+ hide("editor");playNode(nodes[0].id);
+}
+function playNode(id){
+ if(String(id).toUpperCase()==="END"){finishStory("История завершена","Ты дошёл до конца этой сюжетной ветки.");return}
+ const n=nodes.find(v=>String(v.id)===String(id));
+ if(!n){finishStory("Продолжение не найдено","Проверь ID продолжения в редакторе сценария.");return}
+ if(n.type==="ending"){finishStory(n.title,n.text);return}
+ const choices=n.choices.map(c=>[c.text,"Продолжить историю","node:"+c.next]);
+ showEvent(n.title,n.text,choices,n.type==="call"?"ЗВОНОК":"СЦЕНАРИЙ");
+}
+function finishStory(title,text){
+ hide("event");$("endingTitle").textContent=title;$("endingText").textContent=text;show("ending");
+}
+$("runStory").onclick=runStory;
+$("continueGame").onclick=()=>hide("ending");
+$("editEnding").onclick=()=>{hide("ending");openEditor()};
+$("replay").onclick=()=>{hide("ending");runStory()};
+
+// Поддержка переходов из пользовательских событий
+const originalShowEvent=showEvent;
+showEvent=function(title,text,choices=[],tag="СОБЫТИЕ"){
+ const mapped=choices.map(c=>{
+  const old=c[2];
+  return [c[0],c[1],typeof old==="string"&&old.startsWith("node:")?old:old];
+ });
+ originalShowEvent(title,text,mapped,tag);
+ if(mapped.some(c=>typeof c[2]==="string"&&c[2].startsWith("node:"))){
+  const buttons=[...$("choices").querySelectorAll("button")];
+  buttons.forEach((b,i)=>{
+   const action=mapped[i]?.[2];
+   if(typeof action==="string"&&action.startsWith("node:"))
+    b.onclick=()=>{hide("event");playNode(action.slice(5))};
+  });
+ }
+};
+$("saveStory").onclick=()=>{
+ try{localStorage.setItem("storyStudioNodes",JSON.stringify({name:$("storyName").value,nodes,nextId}));notify("Сценарий сохранён")}
+ catch(e){notify("Не удалось сохранить сценарий")}
+};
+$("exportStory").onclick=()=>{
+ const data={name:$("storyName").value,nodes,nextId};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="my-story.json";a.click();URL.revokeObjectURL(url);
+};
+$("importStory").onclick=()=>$("fileInput").click();
+$("fileInput").onchange=async e=>{
+ const f=e.target.files?.[0];if(!f)return;
+ try{
+  const d=JSON.parse(await f.text());nodes=Array.isArray(d.nodes)?d.nodes:[];
+  nextId=d.nextId||Math.max(0,...nodes.map(n=>Number(n.id)||0))+1;
+  $("storyName").value=d.name||"Импортированная история";renderNodes();notify("История импортирована");
+ }catch(err){notify("Ошибка чтения JSON")}
+};
+function saveAll(){
+ try{
+  const props=customObjects.filter(o=>o.userData.custom&&o.userData.propType).map(o=>({
+   type:o.userData.propType,x:o.position.x,y:o.position.y,z:o.position.z,rot:o.rotation.y
+  }));
+  localStorage.setItem("storyStudioSave",JSON.stringify({
+   props,nodes,nextId,name:$("storyName").value,lightOn,
+   camera:{x:camera.position.x,y:camera.position.y,z:camera.position.z,yaw,pitch}
+  }));
+  notify("Комната и сценарий сохранены");
+ }catch(e){notify("Сохранение недоступно в этом режиме")}
+}
+function loadAll(){
+ try{
+  const raw=localStorage.getItem("storyStudioSave");
+  if(!raw){notify("Сохранение не найдено");return}
+  const d=JSON.parse(raw);
+  for(const o of [...customObjects]){
+   scene.remove(o);
+   const i=interactive.indexOf(o);if(i>=0)interactive.splice(i,1);
+   const j=customObjects.indexOf(o);if(j>=0)customObjects.splice(j,1);
+  }
+  (d.props||[]).forEach(p=>{
+   const o=addProp(p.type,p.x,p.z,p.rot,true);
+   if(o&&p.y!==undefined)o.position.y=p.y;
+  });
+  nodes=Array.isArray(d.nodes)?d.nodes:[];nextId=d.nextId||1;
+  $("storyName").value=d.name||"Моя история";
+  lightOn=!!d.lightOn;setLight();
+  if(d.camera){
+   camera.position.set(d.camera.x,d.camera.y,d.camera.z);
+   yaw=d.camera.yaw||0;pitch=d.camera.pitch||0;camera.rotation.set(pitch,yaw,0);
+  }
+  renderNodes();notify("Сохранение загружено");
+ }catch(e){notify("Не удалось загрузить сохранение")}
+}
+$("saveBtn").onclick=saveAll;$("load").onclick=loadAll;
+window.addEventListener("beforeunload",()=>{try{
+ const props=customObjects.filter(o=>o.userData.custom&&o.userData.propType).map(o=>({type:o.userData.propType,x:o.position.x,y:o.position.y,z:o.position.z,rot:o.rotation.y}));
+ localStorage.setItem("storyStudioSave",JSON.stringify({props,nodes,nextId,name:$("storyName").value,lightOn,camera:{x:camera.position.x,y:camera.position.y,z:camera.position.z,yaw,pitch}}));
+}catch(e){}});
+window.addEventListener("blur",()=>{dragging=false;for(const k in keys)keys[k]=false});
+window.addEventListener("resize",()=>{
+ if(!camera||!renderer)return;
+ camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
+});
+
+try{init()}catch(error){
+ console.error(error);$("fatalText").textContent=String(error?.stack||error);$("fatal").style.display="block";
+}
+</script>
 </body>
 </html>
