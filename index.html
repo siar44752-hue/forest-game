@@ -11,21 +11,18 @@
     <style>
         :root {
             --bg-deep: #09090b;
-            --bg-card: rgba(18, 18, 24, 0.7);
-            --bg-card-hover: rgba(26, 26, 36, 0.85);
+            --bg-card: rgba(18, 18, 24, 0.75);
             --border-glass: rgba(255, 255, 255, 0.08);
-            --border-focus: rgba(139, 92, 246, 0.5);
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --primary: #8b5cf6;
             --primary-hover: #7c3aed;
             --accent-cyan: #06b6d4;
-            --accent-pink: #ec4899;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
             --shadow-glow: 0 0 25px rgba(139, 92, 246, 0.2);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -33,18 +30,16 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            scroll-behavior: smooth;
         }
 
         body {
             background-color: var(--bg-deep);
             color: var(--text-main);
             min-height: 100vh;
-            overflow-x: hidden;
             position: relative;
         }
 
-        /* Фоновый Canvas для анимации сети и частиц */
+        /* Фоновый Canvas для плавающих точек */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -56,182 +51,126 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* Шапка сайта */
+        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--border-glass);
             border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
+            padding: 18px 25px;
+            margin-bottom: 25px;
             box-shadow: var(--shadow-glow);
-            animation: fadeInDown 0.8s ease;
         }
 
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
-            border-radius: 14px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             color: white;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
         }
 
         .logo-text h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             background: linear-gradient(135deg, #fff, #c084fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
         }
 
         .logo-text p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
         }
 
-        .user-profile-btn {
+        .user-badge {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glass);
-            padding: 8px 16px;
-            border-radius: 50px;
+            padding: 8px 15px;
+            border-radius: 30px;
             cursor: pointer;
             transition: var(--transition);
         }
 
-        .user-profile-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .user-badge:hover {
             border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
         }
 
-        .user-avatar-disp {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-pink), var(--primary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: white;
-            font-weight: 700;
-        }
-
-        .user-info-disp span {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: block;
-        }
-
-        .user-info-disp h3 {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        /* Главный баннер-приветствие */
-        .welcome-banner {
+        /* Баннер */
+        .banner {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1));
             border: 1px solid var(--border-glass);
-            border-radius: 24px;
-            padding: 35px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-            animation: fadeIn 0.8s ease;
-        }
-
-        .welcome-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .welcome-content h2 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            animation: slideInLeft 0.8s ease;
-        }
-
-        .welcome-content h2 span {
-            background: linear-gradient(90deg, var(--accent-cyan), var(--primary), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .welcome-content p {
-            color: var(--text-muted);
-            font-size: 16px;
-            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
             margin-bottom: 25px;
+            backdrop-filter: blur(10px);
         }
 
-        .stats-grid {
+        .banner h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .banner h2 span {
+            color: #c084fc;
+        }
+
+        .banner p {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Статистика */
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
-            border-radius: 18px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
+            border-radius: 16px;
+            padding: 18px;
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
-        }
-
         .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             color: white;
         }
 
@@ -239,232 +178,139 @@
         .stat-icon.done { background: rgba(16, 185, 129, 0.2); color: var(--success); }
         .stat-icon.pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
 
-        .stat-info h4 {
-            font-size: 24px;
-            font-weight: 700;
-        }
+        .stat-info h4 { font-size: 22px; font-weight: 700; }
+        .stat-info p { font-size: 12px; color: var(--text-muted); }
 
-        .stat-info p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* Панель управления (поиск, фильтры, кнопки) */
-        .control-panel {
+        /* Панель управления */
+        .controls {
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 30px;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 25px;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+            gap: 12px;
             justify-content: space-between;
-            backdrop-filter: blur(12px);
         }
 
-        .search-box {
-            position: relative;
+        .search-input {
             flex: 1;
-            min-width: 250px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-box input {
-            width: 100%;
+            min-width: 220px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 12px 15px 12px 45px;
-            color: var(--text-main);
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
             outline: none;
-            transition: var(--transition);
         }
 
-        .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-        }
-
-        .filters-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .search-input:focus { border-color: var(--primary); }
 
         select {
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 12px 15px;
-            color: var(--text-main);
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: white;
             outline: none;
             cursor: pointer;
-            transition: var(--transition);
         }
 
-        select:focus, select:hover {
-            border-color: var(--primary);
-        }
+        select:focus { border-color: var(--primary); }
 
         .btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-hover));
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
+            border-radius: 10px;
+            padding: 10px 20px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glass);
-            box-shadow: none;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--text-muted);
         }
 
         /* Список задач */
-        .tasks-section h3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
         .tasks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
         }
 
         .task-card {
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 20px;
-            position: relative;
-            backdrop-filter: blur(12px);
-            transition: var(--transition);
+            border-radius: 16px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: var(--transition);
         }
 
         .task-card:hover {
-            transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: var(--shadow-glow);
-            background: var(--bg-card-hover);
+            transform: translateY(-3px);
         }
 
-        .task-card.completed {
-            opacity: 0.6;
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .task-card.completed .task-title {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
+        .task-card.completed { opacity: 0.6; }
+        .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
 
         .task-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .task-subject {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 3px 8px;
+            border-radius: 10px;
             background: rgba(139, 92, 246, 0.15);
             color: #c084fc;
-            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
-        .priority-badge {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
+        .badge-high { color: var(--danger); background: rgba(239, 68, 68, 0.15); padding: 3px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+        .badge-medium { color: var(--warning); background: rgba(245, 158, 11, 0.15); padding: 3px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; }
+        .badge-low { color: var(--success); background: rgba(16, 185, 129, 0.15); padding: 3px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; }
 
-        .priority-high { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .priority-medium { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .priority-low { background: rgba(16, 185, 129, 0.2); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
-
-        .task-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            word-break: break-word;
-        }
-
-        .task-desc {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            word-break: break-word;
-        }
+        .task-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; word-break: break-word; }
+        .task-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; word-break: break-word; }
 
         .task-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid var(--border-glass);
-            padding-top: 12px;
-            font-size: 13px;
+            padding-top: 10px;
+            font-size: 12px;
             color: var(--text-muted);
-        }
-
-        .task-date {
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .task-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
 
-        .action-btn {
+        .icon-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            width: 32px;
-            height: 32px;
+            color: white;
+            width: 30px;
+            height: 30px;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
@@ -473,50 +319,14 @@
             transition: var(--transition);
         }
 
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .action-btn.done-btn:hover { background: rgba(16, 185, 129, 0.3); color: var(--success); border-color: var(--success); }
-        .action-btn.edit-btn:hover { background: rgba(139, 92, 246, 0.3); color: var(--primary); border-color: var(--primary); }
-        .action-btn.del-btn:hover { background: rgba(239, 68, 68, 0.3); color: var(--danger); border-color: var(--danger); }
-
-        /* Пустое состояние */
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
-
-        .empty-state h4 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
+        .icon-btn:hover { background: rgba(255, 255, 255, 0.15); }
 
         /* Модальные окна */
-        .modal-overlay {
+        .modal-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -526,276 +336,133 @@
             transition: var(--transition);
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-bg.active { opacity: 1; pointer-events: auto; }
 
         .modal {
             background: #121218;
             border: 1px solid var(--border-glass);
-            border-radius: 24px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 480px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9);
-            transition: var(--transition);
+            max-width: 420px;
+            padding: 25px;
         }
 
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
+        .modal h3 { font-size: 18px; margin-bottom: 15px; }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h3 {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .close-modal:hover {
-            color: white;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
         .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-glass);
-            border-radius: 12px;
-            padding: 12px 15px;
-            color: var(--text-main);
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
             outline: none;
-            transition: var(--transition);
         }
+        .form-group textarea { resize: vertical; min-height: 70px; }
 
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-        }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        /* Выбор иконок для профиля */
-        .icon-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .avatar-option {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .avatar-option:hover, .avatar-option.selected {
-            border-color: var(--primary);
-            background: rgba(139, 92, 246, 0.2);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
-        }
-
-        /* Адаптивность */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
-        @media(max-width: 768px) {
-            header { flex-direction: column; gap: 15px; align-items: stretch; text-align: center; }
-            .logo-area { justify-content: center; }
-            .user-profile-btn { justify-content: center; }
-            .control-panel { flex-direction: column; align-items: stretch; }
-            .filters-group { width: 100%; justify-content: space-between; }
-            .filters-group select { flex: 1; }
-        }
+        .empty { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
-    <!-- Фоновый Canvas для анимации -->
     <canvas id="bg-canvas"></canvas>
 
     <div class="container">
         <!-- Шапка -->
         <header>
             <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
+                <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                 <div class="logo-text">
                     <h1>УЧЁБА FLOW</h1>
-                    <p>Проект по информатике • 9 класс</p>
+                    <p>Проект • 9 класс</p>
                 </div>
             </div>
-            <!-- Кнопка профиля -->
-            <div class="user-profile-btn" onclick="openProfileModal()" title="Настроить профиль и имя">
-                <div class="user-avatar-disp" id="header-avatar">🎓</div>
-                <div class="user-info-disp">
-                    <span>Мой профиль</span>
-                    <h3 id="header-username">Гость</h3>
-                </div>
-                <i class="fa-solid fa-gear" style="color: var(--text-muted); margin-left: 5px;"></i>
+            <div class="user-badge" onclick="openProfileModal()">
+                <i class="fa-solid fa-user-circle" style="color: var(--primary); font-size: 18px;"></i>
+                <span id="header-name" style="font-weight: 600; font-size: 14px;">Школьник</span>
             </div>
         </header>
 
         <!-- Баннер -->
-        <section class="welcome-banner">
-            <div class="welcome-content">
-                <h2 id="greeting-title">Привет! 👋</h2>
-                <p>Управляй школьными заданиями легко и эффективно. Добавляй задачи, следи за дедлайнами и достигай высоких результатов.</p>
-                <button class="btn" onclick="openTaskModal()">
-                    <i class="fa-solid fa-plus"></i> Новое задание
-                </button>
-            </div>
+        <section class="banner">
+            <h2 id="greeting">Привет! 👋</h2>
+            <p>Удобный планировщик заданий для учеников. Создавай, выполняй и следи за успеваемостью.</p>
+            <button class="btn" onclick="openTaskModal()"><i class="fa-solid fa-plus"></i> Добавить задание</button>
         </section>
 
         <!-- Статистика -->
-        <section class="stats-grid">
+        <section class="stats">
             <div class="stat-card">
-                <div class="stat-icon total"><i class="fa-solid fa-list-check"></i></div>
-                <div class="stat-info">
-                    <h4 id="stat-total">0</h4>
-                    <p>Всего заданий</p>
-                </div>
+                <div class="stat-icon total"><i class="fa-solid fa-list"></i></div>
+                <div class="stat-info"><h4 id="stat-total">0</h4><p>Всего</p></div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon done"><i class="fa-solid fa-circle-check"></i></div>
-                <div class="stat-info">
-                    <h4 id="stat-done">0</h4>
-                    <p>Выполнено</p>
-                </div>
+                <div class="stat-icon done"><i class="fa-solid fa-check"></i></div>
+                <div class="stat-info"><h4 id="stat-done">0</h4><p>Выполнено</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon pending"><i class="fa-solid fa-clock"></i></div>
-                <div class="stat-info">
-                    <h4 id="stat-pending">0</h4>
-                    <p>В процессе</p>
-                </div>
+                <div class="stat-info"><h4 id="stat-pending">0</h4><p>В процессе</p></div>
             </div>
         </section>
 
-        <!-- Панель управления -->
-        <section class="control-panel">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Поиск по названию или описанию..." oninput="renderTasks()">
-            </div>
-            <div class="filters-group">
-                <select id="filter-status" onchange="renderTasks()">
-                    <option value="all">Все статусы</option>
-                    <option value="pending">В процессе</option>
-                    <option value="completed">Выполненные</option>
-                </select>
-                <select id="filter-priority" onchange="renderTasks()">
-                    <option value="all">Все приоритеты</option>
-                    <option value="high">Высокий</option>
-                    <option value="medium">Средний</option>
-                    <option value="low">Низкий</option>
-                </select>
-                <select id="sort-by" onchange="renderTasks()">
-                    <option value="date">По дате сдачи</option>
-                    <option value="priority">По приоритету</option>
-                </select>
-            </div>
+        <!-- Управление -->
+        <section class="controls">
+            <input type="text" id="search" class="search-input" placeholder="Поиск по задачам..." oninput="render()">
+            <select id="filter-status" onchange="render()">
+                <option value="all">Все статусы</option>
+                <option value="pending">В процессе</option>
+                <option value="completed">Выполненные</option>
+            </select>
+            <select id="filter-priority" onchange="render()">
+                <option value="all">Все приоритеты</option>
+                <option value="high">Высокий</option>
+                <option value="medium">Средний</option>
+                <option value="low">Низкий</option>
+            </select>
         </section>
 
-        <!-- Список задач -->
-        <section class="tasks-section">
-            <h3>
-                <span>Список задач</span>
-                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="clearCompletedTasks()">
-                    <i class="fa-solid fa-trash-can"></i> Очистить выполненные
-                </button>
-            </h3>
-            <div class="tasks-grid" id="tasks-container">
-                <!-- Задачи рендерятся через JavaScript -->
-            </div>
+        <!-- Список заданий -->
+        <section>
+            <div class="tasks-grid" id="tasks-box"></div>
         </section>
     </div>
 
-    <!-- Модальное окно добавления/редактирования задачи -->
-    <div class="modal-overlay" id="task-modal">
+    <!-- Модалка задачи -->
+    <div class="modal-bg" id="task-modal">
         <div class="modal">
-            <div class="modal-header">
-                <h3 id="modal-task-title">Новое задание</h3>
-                <button class="close-modal" onclick="closeTaskModal()">&times;</button>
-            </div>
-            <form id="task-form" onsubmit="handleTaskSubmit(event)">
+            <h3 id="modal-title">Новое задание</h3>
+            <form id="task-form" onsubmit="saveTask(event)">
                 <input type="hidden" id="task-id">
                 <div class="form-group">
-                    <label>Название задания *</label>
-                    <input type="text" id="task-name" required placeholder="Например: Решить параграф по алгебре">
+                    <label>Название *</label>
+                    <input type="text" id="t-name" required placeholder="Например: Выучить стих">
                 </div>
                 <div class="form-group">
                     <label>Описание</label>
-                    <textarea id="task-desc" placeholder="Дополнительные заметки или ссылки..."></textarea>
+                    <textarea id="t-desc" placeholder="Детали задания..."></textarea>
                 </div>
                 <div class="form-group">
                     <label>Предмет</label>
-                    <select id="task-subject">
+                    <select id="t-subject">
                         <option value="Информатика">Информатика</option>
-                        <option value="Алгебра">Алгебра</option>
-                        <option value="Геометрия">Геометрия</option>
+                        <option value="Математика">Математика</option>
                         <option value="Физика">Физика</option>
-                        <option value="Химия">Химия</option>
-                        <option value="История">История</option>
                         <option value="Литература">Литература</option>
-                        <option value="Английский язык">Английский язык</option>
                         <option value="Другое">Другое</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Дата сдачи</label>
-                    <input type="date" id="task-date">
+                    <input type="date" id="t-date">
                 </div>
                 <div class="form-group">
                     <label>Приоритет</label>
-                    <select id="task-priority">
+                    <select id="t-priority">
                         <option value="low">Низкий</option>
                         <option value="medium" selected>Средний</option>
                         <option value="high">Высокий</option>
@@ -809,396 +476,217 @@
         </div>
     </div>
 
-    <!-- Модальное окно ввода имени и настроек профиля -->
-    <div class="modal-overlay" id="profile-modal">
+    <!-- Модалка профиля (Ввод имени) -->
+    <div class="modal-bg" id="profile-modal">
         <div class="modal">
-            <div class="modal-header">
-                <h3 id="profile-modal-title">Представьтесь, пожалуйста</h3>
-                <!-- Кнопка закрытия скрывается при первом входе, чтобы пользователь обязательно ввел имя -->
-                <button class="close-modal" id="profile-close-btn" onclick="closeProfileModal()">&times;</button>
-            </div>
-            <form id="profile-form" onsubmit="handleProfileSubmit(event)">
+            <h3 id="profile-modal-title">Как вас зовут?</h3>
+            <form onsubmit="saveProfile(event)">
                 <div class="form-group">
-                    <label>Как вас зовут? *</label>
-                    <input type="text" id="profile-name-input" required placeholder="Например: Сияр">
-                </div>
-                <div class="form-group">
-                    <label>Выберите иконку (аватар)</label>
-                    <div class="icon-selector" id="avatar-selector">
-                        <div class="avatar-option selected" onclick="selectAvatar('🎓')">🎓</div>
-                        <div class="avatar-option" onclick="selectAvatar('💻')">💻</div>
-                        <div class="avatar-option" onclick="selectAvatar('🚀')">🚀</div>
-                        <div class="avatar-option" onclick="selectAvatar('⚡')">⚡</div>
-                        <div class="avatar-option" onclick="selectAvatar('🦊')">🦊</div>
-                        <div class="avatar-option" onclick="selectAvatar('⭐')">⭐</div>
-                    </div>
+                    <label>Введите ваше имя:</label>
+                    <input type="text" id="p-name" required placeholder="Ваше имя...">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="profile-cancel-btn" onclick="closeProfileModal()" style="display:none;">Отмена</button>
-                    <button type="submit" class="btn" id="profile-submit-btn">Продолжить</button>
+                    <button type="button" class="btn btn-secondary" id="profile-cancel" onclick="closeProfileModal()" style="display:none;">Отмена</button>
+                    <button type="submit" class="btn">Готово</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        /* ================= 1. АНИМИРОВАННЫЙ ФОН (CANVAS) ================= */
+        /* 1. ФОНОВЫЙ CANVAS */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize;
+        resize();
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        let dots = Array.from({length: 30}, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
+        }));
 
-        let particles = [];
-        const particleCount = Math.floor(window.innerWidth / 35);
-        const symbols = ['{ }', '</>', '01', 'JS', 'HTML', 'CSS', '9', '△', '□', '○'];
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: (Math.random() - 0.5) * 0.6,
-                radius: Math.random() * 2 + 1,
-                symbol: symbols[Math.floor(Math.random() * symbols.length)],
-                isSymbol: Math.random() > 0.65,
-                alpha: Math.random() * 0.5 + 0.2
-            });
-        }
-
-        function drawBackground() {
+        function animateBg() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${0.15 * (1 - dist / 120)})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                if (p.isSymbol) {
-                    ctx.font = '12px "Plus Jakarta Sans", sans-serif';
-                    ctx.fillStyle = `rgba(192, 132, 252, ${p.alpha})`;
-                    ctx.fillText(p.symbol, p.x, p.y);
-                } else {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha + 0.2})`;
-                    ctx.fill();
-                }
+            dots.forEach(d => {
+                d.x += d.vx; d.y += d.vy;
+                if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+                if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(139, 92, 246, 0.3)';
+                ctx.fill();
             });
-
-            requestAnimationFrame(drawBackground);
+            requestAnimationFrame(animateBg);
         }
-        drawBackground();
+        animateBg();
 
-
-        /* ================= 2. СОСТОЯНИЕ И ДАННЫЕ (LOCALSTORAGE) ================= */
-        let tasks = JSON.parse(localStorage.getItem('ucheba_flow_tasks')) || [
-            {
-                id: '1',
-                title: 'Подготовить проект по информатике',
-                desc: 'Создать веб-приложение Учёба Flow и подготовить презентацию для защиты.',
-                subject: 'Информатика',
-                date: '2026-06-01',
-                priority: 'high',
-                completed: false
-            },
-            {
-                id: '2',
-                title: 'Решить варианты ОГЭ по математике',
-                desc: 'Варианты №12 и №13 из сборника Ященко.',
-                subject: 'Алгебра',
-                date: '2026-05-30',
-                priority: 'medium',
-                completed: true
-            }
+        /* 2. ДАННЫЕ И LOCALSTORAGE */
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [
+            { id: '1', title: 'Сдать проект по информатике', desc: 'Защитить веб-приложение Учёба Flow', subject: 'Информатика', date: '2026-06-01', priority: 'high', completed: false }
         ];
+        let userName = localStorage.getItem('userName') || '';
 
-        let userProfile = JSON.parse(localStorage.getItem('ucheba_flow_profile')) || null;
-
-        function saveTasks() {
-            localStorage.setItem('ucheba_flow_tasks', JSON.stringify(tasks));
+        function persist() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('userName', userName);
             updateStats();
         }
 
-        function saveProfile() {
-            localStorage.setItem('ucheba_flow_profile', JSON.stringify(userProfile));
-            updateProfileUI();
-        }
-
-        function updateProfileUI() {
-            if (userProfile && userProfile.name) {
-                document.getElementById('header-username').textContent = userProfile.name;
-                document.getElementById('header-avatar').textContent = userProfile.avatar;
-                document.getElementById('greeting-title').innerHTML = `Привет, <span>${userProfile.name}</span>! 👋`;
+        /* 3. ПРОФИЛЬ */
+        function checkProfile() {
+            if (!userName) {
+                document.getElementById('profile-modal-title').textContent = 'Добро пожаловать!';
+                document.getElementById('profile-cancel').style.display = 'none';
+                document.getElementById('profile-modal').classList.add('active');
             } else {
-                document.getElementById('header-username').textContent = 'Гость';
-                document.getElementById('header-avatar').textContent = '🎓';
-                document.getElementById('greeting-title').innerHTML = `Привет! 👋`;
+                document.getElementById('header-name').textContent = userName;
+                document.getElementById('greeting').innerHTML = `Привет, <span>${userName}</span>! 👋`;
             }
-        }
-
-        // Проверка при загрузке: если имя еще не задано, принудительно открываем окно знакомства
-        window.addEventListener('DOMContentLoaded', () => {
-            updateProfileUI();
-            updateStats();
-            renderTasks();
-            document.getElementById('task-date').valueAsDate = new Date();
-
-            if (!userProfile || !userProfile.name) {
-                openFirstTimeProfileModal();
-            }
-        });
-
-
-        /* ================= 3. УПРАВЛЕНИЕ ПРОФИЛЕМ ================= */
-        function openFirstTimeProfileModal() {
-            document.getElementById('profile-modal-title').textContent = 'Добро пожаловать в Учёба Flow!';
-            document.getElementById('profile-close-btn').style.display = 'none'; // нельзя закрыть крестиком
-            document.getElementById('profile-cancel-btn').style.display = 'none'; // нет кнопки отмена
-            document.getElementById('profile-submit-btn').textContent = 'Начать работу';
-            document.getElementById('profile-modal').classList.add('active');
         }
 
         function openProfileModal() {
-            if (!userProfile) userProfile = { name: '', avatar: '🎓' };
-            document.getElementById('profile-modal-title').textContent = 'Настройки профиля';
-            document.getElementById('profile-close-btn').style.display = 'block';
-            document.getElementById('profile-cancel-btn').style.display = 'inline-block';
-            document.getElementById('profile-submit-btn').textContent = 'Сохранить';
-            
-            document.getElementById('profile-name-input').value = userProfile.name;
-            
-            const options = document.querySelectorAll('.avatar-option');
-            options.forEach(opt => {
-                if (opt.textContent === userProfile.avatar) {
-                    opt.classList.add('selected');
-                } else {
-                    opt.classList.remove('selected');
-                }
-            });
+            document.getElementById('profile-modal-title').textContent = 'Изменить имя';
+            document.getElementById('p-name').value = userName;
+            document.getElementById('profile-cancel').style.display = 'inline-block';
             document.getElementById('profile-modal').classList.add('active');
         }
 
         function closeProfileModal() {
-            if (!userProfile || !userProfile.name) return; // Не даем закрыть, если имя не введено
+            if (!userName) return;
             document.getElementById('profile-modal').classList.remove('active');
         }
 
-        function selectAvatar(icon) {
-            if (!userProfile) userProfile = { name: '', avatar: '🎓' };
-            userProfile.avatar = icon;
-            document.querySelectorAll('.avatar-option').forEach(opt => {
-                if (opt.textContent === icon) {
-                    opt.classList.add('selected');
-                } else {
-                    opt.classList.remove('selected');
-                }
-            });
-        }
-
-        function handleProfileSubmit(e) {
+        function saveProfile(e) {
             e.preventDefault();
-            const newName = document.getElementById('profile-name-input').value.trim();
-            if (newName) {
-                if (!userProfile) userProfile = { avatar: '🎓' };
-                userProfile.name = newName;
-                saveProfile();
+            const val = document.getElementById('p-name').value.trim();
+            if (val) {
+                userName = val;
+                persist();
+                checkProfile();
                 document.getElementById('profile-modal').classList.remove('active');
             }
         }
 
-
-        /* ================= 4. ЛОГИКА ЗАДАЧ (CRUD) ================= */
-        function openTaskModal(taskId = null) {
-            const modal = document.getElementById('task-modal');
-            const titleEl = document.getElementById('modal-task-title');
+        /* 4. ЗАДАЧИ (CRUD) */
+        function openTaskModal(id = null) {
             const form = document.getElementById('task-form');
-            
             form.reset();
             document.getElementById('task-id').value = '';
-            document.getElementById('task-date').valueAsDate = new Date();
+            document.getElementById('t-date').valueAsDate = new Date();
 
-            if (taskId) {
-                titleEl.textContent = 'Редактировать задание';
-                const task = tasks.find(t => t.id === taskId);
-                if (task) {
-                    document.getElementById('task-id').value = task.id;
-                    document.getElementById('task-name').value = task.title;
-                    document.getElementById('task-desc').value = task.desc;
-                    document.getElementById('task-subject').value = task.subject;
-                    document.getElementById('task-date').value = task.date;
-                    document.getElementById('task-priority').value = task.priority;
+            if (id) {
+                document.getElementById('modal-title').textContent = 'Редактировать задание';
+                const t = tasks.find(x => x.id === id);
+                if (t) {
+                    document.getElementById('task-id').value = t.id;
+                    document.getElementById('t-name').value = t.title;
+                    document.getElementById('t-desc').value = t.desc;
+                    document.getElementById('t-subject').value = t.subject;
+                    document.getElementById('t-date').value = t.date;
+                    document.getElementById('t-priority').value = t.priority;
                 }
             } else {
-                titleEl.textContent = 'Новое задание';
+                document.getElementById('modal-title').textContent = 'Новое задание';
             }
-
-            modal.classList.add('active');
+            document.getElementById('task-modal').classList.add('active');
         }
 
         function closeTaskModal() {
             document.getElementById('task-modal').classList.remove('active');
         }
 
-        function handleTaskSubmit(e) {
+        function saveTask(e) {
             e.preventDefault();
             const id = document.getElementById('task-id').value;
-            const title = document.getElementById('task-name').value.trim();
-            const desc = document.getElementById('task-desc').value.trim();
-            const subject = document.getElementById('task-subject').value;
-            const date = document.getElementById('task-date').value;
-            const priority = document.getElementById('task-priority').value;
+            const title = document.getElementById('t-name').value.trim();
+            const desc = document.getElementById('t-desc').value.trim();
+            const subject = document.getElementById('t-subject').value;
+            const date = document.getElementById('t-date').value;
+            const priority = document.getElementById('t-priority').value;
 
             if (!title) return;
 
             if (id) {
-                tasks = tasks.map(t => t.id === id ? { ...t, title, desc, subject, date, priority } : t);
+                tasks = tasks.map(t => t.id === id ? {...t, title, desc, subject, date, priority} : t);
             } else {
-                const newTask = {
-                    id: Date.now().toString(),
-                    title,
-                    desc,
-                    subject,
-                    date,
-                    priority,
-                    completed: false
-                };
-                tasks.unshift(newTask);
+                tasks.unshift({ id: Date.now().toString(), title, desc, subject, date, priority, completed: false });
             }
 
-            saveTasks();
-            renderTasks();
+            persist();
+            render();
             closeTaskModal();
         }
 
-        function toggleTaskComplete(id) {
-            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
-            saveTasks();
-            renderTasks();
+        function toggleComplete(id) {
+            tasks = tasks.map(t => t.id === id ? {...t, completed: !t.completed} : t);
+            persist();
+            render();
         }
 
         function deleteTask(id) {
-            if (confirm('Вы уверены, что хотите удалить это задание?')) {
+            if (confirm('Удалить это задание?')) {
                 tasks = tasks.filter(t => t.id !== id);
-                saveTasks();
-                renderTasks();
+                persist();
+                render();
             }
         }
 
-        function clearCompletedTasks() {
-            if (confirm('Удалить все выполненные задания?')) {
-                tasks = tasks.filter(t => !t.completed);
-                saveTasks();
-                renderTasks();
-            }
-        }
-
-
-        /* ================= 5. ОТРИСОВКА И ФИЛЬТРАЦИЯ ================= */
+        /* 5. СТАТИСТИКА И РЕНДЕР */
         function updateStats() {
-            const total = tasks.length;
-            const done = tasks.filter(t => t.completed).length;
-            const pending = total - done;
-
-            document.getElementById('stat-total').textContent = total;
-            document.getElementById('stat-done').textContent = done;
-            document.getElementById('stat-pending').textContent = pending;
+            document.getElementById('stat-total').textContent = tasks.length;
+            document.getElementById('stat-done').textContent = tasks.filter(t => t.completed).length;
+            document.getElementById('stat-pending').textContent = tasks.filter(t => !t.completed).length;
         }
 
-        function renderTasks() {
-            const container = document.getElementById('tasks-container');
-            const searchQuery = document.getElementById('search-input').value.toLowerCase();
-            const statusFilter = document.getElementById('filter-status').value;
-            const priorityFilter = document.getElementById('filter-priority').value;
-            const sortBy = document.getElementById('sort-by').value;
+        function render() {
+            const box = document.getElementById('tasks-box');
+            const search = document.getElementById('search').value.toLowerCase();
+            const sFilter = document.getElementById('filter-status').value;
+            const pFilter = document.getElementById('filter-priority').value;
 
-            let filtered = tasks.filter(t => {
-                const matchesSearch = t.title.toLowerCase().includes(searchQuery) || t.desc.toLowerCase().includes(searchQuery);
-                const matchesStatus = statusFilter === 'all' ? true : statusFilter === 'completed' ? t.completed : !t.completed;
-                const matchesPriority = priorityFilter === 'all' ? true : t.priority === priorityFilter;
-                return matchesSearch && matchesStatus && matchesPriority;
+            let list = tasks.filter(t => {
+                let matchSearch = t.title.toLowerCase().includes(search) || t.desc.toLowerCase().includes(search);
+                let matchStatus = sFilter === 'all' ? true : sFilter === 'completed' ? t.completed : !t.completed;
+                let matchPriority = pFilter === 'all' ? true : t.priority === pFilter;
+                return matchSearch && matchStatus && matchPriority;
             });
 
-            filtered.sort((a, b) => {
-                if (sortBy === 'date') {
-                    return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
-                } else if (sortBy === 'priority') {
-                    const weights = { high: 3, medium: 2, low: 1 };
-                    return weights[b.priority] - weights[a.priority];
-                }
-                return 0;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-folder-open"></i>
-                        <h4>Заданий не найдено</h4>
-                        <p>Измените параметры поиска или добавьте новое задание кнопкой выше.</p>
-                    </div>
-                `;
+            if (list.length === 0) {
+                box.innerHTML = `<div class="empty">Заданий не найдено</div>`;
                 return;
             }
 
-            const priorityLabels = { high: 'Высокий', medium: 'Средний', low: 'Низкий' };
+            const pLabels = { high: 'Высокий', medium: 'Средний', low: 'Низкий' };
 
-            container.innerHTML = filtered.map(t => `
+            box.innerHTML = list.map(t => `
                 <div class="task-card ${t.completed ? 'completed' : ''}">
                     <div>
                         <div class="task-header">
                             <span class="task-subject">${t.subject}</span>
-                            <span class="priority-badge priority-${t.priority}">${priorityLabels[t.priority]}</span>
+                            <span class="badge-${t.priority}">${pLabels[t.priority]}</span>
                         </div>
-                        <h4 class="task-title">${escapeHTML(t.title)}</h4>
-                        <p class="task-desc">${escapeHTML(t.desc || 'Нет описания')}</p>
+                        <h4 class="task-title">${t.title}</h4>
+                        <p class="task-desc">${t.desc || 'Без описания'}</p>
                     </div>
                     <div class="task-footer">
-                        <div class="task-date">
-                            <i class="fa-regular fa-calendar"></i> ${t.date || 'Без даты'}
-                        </div>
+                        <span><i class="fa-regular fa-calendar"></i> ${t.date || 'Нет даты'}</span>
                         <div class="task-actions">
-                            <button class="action-btn done-btn" onclick="toggleTaskComplete('${t.id}')" title="${t.completed ? 'Вернуть в работу' : 'Выполнить'}">
-                                <i class="fa-solid ${t.completed ? 'fa-rotate-left' : 'fa-check'}"></i>
-                            </button>
-                            <button class="action-btn edit-btn" onclick="openTaskModal('${t.id}')" title="Редактировать">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                            <button class="action-btn del-btn" onclick="deleteTask('${t.id}')" title="Удалить">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            <button class="icon-btn" onclick="toggleComplete('${t.id}')" title="Выполнить"><i class="fa-solid ${t.completed ? 'fa-rotate-left' : 'fa-check'}"></i></button>
+                            <button class="icon-btn" onclick="openTaskModal('${t.id}')" title="Изменить"><i class="fa-solid fa-pen"></i></button>
+                            <button class="icon-btn" onclick="deleteTask('${t.id}')" title="Удалить"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
+        // Запуск при загрузке
+        checkProfile();
+        updateStats();
+        render();
     </script>
 </body>
 </html>
