@@ -515,7 +515,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             z-index: 100;
             display: flex;
@@ -672,12 +672,12 @@
                     <p>Проект по информатике • 9 класс</p>
                 </div>
             </div>
-            <!-- Кнопка профиля (открывает меню настройки имени и иконки) -->
+            <!-- Кнопка профиля -->
             <div class="user-profile-btn" onclick="openProfileModal()" title="Настроить профиль и имя">
                 <div class="user-avatar-disp" id="header-avatar">🎓</div>
                 <div class="user-info-disp">
                     <span>Мой профиль</span>
-                    <h3 id="header-username">Ученик</h3>
+                    <h3 id="header-username">Гость</h3>
                 </div>
                 <i class="fa-solid fa-gear" style="color: var(--text-muted); margin-left: 5px;"></i>
             </div>
@@ -686,7 +686,7 @@
         <!-- Баннер -->
         <section class="welcome-banner">
             <div class="welcome-content">
-                <h2 id="greeting-title">Привет, <span>Ученик</span>! 👋</h2>
+                <h2 id="greeting-title">Привет! 👋</h2>
                 <p>Управляй школьными заданиями легко и эффективно. Добавляй задачи, следи за дедлайнами и достигай высоких результатов.</p>
                 <button class="btn" onclick="openTaskModal()">
                     <i class="fa-solid fa-plus"></i> Новое задание
@@ -809,16 +809,17 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек профиля (Имя и иконка) -->
+    <!-- Модальное окно ввода имени и настроек профиля -->
     <div class="modal-overlay" id="profile-modal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Настройки профиля</h3>
-                <button class="close-modal" onclick="closeProfileModal()">&times;</button>
+                <h3 id="profile-modal-title">Представьтесь, пожалуйста</h3>
+                <!-- Кнопка закрытия скрывается при первом входе, чтобы пользователь обязательно ввел имя -->
+                <button class="close-modal" id="profile-close-btn" onclick="closeProfileModal()">&times;</button>
             </div>
             <form id="profile-form" onsubmit="handleProfileSubmit(event)">
                 <div class="form-group">
-                    <label>Ваше имя / Как вас зовут?</label>
+                    <label>Как вас зовут? *</label>
                     <input type="text" id="profile-name-input" required placeholder="Например: Сияр">
                 </div>
                 <div class="form-group">
@@ -833,8 +834,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeProfileModal()">Отмена</button>
-                    <button type="submit" class="btn">Применить</button>
+                    <button type="button" class="btn btn-secondary" id="profile-cancel-btn" onclick="closeProfileModal()" style="display:none;">Отмена</button>
+                    <button type="submit" class="btn" id="profile-submit-btn">Продолжить</button>
                 </div>
             </form>
         </div>
@@ -852,7 +853,6 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Частицы и геометрические фигуры
         let particles = [];
         const particleCount = Math.floor(window.innerWidth / 35);
         const symbols = ['{ }', '</>', '01', 'JS', 'HTML', 'CSS', '9', '△', '□', '○'];
@@ -873,7 +873,6 @@
         function drawBackground() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Рисуем линии сети между близкими точками
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     let dx = particles[i].x - particles[j].x;
@@ -890,7 +889,6 @@
                 }
             }
 
-            // Рисуем точки и символы
             particles.forEach(p => {
                 p.x += p.vx;
                 p.y += p.vy;
@@ -937,10 +935,7 @@
             }
         ];
 
-        let userProfile = JSON.parse(localStorage.getItem('ucheba_flow_profile')) || {
-            name: 'Сияр',
-            avatar: '🎓'
-        };
+        let userProfile = JSON.parse(localStorage.getItem('ucheba_flow_profile')) || null;
 
         function saveTasks() {
             localStorage.setItem('ucheba_flow_tasks', JSON.stringify(tasks));
@@ -953,23 +948,48 @@
         }
 
         function updateProfileUI() {
-            document.getElementById('header-username').textContent = userProfile.name;
-            document.getElementById('header-avatar').textContent = userProfile.avatar;
-            document.getElementById('greeting-title').innerHTML = `Привет, <span>${userProfile.name}</span>! 👋`;
+            if (userProfile && userProfile.name) {
+                document.getElementById('header-username').textContent = userProfile.name;
+                document.getElementById('header-avatar').textContent = userProfile.avatar;
+                document.getElementById('greeting-title').innerHTML = `Привет, <span>${userProfile.name}</span>! 👋`;
+            } else {
+                document.getElementById('header-username').textContent = 'Гость';
+                document.getElementById('header-avatar').textContent = '🎓';
+                document.getElementById('greeting-title').innerHTML = `Привет! 👋`;
+            }
         }
 
-        // Инициализация при загрузке
-        updateProfileUI();
-        updateStats();
-        renderTasks();
-        // Устанавливаем текущую дату в форме по умолчанию
-        document.getElementById('task-date').valueAsDate = new Date();
+        // Проверка при загрузке: если имя еще не задано, принудительно открываем окно знакомства
+        window.addEventListener('DOMContentLoaded', () => {
+            updateProfileUI();
+            updateStats();
+            renderTasks();
+            document.getElementById('task-date').valueAsDate = new Date();
+
+            if (!userProfile || !userProfile.name) {
+                openFirstTimeProfileModal();
+            }
+        });
 
 
-        /* ================= 3. УПРАВЛЕНИЕ ПРОФИЛЕМ (МЕНЮ ИМЕНИ И АВАТАРА) ================= */
+        /* ================= 3. УПРАВЛЕНИЕ ПРОФИЛЕМ ================= */
+        function openFirstTimeProfileModal() {
+            document.getElementById('profile-modal-title').textContent = 'Добро пожаловать в Учёба Flow!';
+            document.getElementById('profile-close-btn').style.display = 'none'; // нельзя закрыть крестиком
+            document.getElementById('profile-cancel-btn').style.display = 'none'; // нет кнопки отмена
+            document.getElementById('profile-submit-btn').textContent = 'Начать работу';
+            document.getElementById('profile-modal').classList.add('active');
+        }
+
         function openProfileModal() {
+            if (!userProfile) userProfile = { name: '', avatar: '🎓' };
+            document.getElementById('profile-modal-title').textContent = 'Настройки профиля';
+            document.getElementById('profile-close-btn').style.display = 'block';
+            document.getElementById('profile-cancel-btn').style.display = 'inline-block';
+            document.getElementById('profile-submit-btn').textContent = 'Сохранить';
+            
             document.getElementById('profile-name-input').value = userProfile.name;
-            // Выделяем текущую иконку
+            
             const options = document.querySelectorAll('.avatar-option');
             options.forEach(opt => {
                 if (opt.textContent === userProfile.avatar) {
@@ -982,10 +1002,12 @@
         }
 
         function closeProfileModal() {
+            if (!userProfile || !userProfile.name) return; // Не даем закрыть, если имя не введено
             document.getElementById('profile-modal').classList.remove('active');
         }
 
         function selectAvatar(icon) {
+            if (!userProfile) userProfile = { name: '', avatar: '🎓' };
             userProfile.avatar = icon;
             document.querySelectorAll('.avatar-option').forEach(opt => {
                 if (opt.textContent === icon) {
@@ -1000,9 +1022,10 @@
             e.preventDefault();
             const newName = document.getElementById('profile-name-input').value.trim();
             if (newName) {
+                if (!userProfile) userProfile = { avatar: '🎓' };
                 userProfile.name = newName;
                 saveProfile();
-                closeProfileModal();
+                document.getElementById('profile-modal').classList.remove('active');
             }
         }
 
@@ -1051,10 +1074,8 @@
             if (!title) return;
 
             if (id) {
-                // Редактирование существующей задачи
                 tasks = tasks.map(t => t.id === id ? { ...t, title, desc, subject, date, priority } : t);
             } else {
-                // Создание новой задачи
                 const newTask = {
                     id: Date.now().toString(),
                     title,
@@ -1113,7 +1134,6 @@
             const priorityFilter = document.getElementById('filter-priority').value;
             const sortBy = document.getElementById('sort-by').value;
 
-            // Фильтрация
             let filtered = tasks.filter(t => {
                 const matchesSearch = t.title.toLowerCase().includes(searchQuery) || t.desc.toLowerCase().includes(searchQuery);
                 const matchesStatus = statusFilter === 'all' ? true : statusFilter === 'completed' ? t.completed : !t.completed;
@@ -1121,7 +1141,6 @@
                 return matchesSearch && matchesStatus && matchesPriority;
             });
 
-            // Сортировка
             filtered.sort((a, b) => {
                 if (sortBy === 'date') {
                     return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
@@ -1175,7 +1194,6 @@
             `).join('');
         }
 
-        // Защита от XSS (безопасный вывод текста)
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
                 tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
