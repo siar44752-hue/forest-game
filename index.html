@@ -1,588 +1,318 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Необычный случай — Премиум 3D Триллер</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js R128 CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; background-color: #030407; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #f1f5f9; user-select: none;
-        }
-        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .ui-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10; pointer-events: none; display: flex; flex-direction: column;
-            justify-content: space-between; box-sizing: border-box; padding: 24px;
-        }
-        .interactive { pointer-events: auto; }
-        .glass-panel {
-            background: rgba(12, 14, 22, 0.88);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
-        }
-        .glow-effect { animation: pulseGlow 3s infinite; }
-    </style>
-</head>
-<body>
-
-    <div id="canvas-container"></div>
-
-    <div class="ui-layer" id="ui-layer">
-        
-        <!-- Loading -->
-        <div id="loading-screen" class="absolute inset-0 bg-[#05060a] z-50 flex flex-col items-center justify-center transition-opacity duration-1000">
-            <div class="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-6"></div>
-            <h1 class="text-3xl font-bold tracking-widest text-white mb-2">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-            <p class="text-sm text-gray-400">Генерация детализированной 3D-квартиры...</p>
-        </div>
-
-        <!-- In-Game Top Bar -->
-        <div id="game-top-bar" class="hidden flex justify-between items-center w-full">
-            <div class="glass-panel px-5 py-2.5 rounded-2xl flex items-center space-x-4">
-                <span class="inline-block w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
-                <span id="current-objective" class="text-sm font-medium tracking-wide">Исследуйте комнаты. Найдите ключ и откройте дверь.</span>
-            </div>
-            <div class="flex space-x-3">
-                <button onclick="toggleLight()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition">💡 Свет [F]</button>
-                <button onclick="openJournal()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-white/10 transition">📖 Инвентарь</button>
-                <button onclick="returnToMainMenu()" class="interactive glass-panel px-4 py-2.5 rounded-2xl text-sm font-semibold hover:bg-red-500/20 text-red-400 transition">✕ В меню</button>
-            </div>
-        </div>
-
-        <!-- Crosshair -->
-        <div id="crosshair-container" class="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
-            <div class="w-2 h-2 bg-white/70 rounded-full"></div>
-            <div id="interaction-prompt" class="absolute mt-12 bg-black/80 border border-white/20 text-white text-xs px-3.5 py-2 rounded-xl opacity-0 transition-opacity">
-                [E] Взаимодействовать
-            </div>
-        </div>
-
-        <!-- Main Menu -->
-        <div id="main-menu" class="absolute inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-45 transition-opacity duration-500">
-            <div class="glass-panel p-10 rounded-3xl max-w-lg w-full mx-4 flex flex-col items-center text-center glow-effect">
-                <h1 class="text-4xl font-extrabold tracking-wider text-white mb-2">НЕОБЫЧНЫЙ СЛУЧАЙ</h1>
-                <p class="text-xs text-blue-400 uppercase tracking-widest mb-6">3D Триллер • Полная версия интерьера</p>
-                
-                <!-- Google Auth -->
-                <div class="w-full mb-6 p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div id="auth-avatar" class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white text-sm">?</div>
-                        <div class="text-left">
-                            <p id="auth-username" class="text-xs font-bold text-gray-200">Гость</p>
-                            <p id="auth-status-text" class="text-[10px] text-gray-400">Требуется вход для создания карт</p>
-                        </div>
-                    </div>
-                    <button id="auth-btn" onclick="toggleGoogleAuth()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold transition">Войти через Google</button>
-                </div>
-
-                <div class="flex flex-col space-y-3 w-full">
-                    <button onclick="startStoryMode()" class="interactive py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg transition">▶ Начать расследование</button>
-                    <button onclick="openCommunityMaps()" class="interactive py-3.5 px-6 rounded-xl bg-indigo-600/80 hover:bg-indigo-600 font-semibold text-white transition">🌐 Истории от игроков</button>
-                    <button onclick="openMapBuilder()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition">🛠 Создать свою карту (Конструктор)</button>
-                    <button onclick="openSettings()" class="interactive py-3.5 px-6 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white transition">⚙ Настройки графики</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Community Maps Modal -->
-        <div id="community-modal" class="absolute inset-0 bg-black/80 backdrop-blur-md hidden flex items-center justify-center z-50 pointer-events-auto">
-            <div class="glass-panel w-full max-w-2xl rounded-3xl p-8 flex flex-col max-h-[85vh]">
-                <div class="flex justify-between items-center mb-6 pb-3 border-b border-white/10">
-                    <h2 class="text-2xl font-bold">🌐 Истории от игроков (Корпус карт)</h2>
-                    <button onclick="closeCommunityMaps()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
-                </div>
-                <div id="community-maps-list" class="overflow-y-auto space-y-4 flex-grow pr-2"></div>
-            </div>
-        </div>
-
-        <!-- Builder UI -->
-        <div id="builder-ui" class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-2xl hidden flex items-center space-x-3 pointer-events-auto shadow-2xl">
-            <span class="text-xs font-bold text-blue-400">🛠 Редактор:</span>
-            <button onclick="setBuilderTool('wall')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Стена</button>
-            <button onclick="setBuilderTool('door')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Дверь</button>
-            <button onclick="setBuilderTool('key')" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-semibold">Ключ</button>
-            <button onclick="setBuilderTool('trap')" class="px-3 py-1.5 bg-red-600/50 hover:bg-red-600 rounded-xl text-xs font-semibold">Ловушка</button>
-            <button onclick="saveAndPublishMapModal()" class="px-4 py-1.5 bg-green-600 hover:bg-green-500 rounded-xl text-xs font-bold ml-3">💾 Опубликовать</button>
-            <button onclick="closeMapBuilder()" class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xs font-semibold">Выйти</button>
-        </div>
-
-        <!-- Publish Modal -->
-        <div id="publish-modal" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 pointer-events-auto">
-            <div class="glass-panel w-full max-w-md rounded-3xl p-6 flex flex-col space-y-4">
-                <h3 class="text-xl font-bold">Публикация карты</h3>
-                <input id="pub-title" type="text" class="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm" placeholder="Название карты...">
-                <textarea id="pub-desc" rows="3" class="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-sm" placeholder="Описание..."></textarea>
-                <div class="flex space-x-3 pt-2">
-                    <button onclick="publishMapAction()" class="flex-grow py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-semibold text-sm">Опубликовать</button>
-                    <button onclick="document.getElementById('publish-modal').classList.add('hidden')" class="px-4 py-2.5 bg-white/10 rounded-xl text-sm">Отмена</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Journal / Inventory Modal -->
-        <div id="journal-modal" class="absolute inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center z-50 pointer-events-auto">
-            <div class="glass-panel w-full max-w-lg rounded-3xl p-6 flex flex-col max-h-[80vh]">
-                <div class="flex justify-between items-center mb-4 pb-3 border-b border-white/10">
-                    <h2 class="text-xl font-bold">📖 Инвентарь и улики</h2>
-                    <button onclick="closeJournal()" class="text-gray-400 hover:text-white">✕</button>
-                </div>
-                <div id="inventory-slots" class="grid grid-cols-4 gap-3 mb-4"></div>
-                <div id="journal-list" class="overflow-y-auto space-y-3 flex-grow pr-2"></div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        // Sound Engine
-        class SoundEngine {
-            constructor() { this.ctx = null; this.enabled = true; }
-            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
-            playKnock() {
-                if (!this.enabled) return; this.init();
-                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(90, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(20, this.ctx.currentTime + 0.12);
-                gain.gain.setValueAtTime(1.0, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.15);
-            }
-            playClick() {
-                if (!this.enabled) return; this.init();
-                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-                osc.type = 'square'; osc.frequency.setValueAtTime(400, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.04);
-            }
-            playPickup() {
-                if (!this.enabled) return; this.init();
-                const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
-                osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.08);
-                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
-                osc.connect(gain); gain.connect(this.ctx.destination);
-                osc.start(); osc.stop(this.ctx.currentTime + 0.25);
-            }
-        }
-        const audio = new SoundEngine();
-
-        const userState = { isLoggedIn: false, username: 'Гость', avatar: '?', inventory: [], clues: [] };
-
-        function toggleGoogleAuth() {
-            if (!userState.isLoggedIn) {
-                userState.isLoggedIn = true;
-                userState.username = 'Siyar Bodurov';
-                userState.avatar = 'SB';
-                document.getElementById('auth-username').innerText = userState.username;
-                document.getElementById('auth-avatar').innerText = userState.avatar;
-                document.getElementById('auth-status-text').innerText = 'Авторизован через Google';
-                document.getElementById('auth-btn').innerText = 'Выйти';
-                document.getElementById('auth-btn').className = 'px-3 py-1.5 bg-red-600/80 hover:bg-red-600 rounded-xl text-xs font-semibold transition';
-                audio.playClick();
-            } else {
-                userState.isLoggedIn = false;
-                userState.username = 'Гость';
-                userState.avatar = '?';
-                document.getElementById('auth-username').innerText = userState.username;
-                document.getElementById('auth-avatar').innerText = userState.avatar;
-                document.getElementById('auth-status-text').innerText = 'Требуется вход для создания карт';
-                document.getElementById('auth-btn').innerText = 'Войти через Google';
-                document.getElementById('auth-btn').className = 'px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-semibold transition';
-                audio.playClick();
-            }
-        }
-
-        let communityMaps = JSON.parse(localStorage.getItem('community_maps') || JSON.stringify([
-            { id: '1', title: 'Таинственный Бункер', author: 'Alex_99', desc: 'Найдите ключ от двери и избегайте ловушки.', objects: [] },
-            { id: '2', title: 'Заброшенная Квартира №404', author: 'Elena_3D', desc: 'Странные звуки и запертый кодовый замок.', objects: [] }
-        ]));
-
-        function saveCommunityMaps() { localStorage.setItem('community_maps', JSON.stringify(communityMaps)); }
-
-        // Three.js Engine & Detailed Apartment
-        let scene, camera, renderer, clock;
-        let playerPos = new THREE.Vector3(0, 1.6, 2);
-        let yaw = 0, pitch = 0;
-        let isMouseDown = false;
-        let prevMousePos = { x: 0, y: 0 };
-        const keys = {};
-        let interactableObjects = [];
-        let roomLight, ambientLight;
-        let interactiveGroup;
-        let currentMode = 'menu';
-        let builderTool = 'wall';
-        let customBuiltObjects = [];
-
-        function initThree() {
-            const container = document.getElementById('canvas-container');
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x040508);
-            scene.fog = new THREE.FogExp2(0x040508, 0.05);
-
-            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.copy(playerPos);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            container.appendChild(renderer.domElement);
-
-            clock = new THREE.Clock();
-
-            ambientLight = new THREE.AmbientLight(0x182030, 0.6);
-            scene.add(ambientLight);
-
-            roomLight = new THREE.PointLight(0xffeedd, 1.5, 20);
-            roomLight.position.set(0, 3.8, 0);
-            roomLight.castShadow = true;
-            scene.add(roomLight);
-
-            interactiveGroup = new THREE.Group();
-            scene.add(interactiveGroup);
-
-            buildFullyDetailedApartment();
-
-            window.addEventListener('resize', onWindowResize);
-            window.addEventListener('keydown', (e) => { keys[e.code] = true; if(e.code === 'KeyF') toggleLight(); if(e.code === 'KeyE') checkInteraction(); });
-            window.addEventListener('keyup', (e) => { keys[e.code] = false; });
-
-            const canvas = renderer.domElement;
-            canvas.addEventListener('mousedown', (e) => {
-                if(currentMode !== 'menu') { isMouseDown = true; prevMousePos = { x: e.clientX, y: e.clientY }; }
-                if(currentMode === 'builder') placeBuilderObject();
-            });
-            window.addEventListener('mouseup', () => { isMouseDown = false; });
-            canvas.addEventListener('mousemove', (e) => {
-                if(!isMouseDown) return;
-                const dx = e.clientX - prevMousePos.x;
-                const dy = e.clientY - prevMousePos.y;
-                yaw -= dx * 0.003;
-                pitch -= dy * 0.003;
-                pitch = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, pitch));
-                prevMousePos = { x: e.clientX, y: e.clientY };
-            });
-
-            document.getElementById('loading-screen').style.opacity = '0';
-            setTimeout(() => { document.getElementById('loading-screen').style.display = 'none'; }, 1000);
-
-            animate();
-        }
-
-        // FULLY DETAILED 3D APARTMENT
-        function buildFullyDetailedApartment() {
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1a1512, roughness: 0.7 });
-            const wallMat = new THREE.MeshStandardMaterial({ color: 0x2e3542, roughness: 0.9 });
-            const woodMat = new THREE.MeshStandardMaterial({ color: 0x5c4033, roughness: 0.5 });
-            const metalMat = new THREE.MeshStandardMaterial({ color: 0x888899, metalness: 0.8, roughness: 0.2 });
-            const sofaMat = new THREE.MeshStandardMaterial({ color: 0x283b58, roughness: 0.8 });
-
-            // Floor & Ceiling
-            const floor = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), floorMat);
-            floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
-            
-            const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), wallMat);
-            ceiling.position.y = 4.5; ceiling.rotation.x = Math.PI / 2; scene.add(ceiling);
-
-            // Walls
-            const w1 = new THREE.Mesh(new THREE.BoxGeometry(16, 4.5, 0.3), wallMat);
-            w1.position.set(0, 2.25, -8); w1.castShadow = true; w1.receiveShadow = true; scene.add(w1);
-
-            const w2 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 4.5, 16), wallMat);
-            w2.position.set(-8, 2.25, 0); w2.castShadow = true; w2.receiveShadow = true; scene.add(w2);
-
-            const w3 = new THREE.Mesh(new THREE.BoxGeometry(16, 4.5, 0.3), wallMat);
-            w3.position.set(0, 2.25, 8); w3.castShadow = true; w3.receiveShadow = true; scene.add(w3);
-
-            // --- FURNITURE & DETAILS ---
-            // Sofa in Living Room
-            const sofa = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 1.2), sofaMat);
-            sofa.position.set(3, 0.4, 2); sofa.castShadow = true; scene.add(sofa);
-
-            // Bed in Bedroom
-            const bed = new THREE.Mesh(new THREE.BoxGeometry(2, 0.6, 2.5), new THREE.MeshStandardMaterial({ color: 0x334455 }));
-            bed.position.set(-5, 0.3, -5); bed.castShadow = true; scene.add(bed);
-
-            // 1. Interactive Radiator
-            const radGroup = new THREE.Group();
-            radGroup.position.set(-7.5, 1.2, 0);
-            const radBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 2.0, 1.5), metalMat);
-            radBody.castShadow = true; radGroup.add(radBody);
-            radGroup.userData = { id: 'radiator', name: 'Чугунная батарея (Стук Морзе)', action: () => inspectRadiator() };
-            interactiveGroup.add(radGroup);
-            interactableObjects.push(radGroup);
-
-            // 2. Desk with Key
-            const deskGroup = new THREE.Group();
-            deskGroup.position.set(-5, 0, 5);
-            const deskTop = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.12, 1.2), woodMat);
-            deskTop.position.y = 1.1; deskTop.castShadow = true; deskGroup.add(deskTop);
-
-            // Key on desk
-            const keyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.03, 16), new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9 }));
-            keyMesh.position.set(0, 1.18, 0); keyMesh.rotation.x = Math.PI / 2;
-            deskGroup.add(keyMesh);
-            
-            deskGroup.userData = { id: 'desk', name: 'Письменный стол (Забрать Ключ)', action: () => pickupKey() };
-            interactiveGroup.add(deskGroup);
-            interactableObjects.push(deskGroup);
-
-            // 3. Exit Door
-            const doorGroup = new THREE.Group();
-            doorGroup.position.set(8, 2, 0);
-            const doorMesh = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3.8, 1.6), woodMat);
-            doorMesh.castShadow = true; doorGroup.add(doorMesh);
-            doorGroup.userData = { id: 'door', name: 'Выходная дверь (Заперта)', action: () => tryOpenDoor() };
-            interactiveGroup.add(doorGroup);
-            interactableObjects.push(doorGroup);
-        }
-
-        // Gameplay interactions
-        function inspectRadiator() {
-            audio.playKnock();
-            userState.clues.push('Холодная батарея: стук отбивает шифр Морзе.');
-            alert('Вы подошли к батарее. Металлический стук идет изнутри трубы. Улика записана в журнал!');
-        }
-
-        function pickupKey() {
-            if (!userState.inventory.includes('Ключ от выхода')) {
-                userState.inventory.push('Ключ от выхода');
-                audio.playPickup();
-                alert('Вы подобрали Ключ от выхода со стола!');
-            } else {
-                alert('На столе больше ничего нет.');
-            }
-        }
-
-        function tryOpenDoor() {
-            if (userState.inventory.includes('Ключ от выхода')) {
-                alert('Вы открыли дверь ключом и успешно выбрались из квартиры! Поздравляем с победой!');
-                returnToMainMenu();
-            } else {
-                audio.playClick();
-                alert('Дверь заперта. Нужен ключ со стола!');
-            }
-        }
-
-        // Loop & Controls
-        function animate() {
-            requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-
-            if (currentMode === 'story' || currentMode === 'sandbox' || currentMode === 'community_play') {
-                const speed = keys['ShiftLeft'] || keys['ShiftRight'] ? 6.5 : 3.8;
-                const dir = new THREE.Vector3();
-                const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
-                const side = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
-
-                if (keys['KeyW'] || keys['ArrowUp']) dir.add(forward);
-                if (keys['KeyS'] || keys['ArrowDown']) dir.sub(forward);
-                if (keys['KeyD'] || keys['ArrowRight']) dir.add(side);
-                if (keys['KeyA'] || keys['ArrowLeft']) dir.sub(side);
-
-                dir.normalize();
-                playerPos.addScaledVector(dir, speed * delta);
-                playerPos.x = Math.max(-7.2, Math.min(7.2, playerPos.x));
-                playerPos.z = Math.max(-7.2, Math.min(7.2, playerPos.z));
-
-                camera.position.copy(playerPos);
-                camera.position.y = 1.6;
-
-                const euler = new THREE.Euler(pitch, yaw, 0, 'YXZ');
-                camera.quaternion.setFromEuler(euler);
-
-                checkRaycast();
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        const raycaster = new THREE.Raycaster();
-        function checkRaycast() {
-            raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-            const intersects = raycaster.intersectObjects(interactiveGroup.children, true);
-            const prompt = document.getElementById('interaction-prompt');
-
-            if (intersects.length > 0) {
-                let obj = intersects[0].object;
-                while(obj.parent && !obj.userData.action && obj.parent !== interactiveGroup) {
-                    obj = obj.parent;
-                }
-                if (obj && obj.userData && obj.userData.action) {
-                    prompt.innerText = `[E] ${obj.userData.name}`;
-                    prompt.style.opacity = '1';
-                    window.currentInteractable = obj.userData.action;
-                    return;
-                }
-            }
-            prompt.style.opacity = '0';
-            window.currentInteractable = null;
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if(e.code === 'KeyE' && window.currentInteractable) window.currentInteractable();
-        });
-
-        // Menus
-        function startStoryMode() {
-            currentMode = 'story';
-            audio.init();
-            document.getElementById('main-menu').style.opacity = '0';
-            setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
-            document.getElementById('game-top-bar').classList.remove('hidden');
-            document.getElementById('crosshair-container').classList.remove('hidden');
-            alert('Вы очнулись в ночной квартире. Осмотрите батарею и стол, найдите ключ и откройте дверь!');
-        }
-
-        function returnToMainMenu() {
-            currentMode = 'menu';
-            document.getElementById('game-top-bar').classList.add('hidden');
-            document.getElementById('crosshair-container').classList.add('hidden');
-            document.getElementById('builder-ui').classList.add('hidden');
-            document.getElementById('community-modal').classList.add('hidden');
-            document.getElementById('main-menu').style.display = 'flex';
-            document.getElementById('main-menu').style.opacity = '1';
-        }
-
-        function toggleLight() {
-            roomLight.intensity = roomLight.intensity > 0.5 ? 0.1 : 1.5;
-            audio.playClick();
-        }
-
-        function openJournal() {
-            const modal = document.getElementById('journal-modal');
-            const invSlots = document.getElementById('inventory-slots');
-            const list = document.getElementById('journal-list');
-
-            invSlots.innerHTML = '';
-            for(let i=0; i<4; i++) {
-                const item = userState.inventory[i];
-                const slot = document.createElement('div');
-                slot.className = 'h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xs font-bold text-blue-400';
-                slot.innerText = item || `Слот ${i+1}`;
-                invSlots.appendChild(slot);
-            }
-
-            list.innerHTML = userState.clues.map(c => `<div class="p-3 bg-white/5 rounded-xl text-xs text-gray-300">• ${c}</div>`).join('') || '<p class="text-xs text-gray-500">Улик пока нет.</p>';
-            modal.classList.remove('hidden');
-        }
-
-        function closeJournal() { document.getElementById('journal-modal').classList.add('hidden'); }
-
-        // Builder & Community
-        function openMapBuilder() {
-            if (!userState.isLoggedIn) {
-                alert('Для создания и публикации карт требуется авторизация через Google! Нажмите кнопку "Войти через Google" в меню.');
-                return;
-            }
-            currentMode = 'builder';
-            document.getElementById('main-menu').style.opacity = '0';
-            setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
-            document.getElementById('builder-ui').classList.remove('hidden');
-            document.getElementById('crosshair-container').classList.remove('hidden');
-            alert('Режим конструктора активен! Кликайте ЛКМ для расстановки объектов.');
-        }
-
-        function closeMapBuilder() {
-            currentMode = 'menu';
-            document.getElementById('builder-ui').classList.add('hidden');
-            document.getElementById('crosshair-container').classList.add('hidden');
-            document.getElementById('main-menu').style.display = 'flex';
-            document.getElementById('main-menu').style.opacity = '1';
-        }
-
-        function setBuilderTool(tool) { builderTool = tool; audio.playClick(); }
-
-        function placeBuilderObject() {
-            if (currentMode !== 'builder') return;
-            const colors = { wall: 0x445566, door: 0x5c4033, key: 0xd4af37, trap: 0xff3333 };
-            const geo = builderTool === 'key' ? new THREE.CylinderGeometry(0.15, 0.15, 0.03, 16) : new THREE.BoxGeometry(1, 1, 1);
-            const mat = new THREE.MeshStandardMaterial({ color: colors[builderTool] || 0xffffff });
-            const mesh = new THREE.Mesh(geo, mat);
-            mesh.position.copy(playerPos).add(new THREE.Vector3(0, 0, -3).applyQuaternion(camera.quaternion));
-            mesh.position.y = 0.5;
-            mesh.castShadow = true;
-            scene.add(mesh);
-            customBuiltObjects.push({ type: builderTool, position: mesh.position.clone() });
-            audio.playPickup();
-        }
-
-        function saveAndPublishMapModal() {
-            if(customBuiltObjects.length === 0) {
-                alert('Карта пуста! Разместите объекты.');
-                return;
-            }
-            document.getElementById('publish-modal').classList.remove('hidden');
-        }
-
-        function publishMapAction() {
-            const title = document.getElementById('pub-title').value || 'Моя карта';
-            const desc = document.getElementById('pub-desc').value || 'Пользовательская история.';
-            communityMaps.push({ id: 'map_' + Date.now(), title, author: userState.username, desc, objects: [...customBuiltObjects] });
-            saveCommunityMaps();
-            document.getElementById('publish-modal').classList.add('hidden');
-            alert('Карта успешно опубликована в корпус историй игроков!');
-            closeMapBuilder();
-        }
-
-        function openCommunityMaps() {
-            const modal = document.getElementById('community-modal');
-            const list = document.getElementById('community-maps-list');
-            list.innerHTML = communityMaps.map(m => `
-                <div class="glass-panel p-5 rounded-2xl flex justify-between items-center border border-white/10">
-                    <div>
-                        <h4 class="font-bold text-lg text-blue-400">${m.title}</h4>
-                        <p class="text-xs text-gray-400 mt-1">Автор: ${m.author} • Объектов: ${m.objects.length}</p>
-                        <p class="text-xs text-gray-300 mt-2">${m.desc}</p>
-                    </div>
-                    <button onclick="playCommunityMap('${m.id}')" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-xs font-bold transition">Играть</button>
-                </div>
-            `).join('');
-            modal.classList.remove('hidden');
-        }
-
-        function closeCommunityMaps() { document.getElementById('community-modal').classList.add('hidden'); }
-
-        function playCommunityMap(id) {
-            const map = communityMaps.find(m => m.id === id);
-            if (!map) return;
-            closeCommunityMaps();
-            currentMode = 'community_play';
-            document.getElementById('main-menu').style.opacity = '0';
-            setTimeout(() => { document.getElementById('main-menu').style.display = 'none'; }, 500);
-            document.getElementById('game-top-bar').classList.remove('hidden');
-            document.getElementById('crosshair-container').classList.remove('hidden');
-            alert(`Загружена пользовательская карта: "${map.title}"`);
-        }
-
-        function openSettings() { alert('Настройки: максимальное качество графики и тени активированы.'); }
-
-        window.onload = () => { initThree(); };
-    </script>
-</body>
-</html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Необычный случай</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#0b0d14;color:#e9e4d8;font:15px system-ui,sans-serif;user-select:none;-webkit-user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font:inherit;color:inherit;background:#1d2030;border:1px solid #394060;border-radius:8px;padding:10px 16px;cursor:pointer;transition:background .15s}
+button:hover{background:#2c3352}button:disabled{opacity:.35;pointer-events:none}
+input,select,textarea{font:inherit;color:#e9e4d8;background:#0e1019;border:1px solid #2f3555;border-radius:6px;padding:6px;width:100%}
+textarea{min-height:70px;resize:vertical;user-select:text}label{display:block;font-size:13px;color:#9aa3c0;margin-bottom:6px}
+.p{display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(6,7,12,.8);backdrop-filter:blur(4px);z-index:5;padding:10px}
+.p.on{display:flex;animation:f .3s}@keyframes f{from{opacity:0}}
+.b{background:#11131d;border:1px solid #2a2f4d;border-radius:14px;padding:22px;max-width:640px;width:100%;max-height:92vh;overflow:auto;display:flex;flex-direction:column;gap:10px}
+h1{font:400 42px Georgia,serif;letter-spacing:.04em;margin:0;color:#e8a54b}h2{font:400 24px Georgia,serif;margin:0;color:#e8a54b}
+.sub{color:#8d93ad;margin:0 0 8px}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:2}#hud button{pointer-events:auto}
+#hint{position:absolute;top:10px;left:12px;max-width:50%;font-size:13px;color:#e8a54b;text-shadow:0 1px 3px #000}
+#pr{position:absolute;bottom:22%;width:100%;text-align:center;font-size:18px;text-shadow:0 1px 4px #000}
+#tb{position:absolute;top:8px;right:8px;display:flex;gap:6px}
+#tc{position:absolute;bottom:18px;left:0;right:0;display:none;justify-content:space-between;padding:0 18px}
+#tc div:last-child{display:flex;gap:10px;align-items:flex-end}#tc button{width:58px;height:58px;border-radius:50%}
+#joyb{width:110px;height:110px;border:2px dashed #394060;border-radius:50%;opacity:.6}
+#toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-80px);background:#1d2030;border:1px solid #e8a54b;padding:9px 16px;border-radius:8px;z-index:20;transition:transform .3s;max-width:90%;text-align:center}
+#toast.on{transform:translate(-50%,0)}
+#fatal{display:none;position:fixed;inset:0;background:#0b0d14;color:#e8a54b;z-index:99;align-items:center;justify-content:center;padding:30px;text-align:center;font-size:18px}
+#dlg{align-items:flex-end;background:none;backdrop-filter:none;pointer-events:none}#dlg .b{pointer-events:auto;border-color:#e8a54b}
+#sp{color:#e8a54b;font:italic 18px Georgia,serif}#tx{font-size:17px;line-height:1.5;white-space:pre-wrap}#ch{display:flex;flex-direction:column;gap:6px}
+#build{background:none;backdrop-filter:none;justify-content:flex-end;align-items:stretch;pointer-events:none;padding:0}#build .b{pointer-events:auto;width:240px;border-radius:0;max-height:100%}
+#build .g{display:grid;grid-template-columns:1fr 1fr;gap:5px}#build button{padding:7px 4px;font-size:13px}
+#ed .b{max-width:1150px;height:92vh}.cols{display:grid;grid-template-columns:140px 1fr 1fr;gap:10px;flex:1;min-height:0;overflow:auto}
+.cols>div{overflow:auto;min-height:0}#nl button{display:block;width:100%;padding:5px;margin-bottom:3px;text-align:left;font-size:12px}
+#eg{background:#0b0d14;border-radius:8px}#ev{white-space:pre-wrap;color:#e8a54b;font-size:12px;margin:0;max-height:90px;overflow:auto}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.row input{width:auto;flex:1;min-width:90px}
+.m{border-left:3px solid #5b7fb5;padding:4px 10px;margin:4px 0;background:#161a28}.m b{display:block;color:#5b7fb5;font-size:13px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}h1{font-size:30px}}
+</style></head><body>
+<canvas id="c"></canvas>
+<div id="hud"><div id="hint"></div><div id="pr"></div>
+<div id="tb"><button id="bPh">📱</button><button id="bPa">☰</button></div>
+<div id="tc"><div id="joyb"></div><div><button id="bF">💡</button><button id="bE">E</button></div></div></div>
+<div id="toast"></div><div id="fatal"></div>
+
+<div id="menu" class="p on"><div class="b"><h1>Необычный случай</h1><p class="sub">Ночь. Квартира. Кто-то стучит.</p>
+<button id="bCont">Продолжить</button><button id="bNew">Новая история</button><button id="bFree">Свободная игра</button><button id="bBuild">Конструктор</button><button id="bLoad">Загрузить историю</button><button id="bSet">Настройки</button><p class="sub" id="mEnd"></p></div></div>
+<div id="dlg" class="p"><div class="b"><div id="sp"></div><div id="tx"></div><div id="ch"></div></div></div>
+<div id="end" class="p"><div class="b"><h2 id="et"></h2><div id="ex" style="font-size:17px;line-height:1.5"></div><p class="sub" id="ec"></p><button id="eAgain">Начать заново</button><button id="eMenu">В меню</button></div></div>
+<div id="phone" class="p"><div class="b"><h2>📱 Телефон и журнал</h2><b>Сообщения</b><div id="pm"></div><b>Подсказки</b><div id="pj"></div><button class="cl">Закрыть</button></div></div>
+<div id="pause" class="p"><div class="b"><h2>Пауза</h2><button id="paBack">Продолжить</button><button id="paSave">Сохранить</button><button id="paPh">Журнал</button><button id="paSet">Настройки</button><button id="paMenu">В меню</button></div></div>
+<div id="set" class="p"><div class="b"><h2>Настройки</h2><label>Громкость<input type="range" id="sVol" min="0" max="1" step=".05"></label><label><input type="checkbox" id="sMute" style="width:auto"> Отключить звук</label><label>Яркость света<input type="range" id="sBr" min=".3" max="1.6" step=".05"></label><button class="cl">Закрыть</button></div></div>
+<div id="load" class="p"><div class="b"><h2>Истории</h2><div id="ll"></div><label>Импорт JSON<input type="file" id="lf" accept=".json,application/json"></label><div class="row"><button id="lNew">Новая в редакторе</button><button class="cl">Закрыть</button></div></div></div>
+<div id="ed" class="p"><div class="b"><div class="row"><input id="en" placeholder="Название"><input id="es" placeholder="Старт (id)"><button id="eSave">Сохранить</button><button id="eExp">Экспорт</button><label style="margin:0"><input type="file" id="eImp" accept=".json" style="width:150px"></label><button id="eChk">Проверить</button><button id="eTest">Тест</button><button class="cl">Закрыть</button></div>
+<div class="cols"><div><button id="nAdd">+ узел</button><button id="nDup">⧉ дубль</button><button id="nDel">🗑 удалить</button><div id="nl"></div></div><div id="ef"></div><div><svg id="eg"></svg></div></div>
+<div class="row"><button id="eApp">Применить узел</button></div><pre id="ev"></pre></div></div>
+<div id="build" class="p"><div class="b"><h2>Конструктор</h2><div class="g" id="cat"></div><div class="g"><button id="bU">↶ Отмена</button><button id="bR">↷ Повтор</button><button id="bRot">⟳ Поворот</button><button id="bDup">⧉ Дубль</button><button id="bDel">🗑 Удалить</button><button id="bDes">Снять выбор</button></div>
+<label>Цвет<input type="color" id="bCol" value="#888888"></label><label>Сетка<select id="bGr"><option>.25</option><option selected>.5</option><option>1</option></select></label>
+<p class="sub">Клик по предмету — выбрать, клик по полу — переместить. Клавиши: R, Del, ←↑↓→, Ctrl+Z/Y.</p><button id="bSv">Сохранить планировку</button><button id="bDef">Сбросить к стандартной</button><button id="bEx">Выйти</button></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),cl=(v,a,b)=>Math.max(a,Math.min(b,v)),MEM={};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t,ms=2600){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)}
+function sv(k,v){const s=JSON.stringify(v);try{localStorage.setItem(k,s);return true}catch(e){MEM[k]=s;toast('Хранилище браузера недоступно, прогресс сохранён только до закрытия вкладки',4000);return false}}
+function ld(k,d){try{let v=null;try{v=localStorage.getItem(k)}catch(e){}if(v==null)v=MEM[k];return v==null?d:JSON.parse(v)}catch(e){return d}}
+function rm(k){try{localStorage.removeItem(k)}catch(e){}delete MEM[k]}
+function fatal(m){const f=$('#fatal');f.style.display='flex';f.textContent=m}
+addEventListener('error',e=>toast('Ошибка: '+e.message,5000));
+if(typeof THREE==='undefined')fatal('Не удалось загрузить Three.js (r128, cdnjs). Проверьте интернет и обновите страницу.');
+else try{boot()}catch(e){fatal('Ошибка запуска: '+e.message)}
+
+function boot(){
+const touch=matchMedia('(pointer:coarse)').matches;
+let S=Object.assign({vol:.6,mute:false,br:1},ld('nc_set',{}));
+let mode='menu',panel='menu',ret=null,St=null,story=null,sel=null,grid=.5,bh=null,cur=null,jx=0,jy=0,bob=0,stT=0,E=null,esel=null,runTok=0;
+const K={},P={x:-3,z:-1.5,yaw:0,pitch:0},BUILT=makeStory();
+// ---------- звук ----------
+let AC;function snd(t){if(S.mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime,
+p={step:[80,.07,'sine',.5],ring:[880,.45,'square',.25],click:[600,.06,'triangle',.5],knock:[110,.14,'square',.6],end:[200,1.4,'sawtooth',.3]}[t];
+o.type=p[2];o.frequency.value=p[0];g.gain.setValueAtTime(p[3]*S.vol*.3,n);g.gain.exponentialRampToValueAtTime(.0001,n+p[1]);o.connect(g);g.connect(AC.destination);o.start();o.stop(n+p[1])}catch(e){}}
+// ---------- рендер ----------
+let R;try{R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:!touch});}catch(e){return fatal('WebGL недоступен: '+e.message)}
+R.setPixelRatio(Math.min(devicePixelRatio||1,2));R.shadowMap.enabled=!touch;R.shadowMap.type=THREE.PCFSoftShadowMap;
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x05060a);sc.fog=new THREE.Fog(0x05060a,9,28);
+const cam=new THREE.PerspectiveCamera(70,1,.05,60);cam.rotation.order='YXZ';
+const amb=new THREE.AmbientLight(0x3a4468,.3);sc.add(amb);
+function rs(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',rs);
+const M={},mat=(c,e)=>M[c+'|'+e]||(M[c+'|'+e]=new THREE.MeshStandardMaterial({color:c,roughness:.85,emissive:e||0}));
+function bx(p,w,h,d,x,y,z,c,sh=true,e){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,e));m.position.set(x,y,z);m.castShadow=m.receiveShadow=sh;p.add(m);return m}
+const world=new THREE.Group(),furn=new THREE.Group();sc.add(world,furn);const colW=[],colF=[],IA=[];
+function wall(x1,z1,x2,z2,lint){const t=.2,cx=(x1+x2)/2,cz=(z1+z2)/2,w=Math.abs(x2-x1)||t,d=Math.abs(z2-z1)||t;
+ if(lint)bx(world,w,.7,d,cx,2.45,cz,0x2b2d38,false);else{bx(world,w,2.8,d,cx,1.4,cz,0x2b2d38);colW.push([cx-w/2,cx+w/2,cz-d/2,cz+d/2])}}
+[[-6,-5,6,-5],[-6,5,6,5],[-6,-5,-6,5],[6,-5,6,-3],[6,-1,6,5],[-1,-5,-1,-3],[-1,-1,-1,2],[-1,4,-1,5],[-6,.5,-1,.5],[-1,.5,1,.5],[3,.5,6,.5]].forEach(a=>wall(...a));
+[[6,-3,6,-1],[-1,-3,-1,-1],[-1,2,-1,4],[1,.5,3,.5]].forEach(a=>wall(...a,true));
+[[-3.5,-2.25,5,5.5,0x3a2f2a],[-3.5,2.75,5,4.5,0x6f7a80],[2.5,-2.25,7,5.5,0x4a3b2e],[2.5,2.75,7,4.5,0x7d7a70]].forEach(a=>bx(world,a[2],.1,a[3],a[0],-.05,a[1],a[4],false).receiveShadow=true);
+const ceil=bx(world,12,.1,10,0,2.85,0,0x1a1b22,false);
+[[-3.5,-4.88],[3,-4.88],[3,4.88]].forEach(a=>bx(world,1.4,1.2,.05,a[0],1.6,a[1],0x0a1530,false,0x16305f));
+// фиксированные предметы
+for(const s of[-.6,.6])for(const t of[-.28,.28])bx(world,.06,.75,.06,-2+s,.375,-4.5+t,0x222222);
+bx(world,1.4,.05,.7,-2,.77,-4.5,0x5a4636);colW.push([-2.7,-1.3,-4.85,-4.15]);
+bx(world,.4,.02,.28,-2,.81,-4.45,0x888888);bx(world,.4,.26,.02,-2,.95,-4.6,0x111111,true,0x2255aa);
+bx(world,.5,.5,.5,1.3,.25,-4.5,0x5a4636);colW.push([1.05,1.55,-4.75,-4.25]);bx(world,.2,.03,.3,1.3,.52,-4.5,0x111111,true,0x551111);
+bx(world,.12,.6,1.1,-5.85,.55,-1.5,0xcfcfcf);colW.push([-6,-5.75,-2.05,-.95]);
+[['radiator',-5.6,-1.5,'осмотреть батарею'],['phone',1.3,-4.2,'телефон'],['laptop',-2,-4.2,'ноутбук'],['door',5.7,-2,'входная дверь'],['window',-3.5,-4.5,'окно'],['mirror',-3,4.5,'зеркало']].forEach(a=>IA.push({id:a[0],x:a[1],z:a[2],n:a[3]}));
+const FL={door:'Дверь заперта на два замка.',window:'За окном тёмный двор и пустая улица.',mirror:'В зеркале усталое лицо.',radiator:'Батарея стучит: тук… тук-тук.',laptop:'Ноутбук пока спит.',phone:'Телефон молчит.'};
+// лампы
+const LT=[['Спальня',-3.5,-2.3,1],['Гостиная',2.5,-2.3,0],['Кухня',2.5,2.8,0],['Ванная',-3.5,2.8,0]].map((a,i)=>{const L=new THREE.PointLight(0xffd7a0,1,13,2);L.position.set(a[1],2.4,a[2]);
+ if(!touch&&i<2){L.castShadow=true;L.shadow.mapSize.set(512,512)}sc.add(L);const b=bx(sc,.25,.06,.25,a[1],2.76,a[2],0xffffff,false,0xffeeaa);return{n:a[0],x:a[1],z:a[2],L,b,on:!!a[3]}});
+function setBr(){LT.forEach(l=>{l.L.intensity=l.on?.9*S.br:0;l.b.visible=l.on});amb.intensity=(mode==='build'?.9:.12+.18*S.br)}
+function lamp(){let b=null,bd=1e9;LT.forEach(l=>{const d=Math.hypot(l.x-P.x,l.z-P.z);if(d<bd){bd=d;b=l}});b.on=!b.on;setBr();snd('click');toast(b.n+': свет '+(b.on?'включён':'выключен'),1200)}
+// ---------- мебель ----------
+const lg=(x,z,h,t=.06)=>[[t,h,t,x,h/2,z],[t,h,t,-x,h/2,z],[t,h,t,x,h/2,-z],[t,h,t,-x,h/2,-z]];
+const SP={bed:{n:'Кровать',w:2,d:2.2,c:'#4b6a9b',p:[[2,.35,2.2,0,.175,0],[1.9,.25,2,0,.475,.05,1],[1.2,.12,.4,0,.66,-.8,'#e8e8f0']]},
+sofa:{n:'Диван',w:2.2,d:.95,c:'#7a4a4a',p:[[2.2,.45,.95,0,.225,0,1],[2.2,.5,.25,0,.65,-.35,1],[.2,.3,.95,1,.55,0,1],[.2,.3,.95,-1,.55,0,1]]},
+table:{n:'Стол',w:1.4,d:.8,c:'#8a6a4a',p:[[1.4,.06,.8,0,.74,0,1],...lg(.65,.35,.74)]},
+chair:{n:'Стул',w:.5,d:.5,c:'#8a6a4a',p:[[.5,.06,.5,0,.45,0,1],[.5,.5,.06,0,.7,-.22,1],...lg(.2,.2,.45,.05)]},
+desk:{n:'Письменный стол',w:1.4,d:.7,c:'#6a5238',p:[[1.4,.05,.7,0,.75,0,1],...lg(.65,.3,.75)]},
+lamp:{n:'Торшер',w:.4,d:.4,c:'#e8c070',p:[[.04,1.5,.04,0,.75,0,0x333333],[.35,.3,.35,0,1.6,0,1]]},
+shelf:{n:'Стеллаж',w:1.2,d:.35,c:'#6a4a2e',p:[[1.2,1.9,.35,0,.95,0,1],[1.1,.04,.3,0,.5,.03,0x222222],[1.1,.04,.3,0,1,.03,0x222222],[1.1,.04,.3,0,1.5,.03,0x222222]]},
+plant:{n:'Растение',w:.5,d:.5,c:'#2f6b3a',p:[[.3,.3,.3,0,.15,0,0x6b3b2a],[.45,.7,.45,0,.65,0,1]]},
+rug:{n:'Ковёр',w:2.2,d:1.5,c:'#7a2f3a',nc:1,p:[[2.2,.02,1.5,0,.01,0,1]]},
+wardrobe:{n:'Шкаф',w:1.4,d:.6,c:'#5a4636',p:[[1.4,2.1,.6,0,1.05,0,1],[.04,.3,.04,.1,1,.32,0x999999],[.04,.3,.04,-.1,1,.32,0x999999]]},
+fridge:{n:'Холодильник',w:.7,d:.7,c:'#dfe3e6',p:[[.7,1.8,.7,0,.9,0,1],[.04,.5,.04,.3,1.2,.37,0x888888]]},
+tub:{n:'Ванна',w:1.7,d:.8,c:'#e6eef2',p:[[1.7,.55,.8,0,.275,0,1]]}};
+const DEF=[['bed',-4.6,-3.8],['wardrobe',-3.3,.1],['sofa',3,-4.3],['rug',3,-2.4],['table',3,-2.4],['shelf',5.8,-.1,1],['plant',5.4,-4.4],['lamp',.2,-4.5],
+['fridge',5.5,4.4],['table',3,3],['chair',2.2,3,1],['chair',3.8,3,1],['tub',-4.9,4.4],['plant',-2.8,4.4]].map(a=>({t:a[0],x:a[1],z:a[2],r:a[3]||0,c:SP[a[0]].c}));
+let layout=loadLayout();
+function loadLayout(){const l=ld('nc_layout',null);if(Array.isArray(l)){const ok=l.filter(i=>i&&SP[i.t]&&isFinite(i.x)&&isFinite(i.z)).map(i=>({t:i.t,x:+i.x,z:+i.z,r:(+i.r||0)&3,c:/^#[0-9a-f]{6}$/i.test(i.c)?i.c:SP[i.t].c}));if(ok.length||l.length===0)return ok}return JSON.parse(JSON.stringify(DEF))}
+function mk(it){const s=SP[it.t],g=new THREE.Group();s.p.forEach(q=>bx(g,q[0],q[1],q[2],q[3],q[4],q[5],q[6]===1?it.c:(q[6]==null?0x3a2c22:q[6])));g.position.set(it.x,0,it.z);g.rotation.y=it.r*Math.PI/2;return g}
+function rebuild(){furn.children.slice().forEach(c=>{c.traverse(o=>o.geometry&&o.geometry.dispose());furn.remove(c)});colF.length=0;
+ layout.forEach((it,i)=>{const g=mk(it);g.userData.i=i;furn.add(g);const s=SP[it.t];if(!s.nc){const o=it.r&1,hw=(o?s.d:s.w)/2,hd=(o?s.w:s.d)/2;colF.push([it.x-hw,it.x+hw,it.z-hd,it.z+hd])}});updSel()}
+function updSel(){const g=sel!=null&&furn.children[sel];if(g){if(!bh){bh=new THREE.BoxHelper(g,0xffcc00);sc.add(bh)}bh.setFromObject(g)}if(bh)bh.visible=!!g&&mode==='build'}
+// ---------- движение ----------
+function hit(nx,nz){const r=.3;for(const b of colW.concat(colF)){const cx=cl(nx,b[0],b[1]),cz=cl(nz,b[2],b[3]);if((nx-cx)**2+(nz-cz)**2<r*r)return true}return false}
+function move(dx,dz){if(!hit(P.x+dx,P.z))P.x+=dx;if(!hit(P.x,P.z+dz))P.z+=dz}
+const blocked=()=>!!panel||mode==='menu'||mode==='build';
+function update(dt){const b=blocked();
+ if(mode==='menu')P.yaw+=dt*.08;
+ if(!b){let f=(K.KeyW||K.ArrowUp?1:0)-(K.KeyS||K.ArrowDown?1:0)-jy,s=(K.KeyD||K.ArrowRight?1:0)-(K.KeyA||K.ArrowLeft?1:0)+jx;const l=Math.hypot(f,s);if(l>1){f/=l;s/=l}
+  const run=K.ShiftLeft||K.ShiftRight,sp=(run?3.8:2.2)*dt,sn=Math.sin(P.yaw),cs=Math.cos(P.yaw);move((-sn*f+cs*s)*sp,(-cs*f-sn*s)*sp);
+  if(l>.1){bob+=dt*(run?12:8);stT+=dt;if(stT>(run?.3:.46)){stT=0;snd('step')}}}
+ P.x=cl(P.x,-5.7,5.7);P.z=cl(P.z,-4.7,4.7);cam.position.set(P.x,1.65+Math.sin(bob)*.025,P.z);cam.rotation.set(P.pitch,P.yaw,0);
+ cur=null;if(!b){const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw);let best=9;for(const a of IA){const dx=a.x-P.x,dz=a.z-P.z,d=Math.hypot(dx,dz);if(d<2&&d<best&&(dx*fx+dz*fz)/d>.2){best=d;cur=a}}}
+ $('#pr').textContent=cur?(touch?'':'E — ')+cur.n:''}
+const clock=new THREE.Clock();
+function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.05);if(mode!=='build')update(dt);R.render(sc,cam)}
+// ---------- ввод ----------
+const cv=$('#c');let look=null,joy=null,bd=null;
+cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId)}catch(_){}
+ if(mode==='build'){bd=[e.clientX,e.clientY];return}if(blocked())return;
+ if(e.pointerType==='touch'&&e.clientX<innerWidth*.45)joy={id:e.pointerId,x:e.clientX,y:e.clientY};else look={id:e.pointerId,x:e.clientX,y:e.clientY}});
+cv.addEventListener('pointermove',e=>{if(joy&&e.pointerId===joy.id){jx=cl((e.clientX-joy.x)/50,-1,1);jy=cl((e.clientY-joy.y)/50,-1,1)}
+ else if(look&&e.pointerId===look.id&&!blocked()){P.yaw-=(e.clientX-look.x)*.005;P.pitch=cl(P.pitch-(e.clientY-look.y)*.005,-1.4,1.4);look.x=e.clientX;look.y=e.clientY}});
+const up=e=>{if(joy&&e.pointerId===joy.id){joy=null;jx=jy=0}if(look&&e.pointerId===look.id)look=null;
+ if(bd&&mode==='build'&&e.type==='pointerup'&&Math.hypot(e.clientX-bd[0],e.clientY-bd[1])<7)bpick(e);bd=null};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('contextmenu',e=>e.preventDefault());
+addEventListener('blur',()=>{for(const k in K)K[k]=false;jx=jy=0});
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)&&e.code!=='Escape')return;K[e.code]=true;
+ if(mode==='build'){const m={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.code];
+  if(m&&sel!=null){e.preventDefault();snap();layout[sel].x+=m[0]*grid;layout[sel].z+=m[1]*grid;clampIt(layout[sel]);rebuild()}
+  else if(e.code==='KeyR')rot();else if(e.code==='Delete'||e.code==='Backspace')del();else if(e.ctrlKey&&e.code==='KeyZ')undo();else if(e.ctrlKey&&e.code==='KeyY')redo();return}
+ if(e.code==='Escape'){if(['dlg','end','menu'].includes(panel)||mode==='menu')return;if(panel)closeP();else pnl('pause');return}
+ if(blocked())return;if(e.code==='KeyE')cur&&interact(cur.id);else if(e.code==='KeyF')lamp();else if(e.code==='KeyJ')openP('phone')});
+addEventListener('keyup',e=>K[e.code]=false);
+if(touch)$('#tc').style.display='flex';
+$('#bE').onpointerdown=e=>{e.preventDefault();if(!blocked()&&cur)interact(cur.id)};$('#bF').onpointerdown=e=>{e.preventDefault();if(!blocked())lamp()};
+$('#bPh').onclick=()=>{if(!blocked())openP('phone')};$('#bPa').onclick=()=>{if(!blocked()&&mode!=='build')pnl('pause')};
+// ---------- панели ----------
+function pnl(id){document.querySelectorAll('.p').forEach(e=>e.classList.toggle('on',e.id===id));panel=id||null;if(id!=='menu')$('#hud').style.display=(mode==='menu')?'none':'block';else $('#hud').style.display='none'}
+function openP(id){ret=panel;pnl(id)}function closeP(){const r=ret;ret=null;pnl(r||(mode==='menu'?'menu':null))}
+document.querySelectorAll('.cl').forEach(b=>b.onclick=closeP);
+function refreshMenu(){$('#bCont').disabled=!ld('nc_save',null);const n=(ld('nc_end',[])||[]).length;$('#mEnd').textContent='Найдено концовок: '+n;$('#hud').style.display='none'}
+function toMenu(){saveGame();mode='menu';runTok++;setBr();pnl('menu');refreshMenu()}
+// ---------- сюжет ----------
+function makeStory(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Необычный случай',start:'n0',nodes:{
+n0:{t:'msg',from:'Рассказчик',text:'03:14. Вы просыпаетесь от ритмичного стука. Это батарея в спальне: тук… тук-тук… тук.',next:'c0',knock:true},
+c0:{t:'choice',from:'Рассказчик',text:'Стук не прекращается. Что делать?',knock:true,choices:[{text:'Подойти к батарее',next:'w_rad'},{text:'Постучать в ответ по трубе',set:'knock=1',next:'w_rad'},{text:'Накрыться одеялом и уснуть',next:'e_sleep'}]},
+w_rad:{t:'wait',obj:'radiator',hint:'Осмотри батарею в спальне (подойди и нажми E).',knock:true,next:'n1'},
+n1:{t:'msg',from:'Рассказчик',text:'За батареей приклеена записка: «3-1-4. Не верь тому, кто придёт».',set:'note=1',next:'m1'},
+m1:{t:'msg',from:'Марк',text:'Ты не спишь? Не открывай дверь, что бы ни случилось. И проверь ноутбук.',next:'w_ph'},
+w_ph:{t:'wait',obj:'phone',ring:true,hint:'Звонит телефон в гостиной. Ответь.',next:'c1'},
+c1:{t:'call',from:'Марк',text:'— Слушай внимательно. За тобой придут. Код от ноутбука сказать по телефону не могу. Ты мне веришь?',choices:[{text:'Верю тебе, Марк',set:'trust=1',next:'w_lap'},{text:'Бросить трубку',set:'trust=0',next:'w_lap'}]},
+w_lap:{t:'wait',obj:'laptop',hint:'Включи ноутбук в спальне: он просит код.',next:'p1'},
+p1:{t:'choice',from:'Ноутбук',text:'Введите трёхзначный код:',choices:[{text:'3-1-4',set:'code=1',next:'k1'},{text:'1-3-4',set:'code=0',next:'k1'},{text:'4-1-3',set:'code=0',next:'k1'}]},
+k1:{t:'msg',from:'Рассказчик',text:'Экран мигнул и погас. В прихожей кто-то тихо скребётся в дверь.',next:'w_door'},
+w_door:{t:'wait',obj:'door',hint:'Подойди к входной двери (гостиная).',next:'d1'},
+d1:{t:'choice',from:'Рассказчик',text:'За дверью тишина. Потом знакомый голос: «Открой, это я».',choices:[{text:'Открыть дверь',next:'trust=1,code=1?e_friend;e_guest'},{text:'Спросить, кто там',next:'knock=1?e_neighbors;trust=1,code=1?e_friend;e_guest'},{text:'Уйти через окно (код подошёл)',if:'code=1',next:'e_escape'},{text:'Вернуться в кровать и ждать утра',next:'e_sleep'}]},
+e_sleep:e('Концовка: Тишина','Вы закрываете глаза. Утром батарея молчит, а записка исчезла. Было ли это на самом деле?'),
+e_friend:e('Концовка: Верный друг','На пороге Марк. Он знал код, потому что сам оставил записку. Вместе вы находите в ноутбуке то, от чего он вас прятал.'),
+e_guest:e('Концовка: Незваный гость','Тот, кто стоял за дверью, оказался вовсе не Марком. Утро вы встречаете уже не в своей квартире.'),
+e_neighbors:e('Концовка: Ответ из трубы','«Это мы, соседи снизу, — отвечают из-за двери. — Вы стучали по трубе. Мы думали, у вас беда». Всю ночь пьёте чай.'),
+e_escape:e('Концовка: Ночной побег','Код подошёл, и ноутбук открыл план эвакуации. Вы выбираетесь через окно и растворяетесь в ночи.')}}}
+const parseKV=s=>{const o={};String(s||'').split(';').forEach(p=>{const i=p.indexOf('=');if(i>0)o[p.slice(0,i).trim()]=p.slice(i+1).trim()});return o};
+function setv(s){Object.assign(St.vars,parseKV(s))}
+function cond(s){if(!s)return true;const o=parseKV(String(s).replace(/,/g,';'));return Object.keys(o).every(k=>String(St.vars[k]==null?0:St.vars[k])===o[k])}
+function resolve(s){if(!s)return null;for(let seg of String(s).split(';')){seg=seg.trim();const i=seg.indexOf('?');if(i<0)return seg||null;if(cond(seg.slice(0,i)))return seg.slice(i+1).trim()}return null}
+function go(id){if(!St||St.done)return;const n=story.nodes[id];
+ if(!n){toast('Ошибка сценария: нет узла «'+id+'»',5000);St.wait=null;pnl(null);return}
+ St.node=id;if(n.set)setv(n.set);
+ if(n.t==='wait'){St.wait=n.obj;if(n.hint){St.hints.push(n.hint);$('#hint').textContent=n.hint;toast(n.hint,3500)}pnl(null);saveGame();return}
+ if(n.t==='end')return endGame(n);
+ St.wait=null;if(n.from&&n.from!=='Рассказчик'&&n.from!=='Ноутбук')St.msgs.push({from:n.from,text:n.text});
+ pnl('dlg');snd(n.t==='call'?'ring':'click');$('#sp').textContent=(n.t==='call'?'📞 ':'')+(n.from||'');$('#tx').textContent=n.text||'';
+ const box=$('#ch');box.innerHTML='';const list=(n.choices||[]).filter(c=>cond(c.if));
+ if(list.length)list.forEach(c=>{const b=document.createElement('button');b.textContent=c.text;b.onclick=()=>{snd('click');if(c.set)setv(c.set);go(resolve(c.next))};box.appendChild(b)});
+ else{const b=document.createElement('button');b.textContent='Далее';b.onclick=()=>{snd('click');const nx=resolve(n.next);if(!nx){toast('Сценарий оборвался: нет перехода',4000);pnl(null)}else go(nx)};box.appendChild(b)}
+ saveGame()}
+function endGame(n){St.done=true;rm('nc_save');const k=St.node,es=ld('nc_end',[]);if(!St.test&&!es.includes(k)){es.push(k);sv('nc_end',es)}
+ pnl('end');snd('end');$('#et').textContent=n.title||'Конец';$('#ex').textContent=n.text||'';$('#ec').textContent=St.test?'Тестовый прогон':'Найдено концовок: '+es.length;$('#eMenu').textContent=St.test?'Вернуться в редактор':'В меню'}
+function interact(id){if(St&&!St.done&&St.wait===id){const nx=resolve(story.nodes[St.node].next);St.wait=null;$('#hint').textContent='';nx?go(nx):toast('Нет перехода после ожидания',4000);return}
+ if(id==='phone')return openP('phone');snd('click');toast(FL[id]||'Ничего особенного.',2000)}
+setInterval(()=>{if(mode==='menu'||panel==='pause'||!St||St.done||!story)return;const n=story.nodes[St.node];if(!n)return;if(n.ring&&St.wait)snd('ring');if(n.knock)snd('knock')},1800);
+function activeStory(){const nm=ld('nc_active','');return ld('nc_stories',{})[nm]||BUILT}
+function startStory(s,o={}){const t=++runTok;story=s;St={node:null,vars:{},msgs:[],hints:[],wait:null,done:false,test:!!o.test};mode='play';Object.assign(P,{x:-3,z:-1.5,yaw:0,pitch:0});
+ LT.forEach((l,i)=>l.on=i===0);setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent='';setTimeout(()=>{if(t===runTok)go(s.start)},1500)}
+function saveGame(manual){if(!St||St.done||mode!=='play')return;if(sv('nc_save',{St,story,pos:{x:P.x,z:P.z,yaw:P.yaw},lights:LT.map(l=>l.on)})&&manual)toast('Сохранено')}
+setInterval(()=>saveGame(),10000);addEventListener('beforeunload',()=>saveGame());document.addEventListener('visibilitychange',()=>document.hidden&&saveGame());
+function contGame(){const s=ld('nc_save',null);if(!s||!s.St||!s.story||structErr(s.story)){toast('Сохранение повреждено или отсутствует');rm('nc_save');return refreshMenu()}
+ story=s.story;St=s.St;mode='play';runTok++;Object.assign(P,s.pos||{});P.pitch=0;(s.lights||[]).forEach((o,i)=>LT[i]&&(LT[i].on=!!o));setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent=St.wait?(St.hints[St.hints.length-1]||''):'';
+ if(!St.wait&&St.node)go(St.node)}
+function freePlay(){runTok++;St=null;story=null;mode='free';Object.assign(P,{x:-3,z:-1.5,yaw:0,pitch:0});LT.forEach(l=>l.on=true);setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent='';toast('Свободная игра: F — свет, J — телефон',2500)}
+// ---------- меню ----------
+$('#bCont').onclick=contGame;$('#bNew').onclick=()=>startStory(activeStory());$('#bFree').onclick=freePlay;$('#bBuild').onclick=enterBuild;
+$('#bSet').onclick=()=>openP('set');$('#bLoad').onclick=()=>{renderLoad();openP('load')};
+$('#paBack').onclick=()=>pnl(null);$('#paSave').onclick=()=>saveGame(true);$('#paPh').onclick=()=>openP('phone');$('#paSet').onclick=()=>openP('set');$('#paMenu').onclick=toMenu;
+$('#eAgain').onclick=()=>startStory(story);$('#eMenu').onclick=()=>{if(St&&St.test){mode='menu';pnl('ed')}else toMenu()};
+$('#sVol').value=S.vol;$('#sMute').checked=S.mute;$('#sBr').value=S.br;
+const upS=()=>{S.vol=+$('#sVol').value;S.mute=$('#sMute').checked;S.br=+$('#sBr').value;setBr();sv('nc_set',S)};['#sVol','#sMute','#sBr'].forEach(i=>$(i).oninput=upS);
+const _pnl=pnl;
+function phoneRender(){$('#pm').innerHTML=(St&&St.msgs.length?St.msgs.map(m=>`<div class="m"><b>${esc(m.from)}</b>${esc(m.text)}</div>`).join(''):'<p class="sub">Сообщений нет.</p>');
+ $('#pj').innerHTML=(St&&St.hints.length?St.hints.map(h=>`<div class="m">${esc(h)}</div>`).join(''):'<p class="sub">Подсказок пока нет.</p>')}
+const _openP=openP;openP=function(id){if(id==='phone')phoneRender();_openP(id)};
+// ---------- загрузка / импорт ----------
+function structErr(o){if(!o||typeof o!=='object'||Array.isArray(o))return'Файл не похож на сценарий';if(!o.nodes||typeof o.nodes!=='object')return'Нет поля nodes';if(!o.start||!o.nodes[o.start])return'Стартовый узел не найден';
+ for(const k in o.nodes){const n=o.nodes[k];if(!n||!['msg','call','choice','wait','end'].includes(n.t))return'Узел «'+k+'»: неизвестный тип';}return null}
+function readFile(f,cb){if(!f)return;const r=new FileReader();r.onerror=()=>toast('Не удалось прочитать файл');r.onload=()=>{let o;try{o=JSON.parse(r.result)}catch(e){return toast('Некорректный JSON: '+e.message,4500)}const er=structErr(o);if(er)return toast('Ошибка сценария: '+er,4500);cb(o)};r.readAsText(f)}
+function renderLoad(){const st=ld('nc_stories',{}),a=ld('nc_active','');let h=`<div class="row"><b style="flex:1">${esc(BUILT.name)} (встроенная)</b><button data-a="play" data-n="">Играть</button><button data-a="edit" data-n="">Править</button></div>`;
+ for(const k in st)h+=`<div class="row"><b style="flex:1">${esc(k)}${k===a?' ✓':''}</b><button data-a="play" data-n="${esc(k)}">Играть</button><button data-a="edit" data-n="${esc(k)}">Править</button><button data-a="del" data-n="${esc(k)}">✕</button></div>`;$('#ll').innerHTML=h}
+$('#ll').onclick=e=>{const b=e.target.closest('button');if(!b)return;const n=b.dataset.n,st=ld('nc_stories',{});
+ if(b.dataset.a==='del'){delete st[n];sv('nc_stories',st);if(ld('nc_active','')===n)sv('nc_active','');renderLoad()}
+ else{sv('nc_active',n);if(b.dataset.a==='play')startStory(activeStory());else openEd()}};
+$('#lf').onchange=e=>{readFile(e.target.files[0],o=>{const st=ld('nc_stories',{});let n=String(o.name||'Импорт').slice(0,60);if(n===BUILT.name)n+=' (импорт)';o.name=n;st[n]=o;sv('nc_stories',st);sv('nc_active',n);renderLoad();toast('Загружено: '+n)});e.target.value=''};
+$('#lNew').onclick=()=>{sv('nc_active','');openEd(true)};
+// ---------- редактор ----------
+function openEd(blank){E=JSON.parse(JSON.stringify(blank?{name:'Моя история',start:'n0',nodes:{n0:{t:'msg',from:'Рассказчик',text:'Начало истории',next:'e1'},e1:{t:'end',title:'Конец',text:'Конец истории.'}}}:activeStory()));
+ esel=E.start;$('#en').value=E.name;$('#es').value=E.start;edRender();openP('ed')}
+function targets(s){return String(s||'').split(';').map(x=>x.slice(x.indexOf('?')+1).trim()).filter(Boolean)}
+const edges=n=>targets(n.next).concat(...(n.choices||[]).map(c=>targets(c.next)));
+function edRender(){$('#nl').innerHTML=Object.keys(E.nodes).map(k=>`<button data-id="${esc(k)}"${k===esel?' style="border-color:#e8a54b"':''}>${esc(k)} · ${E.nodes[k].t}</button>`).join('');edForm();edGraph()}
+function edForm(){const n=E.nodes[esel];if(!n){$('#ef').innerHTML='<p class="sub">Выберите узел</p>';return}
+ const ch=(n.choices||[]).map(c=>[c.text,c.next||'',c.set||'',c.if||''].join(' | ')).join('\n');
+ $('#ef').innerHTML=`<label>ID<input id=f_id value="${esc(esel)}"></label><label>Тип<select id=f_t>${['msg','call','choice','wait','end'].map(t=>`<option${t===n.t?' selected':''}>${t}</option>`).join('')}</select></label>
+<label>Персонаж / заголовок концовки<input id=f_from value="${esc(n.from||n.title)}"></label><label>Текст<textarea id=f_text>${esc(n.text)}</textarea></label>
+<label>Объект ожидания (radiator, phone, laptop, door, window, mirror)<input id=f_obj value="${esc(n.obj)}"></label><label>Подсказка<input id=f_hint value="${esc(n.hint)}"></label>
+<label>Далее: id или «условие?id;id»<input id=f_next value="${esc(n.next)}"></label><label>Переменные: a=1;b=2<input id=f_set value="${esc(n.set)}"></label>
+<label>Выборы, по строке: текст | далее | переменные | условие<textarea id=f_ch>${esc(ch)}</textarea></label>
+<label><input type=checkbox id=f_ring style="width:auto"${n.ring?' checked':''}> звонок</label><label><input type=checkbox id=f_knock style="width:auto"${n.knock?' checked':''}> стук батареи</label>`}
+function edApply(){const n=E.nodes[esel];if(!n||!$('#f_id'))return true;const g=i=>$('#f_'+i).value.trim(),nid=g('id'),t=g('t'),o={t,text:$('#f_text').value};
+ if(g('from'))o[t==='end'?'title':'from']=g('from');['obj','hint','next','set'].forEach(k=>{if(g(k))o[k]=g(k)});if($('#f_ring').checked)o.ring=true;if($('#f_knock').checked)o.knock=true;
+ const ch=$('#f_ch').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(x=>x.trim()),c={text:p[0],next:p[1]||''};if(p[2])c.set=p[2];if(p[3])c.if=p[3];return c});if(ch.length)o.choices=ch;
+ if(!nid){toast('ID не может быть пустым');return false}
+ if(nid!==esel){if(E.nodes[nid]){toast('ID «'+nid+'» уже занят');return false}delete E.nodes[esel];if($('#es').value.trim()===esel)$('#es').value=nid;esel=nid}
+ E.nodes[nid]=o;return true}
+$('#nl').onclick=e=>{const b=e.target.closest('button');if(b&&edApply()){esel=b.dataset.id;edRender()}};
+$('#eApp').onclick=()=>{if(edApply()){edRender();toast('Узел применён',1200)}};
+$('#nAdd').onclick=()=>{if(!edApply())return;let i=1;while(E.nodes['n_'+i])i++;E.nodes['n_'+i]={t:'msg',from:'Рассказчик',text:'Новый узел',next:''};esel='n_'+i;edRender()};
+$('#nDup').onclick=()=>{if(!edApply()||!E.nodes[esel])return;let i=1;while(E.nodes[esel+'_'+i])i++;E.nodes[esel+'_'+i]=JSON.parse(JSON.stringify(E.nodes[esel]));esel=esel+'_'+i;edRender()};
+$('#nDel').onclick=()=>{if(!E.nodes[esel])return;delete E.nodes[esel];esel=Object.keys(E.nodes)[0]||null;edRender()};
+$('#eg').onclick=e=>{const g=e.target.closest('[data-id]');if(g&&edApply()){esel=g.dataset.id;edRender()}};
+function edGraph(){const lv={},q=[],s=$('#es').value.trim()||E.start;if(E.nodes[s]){lv[s]=0;q.push(s)}
+ while(q.length){const k=q.shift();edges(E.nodes[k]).forEach(t=>{if(E.nodes[t]&&lv[t]==null){lv[t]=lv[k]+1;q.push(t)}})}
+ const mx=Math.max(0,...Object.values(lv));Object.keys(E.nodes).forEach(k=>{if(lv[k]==null)lv[k]=mx+1});
+ const col={},pos={};let W=0,H=0;Object.keys(E.nodes).forEach(k=>{const l=lv[k];col[l]=(col[l]||0)+1;pos[k]=[10+l*130,10+(col[l]-1)*44];W=Math.max(W,pos[k][0]+120);H=Math.max(H,pos[k][1]+36)});
+ const C={msg:'#2a3a5c',call:'#5c3a2a',choice:'#3a5c3a',wait:'#4a4a2a',end:'#6a2a4a'};let h='<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="#e8a54b"/></marker></defs>';
+ Object.keys(E.nodes).forEach(k=>edges(E.nodes[k]).forEach(t=>{if(pos[t])h+=`<line x1="${pos[k][0]+110}" y1="${pos[k][1]+16}" x2="${pos[t][0]}" y2="${pos[t][1]+16}" stroke="#e8a54b" stroke-opacity=".6" marker-end="url(#ar)"/>`}));
+ Object.keys(E.nodes).forEach(k=>h+=`<g data-id="${esc(k)}" style="cursor:pointer"><rect x="${pos[k][0]}" y="${pos[k][1]}" width="110" height="32" rx="6" fill="${C[E.nodes[k].t]||'#333'}" stroke="${k===esel?'#e8a54b':'#556'}" stroke-width="${k===esel?2:1}"/><text x="${pos[k][0]+6}" y="${pos[k][1]+20}" fill="#e9e4d8" font-size="12">${esc(k.slice(0,15))}</text></g>`);
+ const sv_=$('#eg');sv_.setAttribute('viewBox',`0 0 ${W+10} ${H+10}`);sv_.setAttribute('width',W+10);sv_.setAttribute('height',H+10);sv_.innerHTML=h}
+function check(){const r=[],N=E.nodes,s=$('#es').value.trim();if(!N[s])r.push('Стартовый узел «'+s+'» не существует');const seen=new Set(),q=N[s]?[s]:[];
+ while(q.length){const k=q.pop();if(seen.has(k))continue;seen.add(k);edges(N[k]).forEach(t=>N[t]&&q.push(t))}
+ let ends=0;for(const k in N){const n=N[k];if(n.t==='end')ends++;if(n.t==='wait'&&!n.obj)r.push(k+': у wait нет объекта');if(n.t==='choice'&&!(n.choices||[]).length)r.push(k+': у choice нет выборов');
+  if(n.t!=='end'&&!n.next&&!(n.choices||[]).length)r.push(k+': нет перехода');
+  edges(n).forEach(t=>{if(!N[t])r.push(k+': переход на несуществующий «'+t+'»')});if(N[s]&&!seen.has(k))r.push(k+': недостижим из старта')}
+ if(!ends)r.push('В истории нет ни одной концовки');return r}
+$('#eChk').onclick=()=>{if(!edApply())return;const r=check();$('#ev').textContent=r.length?r.join('\n'):'Ошибок не найдено ✓';edGraph()};
+$('#es').onchange=edGraph;
+$('#eSave').onclick=()=>{if(!edApply())return;E.name=$('#en').value.trim()||'Без названия';if(E.name===BUILT.name)E.name+=' (копия)';E.start=$('#es').value.trim();const er=structErr(E);if(er)return toast('Нельзя сохранить: '+er,4500);
+ const st=ld('nc_stories',{});st[E.name]=JSON.parse(JSON.stringify(E));sv('nc_stories',st);sv('nc_active',E.name);toast('История сохранена: '+E.name)};
+$('#eExp').onclick=()=>{if(!edApply())return;E.name=$('#en').value.trim()||'story';E.start=$('#es').value.trim();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(E,null,1)],{type:'application/json'}));a.download=E.name.replace(/[^\wа-яё-]+/gi,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
+$('#eImp').onchange=e=>{readFile(e.target.files[0],o=>{E=o;esel=o.start;$('#en').value=o.name||'Импорт';$('#es').value=o.start;edRender();toast('Импортировано')});e.target.value=''};
+$('#eTest').onclick=()=>{if(!edApply())return;E.start=$('#es').value.trim();const er=structErr(E);if(er)return toast('Тест невозможен: '+er,4500);startStory(JSON.parse(JSON.stringify(E)),{test:true})};
+// ---------- конструктор ----------
+let U=[],Rd=[];const sn=v=>Math.round(v/grid)*grid;
+const snap=()=>{U.push(JSON.stringify(layout));if(U.length>60)U.shift();Rd.length=0};
+const undo=()=>{if(!U.length)return;Rd.push(JSON.stringify(layout));layout=JSON.parse(U.pop());sel=null;rebuild()};
+const redo=()=>{if(!Rd.length)return;U.push(JSON.stringify(layout));layout=JSON.parse(Rd.pop());sel=null;rebuild()};
+const clampIt=it=>{it.x=cl(it.x,-5.6,5.6);it.z=cl(it.z,-4.6,4.6)};
+function rot(){if(sel==null)return;snap();layout[sel].r=(layout[sel].r+1)&3;rebuild()}
+function del(){if(sel==null)return;snap();layout.splice(sel,1);sel=null;rebuild()}
+$('#cat').innerHTML=Object.keys(SP).map(k=>`<button data-t="${k}">${SP[k].n}</button>`).join('');
+$('#cat').onclick=e=>{const b=e.target.closest('button');if(!b)return;snap();const t=b.dataset.t;layout.push({t,x:sn(0),z:sn(0),r:0,c:SP[t].c});sel=layout.length-1;rebuild();$('#bCol').value=SP[t].c};
+$('#bU').onclick=undo;$('#bR').onclick=redo;$('#bRot').onclick=rot;$('#bDel').onclick=del;$('#bDes').onclick=()=>{sel=null;updSel()};
+$('#bDup').onclick=()=>{if(sel==null)return;snap();const o=Object.assign({},layout[sel]);o.x+=grid*2;o.z+=grid*2;clampIt(o);layout.push(o);sel=layout.length-1;rebuild()};
+$('#bCol').onchange=e=>{if(sel==null)return toast('Сначала выберите предмет');snap();layout[sel].c=e.target.value;rebuild()};
+$('#bGr').onchange=e=>grid=+e.target.value;
+$('#bSv').onclick=()=>{if(sv('nc_layout',layout))toast('Планировка сохранена')};
+$('#bDef').onclick=()=>{if(!confirm('Сбросить планировку к стандартной?'))return;snap();layout=JSON.parse(JSON.stringify(DEF));sel=null;rebuild()};
+$('#bEx').onclick=()=>{sv('nc_layout',layout);mode='menu';ceil.visible=true;sel=null;setBr();updSel();Object.assign(P,{x:-3,z:-1.5,pitch:0});pnl('menu');refreshMenu()};
+function enterBuild(){runTok++;St=null;mode='build';ceil.visible=false;LT.forEach(l=>l.on=true);setBr();sel=null;U=[];Rd=[];rebuild();cam.position.set(0,15,9);cam.rotation.set(0,0,0);cam.lookAt(0,0,0);pnl('build');$('#hud').style.display='none'}
+const RC=new THREE.Raycaster(),V=new THREE.Vector2(),PL=new THREE.Plane(new THREE.Vector3(0,1,0),0);
+function bpick(e){V.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);RC.setFromCamera(V,cam);
+ const objs=furn.children.filter(g=>sel==null||layout[g.userData.i].t!=='rug'),h=RC.intersectObjects(objs,true)[0];
+ if(h){let o=h.object;while(o.parent!==furn)o=o.parent;sel=o.userData.i;$('#bCol').value=layout[sel].c;updSel();return}
+ const pt=new THREE.Vector3();if(sel!=null&&RC.ray.intersectPlane(PL,pt)){snap();const it=layout[sel];it.x=sn(pt.x);it.z=sn(pt.z);clampIt(it);rebuild()}else{sel=null;updSel()}}
+// ---------- старт ----------
+rs();setBr();rebuild();pnl('menu');refreshMenu();tick();
+}
+</script></body></html>
