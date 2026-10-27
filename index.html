@@ -56,18 +56,18 @@ h1{font:400 42px Georgia,serif;letter-spacing:.04em;margin:0;color:#e8a54b}h2{fo
 <div id="wiz" class="p"><div class="b"><h2 id="wt"></h2><p class="sub" id="wh"></p>
 <div class="ws"><input id="w_n" value="Моя история" placeholder="Название"><input id="w_d" placeholder="Краткое описание сюжета"></div>
 <div class="ws"><label>Где начинается история<select id="w_r"><option value="0">Спальня</option><option value="1">Гостиная</option><option value="2">Кухня</option><option value="3">Ванная</option></select></label><label>Начальное время<input type="time" id="w_t" value="23:00"></label><label>Освещение<select id="w_l"><option value="1">Только спальня</option><option value="2">Везде включено</option><option value="0">Темнота</option></select></label><label><input type="checkbox" id="w_s" checked style="width:auto"> Атмосферные звуки (стук, скрип)</label></div>
-<div class="ws"><label>Кто живёт в квартире</label><label><input type="checkbox" class="wn" value="lev" checked style="width:auto"> Лёва, сосед</label><label><input type="checkbox" class="wn" value="vera" style="width:auto"> Вера, соседка</label><label>Свои персонажи (по одному в строке)<textarea id="w_c">Марк&#10;Рассказчик</textarea></label></div>
+<div class="ws"><label>Кто живёт в квартире</label><label><input type="checkbox" class="wn" value="lev" checked style="width:auto"> Лёва, сосед</label><label><input type="checkbox" class="wn" value="vera" style="width:auto"> Вера, соседка</label><label><input type="checkbox" class="wn" value="tim" style="width:auto"> Тимофей, студент</label><label><input type="checkbox" class="wn" value="anna" style="width:auto"> Анна, медсестра</label><label>Свои персонажи. Строка: Имя | цвет одежды | характер (добрый, ворчливый, трусливый, весёлый) | комната | фраза. Без комнаты персонаж только пишет и звонит.<textarea id="w_c" rows="4">Марк&#10;Лиза | синий | весёлый | кухня | Хотите чаю?</textarea></label></div>
 <div class="ws"><label>События по порядку. Строка: Кто | сообщение или звонок | Текст<textarea id="w_e" rows="5">Марк | сообщение | Ты не спишь? Кто-то ходит по лестнице.&#10;Марк | звонок | — Слушай, не открывай дверь, что бы ни случилось!</textarea></label></div>
 <div class="ws"><label>Вопрос игроку<input id="w_q" value="За дверью стоят и ждут. Что вы сделаете?"></label><label>Варианты. Строка: Текст | номер концовки<textarea id="w_o">Открыть дверь | 1&#10;Остаться тихо | 2</textarea></label></div>
 <div class="ws"><label>Концовки. Строка: Название | Текст (номер = порядок)<textarea id="w_f" rows="4">Гость | Это был Марк. Он принёс хорошие новости.&#10;Тишина | Утром всё как прежде. Или нет?</textarea></label></div>
 <div class="row"><button id="wBack">Назад</button><button id="wNext">Далее</button><button class="cl">Закрыть</button></div></div></div>
 <div id="dlg" class="p"><div class="b"><div id="sp"></div><div id="tx"></div><div id="ch"></div></div></div>
 <div id="end" class="p"><div class="b"><h2 id="et"></h2><div id="ex" style="font-size:17px;line-height:1.5"></div><p class="sub" id="ec"></p><button id="eAgain">Начать заново</button><button id="eMenu">В меню</button></div></div>
-<div id="phone" class="p"><div class="b"><h2>📱 Телефон и журнал</h2><b>Сообщения</b><div id="pm"></div><b>Подсказки</b><div id="pj"></div><button class="cl">Закрыть</button></div></div>
+<div id="phone" class="p"><div class="b"><h2>📱 Телефон и журнал</h2><b>Сообщения</b><div id="pm"></div><b>Подсказки</b><div id="pj"></div><button id="pCall">📞 Позвонить соседям</button><button class="cl">Закрыть</button></div></div>
 <div id="pause" class="p"><div class="b"><h2>Пауза</h2><button id="paBack">Продолжить</button><button id="paSave">Сохранить</button><button id="paPh">Журнал</button><button id="paSet">Настройки</button><button id="paMenu">В меню</button></div></div>
-<div id="set" class="p"><div class="b"><h2>Настройки</h2><label>Громкость<input type="range" id="sVol" min="0" max="1" step=".05"></label><label><input type="checkbox" id="sMute" style="width:auto"> Отключить звук</label><label>Яркость света<input type="range" id="sBr" min=".3" max="1.6" step=".05"></label><label>Графика<select id="sGfx"><option value="0">Низкая (без теней)</option><option value="1">Средняя</option><option value="2">Высокая</option></select></label><button class="cl">Закрыть</button></div></div>
+<div id="set" class="p"><div class="b"><h2>Настройки</h2><label>Громкость<input type="range" id="sVol" min="0" max="1" step=".05"></label><label><input type="checkbox" id="sMute" style="width:auto"> Отключить звук</label><label>Яркость света<input type="range" id="sBr" min=".3" max="1.6" step=".05"></label><label>Графика<select id="sGfx"><option value="0">Низкая (без теней)</option><option value="1">Средняя</option><option value="2">Высокая</option></select></label><button id="bkExp">💾 Резервная копия (скачать)</button><label>Восстановить из копии<input type="file" id="bkImp" accept=".json"></label><button class="cl">Закрыть</button></div></div>
 <div id="load" class="p"><div class="b"><h2>Играть</h2><button id="bFree">🛋 Свободная жизнь в квартире (без заданий)</button><div id="ll"></div><label>Импорт JSON<input type="file" id="lf" accept=".json,application/json"></label><div class="row"><button id="lNew">Новая в редакторе</button><button class="cl">Закрыть</button></div></div></div>
-<div id="ed" class="p"><div class="b"><div class="row"><input id="en" placeholder="Название"><input id="es" placeholder="Старт (id)"><select id="eTpl" style="width:auto"></select><button id="eSave">Сохранить</button><button id="eExp">Экспорт</button><label style="margin:0"><input type="file" id="eImp" accept=".json" style="width:150px"></label><button id="eChk">Проверить</button><button id="eUndo">↶ Отмена</button><button id="eTest">▶ Предпросмотр</button><button id="ePrev">С выбранного</button><button id="eDraft">Черновик</button><button class="cl">Закрыть</button></div><div class="row"><input id="ed_d" placeholder="Описание истории"><input id="ec_c" placeholder="Персонажи через запятую"><input id="ed_n" placeholder="Жильцы: lev, vera"><label style="margin:0">Время <input type="time" id="ed_t" style="width:auto"></label><select id="ed_l" style="width:auto"><option value="1">Свет: спальня</option><option value="2">Свет: везде</option><option value="0">Свет: темнота</option></select><label style="margin:0"><input type="checkbox" id="ed_s" style="width:auto"> звуки</label></div><p class="sub">1) Выберите шаблон или добавьте блоки. 2) Впишите текст справа. 3) «🔗 связать», затем клик по блоку на графе соединяет блоки. 4) «Проверить» и «Тест». Черновик сохраняется сам.</p><datalist id="chars"></datalist>
+<div id="ed" class="p"><div class="b"><div class="row"><input id="en" placeholder="Название"><input id="es" placeholder="Старт (id)"><select id="eTpl" style="width:auto"></select><button id="eSave">Сохранить</button><button id="eExp">Экспорт</button><label style="margin:0"><input type="file" id="eImp" accept=".json" style="width:150px"></label><button id="eChk">Проверить</button><button id="eUndo">↶ Отмена</button><button id="eTest">▶ Предпросмотр</button><button id="ePrev">С выбранного</button><button id="eDraft">Черновик</button><button class="cl">Закрыть</button></div><div class="row"><input id="ed_d" placeholder="Описание истории"><input id="ec_c" placeholder="Персонажи через запятую"><input id="ed_n" placeholder="Жильцы: lev, vera, tim, anna"><textarea id="ed_cs" rows="2" style="flex-basis:100%" placeholder="Персонажи, по строке: Имя | одежда | характер | комната (спальня, гостиная, кухня, ванная, подъезд) | фраза | волосы | скрыт"></textarea><textarea id="ed_it" rows="2" style="flex-basis:100%" placeholder="Предметы, по строке: id | название | цвет | комната (в т.ч. подъезд, двор) | вид (ключ, записка, предмет) | текст | переменные"></textarea><textarea id="ed_dr" rows="1" style="flex-basis:100%" placeholder="Двери, по строке: front, bed или bath | заперта или открыта | id ключа"></textarea><input id="ed_v" placeholder="Переменные: a=0;b=1"><input id="ed_g" placeholder="Цель игры (подсказка вверху)"><label style="margin:0">Время <input type="time" id="ed_t" style="width:auto"></label><select id="ed_l" style="width:auto"><option value="1">Свет: спальня</option><option value="2">Свет: везде</option><option value="0">Свет: темнота</option></select><label style="margin:0"><input type="checkbox" id="ed_s" style="width:auto"> звуки</label></div><p class="sub">1) Выберите шаблон или добавьте блоки. 2) Впишите текст справа. 3) «🔗 связать», затем клик по блоку на графе соединяет блоки. 4) «Проверить» и «Тест». Черновик сохраняется сам.</p><datalist id="chars"></datalist><datalist id="objs"></datalist>
 <div class="cols"><div><button class="na" data-t="msg">+ сообщение</button><button class="na" data-t="call">+ звонок</button><button class="na" data-t="choice">+ выбор</button><button class="na" data-t="wait">+ ожидание</button><button class="na" data-t="end">+ концовка</button><button id="nLink">🔗 связать</button><button id="nDup">⧉ дубль</button><button id="nDel">🗑 удалить</button><div id="nl"></div></div><div id="ef"></div><div><svg id="eg"></svg></div></div>
 <div class="row"><button id="eApp">Применить узел</button></div><pre id="ev"></pre></div></div>
 <div id="build" class="p"><div class="b"><h2>Конструктор</h2><input id="bSearch" placeholder="Поиск предмета…"><select id="bCat"></select><div class="g" id="cat"></div><div class="g"><button id="bU">↶ Отмена</button><button id="bR">↷ Повтор</button><button id="bRot">⟳ Поворот</button><button id="bDup">⧉ Дубль</button><button id="bDel">🗑 Удалить</button><button id="bDes">Снять выбор</button></div>
@@ -106,7 +106,7 @@ const amb=new THREE.AmbientLight(0x3a4468,.3);sc.add(amb);
 function rs(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',rs);
 const M={},mat=(c,e)=>M[c+'|'+e]||(M[c+'|'+e]=new THREE.MeshStandardMaterial({color:c,roughness:.85,emissive:e||0}));
 function bx(p,w,h,d,x,y,z,c,sh=true,e){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,e));m.position.set(x,y,z);m.castShadow=m.receiveShadow=sh;p.add(m);return m}
-const world=new THREE.Group(),furn=new THREE.Group();sc.add(world,furn);const colW=[],colF=[],IA=[];
+const world=new THREE.Group(),furn=new THREE.Group();sc.add(world,furn);const colW=[],colF=[],colD=[],IA=[];
 function ctex(w,h,fn,rx,ry){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);return t}
 const woodM=new THREE.MeshStandardMaterial({map:ctex(128,128,(x,w,h)=>{x.fillStyle='#4a3828';x.fillRect(0,0,w,h);for(let i=0;i<8;i++){x.fillStyle='hsl(28,30%,'+(22+Math.random()*10)+'%)';x.fillRect(0,i*16+1,w,14);x.fillStyle='#1b130d';x.fillRect(0,i*16,w,1);x.fillRect(Math.random()*w,i*16,1,16)}},3,3),roughness:.5,metalness:.05});
 const tileM=new THREE.MeshStandardMaterial({map:ctex(128,128,(x,w,h)=>{for(let i=0;i<4;i++)for(let j=0;j<4;j++){x.fillStyle=(i+j)%2?'#7e888d':'#a3acb0';x.fillRect(i*32,j*32,32,32)}x.strokeStyle='#3c4448';x.lineWidth=2;for(let i=0;i<=4;i++){x.strokeRect(i*32,0,0,h);x.strokeRect(0,i*32,w,0)}},5,4),roughness:.2,metalness:.15});
@@ -116,25 +116,44 @@ function wall(x1,z1,x2,z2,lint){const t=.2,cx=(x1+x2)/2,cz=(z1+z2)/2,w=Math.abs(
 [[-6,-5,6,-5],[-6,5,6,5],[-6,-5,-6,5],[6,-5,6,-3],[6,-1,6,5],[-1,-5,-1,-3],[-1,-1,-1,2],[-1,4,-1,5],[-6,.5,-1,.5],[-1,.5,1,.5],[3,.5,6,.5]].forEach(a=>wall(...a));
 [[6,-3,6,-1],[-1,-3,-1,-1],[-1,2,-1,4],[1,.5,3,.5]].forEach(a=>wall(...a,true));
 [[-3.5,-2.25,5,5.5,woodM],[-3.5,2.75,5,4.5,tileM],[2.5,-2.25,7,5.5,woodM],[2.5,2.75,7,4.5,tileM]].forEach(a=>{const m=bx(world,a[2],.1,a[3],a[0],-.05,a[1],0x444444,false);m.material=a[4];m.receiveShadow=true});
-const ceil=bx(world,12,.1,10,0,2.85,0,0x1a1b22,false);
+const ceil=bx(world,24,.1,10,6,2.85,0,0x1a1b22,false);
 [[-3.5,-4.88],[3,-4.88],[3,4.88]].forEach(a=>{bx(world,1.4,1.2,.05,a[0],1.6,a[1],0x0a1530,false,0x16305f);const z=a[1]<0?-4.78:4.78;bx(world,.4,2,.1,a[0]-.95,1.5,z,0x6a2f3a,false);bx(world,.4,2,.1,a[0]+.95,1.5,z,0x6a2f3a,false);bx(world,1.6,.06,.1,a[0],2.5,z,0x2a1a10,false)});
 bx(world,.9,.6,.04,5.2,1.8,-4.87,0x3a2a1a,false);bx(world,.78,.48,.05,5.2,1.8,-4.86,0x5a7a9a,false,0x0a1a2a);bx(world,.6,.8,.04,-.6,1.7,-4.87,0x3a2a1a,false);bx(world,.5,.7,.05,-.6,1.7,-4.86,0x9a7a5a,false,0x1a1208);
 bx(world,1,1.1,.04,-3,1.6,4.88,0x8aa0b0,false,0x1a2a3a);bx(world,.5,.5,.04,.5,1.9,4.88,0xeeeeee,false,0x222222);
-bx(world,.08,2.1,1.9,5.94,1.05,-2,0x5a3a22);bx(world,.05,.05,.15,5.88,1,-2.6,0xcccccc,false);
-bx(world,4.5,.9,.6,2.25,.45,4.5,0x6a5a4a);bx(world,4.5,.05,.64,2.25,.92,4.5,0x222a2e);bx(world,.6,.02,.4,1,.95,4.5,0x9aa6ac,false);bx(world,.2,.01,.2,3.2,.95,4.5,0x111111,false,0x442200);bx(world,.2,.01,.2,3.6,.95,4.5,0x111111,false,0x442200);colW.push([0,4.5,4.2,4.8]);
+
+bx(world,4.5,.9,.6,2.25,.45,4.5,0x6a5a4a);bx(world,4.5,.05,.64,2.25,.92,4.5,0x222a2e);bx(world,.6,.02,.4,1,.95,4.5,0x9aa6ac,false);bx(world,.2,.01,.2,3.2,.95,4.5,0x111111,false,0x442200);bx(world,.2,.01,.2,3.6,.95,4.5,0x111111,false,0x442200);colW.push([0,4.5,4.2,4.8]);[[0,-4.88,12,.05,.05],[0,4.88,12,.05,.05],[-5.88,0,.05,10,.05],[5.88,0,.05,10,.05]].forEach(a=>bx(world,a[2],.12,a[3],a[0],.06,a[1],0x15161c,false));IA.push({id:'cook',x:2,z:4.5,n:'готовить еду'});
+// двери
+const DOORS={};function mkDoor(k,x,hz,sgn,nm){const g=new THREE.Group();g.position.set(x,0,hz);world.add(g);bx(g,.08,2.1,1.9,0,1.05,.95,0x5a3a22);bx(g,.05,.05,.14,sgn*.07,1,1.7,0xcccccc,false);DOORS[k]={g,x,hz,sgn,open:false,locked:false,key:'',a:0,auto:0,ct:0};IA.push({id:k==='front'?'door':'door:'+k,x,z:hz+.95,n:nm})}
+mkDoor('front',6,-3,1,'входная дверь');mkDoor('bed',-1,-3,-1,'дверь спальни');mkDoor('bath',-1,2,-1,'дверь ванной');
+// подъезд
+wall(6,-5,12,-5);wall(12,-5,12,1);wall(6,1,12,1);bx(world,6,.1,6,9,-.05,-2,0x5a5f66,false).receiveShadow=true;
+for(let i=0;i<8;i++)bx(world,.2,.2*(i+1),1.5,10.4+.2*i,.1*(i+1),-4.1,0x6a6e75);colW.push([10.3,12,-4.85,-3.35]);
+bx(world,1.6,2.3,.1,7.2,1.15,-4.92,0x3a3f46);const LIFT={open:false,a:0,l:bx(world,.6,2.1,.06,6.9,1.05,-4.84,0x9aa4ac,false),r:bx(world,.6,2.1,.06,7.5,1.05,-4.84,0x9aa4ac,false)};bx(world,.1,.2,.04,8.1,1.2,-4.9,0x222222,false,0xe8a54b);
+for(let i=0;i<6;i++)bx(world,.3,.35,.15,7+i*.55,1.3,.92,0x7a828a,false);bx(world,.9,2.1,.06,11.2,1.05,.92,0x3a3a50,false);
+[['stairs',10.8,-3,'лестница вниз'],['lift',7.2,-4,'лифт'],['mail',8.5,.3,'почтовые ящики'],['neigh',11.2,.2,'дверь соседа']].forEach(a=>IA.push({id:a[0],x:a[1],z:a[2],n:a[3]}));
+// двор
+const yL=[];(function(){const X=40,bt=ctex(64,128,(x,w,h)=>{x.fillStyle='#1a1c26';x.fillRect(0,0,w,h);for(let i=0;i<4;i++)for(let j=0;j<9;j++){x.fillStyle=Math.random()<.4?'#ffd98a':'#0e1018';x.fillRect(6+i*14,6+j*13,9,8)}},1,1),BM=new THREE.MeshStandardMaterial({map:bt,emissiveMap:bt,emissive:0xffffff,emissiveIntensity:.8,roughness:.9});
+ bx(world,26,.1,20,X,-.05,0,0x26302a,false);bx(world,26,.12,2.5,X,0,-7.75,0x4a4d52,false);bx(world,26,.08,6,X,-.01,5.5,0x1a1b1f,false);
+ [34,40,46].forEach(x=>{const b=new THREE.Mesh(new THREE.BoxGeometry(8,10,3),BM);b.position.set(x,5,-10.5);world.add(b);colW.push([x-4,x+4,-12,-9])});
+ bx(world,1.4,2.2,.1,X,1.1,-8.95,0x3a2a1a,false,0x1a1208);IA.push({id:'enter',x:X,z:-8.2,n:'войти в подъезд'});
+ const car=(x,z,c,hl)=>{bx(world,2.3,.6,1.1,x,.5,z,c);bx(world,1.2,.5,1,x-.1,1.05,z,0x202a38);[[-.8,-.5],[-.8,.5],[.8,-.5],[.8,.5]].forEach(w=>bx(world,.4,.4,.15,x+w[0],.2,z+w[1]*1.05,0x111111,false));bx(world,.05,.15,.25,x+1.16,.55,z-.3,0xffffff,false,hl);bx(world,.05,.15,.25,x+1.16,.55,z+.3,0xffffff,false,hl);colW.push([x-1.15,x+1.15,z-.55,z+.55]);IA.push({id:'car',x,z,n:'машина'})};
+ car(35,4.5,0x7a2a2a,0xffeeaa);car(45,6,0x2a4a6a,0x66ff88);
+ [34,47].forEach(x=>{bx(world,.1,4,.1,x,2,-5.8,0x222222,false);bx(world,.4,.15,.4,x,4.05,-5.8,0xffffff,false,0xffe9a0);const l=new THREE.PointLight(0xffe0a0,.9,13,2);l.position.set(x,3.9,-5.8);sc.add(l);yL.push(l)});
+ bx(world,1.6,.1,.5,X,.45,-4.5,0x6a4a2a);bx(world,1.6,.5,.08,X,.8,-4.75,0x6a4a2a);colW.push([X-.8,X+.8,-4.8,-4.25]);IA.push({id:'bench',x:X,z:-4.5,n:'посидеть на скамейке'});
+ [31,49].forEach(x=>{bx(world,.3,2,.3,x,1,-3,0x4a3420);bx(world,1.6,1.4,1.6,x,2.7,-3,0x2a5a30);colW.push([x-.2,x+.2,-3.2,-2.8])})})();
 // фиксированные предметы
 for(const s of[-.6,.6])for(const t of[-.28,.28])bx(world,.06,.75,.06,-2+s,.375,-4.5+t,0x222222);
 bx(world,1.4,.05,.7,-2,.77,-4.5,0x5a4636);colW.push([-2.7,-1.3,-4.85,-4.15]);
 bx(world,.4,.02,.28,-2,.81,-4.45,0x888888);bx(world,.4,.26,.02,-2,.95,-4.6,0x111111,true,0x2255aa);
 bx(world,.5,.5,.5,1.3,.25,-4.5,0x5a4636);colW.push([1.05,1.55,-4.75,-4.25]);bx(world,.2,.03,.3,1.3,.52,-4.5,0x111111,true,0x551111);
 bx(world,.12,.6,1.1,-5.85,.55,-1.5,0xcfcfcf);colW.push([-6,-5.75,-2.05,-.95]);
-[['radiator',-5.6,-1.5,'осмотреть батарею'],['phone',1.3,-4.2,'телефон'],['laptop',-2,-4.2,'ноутбук'],['door',5.7,-2,'входная дверь'],['window',-3.5,-4.5,'окно'],['mirror',-3,4.5,'зеркало']].forEach(a=>IA.push({id:a[0],x:a[1],z:a[2],n:a[3]}));
+[['radiator',-5.6,-1.5,'осмотреть батарею'],['phone',1.3,-4.2,'телефон'],['laptop',-2,-4.2,'ноутбук'],['window',-3.5,-4.5,'окно'],['mirror',-3,4.5,'зеркало']].forEach(a=>IA.push({id:a[0],x:a[1],z:a[2],n:a[3]}));
 const FL={door:'Дверь заперта на два замка.',window:'За окном тёмный двор и пустая улица.',mirror:'В зеркале усталое лицо.',radiator:'Батарея стучит: тук… тук-тук.',laptop:'Ноутбук пока спит.',phone:'Телефон молчит.'};
 // лампы
-const LT=[['Спальня',-3.5,-2.3,1],['Гостиная',2.5,-2.3,0],['Кухня',2.5,2.8,0],['Ванная',-3.5,2.8,0]].map((a,i)=>{const L=new THREE.PointLight(0xffd7a0,1,13,2);L.position.set(a[1],2.4,a[2]);
+const LT=[['Спальня',-3.5,-2.3,1],['Гостиная',2.5,-2.3,0],['Кухня',2.5,2.8,0],['Ванная',-3.5,2.8,0],['Подъезд',9,-2.2,1]].map((a,i)=>{const L=new THREE.PointLight(0xffd7a0,1,13,2);L.position.set(a[1],2.4,a[2]);
  if(!touch&&i<2){L.castShadow=true;L.shadow.mapSize.set(512,512)}sc.add(L);const b=bx(sc,.25,.06,.25,a[1],2.76,a[2],0xffffff,false,0xffeeaa);return{n:a[0],x:a[1],z:a[2],L,b,on:!!a[3]}});
 function setBr(){LT.forEach(l=>{l.L.intensity=l.on?.9*S.br:0;l.b.visible=l.on});amb.intensity=(mode==='build'?.9:.12+.18*S.br);applyTime()}
-function lamp(){let b=null,bd=1e9;LT.forEach(l=>{const d=Math.hypot(l.x-P.x,l.z-P.z);if(d<bd){bd=d;b=l}});b.on=!b.on;setBr();snd('click');toast(b.n+': свет '+(b.on?'включён':'выключен'),1200)}
+function lamp(){let b=null,bd=1e9;LT.forEach(l=>{const d=Math.hypot(l.x-P.x,l.z-P.z);if(d<bd){bd=d;b=l}});b.on=!b.on;setBr();snd('click');toast(b.n+': свет '+(b.on?'включён':'выключен'),1200);NPCS.forEach(o=>{if(o.g.visible&&Math.hypot(o.g.position.x-b.x,o.g.position.z-b.z)<3.2&&(!b.on||o.ph==='late')){o.mood=-1;setTimeout(()=>toast('💬 '+o.d.n+': '+(b.on?'Выключи свет, я сплю!':'Эй, я же тут был!'),3000),500)}})}
 // ---------- мебель ----------
 const lg=(x,z,h,t=.06)=>[[t,h,t,x,h/2,z],[t,h,t,-x,h/2,z],[t,h,t,x,h/2,-z],[t,h,t,-x,h/2,-z]];
 const SP={bed:{n:'Кровать',w:2,d:2.2,c:'#4b6a9b',p:[[2,.35,2.2,0,.175,0],[1.9,.25,2,0,.475,.05,1],[1.2,.12,.4,0,.66,-.8,'#e8e8f0']]},
@@ -158,39 +177,77 @@ const DEF=[['bed',-4.6,-3.8],['wardrobe',-3.3,.1],['sofa',3,-4.3],['rug',3,-2.4]
 let layout=loadLayout();
 function loadLayout(){const l=ld('nc_layout',null);if(Array.isArray(l)){const ok=l.filter(i=>i&&SP[i.t]&&isFinite(i.x)&&isFinite(i.z)).map(i=>({t:i.t,x:+i.x,z:+i.z,s:cl(+i.s||1,.4,2.5),r:(+i.r||0)&3,c:/^#[0-9a-f]{6}$/i.test(i.c)?i.c:SP[i.t].c}));if(ok.length||l.length===0)return ok}return JSON.parse(JSON.stringify(DEF))}
 function mk(it){const s=SP[it.t],g=new THREE.Group();s.p.forEach(q=>bx(g,q[0],q[1],q[2],q[3],q[4],q[5],q[6]===1?it.c:(q[6]==null?0x3a2c22:q[6])));g.position.set(it.x,0,it.z);g.rotation.y=it.r*Math.PI/2;g.scale.setScalar(it.s||1);return g}
-function rebuild(){furn.children.slice().forEach(c=>{c.traverse(o=>o.geometry&&o.geometry.dispose());furn.remove(c)});colF.length=0;IA.filter(a=>a.dyn).forEach(a=>IA.splice(IA.indexOf(a),1));layout.forEach(it=>{const a=ACT[it.t];if(a)IA.push({id:a[0],x:it.x,z:it.z,n:a[1],dyn:1})});
+function rebuild(){furn.children.slice().forEach(c=>{c.traverse(o=>o.geometry&&o.geometry.dispose());furn.remove(c)});colF.length=0;nav=null;IA.filter(a=>a.dyn).forEach(a=>IA.splice(IA.indexOf(a),1));layout.forEach(it=>{const a=ACT[it.t];if(a)IA.push({id:a[0],x:it.x,z:it.z,n:a[1],dyn:1})});
  layout.forEach((it,i)=>{const g=mk(it);g.userData.i=i;furn.add(g);const s=SP[it.t];if(!s.nc){const o=it.r&1,k=it.s||1,hw=(o?s.d:s.w)*k/2,hd=(o?s.w:s.d)*k/2;colF.push([it.x-hw,it.x+hw,it.z-hd,it.z+hd])}});updSel()}
 function updSel(){const g=sel!=null&&furn.children[sel];if(g){if(!bh){bh=new THREE.BoxHelper(g,0xffcc00);sc.add(bh)}bh.setFromObject(g)}if(bh)bh.visible=!!g&&mode==='build'}
 // ---------- NPC ----------
-const MEMN=Object.assign({talks:{},last:''},ld('nc_mem',{}));
-const LP1=[[-3,-1.8],[1.5,-1.5],[2,1.8],[-2.5,3.5],[2,1.8],[1.5,-1.5]],LP2=[[2,1.8],[1.2,2.8],[2,3.8],[1.5,-1.5],[3.5,-1.2],[1.5,-1.5]];
-const NPCD=[{id:'lev',n:'Лёва',col:0x4a6a8a,sp:.9,day:LP1,night:LP1,late:[[2.2,-3.5]]},{id:'vera',n:'Вера',col:0x8a4a6a,sp:.6,day:LP2,night:[[2,1.8],[1.5,-1.5]],late:[[1.3,2.6]]}];
-const NPCS=NPCD.map(d=>{const g=new THREE.Group();bx(g,.45,.9,.3,0,.85,0,d.col);bx(g,.3,.3,.3,0,1.5,0,0xd8b090);const l1=bx(g,.12,.7,.12,-.1,.35,0,0x222233),l2=bx(g,.12,.7,.12,.1,.35,0,0x222233);g.position.set(d.night[0][0],0,d.night[0][1]);sc.add(g);
- const ia={id:'npc:'+d.id,x:0,z:0,n:'поговорить — '+d.n,off:true};IA.push(ia);return{d,g,l1,l2,ia,i:1,w:0,t:0,ph:''}});
-function npcUpd(dt){const h=(gt/60)%24,ph=h>=22||h<2?'night':h<8?'late':'day';
- NPCS.forEach(o=>{const d=o.d,show=mode==='free'||(mode==='menu'&&d.id==='lev')||(mode==='play'&&story&&(story.npcs||['lev']).includes(d.id));o.g.visible=show;o.ia.off=!show;if(!show)return;
-  const pts=d[ph];if(o.ph!==ph){o.ph=ph;o.i=1;o.g.position.set(pts[0][0],0,pts[0][1])}
-  if(o.t>0){o.t-=dt;o.g.rotation.y=Math.atan2(P.x-o.g.position.x,P.z-o.g.position.z)}else if(o.w>0)o.w-=dt;
-  else{const t=pts[o.i%pts.length],dx=t[0]-o.g.position.x,dz=t[1]-o.g.position.z,r=Math.hypot(dx,dz);
-   if(r<.1){o.i++;o.w=2+Math.random()*3;o.l1.rotation.x=o.l2.rotation.x=0}else{o.g.position.x+=dx/r*dt*d.sp;o.g.position.z+=dz/r*dt*d.sp;o.g.rotation.y=Math.atan2(dx,dz);const a=Math.sin(performance.now()/180*d.sp*1.3)*.6;o.l1.rotation.x=a;o.l2.rotation.x=-a}}
-  o.ia.x=o.g.position.x;o.ia.z=o.g.position.z})}
-function talkNpc(id){const o=NPCS.find(x=>x.d.id===id);if(!o)return;const v=St?St.vars:{},h=(gt/60)%24,c=MEMN.talks[id]=(MEMN.talks[id]||0)+1;sv('nc_mem',MEMN);let t;
- if(c>3&&c%2===0)t=id==='lev'?'Ты опять? Мы же только что говорили.':'Вам что, больше делать нечего?!';
- else if(id==='lev'){t=St?(v.knock==='1'?'Это ты стучал по трубе? Тише, соседей разбудишь.':v.code==='1'?'Код подошёл? Молодец, я бы не догадался.':v.trust==='1'?'Раз ты доверяешь Марку, я за тебя спокоен.':v.trust==='0'?'Бросил трубку? Смело. Или глупо.':v.key==='1'?'Что за ключ? Лучше верни владельцу.':v.wave==='1'?'Зеркало… не смотри туда долго.':'Слышишь этот шум? Я не могу уснуть.'):(h>=2&&h<8?'Тсс… я дремлю.':'Привет! Живём спокойно: свет, чай, телефон.');if(c===1&&MEMN.last)t+=' Кстати, говорят, ты видел концовку «'+MEMN.last+'».'}
- else{t=St&&v.key==='1'?'Это ты нашёл мой ключ?! Давай сюда!':h>=2&&h<8?'В такой час? Идите спать!':St?'В моё время по ночам в квартирах было тихо.':'Молодёжь, расставьте мебель нормально!';if(c===1&&MEMN.last)t+=' Слыхала про твои приключения.'}
- o.t=8;pnl('dlg');snd('click');$('#sp').textContent=o.d.n;$('#tx').textContent=t;const box=$('#ch');box.innerHTML='';
+const MEMN=Object.assign({talks:{},last:''},ld('nc_mem',{}));let nav=null,chatCd=0;
+const pick=a=>a[Math.random()*a.length|0];
+const RS={спальня:[[-3,-1.8,'ходит по спальне'],[-2,-3.8,'сидит за столом']],гостиная:[[1.5,-1.5,'ходит по гостиной'],[3.5,-1.2,'смотрит в окно']],подъезд:[[9,-2.3,'ждёт у двери']],кухня:[[2,1.8,'на кухне'],[1.2,2.8,'пьёт чай']],ванная:[[-2.5,3.5,'в ванной']]};
+const CLR={красный:0xb03a3a,синий:0x3a5ab0,зелёный:0x3a8a4a,жёлтый:0xd8b030,фиолетовый:0x7a3ab0,серый:0x808080,чёрный:0x222222,белый:0xe8e8e8,оранжевый:0xd8782a,розовый:0xd878a8};
+const TR={добрый:['Привет! Рад тебя видеть.','Если нужна помощь — обращайся.'],ворчливый:['Опять ты? Дел нет?','В моё время было тише.'],трусливый:['Ой! Ты меня напугал…','Мне кажется, за нами следят.'],весёлый:['О, привет! Хорошая ночка, а?','Ха, ты бы видел своё лицо!']};
+const CHAT=['обсуждают, кто мыл посуду','о чём-то шепчутся','спорят о громкости телевизора','смеются над шуткой'];
+const NM={'лёва':'lev','вера':'vera','тим':'tim','тимофей':'tim','анна':'anna'};
+const NPCD=[
+{id:'lev',n:'Лёва',col:0x4a6a8a,hair:0x2a1a10,sp:.9,trait:'добрый',day:[[3.5,-1.2,'смотрит телевизор'],[2.5,2.2,'готовит завтрак'],[-3,-1.8,'читает у себя']],night:[[1.5,-1.5,'не спит и ходит'],[2,1.8,'пьёт чай'],[-2.5,3.5,'умывается']],late:[[2.2,-3.5,'дремлет на диване']]},
+{id:'vera',n:'Вера',dress:1,col:0x8a4a6a,hair:0xcfcfcf,sp:.6,trait:'ворчливая',day:[[2,3.8,'готовит обед'],[1.2,2.8,'поливает цветы'],[1.5,-1.2,'смотрит в окно']],night:[[2,1.8,'пьёт чай'],[1.5,-1.5,'ворчит']],late:[[1.3,2.6,'дремлет']]},
+{id:'tim',n:'Тимофей',col:0x5a8a4a,hair:0x6a4a20,sp:1,trait:'нервный',day:[[-3,-1.8,'учит конспекты'],[2,1.8,'ест лапшу']],night:[[-2,-3.8,'сидит за ноутбуком'],[2,1.8,'берёт энергетик']],late:[[-3,-1.8,'спит']]},
+{id:'anna',n:'Анна',dress:1,col:0xd8d8e8,hair:0x1a1a1a,sp:.8,trait:'строгая',day:[[2,1.8,'пьёт кофе'],[-2.5,3.5,'принимает душ']],night:[[1.5,-1.5,'вернулась со смены'],[2,3.8,'ужинает']],late:[[3,-3.5,'отдыхает на диване']]}];
+const GX=-5.75,GZ=-4.75,GS=.25,GW=47,GH=39;
+function navBuild(){nav=new Uint8Array(GW*GH);for(let j=0;j<GH;j++)for(let i=0;i<GW;i++)nav[j*GW+i]=hit(GX+i*GS,GZ+j*GS,.22,1)?1:0}
+const c2=(x,z)=>[cl(Math.round((x-GX)/GS),0,GW-1),cl(Math.round((z-GZ)/GS),0,GH-1)];
+function nearFree(i,j){if(!nav[j*GW+i])return[i,j];for(let r=1;r<12;r++)for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<GW&&y<GH&&!nav[y*GW+x])return[x,y]}return null}
+function findPath(x0,z0,x1,z1){if(!nav)navBuild();const a=c2(x0,z0),b=c2(x1,z1),s=nearFree(a[0],a[1]),e=nearFree(b[0],b[1]);if(!s||!e)return null;
+ const prev=new Int32Array(GW*GH).fill(-2),q=[s[1]*GW+s[0]],T=e[1]*GW+e[0];prev[q[0]]=-1;
+ for(let h=0;h<q.length;h++){const k=q[h];if(k===T)break;const ci=k%GW,cj=k/GW|0;
+  for(let dx=-1;dx<=1;dx++)for(let dz=-1;dz<=1;dz++){if(!dx&&!dz)continue;const ni=ci+dx,nj=cj+dz;if(ni<0||nj<0||ni>=GW||nj>=GH)continue;const nk=nj*GW+ni;if(prev[nk]!==-2||nav[nk])continue;if(dx&&dz&&(nav[cj*GW+ni]||nav[nj*GW+ci]))continue;prev[nk]=k;q.push(nk)}}
+ if(prev[T]===-2)return null;const r=[];for(let k=T;k!==-1;k=prev[k])r.push([GX+(k%GW)*GS,GZ+(k/GW|0)*GS]);return r.reverse()}
+function limb(g,x,y,w,h,col,hand,shoe){const p=new THREE.Group();p.position.set(x,y,0);g.add(p);bx(p,w,h,w,0,-h/2,0,col);if(hand)bx(p,w*.9,.1,w*.9,0,-h-.03,0,0xd8b090);if(shoe)bx(p,w*1.1,.08,w*1.7,0,-h+.02,.04,0x15151a);return p}
+function mkNpc(d){const g=new THREE.Group(),pn=d.pants||0x2a2d3a,sk=0xd8b090,hr=d.hair||0x2a2a2a;
+ bx(g,.42,.55,.26,0,1.02,0,d.col);bx(g,.4,.2,.25,0,.7,0,pn);if(d.dress)bx(g,.5,.5,.34,0,.55,0,d.col);bx(g,.1,.08,.1,0,1.34,0,sk);bx(g,.28,.3,.28,0,1.52,0,sk);
+ bx(g,.31,.1,.31,0,1.7,0,hr);bx(g,.31,.3,.08,0,1.56,-.13,hr);bx(g,.05,.05,.02,-.07,1.55,.15,0x111111,false);bx(g,.05,.05,.02,.07,1.55,.15,0x111111,false);bx(g,.08,.02,.02,0,1.44,.15,0x7a3a3a,false);
+ const l1=limb(g,-.1,.7,.13,.7,pn,0,1),l2=limb(g,.1,.7,.13,.7,pn,0,1),a1=limb(g,-.28,1.28,.1,.6,d.col,1),a2=limb(g,.28,1.28,.1,.6,d.col,1);
+ const f=d.night[0];g.position.set(f[0],0,f[1]);g.visible=false;sc.add(g);const ia={id:'npc:'+d.id,x:f[0],z:f[1],n:'',off:true};IA.push(ia);
+ return{d,g,l1,l2,a1,a2,ia,i:0,w:0,t:0,ph:'',path:null,tgt:null,act:'',mood:0,sp:d.sp,hid:false,force:null,fT:0}}
+const NPCS=NPCD.map(mkNpc);
+function rmNpc(o){sc.remove(o.g);const k=IA.indexOf(o.ia);if(k>=0)IA.splice(k,1);NPCS.splice(NPCS.indexOf(o),1)}
+function setCast(list){NPCS.filter(o=>o.d.custom).forEach(rmNpc);(list||[]).slice(0,5).forEach(c=>{const rm=RS[String(c.room||'').toLowerCase()];if(!rm||!c.n)return;const o=mkNpc({id:c.n,n:c.n,custom:1,col:clr(c.col,0x6a6a8a),hair:clr(c.hair,0x3a2a1a),sp:.8,trait:c.trait||'добрый',phrase:c.phrase||'',day:rm,night:rm,late:rm});o.hid=/скр/i.test(String(c.hid||''))||c.hid===true;NPCS.push(o)})}
+function npcUpd(dt){const h=(gt/60)%24,ph=h>=22||h<2?'night':h<8?'late':'day';chatCd-=dt;
+ NPCS.forEach(o=>{const d=o.d,show=d.custom?mode==='play':(mode==='free'||(mode==='menu'&&d.id==='lev')||(mode==='play'&&story&&(story.npcs||['lev']).includes(d.id)));const sh=show&&!o.hid;o.g.visible=sh;o.ia.off=!sh;if(!sh)return;
+  if(o.fT>0){o.fT-=dt;if(o.fT<=0)o.force=null}const pts=o.force?[o.force]:d[ph];if(o.ph!==ph){o.ph=ph;o.i=0;o.path=null;const f=pts[0];o.g.position.set(f[0],0,f[1]);o.w=1;o.act=f[2]||''}
+  o.ia.n='поговорить — '+d.n+(o.w>0&&o.act?' ('+o.act+')':'');
+  if(o.t>0){o.t-=dt;turnTo(o.g,Math.atan2(P.x-o.g.position.x,P.z-o.g.position.z),dt);o.l1.rotation.x=o.l2.rotation.x=0;o.a2.rotation.x=-1+Math.sin(performance.now()/200)*.35}
+  else if(o.w>0){o.w-=dt;o.l1.rotation.x=o.l2.rotation.x=0;o.a2.rotation.x=0;o.a1.rotation.x=Math.sin(performance.now()/300)*.25}
+  else{if(!o.path||!o.path.length){o.tgt=pts[o.i%pts.length];o.path=Math.hypot(o.g.position.x-o.tgt[0],o.g.position.z-o.tgt[1])<.3?[]:(findPath(o.g.position.x,o.g.position.z,o.tgt[0],o.tgt[1])||[[o.tgt[0],o.tgt[1]]]);if(!o.path.length){o.i++;o.w=5;o.act=o.tgt[2]||'';return}}
+   const t=o.path[0],dx=t[0]-o.g.position.x,dz=t[1]-o.g.position.z,r=Math.hypot(dx,dz);
+   if(r<.12){o.path.shift();if(!o.path.length){o.i++;o.w=3+Math.random()*5;o.act=o.tgt[2]||''}}
+   else{const sp=o.sp*dt;o.g.position.x+=dx/r*sp;o.g.position.z+=dz/r*sp;turnTo(o.g,Math.atan2(dx,dz),dt);const a=Math.sin(performance.now()/180*o.sp*1.3)*.6;o.l1.rotation.x=a;o.l2.rotation.x=-a;o.a1.rotation.x=-a*.7;o.a2.rotation.x=a*.7}}
+  o.ia.x=o.g.position.x;o.ia.z=o.g.position.z});
+ if(chatCd<=0&&(mode==='play'||mode==='free')){const v=NPCS.filter(o=>o.g.visible&&o.t<=0);for(let a=0;a<v.length;a++)for(let b=a+1;b<v.length;b++){const A=v[a],B=v[b];
+  if(Math.hypot(A.g.position.x-B.g.position.x,A.g.position.z-B.g.position.z)<1.5&&Math.hypot(P.x-A.g.position.x,P.z-A.g.position.z)<7){chatCd=30;A.w=B.w=4;A.act='болтает с '+B.d.n;B.act='болтает с '+A.d.n;A.path=B.path=null;
+   A.g.rotation.y=Math.atan2(B.g.position.x-A.g.position.x,B.g.position.z-A.g.position.z);B.g.rotation.y=A.g.rotation.y+Math.PI;toast('💬 '+A.d.n+' и '+B.d.n+': '+pick(CHAT),3500);return}}}}
+function npcLine(o){const d=o.d,id=d.id,v=St?St.vars:{},h=(gt/60)%24,c=MEMN.talks[id]||0;let t;
+ if(o.mood<0)return 'Ты же выключил мне свет. Я помню.';if(c>3&&c%2===0)return 'Мы же только что говорили!';
+ if(d.custom)t=d.phrase||pick(TR[d.trait]||TR.добрый);
+ else if(id==='lev'){t=St?(v.knock==='1'?'Это ты стучал по трубе? Тише, соседей разбудишь.':v.code==='1'?'Код подошёл? Молодец, я бы не догадался.':v.trust==='1'?'Раз ты доверяешь Марку, я за тебя спокоен.':v.trust==='0'?'Бросил трубку? Смело. Или глупо.':v.key==='1'?'Что за ключ? Лучше верни владельцу.':v.wave==='1'?'Зеркало… не смотри туда долго.':'Слышишь этот шум? Я не могу уснуть.'):(h>=2&&h<8?'Тсс… я дремлю.':'Привет! Живём спокойно: свет, чай, телефон.')}
+ else if(id==='vera')t=St&&v.key==='1'?'Это ты нашёл мой ключ?! Давай сюда!':h>=2&&h<8?'В такой час? Идите спать!':St?'В моё время по ночам в квартирах было тихо.':'Молодёжь, расставьте мебель нормально!';
+ else if(id==='tim')t=h>=2&&h<8?'Тсс… учусь.':St&&v.paid==='1'?'Спасибо за комнату! Я постараюсь не шуметь.':St&&v.suspect==='1'?'Почему на меня так смотрят?':'Привет. Я Тимофей, готовлюсь к сессии. Энергетик будешь?';
+ else t=h>=2&&h<8?'Я только с дежурства. Дай поспать.':St&&v.torch==='1'?'Хорошо, что у тебя фонарик. Я не люблю темноту.':St&&v.honest==='1'?'Честность — редкость. Уважаю.':'Привет. Не шумите, у меня смена в шесть.';
+ if(c===0&&MEMN.last&&!d.custom)t+=' Говорят, ты видел концовку «'+MEMN.last+'».';return t}
+function talkNpc(id){const o=NPCS.find(x=>x.d.id===id);if(!o)return;const t=npcLine(o);MEMN.talks[id]=(MEMN.talks[id]||0)+1;sv('nc_mem',MEMN);
+ o.t=8;pnl('dlg');snd('click');$('#sp').textContent=o.d.n+(o.act?' ('+o.act+')':'');$('#tx').textContent=t;const box=$('#ch');box.innerHTML='';
  if(St){const a=document.createElement('button');a.textContent='Что мне делать?';a.onclick=()=>{$('#tx').textContent=St.hints.length?St.hints[St.hints.length-1]:'Осмотрись и поговори со всеми.'};box.appendChild(a)}
  const b=document.createElement('button');b.textContent='Закрыть';b.onclick=()=>{o.t=0;pnl(null)};box.appendChild(b)}
 // ---------- движение ----------
-function hit(nx,nz){const r=.3;for(const b of colW.concat(colF)){const cx=cl(nx,b[0],b[1]),cz=cl(nz,b[2],b[3]);if((nx-cx)**2+(nz-cz)**2<r*r)return true}return false}
+function hit(nx,nz,r=.3,nd){for(const b of nd?colW.concat(colF):colW.concat(colF,colD)){const cx=cl(nx,b[0],b[1]),cz=cl(nz,b[2],b[3]);if((nx-cx)**2+(nz-cz)**2<r*r)return true}return false}
 function move(dx,dz){if(!hit(P.x+dx,P.z))P.x+=dx;if(!hit(P.x,P.z+dz))P.z+=dz}
 const blocked=()=>!!panel||mode==='menu'||mode==='build';
-function update(dt){const b=blocked();npcUpd(dt);
+function update(dt){const b=blocked();npcUpd(dt);worldUpd(dt);const rm_=roomAt();if(rm_!==curRoom){curRoom=rm_;fire('room:'+rm_)}
  if(mode==='menu'){mt+=dt;P.x=-1.5+Math.sin(mt*.12)*3.5;P.z=-1.2+Math.cos(mt*.09)*1.4;P.yaw=Math.sin(mt*.1)*1.1+.5;P.pitch=-.04}
  if(!b){let f=(K.KeyW||K.ArrowUp?1:0)-(K.KeyS||K.ArrowDown?1:0)-jy,s=(K.KeyD||K.ArrowRight?1:0)-(K.KeyA||K.ArrowLeft?1:0)+jx;const l=Math.hypot(f,s);if(l>1){f/=l;s/=l}
   const run=K.ShiftLeft||K.ShiftRight,sp=(run?3.8:2.2)*dt,sn=Math.sin(P.yaw),cs=Math.cos(P.yaw);move((-sn*f+cs*s)*sp,(-cs*f-sn*s)*sp);
   if(l>.1){bob+=dt*(run?12:8);stT+=dt;if(stT>(run?.3:.46)){stT=0;snd('step')}}}
- P.x=cl(P.x,-5.7,5.7);P.z=cl(P.z,-4.7,4.7);cam.position.set(P.x,1.65+Math.sin(bob)*.025,P.z);cam.rotation.set(P.pitch,P.yaw,0);
+ const bd_=P.x>20?[28.5,51.5,-9,9]:[-5.7,11.7,-4.7,4.7];P.x=cl(P.x,bd_[0],bd_[1]);P.z=cl(P.z,bd_[2],bd_[3]);cam.position.set(P.x,1.65+Math.sin(bob)*.025,P.z);cam.rotation.set(P.pitch,P.yaw,0);
  cur=null;if(!b){const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw);let best=9;for(const a of IA){if(a.off)continue;const dx=a.x-P.x,dz=a.z-P.z,d=Math.hypot(dx,dz);if(d<2&&d<best&&(dx*fx+dz*fz)/d>.2){best=d;cur=a}}}
  $('#pr').textContent=cur?(touch?'':'E — ')+cur.n:''}
 const clock=new THREE.Clock();
@@ -221,7 +278,7 @@ function pnl(id){document.querySelectorAll('.p').forEach(e=>e.classList.toggle('
 function openP(id){ret=panel;pnl(id)}function closeP(){const r=ret;ret=null;pnl(r||(mode==='menu'?'menu':null))}
 document.querySelectorAll('.cl').forEach(b=>b.onclick=closeP);
 function refreshMenu(){$('#bCont').disabled=!ld('nc_save',null);const n=(ld('nc_end',[])||[]).length;$('#mEnd').textContent='Найдено концовок: '+n;LT.forEach(l=>l.on=true);setBr();$('#hud').style.display='none'}
-function toMenu(){saveGame();mode='menu';runTok++;setBr();pnl('menu');refreshMenu()}
+function toMenu(){saveGame();mode='menu';runTok++;buildItems([],[]);setBr();pnl('menu');refreshMenu()}
 // ---------- сюжет ----------
 function makeStory(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Необычный случай',time:'23:00',light:'1',npcs:['lev'],desc:'Ночью стучит батарея. Загадка с кодом, 5 концовок.',chars:'Марк, Лёва, Рассказчик',start:'n0',nodes:{
 n0:{t:'msg',from:'Рассказчик',text:'03:14. Вы просыпаетесь от ритмичного стука. Это батарея в спальне: тук… тук-тук… тук.',next:'c0',knock:true},
@@ -247,8 +304,8 @@ function cond(s){if(!s)return true;const o=parseKV(String(s).replace(/,/g,';'));
 function resolve(s){if(!s)return null;for(let seg of String(s).split(';')){seg=seg.trim();const i=seg.indexOf('?');if(i<0)return seg||null;if(cond(seg.slice(0,i)))return seg.slice(i+1).trim()}return null}
 function go(id){if(!St||St.done)return;const n=story.nodes[id];
  if(!n){toast('Ошибка сценария: нет узла «'+id+'»',5000);St.wait=null;pnl(null);return}
- St.node=id;if(n.set)setv(n.set);
- if(n.t==='wait'){St.wait=n.obj;if(n.hint){St.hints.push(n.hint);$('#hint').textContent=n.hint;toast(n.hint,3500)}pnl(null);saveGame();return}
+ St.node=id;if(n.set)setv(n.set);if(n.lights!=null){const m=String(n.lights);LT.forEach((l,i)=>l.on=m==='2'||(m==='1'&&i===0));setBr()}if(n.skip)gt+=+n.skip||0;if(n.snd)snd(n.snd);if(n.fx)runFx(n.fx);
+ if(n.t==='wait'){St.wait=n.obj;St.waitAt=String(n.obj).startsWith('time:')?gt+((tmin(String(n.obj).slice(5))-gt%1440+1440)%1440):null;if(n.hint){St.hints.push(n.hint);$('#hint').textContent=n.hint;toast(n.hint,3500)}pnl(null);saveGame();return}
  if(n.t==='end')return endGame(n);
  St.wait=null;if(n.from&&n.from!=='Рассказчик'&&n.from!=='Ноутбук')St.msgs.push({from:n.from,text:n.text});
  pnl('dlg');snd(n.t==='call'?'ring':'click');$('#sp').textContent=(n.t==='call'?'📞 ':'')+(n.from||'');$('#tx').textContent=n.text||'';
@@ -256,20 +313,20 @@ function go(id){if(!St||St.done)return;const n=story.nodes[id];
  if(list.length)list.forEach(c=>{const b=document.createElement('button');b.textContent=c.text;b.onclick=()=>{snd('click');if(c.set)setv(c.set);go(resolve(c.next))};box.appendChild(b)});
  else{const b=document.createElement('button');b.textContent='Далее';b.onclick=()=>{snd('click');const nx=resolve(n.next);if(!nx){toast('Сценарий оборвался: нет перехода',4000);pnl(null)}else go(nx)};box.appendChild(b)}
  saveGame()}
-function endGame(n){MEMN.last=n.title||'';sv('nc_mem',MEMN);St.done=true;rm('nc_save');const k=St.node,es=ld('nc_end',[]);if(!St.test&&!es.includes(k)){es.push(k);sv('nc_end',es)}
+function endGame(n){MEMN.last=n.title||'';sv('nc_mem',MEMN);St.done=true;rm('nc_save');{const a=ld('nc_saves',{});delete a[story.name];sv('nc_saves',a)}const k=St.node,es=ld('nc_end',[]);if(!St.test&&!es.includes(k)){es.push(k);sv('nc_end',es)}
  pnl('end');snd('end');$('#et').textContent=n.title||'Конец';$('#ex').textContent=n.text||'';$('#ec').textContent=St.test?'Тестовый прогон':'Найдено концовок: '+es.length;$('#eMenu').textContent=St.test?'Вернуться в редактор':'В меню'}
-function interact(id){if(St&&!St.done&&St.wait===id){const nx=resolve(story.nodes[St.node].next);St.wait=null;$('#hint').textContent='';nx?go(nx):toast('Нет перехода после ожидания',4000);return}
+function interact(id){if(id==='door'||id.startsWith('door:'))return doorUse(id==='door'?'front':id.slice(5));if(id.startsWith('item:')&&!(St&&St.wait===id))return itemUse(id.slice(5));if(id.startsWith('room:')||id.startsWith('time:'))return fire(id);if(St&&!St.done&&St.wait===id){if(id.startsWith('item:'))return itemUse(id.slice(5));return fire(id)}
  if(id.startsWith('npc:'))return talkNpc(id.slice(4));if(id==='phone')return openP('phone');if(LIFE[id])return LIFE[id]();snd('click');const f=FL[id];toast(Array.isArray(f)?f[Math.random()*f.length|0]:f||'Ничего особенного.',2200)}
 setInterval(()=>{if(mode==='menu'||panel==='pause'||!St||St.done||!story)return;const n=story.nodes[St.node];if(!n)return;if(n.ring&&St.wait)snd('ring');if(n.knock&&sfxOn){snd('knock');flick()}},1800);
 function activeStory(){const nm=ld('nc_active','');return STORIES.find(s=>s.name===nm)||ld('nc_stories',{})[nm]||BUILT}
-function startStory(s,o={}){const t=++runTok;story=s;St={node:null,vars:{},msgs:[],hints:[],wait:null,done:false,test:!!o.test};mode='play';Object.assign(P,SPAWN[s.spawn]||SPAWN[0],{yaw:0,pitch:0});gt=tmin(s.time);sfxOn=s.sfx!==false;
- LT.forEach((l,i)=>{const m=String(s.light==null?1:s.light);l.on=m==='2'||(m==='1'&&i===0)});setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent='';setTimeout(()=>{if(t===runTok)go(s.start)},1500)}
-function saveGame(manual){if(!St||St.done||mode!=='play')return;if(sv('nc_save',{gt,St,story,pos:{x:P.x,z:P.z,yaw:P.yaw},lights:LT.map(l=>l.on)})&&manual)toast('Сохранено')}
+function startStory(s,o={}){const t=++runTok;story=s;St={node:null,vars:{},msgs:[],hints:[],wait:null,done:false,test:!!o.test};mode='play';Object.assign(P,SPAWN[s.spawn]||SPAWN[0],{yaw:0,pitch:0});gt=tmin(s.time);sfxOn=s.sfx!==false;setCast(s.cast);
+ LT.forEach((l,i)=>{const m=String(s.light==null?1:s.light);l.on=m==='2'||(m==='1'&&i===0)});setBr();rebuild();ceil.visible=true;pnl(null);St.vars=Object.assign(St.vars,parseKV(s.vars));St.inv=[];St.taken=[];buildItems(s.items,[]);applyDoors(s.doors);$('#hint').textContent=s.goal||'';setTimeout(()=>{if(t===runTok)go(s.start)},1500)}
+function saveGame(manual){if(!St||St.done||St.test||mode!=='play')return;const o={gt,St,story,pos:{x:P.x,z:P.z,yaw:P.yaw},lights:LT.map(l=>l.on)},all=ld('nc_saves',{});all[story.name]=o;const a=sv('nc_saves',all),b=sv('nc_save',o);if(a&&b&&manual)toast('Сохранено')}
 setInterval(()=>saveGame(),10000);addEventListener('beforeunload',()=>saveGame());document.addEventListener('visibilitychange',()=>document.hidden&&saveGame());
-function contGame(){const s=ld('nc_save',null);if(!s||!s.St||!s.story||structErr(s.story)){toast('Сохранение повреждено или отсутствует');rm('nc_save');return refreshMenu()}
- story=s.story;St=s.St;mode='play';gt=s.gt||gt;sfxOn=s.story.sfx!==false;runTok++;Object.assign(P,s.pos||{});P.pitch=0;(s.lights||[]).forEach((o,i)=>LT[i]&&(LT[i].on=!!o));setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent=St.wait?(St.hints[St.hints.length-1]||''):'';
+function contGame(nm){const s=typeof nm==='string'?ld('nc_saves',{})[nm]:ld('nc_save',null);if(!s||!s.St||!s.story||structErr(s.story)){toast('Сохранение повреждено или отсутствует');rm('nc_save');return refreshMenu()}
+ story=s.story;St=s.St;mode='play';gt=s.gt||gt;setCast(story.cast);buildItems(story.items,St.taken||[]);applyDoors(story.doors);sfxOn=s.story.sfx!==false;runTok++;Object.assign(P,s.pos||{});P.pitch=0;(s.lights||[]).forEach((o,i)=>LT[i]&&(LT[i].on=!!o));setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent=St.wait?(St.hints[St.hints.length-1]||''):'';
  if(!St.wait&&St.node)go(St.node)}
-function freePlay(){runTok++;St=null;story=null;mode='free';gt=21*60;Object.assign(P,{x:-3,z:-1.5,yaw:0,pitch:0});LT.forEach(l=>l.on=true);setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent='';toast('Свободная игра: F — свет, J — телефон',2500)}
+function freePlay(){runTok++;St=null;story=null;mode='free';gt=21*60;setCast(null);buildItems([],[]);applyDoors(null);Object.assign(P,{x:-3,z:-1.5,yaw:0,pitch:0});LT.forEach(l=>l.on=true);setBr();rebuild();ceil.visible=true;pnl(null);$('#hint').textContent='';toast('Свободная игра: F — свет, J — телефон',2500)}
 // ---------- меню ----------
 $('#bCont').onclick=contGame;$('#bFree').onclick=freePlay;$('#bCreate').onclick=()=>openP('create');$('#cEd').onclick=()=>openEd();$('#cBu').onclick=enterBuild;
 $('#bSet').onclick=()=>openP('set');$('#bLoad').onclick=()=>{renderLoad();openP('load')};
@@ -285,9 +342,9 @@ const _openP=openP;openP=function(id){if(id==='phone')phoneRender();_openP(id)};
 function structErr(o){if(!o||typeof o!=='object'||Array.isArray(o))return'Файл не похож на сценарий';if(!o.nodes||typeof o.nodes!=='object')return'Нет поля nodes';if(!o.start||!o.nodes[o.start])return'Стартовый узел не найден';
  for(const k in o.nodes){const n=o.nodes[k];if(!n||!['msg','call','choice','wait','end'].includes(n.t))return'Узел «'+k+'»: неизвестный тип';}return null}
 function readFile(f,cb){if(!f)return;const r=new FileReader();r.onerror=()=>toast('Не удалось прочитать файл');r.onload=()=>{let o;try{o=JSON.parse(r.result)}catch(e){return toast('Некорректный JSON: '+e.message,4500)}const er=structErr(o);if(er)return toast('Ошибка сценария: '+er,4500);cb(o)};r.readAsText(f)}
-function renderLoad(){const st=ld('nc_stories',{}),a=ld('nc_active','');let h=STORIES.map(s=>`<div class="row"><b style="flex:1">${esc(s.name)}${s.name===a?' ✓':''}<br><small class="sub">${esc(s.desc||'')}</small></b><button data-a="play" data-n="${esc(s.name)}">Играть</button><button data-a="edit" data-n="${esc(s.name)}">Править</button><button data-a="dup" data-n="${esc(s.name)}" title="Копия">⧉</button></div>`).join('');
- for(const k in st)h+=`<div class="row"><b style="flex:1">${esc(k)}${k===a?' ✓':''}</b><button data-a="play" data-n="${esc(k)}">Играть</button><button data-a="edit" data-n="${esc(k)}">Править</button><button data-a="dup" data-n="${esc(k)}" title="Копия">⧉</button><button data-a="del" data-n="${esc(k)}">✕</button></div>`;$('#ll').innerHTML=h}
-$('#ll').onclick=e=>{const b=e.target.closest('button');if(!b)return;const n=b.dataset.n,st=ld('nc_stories',{});
+function renderLoad(){const st=ld('nc_stories',{}),a=ld('nc_active',''),SV=ld('nc_saves',{});let h=STORIES.map(s=>`<div class="row"><b style="flex:1">${esc(s.name)}${s.name===a?' ✓':''}<br><small class="sub">${esc(s.desc||'')}</small></b>${SV[s.name]?`<button data-a="cont" data-n="${esc(s.name)}">⏵ Дальше</button>`:''}<button data-a="play" data-n="${esc(s.name)}">Играть</button><button data-a="edit" data-n="${esc(s.name)}">Править</button><button data-a="dup" data-n="${esc(s.name)}" title="Копия">⧉</button></div>`).join('');
+ for(const k in st)h+=`<div class="row"><b style="flex:1">${esc(k)}${k===a?' ✓':''}</b>${SV[k]?`<button data-a="cont" data-n="${esc(k)}">⏵ Дальше</button>`:''}<button data-a="play" data-n="${esc(k)}">Играть</button><button data-a="edit" data-n="${esc(k)}">Править</button><button data-a="dup" data-n="${esc(k)}" title="Копия">⧉</button><button data-a="del" data-n="${esc(k)}">✕</button></div>`;$('#ll').innerHTML=h}
+$('#ll').onclick=e=>{const b=e.target.closest('button');if(!b)return;const n=b.dataset.n,st=ld('nc_stories',{});if(b.dataset.a==='cont')return contGame(n);
  if(b.dataset.a==='dup'){const src=STORIES.find(x=>x.name===n)||st[n];if(!src)return;const c=JSON.parse(JSON.stringify(src));let k=n+' (копия)',i=2;while(STORIES.some(x=>x.name===k)||st[k])k=n+' (копия '+i+++')';c.name=k;st[k]=c;sv('nc_stories',st);renderLoad();toast('Создана копия: '+k)}else if(b.dataset.a==='del'){delete st[n];sv('nc_stories',st);if(ld('nc_active','')===n)sv('nc_active','');renderLoad()}
  else{sv('nc_active',n);if(b.dataset.a==='play')startStory(activeStory());else openEd()}};
 $('#lf').onchange=e=>{readFile(e.target.files[0],o=>{const st=ld('nc_stories',{});let n=String(o.name||'Импорт').slice(0,60);if(STORIES.some(x=>x.name===n))n+=' (импорт)';o.name=n;st[n]=o;sv('nc_stories',st);sv('nc_active',n);renderLoad();toast('Загружено: '+n)});e.target.value=''};
@@ -297,17 +354,17 @@ function openEd(blank){E=JSON.parse(JSON.stringify(blank?{name:'Моя исто�
  eU=[];edFill();edRender();openP('ed')}
 function targets(s){return String(s||'').split(';').map(x=>x.slice(x.indexOf('?')+1).trim()).filter(Boolean)}
 const edges=n=>targets(n.next).concat(...(n.choices||[]).map(c=>targets(c.next)));
-function edRender(){$('#nl').innerHTML=Object.keys(E.nodes).map(k=>`<button data-id="${esc(k)}"${k===esel?' style="border-color:#e8a54b"':''}>${esc(k)} · ${E.nodes[k].t}</button>`).join('');edForm();edGraph();$('#chars').innerHTML=String(E.chars||'').split(',').map(x=>x.trim()).filter(Boolean).map(x=>`<option value="${esc(x)}">`).join('')}
+function edRender(){$('#nl').innerHTML=Object.keys(E.nodes).map(k=>`<button data-id="${esc(k)}"${k===esel?' style="border-color:#e8a54b"':''}>${esc(k)} · ${E.nodes[k].t}</button>`).join('');edForm();edGraph();$('#objs').innerHTML=['radiator','phone','laptop','door','window','mirror','cook','eat','rest','door:front','door:bed','door:bath','room:спальня','room:гостиная','room:кухня','room:ванная','room:подъезд','room:двор','time:23:30','npc:lev','npc:vera','npc:tim','npc:anna'].concat((E.items||[]).map(i=>'item:'+i.id),(E.cast||[]).map(c=>'npc:'+c.n)).map(x=>`<option value="${esc(x)}">`).join('');$('#chars').innerHTML=String(E.chars||'').split(',').map(x=>x.trim()).filter(Boolean).map(x=>`<option value="${esc(x)}">`).join('')}
 function edForm(){const n=E.nodes[esel];if(!n){$('#ef').innerHTML='<p class="sub">Выберите узел</p>';return}
  const ch=(n.choices||[]).map(c=>[c.text,c.next||'',c.set||'',c.if||''].join(' | ')).join('\n');
  $('#ef').innerHTML=`<label>ID<input id=f_id value="${esc(esel)}"></label><label>Тип<select id=f_t>${['msg','call','choice','wait','end'].map(t=>`<option${t===n.t?' selected':''}>${t}</option>`).join('')}</select></label>
 <label>Персонаж / заголовок концовки<input id=f_from list=chars value="${esc(n.from||n.title)}"></label><label>Текст<textarea id=f_text>${esc(n.text)}</textarea></label>
-<label>Объект ожидания (radiator, phone, laptop, door, window, mirror)<input id=f_obj value="${esc(n.obj)}"></label><label>Подсказка<input id=f_hint value="${esc(n.hint)}"></label>
-<label>Далее: id или «условие?id;id»<input id=f_next value="${esc(n.next)}"></label><label>Переменные: a=1;b=2<input id=f_set value="${esc(n.set)}"></label>
+<label>Объект ожидания (radiator, phone, laptop, door, window, mirror)<input id=f_obj list=objs value="${esc(n.obj)}"></label><label>Подсказка<input id=f_hint value="${esc(n.hint)}"></label>
+<label>Далее: id или «условие?id;id»<input id=f_next value="${esc(n.next)}"></label><label>Переменные: a=1;b=2<input id=f_set value="${esc(n.set)}"></label><label>Эффекты в мире: open:bed; close:front; lock:front; unlock:front; drop; flash; knock; ring; lights:0; skip:30; arrive:Имя; leave:Имя; go:lev:кухня<input id=f_fx value="${esc(n.fx)}"></label>
 <label>Выборы, по строке: текст | далее | переменные | условие<textarea id=f_ch>${esc(ch)}</textarea></label>
 <label><input type=checkbox id=f_ring style="width:auto"${n.ring?' checked':''}> звонок</label><label><input type=checkbox id=f_knock style="width:auto"${n.knock?' checked':''}> стук батареи</label>`}
-function edApply(){E.desc=$('#ed_d').value;E.chars=$('#ec_c').value;E.time=$('#ed_t').value||'23:00';E.light=$('#ed_l').value;E.sfx=$('#ed_s').checked;E.npcs=$('#ed_n').value.split(',').map(x=>x.trim()).filter(Boolean);const cs=JSON.stringify(E);if(eU[eU.length-1]!==cs){eU.push(cs);if(eU.length>50)eU.shift()}const n=E.nodes[esel];if(!n||!$('#f_id'))return true;const g=i=>$('#f_'+i).value.trim(),nid=g('id'),t=g('t'),o={t,text:$('#f_text').value};
- if(g('from'))o[t==='end'?'title':'from']=g('from');['obj','hint','next','set'].forEach(k=>{if(g(k))o[k]=g(k)});if($('#f_ring').checked)o.ring=true;if($('#f_knock').checked)o.knock=true;
+function edApply(){E.desc=$('#ed_d').value;E.chars=$('#ec_c').value;E.time=$('#ed_t').value||'23:00';E.light=$('#ed_l').value;E.sfx=$('#ed_s').checked;E.npcs=$('#ed_n').value.split(',').map(x=>x.trim()).filter(Boolean);E.cast=$('#ed_cs').value.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]&&a[3]).map(a=>({n:a[0],col:a[1],trait:a[2],room:a[3],phrase:a[4],hair:a[5],hid:a[6]}));const LL=id=>$(id).value.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a[0]);E.items=LL('#ed_it').filter(a=>a[3]).map(a=>({id:a[0],n:a[1]||a[0],col:a[2],room:a[3],kind:a[4]||'предмет',text:a[5]||'',set:a[6]||''}));E.doors=LL('#ed_dr').map(a=>({id:a[0],locked:/запер/i.test(a[1]||''),key:a[2]||''}));E.vars=$('#ed_v').value;E.goal=$('#ed_g').value;const cs=JSON.stringify(E);if(eU[eU.length-1]!==cs){eU.push(cs);if(eU.length>50)eU.shift()}const n=E.nodes[esel];if(!n||!$('#f_id'))return true;const g=i=>$('#f_'+i).value.trim(),nid=g('id'),t=g('t'),o={t,text:$('#f_text').value};
+ if(g('from'))o[t==='end'?'title':'from']=g('from');['obj','hint','next','set','fx'].forEach(k=>{if(g(k))o[k]=g(k)});['lights','skip','snd'].forEach(k=>{if(n[k]!=null)o[k]=n[k]});if($('#f_ring').checked)o.ring=true;if($('#f_knock').checked)o.knock=true;
  const ch=$('#f_ch').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split('|').map(x=>x.trim()),c={text:p[0],next:p[1]||''};if(p[2])c.set=p[2];if(p[3])c.if=p[3];return c});if(ch.length)o.choices=ch;
  if(!nid){toast('ID не может быть пустым');return false}
  if(nid!==esel){if(E.nodes[nid]){toast('ID «'+nid+'» уже занят');return false}delete E.nodes[esel];if($('#es').value.trim()===esel)$('#es').value=nid;esel=nid}
@@ -397,9 +454,9 @@ e_mirror:e('Концовка: Осколки','Зеркало осыпалось
 e_loop:e('Концовка: Петля','Вы выходите и оказываетесь снова в гостиной. Телефон звонит.'),
 e_out:e('Концовка: Свобода','Дверь захлопнулась за спиной. Вы бежите по лестнице и не оглядываетесь.'),
 e_stay:e('Концовка: Остаться дома','Вы остаётесь. Утром квартира выглядит как прежде, но телефон исчез.')}}}
-const STORIES=[BUILT,story2(),story3(),story4(),story5()];
+const STORIES=[BUILT,story2(),story3(),story4(),story5(),story6(),story7(),story8(),story9(),story10(),story11()];
 const blankStory=()=>({name:'Моя история',desc:'',chars:'Рассказчик',start:'n0',nodes:{n0:{t:'msg',from:'Рассказчик',text:'Начало истории',next:'e1'},e1:{t:'end',title:'Конец',text:'Конец истории.'}}});
-function edFill(){esel=E.start;$('#en').value=E.name||'';$('#es').value=E.start;$('#ed_d').value=E.desc||'';$('#ec_c').value=E.chars||'';$('#ed_t').value=E.time||'23:00';$('#ed_l').value=String(E.light==null?1:E.light);$('#ed_s').checked=E.sfx!==false;$('#ed_n').value=(E.npcs||['lev']).join(',')}
+function edFill(){esel=E.start;$('#en').value=E.name||'';$('#es').value=E.start;$('#ed_d').value=E.desc||'';$('#ec_c').value=E.chars||'';$('#ed_t').value=E.time||'23:00';$('#ed_l').value=String(E.light==null?1:E.light);$('#ed_s').checked=E.sfx!==false;$('#ed_n').value=(E.npcs||['lev']).join(',');$('#ed_cs').value=(E.cast||[]).map(c=>[c.n,c.col,c.trait,c.room,c.phrase,c.hair||'',c.hid||''].join(' | ')).join('\n');$('#ed_it').value=(E.items||[]).map(c=>[c.id,c.n,c.col,c.room,c.kind,c.text,c.set||''].join(' | ')).join('\n');$('#ed_dr').value=(E.doors||[]).map(d=>[d.id,d.locked?'заперта':'открыта',d.key||''].join(' | ')).join('\n');$('#ed_v').value=E.vars||'';$('#ed_g').value=E.goal||''}
 $('#eTpl').innerHTML='<option value="">Шаблон…</option><option value="b">Пустая история</option>'+STORIES.map((x,i)=>`<option value="${i}">${esc(x.name)}</option>`).join('');
 $('#eTpl').onchange=e=>{const v=e.target.value;if(!v)return;if(!confirm('Заменить текущую историю шаблоном?')){e.target.value='';return}E=JSON.parse(JSON.stringify(v==='b'?blankStory():STORIES[+v]));edFill();edRender();e.target.value='';toast('Шаблон загружен')};
 $('#ef').addEventListener('change',()=>{const o=esel;edApply();if(esel!==o)edRender();else edGraph()});
@@ -429,7 +486,7 @@ $('#bLd').onclick=()=>{const k=$('#bLay').value,L=ld('nc_layouts',{});if(!L[k])r
 function dl(n,o){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:'application/json'}));a.download=n+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
 $('#bLx').onclick=()=>dl('planirovka',{layout});
 $('#bLi').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result),l=Array.isArray(o)?o:o.layout;if(!Array.isArray(l))throw Error('нет списка layout');const ok=cleanL(l);if(!ok.length)throw Error('нет подходящих предметов');snap();layout=ok;sel=null;rebuild();toast('Планировка импортирована')}catch(er){toast('Ошибка импорта: '+er.message,4500)}};r.readAsText(f)};
-applyGfx();layList();
+applyGfx();layList();applyDoors(null);
 // ---------- v3 ----------
 function story4(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Шум за стеной',time:'01:30',light:'1',npcs:['lev','vera'],desc:'Ночной конфликт соседей. Решайте, кто прав. 4 концовки.',chars:'Лёва, Вера',start:'d0',nodes:{
 d0:{t:'msg',from:'Рассказчик',text:'Полвторого ночи. За стеной грохочет музыка, на кухне что-то двигают.',sfx:1,next:'d1'},
@@ -463,7 +520,7 @@ e_friend:e('Концовка: Осторожный друг','Лёва верн�
 const SPAWN=[{x:-3,z:-1.5},{x:1.5,z:-1.5},{x:2,z:1.8},{x:-2.5,z:3.5}];
 function tstr(){const m=Math.floor(gt)%1440;return String(m/60|0).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
 function tmin(s){const m=/^(\d\d):(\d\d)$/.exec(s||'');return m?+m[1]*60+ +m[2]:1380}
-function applyTime(){const h=(gt/60)%24,day=h>=7&&h<19;mat(0x0a1530,0x16305f).emissive.setHex(day?0x8fb4e8:0x16305f);sc.background.setHex(day?0x1a2230:0x05060a);sc.fog.color.setHex(day?0x1a2230:0x05060a);$('#clk').textContent=mode==='play'||mode==='free'?tstr():''}
+function applyTime(){const h=(gt/60)%24,day=h>=7&&h<19;mat(0x0a1530,0x16305f).emissive.setHex(day?0x8fb4e8:0x16305f);sc.background.setHex(day?0x1a2230:0x05060a);sc.fog.color.setHex(day?0x1a2230:0x05060a);yL.forEach(l=>l.intensity=day?.15:.9);$('#clk').textContent=mode==='play'||mode==='free'?tstr():''}
 setInterval(()=>{if((mode==='play'||mode==='free')&&!panel){gt+=1/6;applyTime()}},1000);
 setInterval(()=>{if(((mode==='play'&&sfxOn)||mode==='free')&&!panel&&Math.random()<.5)snd(Math.random()<.5?'creak':'tick')},9000);
 const Fm=[],FMS=[['Марк','Ты дома? Заходи вечером на чай.'],['Курьер','Ваш заказ будет через 20 минут.'],['Мама','Не забудь поесть!'],['Вера','Потише там, пожалуйста!']];
@@ -475,21 +532,192 @@ const LIFE={rest:()=>{const f=$('#fade');f.classList.add('on');setTimeout(()=>{g
 const ACT={bed:['rest','отдохнуть'],sofa:['rest','посидеть и отдохнуть'],fridge:['eat','открыть холодильник'],tv:['tv','включить телевизор'],plant:['plant','полить растение'],shelf:['book','пролистать книги']};
 Object.assign(FL,{laptop:['Ноутбук: пришла рассылка. Ничего важного.','Вы полистали ленту новостей.','На ноутбуке открыт пустой документ.'],window:['За окном тёмный двор.','Во дворе ветер гоняет пакет.'],mirror:['В зеркале усталое лицо.','Вы поправили волосы.']});
 // мастер
-const WT=[['1/6 · Название','Придумайте название и пару слов о сюжете.'],['2/6 · Комната','Где начинается история, который час и какой свет.'],['3/6 · Персонажи','Отметьте жильцов квартиры и впишите тех, кто пишет и звонит.'],['4/6 · События и диалоги','Каждая строка — событие: Кто | сообщение или звонок | Текст. Звонок игрок принимает на телефоне.'],['5/6 · Выборы','Вопрос и варианты ответа. После черты — номер концовки.'],['6/6 · Концовки','Каждая строка — концовка: Название | Текст. Номера идут сверху вниз.']];
+const WT=[['1/6 · Название','Придумайте название и пару слов о сюжете.'],['2/6 · Комната','Где начинается история, который час и какой свет.'],['3/6 · Персонажи','Отметьте жильцов квартиры и впишите тех, кто пишет и звонит.'],['4/6 · События и диалоги','Каждая строка — событие: Кто | сообщение или звонок | Текст. Типы: сообщение, звонок, разговор (нужно подойти к персонажу).'],['5/6 · Выборы','Вопрос и варианты ответа. После черты — номер концовки.'],['6/6 · Концовки','Каждая строка — концовка: Название | Текст. Номера идут сверху вниз.']];
 let ws=0;function wShow(){document.querySelectorAll('.ws').forEach((e,i)=>e.classList.toggle('on',i===ws));$('#wt').textContent=WT[ws][0];$('#wh').textContent=WT[ws][1];$('#wBack').disabled=ws===0;$('#wNext').textContent=ws===5?'✓ Создать историю':'Далее'}
 $('#cWiz').onclick=()=>{ws=0;wShow();openP('wiz')};$('#wBack').onclick=()=>{ws--;wShow()};$('#wNext').onclick=()=>{if(ws<5){ws++;wShow()}else wizBuild()};
 function wizBuild(){const L=id=>$(id).value.split('\n').map(x=>x.trim()).filter(Boolean).map(l=>l.split('|').map(x=>x.trim())),ev=L('#w_e'),ch=L('#w_o'),en=L('#w_f');
  if(!ev.length||!ch.length||!en.length)return toast('Заполните события, варианты и концовки',3500);
  const N={};let prev=null,first=null;const lk=id=>{if(prev)N[prev].next=id;else first=id;prev=id};
- ev.forEach((a,i)=>{const id='e'+(i+1);if(/звон/i.test(a[1]||'')){const w='w'+(i+1);N[w]={t:'wait',obj:'phone',ring:true,hint:'Звонит телефон ('+(a[0]||'?')+'): ответьте в гостиной.'};lk(w);N[id]={t:'call',from:a[0]||'Звонящий',text:a[2]||'…'}}else N[id]={t:'msg',from:a[0]||'Рассказчик',text:a[2]||a[1]||'…'};lk(id)});
+ ev.forEach((a,i)=>{const id='e'+(i+1);if(/говор|разгов/i.test(a[1]||'')){const w='w'+(i+1);N[w]={t:'wait',obj:'npc:'+(NM[(a[0]||'').toLowerCase()]||a[0]||'lev'),hint:'Поговорите с персонажем: '+(a[0]||'?')};lk(w);N[id]={t:'msg',from:a[0]||'Рассказчик',text:a[2]||'…'}}else if(/звон/i.test(a[1]||'')){const w='w'+(i+1);N[w]={t:'wait',obj:'phone',ring:true,hint:'Звонит телефон ('+(a[0]||'?')+'): ответьте в гостиной.'};lk(w);N[id]={t:'call',from:a[0]||'Звонящий',text:a[2]||'…'}}else N[id]={t:'msg',from:a[0]||'Рассказчик',text:a[2]||a[1]||'…'};lk(id)});
  N.fin={t:'choice',from:'Рассказчик',text:$('#w_q').value||'Что вы сделаете?',choices:ch.map(a=>({text:a[0],next:'end'+cl(parseInt(a[1])||1,1,en.length)}))};lk('fin');
  en.forEach((a,i)=>N['end'+(i+1)]={t:'end',title:a[0],text:a[1]||''});
  let nm=$('#w_n').value.trim()||'Моя история';if(STORIES.some(x=>x.name===nm))nm+=' (моя)';
- E={name:nm,desc:$('#w_d').value,chars:L('#w_c').map(a=>a[0]).join(', '),time:$('#w_t').value,light:$('#w_l').value,sfx:$('#w_s').checked,spawn:+$('#w_r').value,npcs:[...document.querySelectorAll('.wn:checked')].map(x=>x.value),start:first,nodes:N};
+ E={name:nm,desc:$('#w_d').value,chars:L('#w_c').map(a=>a[0]).join(', '),cast:L('#w_c').filter(a=>a[3]).map(a=>({n:a[0],col:a[1],trait:a[2],room:a[3],phrase:a[4],hair:a[5],hid:a[6]})),time:$('#w_t').value,light:$('#w_l').value,sfx:$('#w_s').checked,spawn:+$('#w_r').value,npcs:[...document.querySelectorAll('.wn:checked')].map(x=>x.value),start:first,nodes:N};
  eU=[];edFill();edRender();const r=check(),st=ld('nc_stories',{});st[nm]=JSON.parse(JSON.stringify(E));sv('nc_stories',st);sv('nc_active',nm);ret=null;pnl('ed');$('#ev').textContent=r.length?r.join('\n'):'Ошибок не найдено ✓';toast('История создана и сохранена. Жмите «Предпросмотр»',4500)}
 $('#eUndo').onclick=()=>{const cur=JSON.stringify(E);let p=null;while(eU.length){p=eU.pop();if(p!==cur)break;p=null}if(!p)return toast('Нечего отменять');const k=esel;E=JSON.parse(p);edFill();esel=E.nodes[k]?k:E.start;edRender();toast('Отменено',1200)};
 $('#bFs').onclick=()=>{try{const f=document.documentElement;(document.fullscreenElement?document.exitFullscreen():f.requestFullscreen()).catch(()=>toast('Полный экран недоступен'))}catch(e){toast('Полный экран недоступен')}};
 $('#bMute').textContent=S.mute?'🔇':'🔊';$('#bMute').onclick=()=>{S.mute=!S.mute;$('#sMute').checked=S.mute;$('#bMute').textContent=S.mute?'🔇':'🔊';sv('nc_set',S)};
+// ---------- v4 ----------
+function dmenu(sp,tx,opts){pnl('dlg');$('#sp').textContent=sp;$('#tx').textContent=tx;const box=$('#ch');box.innerHTML='';opts.forEach(o=>{const b=document.createElement('button');b.textContent=o[0];b.onclick=()=>{snd('click');o[1]()};box.appendChild(b)})}
+const act=(m,t)=>()=>{gt+=m;applyTime();pnl(null);toast(t,3000)};
+LIFE.laptop=()=>dmenu('Ноутбук','Чем заняться?',[['Почитать новости (15 мин)',act(15,pick(['Заголовки: погода, пробки, снова погода.','Учёные нашли новый вид бабочек.']))],['Написать письмо (20 мин)',act(20,'Письмо получилось тёплым. Отправлено.')],['Поиграть (30 мин)',act(30,'Вы прошли уровень с третьей попытки.')],['Закрыть',()=>pnl(null)]]);
+LIFE.cook=()=>{const n=NPCS.find(o=>o.g.visible&&Math.hypot(o.g.position.x-P.x,o.g.position.z-P.z)<4),f=(m,t)=>()=>{act(m,t)();if(n){n.mood=0;setTimeout(()=>toast('💬 '+n.d.n+': Пахнет вкусно! Оставишь мне порцию?',3000),900)}};
+ dmenu('Кухня','Что приготовить?',[['Яичницу (10 мин)',f(10,'Яичница удалась.')],['Суп (25 мин)',f(25,'Суп на славу.')],['Чай (5 мин)',f(5,'Чай заварен.')],['Отмена',()=>pnl(null)]])};
+LIFE.book=()=>dmenu('Книги','Что почитать?',[['Детектив (30 мин)',act(30,'Убийца — садовник. Как всегда.')],['Фантастика (30 мин)',act(30,'Вы улетели на другую планету.')],['Стихи (15 мин)',act(15,'Строчки сами запомнились.')],['Закрыть',()=>pnl(null)]]);
+$('#pCall').onclick=()=>{pnl(null);const v=NPCS.filter(o=>o.g.visible);if(!v.length)return toast('Никто не берёт трубку.');const o=pick(v),h=(gt/60)%24;snd('ring');toast('📞 '+o.d.n+': '+(h>=2&&h<8?'Алло?.. Я сплю, позвони позже.':o.mood<0?'С тобой не буду разговаривать.':'Да? Заходи, поболтаем.'),3500)};
+setInterval(()=>{if(mode==='free'&&!panel&&(gt/60)%24<5&&Math.random()<.35){snd('knock');toast('Из-за стены слышен глухой стук…',3000)}},60000);
+function story6(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Блэкаут',time:'21:00',light:'2',npcs:['lev','vera','tim','anna'],desc:'Вырубился свет, и кто-то ходит по квартире. 6 концовок.',chars:'Лёва, Вера, Тим, Анна',start:'g0',nodes:{
+g0:{t:'msg',from:'Рассказчик',text:'Вечер. Свет мигнул, и вся квартира погрузилась во тьму. В коридоре что-то стукнуло.',lights:'0',snd:'knock',next:'g1'},
+g1:{t:'choice',from:'Рассказчик',text:'Что делать?',choices:[{text:'Искать фонарик на кухне',next:'g2'},{text:'Позвать соседей',next:'g3'},{text:'Ждать на месте',next:'g4'}]},
+g2:{t:'wait',obj:'cook',hint:'Найди фонарик в ящике у плиты (кухня).',next:'g2b'},
+g2b:{t:'msg',from:'Рассказчик',text:'Фонарик нашёлся! Луч выхватывает следы на полу.',set:'torch=1',next:'g5'},
+g3:{t:'wait',obj:'npc:anna',hint:'Найди Анну: она медсестра и знает, что делать.',next:'g3b'},
+g3b:{t:'choice',from:'Анна',text:'Спокойно. Пробки выбило. Кто-то должен сходить в щиток на лестнице. Я не пойду.',choices:[{text:'Пойти в щиток самому',set:'brave=1',next:'g6'},{text:'Попросить Тима',next:'g3t'},{text:'Вернуться и ждать',next:'g4'}]},
+g3t:{t:'wait',obj:'npc:tim',hint:'Уговори Тима.',next:'g3u'},
+g3u:{t:'choice',from:'Тимофей',text:'Я боюсь темноты… но ладно, если ты пойдёшь со мной.',choices:[{text:'Пойти вместе',set:'brave=1;friend=1',next:'g6'},{text:'Отправить его одного',set:'friend=0',next:'g7'}]},
+g4:{t:'msg',from:'Рассказчик',text:'Время тянется. Из темноты доносится шорох.',skip:30,snd:'creak',next:'g8'},
+g8:{t:'choice',from:'Рассказчик',text:'Шорох приближается.',choices:[{text:'Включить подсветку телефона',next:'g5'},{text:'Закричать',next:'e_panic'},{text:'Замереть',next:'e_dark'}]},
+g5:{t:'msg',from:'Рассказчик',text:'Следы ведут к входной двери.',next:'g9'},
+g9:{t:'wait',obj:'door',hint:'Осмотри входную дверь.',next:'g9b'},
+g9b:{t:'choice',from:'Рассказчик',text:'Дверь приоткрыта. На площадке кто-то стоит.',choices:[{text:'Выйти на площадку',next:'brave=1?g6;g10'},{text:'Захлопнуть дверь',next:'e_lock'}]},
+g10:{t:'call',from:'Вера',text:'— Это я! Моя кошка убежала в темноте. Помоги найти!',choices:[{text:'Помочь искать',set:'help=1',next:'e_cat'},{text:'Сказать, что занят',next:'e_lock'}]},
+g6:{t:'msg',from:'Рассказчик',text:'Щиток на лестнице. Один рубильник опущен, рядом записка: «Не поднимай».',next:'g11'},
+g7:{t:'msg',from:'Тимофей',text:'Там кто-то стоит! Я не пойду больше!',next:'g9'},
+g11:{t:'choice',from:'Рассказчик',text:'Поднять рубильник?',choices:[{text:'Поднять',next:'friend=1?e_light;e_shock'},{text:'Не трогать',next:'e_dark'}]},
+e_panic:e('Концовка: Паника','Крик разбудил весь дом. Свет включили соседи, а вы оказались виноватым.'),
+e_dark:e('Концовка: Темнота','Вы просидели до рассвета. Что это было — так и неизвестно.'),
+e_lock:e('Концовка: На два замка','Вы заперлись. Утром у двери лежала мокрая кошка и записка «Спасибо».'),
+e_cat:e('Концовка: Кошка найдена','Вы нашли кошку на чердаке. Вера впервые улыбнулась.'),
+e_light:e('Концовка: Да будет свет','Тим держал фонарь, вы подняли рубильник. Свет вернулся и вы подружились.'),
+e_shock:e('Концовка: Искра','Рубильник ударил током. Вы очнулись в больнице, где работает Анна.')}}}
+function story7(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Новый жилец',time:'12:00',light:'2',npcs:['lev','tim'],desc:'Кто на самом деле Тимофей? 5 концовок.',chars:'Тимофей, Лёва, Незнакомец',start:'h0',nodes:{
+h0:{t:'msg',from:'Рассказчик',text:'Полдень. На пороге молодой человек с чемоданом: Тимофей, новый жилец.',next:'h1'},
+h1:{t:'wait',obj:'npc:tim',hint:'Поговори с Тимофеем.',next:'h2'},
+h2:{t:'choice',from:'Тимофей',text:'Привет! Мне сказали, комната свободна. Вот залог.',choices:[{text:'Принять залог',set:'paid=1',next:'h3'},{text:'Попросить документы',set:'docs=1',next:'h3'},{text:'Отказать',next:'e_refuse'}]},
+h3:{t:'msg',from:'Рассказчик',text:'Тим уходит устраиваться. Через час звонит телефон.',skip:60,next:'h4'},
+h4:{t:'wait',obj:'phone',ring:true,hint:'Ответь на звонок.',next:'h5'},
+h5:{t:'call',from:'Незнакомец',text:'— Вы сдали комнату Тимофею? Он не тот, за кого себя выдаёт. Проверьте паспорт.',choices:[{text:'Поверить и проверить',next:'docs=1?h6;h7'},{text:'Бросить трубку',next:'h8'}]},
+h6:{t:'msg',from:'Рассказчик',text:'Паспорт настоящий, но дата рождения странная.',set:'real=1',next:'h9'},
+h7:{t:'msg',from:'Рассказчик',text:'Документов нет, проверять нечего.',next:'h9'},
+h8:{t:'msg',from:'Рассказчик',text:'Вы выбросили звонок из головы. Но осадок остался.',next:'h9'},
+h9:{t:'wait',obj:'laptop',hint:'Проверь Тимофея через интернет на ноутбуке.',next:'h10'},
+h10:{t:'choice',from:'Рассказчик',text:'Страница подозрительная.',choices:[{text:'Написать в полицию',next:'real=1?e_police;e_fail'},{text:'Спросить Лёву',next:'h11'},{text:'Промолчать',next:'e_silent'}]},
+h11:{t:'wait',obj:'npc:lev',hint:'Расспроси Лёву.',next:'h12'},
+h12:{t:'choice',from:'Лёва',text:'Знаю его. Бывший сосед, ищет жильё. Не доставай человека.',choices:[{text:'Извиниться перед Тимом',next:'e_friend'},{text:'Не поверить',next:'e_fail'}]},
+e_refuse:e('Концовка: Нет мест','Тим ушёл. Комната пустует, а в двери остался странный след.'),
+e_police:e('Концовка: Бдительность','Полиция нашла у Тима поддельные документы. Вы спасли квартиру.'),
+e_fail:e('Концовка: Ложная тревога','Полиция приехала зря. Тим съехал, а соседи теперь на вас косятся.'),
+e_silent:e('Концовка: Тихий сосед','Вы промолчали. Тим оказался тихим и аккуратным жильцом.'),
+e_friend:e('Концовка: Новый друг','Вы извинились. Тим оставил в комнате подарок: банку варенья.')}}}
+function story8(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Тайна холодильника',time:'03:10',light:'0',npcs:['lev','anna'],spawn:2,desc:'Ночью на кухне что-то не так. 4 концовки.',chars:'Анна, Лёва, Вера',start:'i0',nodes:{
+i0:{t:'msg',from:'Рассказчик',text:'Три часа ночи. На кухне что-то стучит внутри холодильника.',snd:'tick',next:'i1'},
+i1:{t:'wait',obj:'eat',hint:'Загляни в холодильник.',next:'i2'},
+i2:{t:'msg',from:'Рассказчик',text:'Внутри записка: «Ешь не всё. Часть — не твоя». И контейнер с надписью «Не открывать».',next:'i3'},
+i3:{t:'choice',from:'Рассказчик',text:'Что сделать с контейнером?',choices:[{text:'Открыть',next:'i4'},{text:'Оставить',next:'i5'},{text:'Позвать Лёву',next:'i6'}]},
+i4:{t:'msg',from:'Рассказчик',text:'Внутри ключ от кладовки.',set:'key=1',next:'i5'},
+i6:{t:'wait',obj:'npc:lev',hint:'Покажи находку Лёве.',next:'i8'},
+i8:{t:'choice',from:'Лёва',text:'Не трогай! Это Верин секрет.',choices:[{text:'Послушаться',next:'i5'},{text:'Всё равно открыть',set:'key=1',next:'i5'}]},
+i5:{t:'wait',obj:'npc:anna',hint:'Анна не спит. Поговори с ней.',next:'i7'},
+i7:{t:'choice',from:'Анна',text:'Ты рылся в холодильнике? Там мои лекарства и кое-что для Веры.',choices:[{text:'Признаться',set:'honest=1',next:'i9'},{text:'Соврать',next:'i9'},{text:'Уйти спать',next:'e_sleep8'}]},
+i9:{t:'wait',obj:'phone',ring:true,hint:'Звонит телефон.',next:'i10'},
+i10:{t:'call',from:'Вера',text:'— Кто трогал мой контейнер?!',choices:[{text:'Признаться',next:'key=1?e_key;e_apology'},{text:'Свалить на Лёву',next:'e_blame'}]},
+e_key:e('Концовка: Ключ от кладовки','Вера открыла кладовку. Там фамильные письма, которые она боялась потерять.'),
+e_apology:e('Концовка: Извинения','Вы извинились за зря потревоженную ночь. Вера простила и дала пирог.'),
+e_blame:e('Концовка: Козёл отпущения','Лёва обиделся и неделю не здоровался. Анна покачала головой.'),
+e_sleep8:e('Концовка: Спать','Вы ушли спать. Стук в холодильнике так и не прекратился.')}}}
+function story9(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Два сообщения',time:'19:00',light:'1',npcs:['vera'],desc:'Банк пишет одно, мама другое. Кому верить? 4 концовки.',chars:'Банк, Мама, Вера',start:'j0',nodes:{
+j0:{t:'msg',from:'Рассказчик',text:'Вечер. На телефон приходят два сообщения подряд.',next:'j1'},
+j1:{t:'msg',from:'Банк',text:'С вашей карты списано 90 000. Если это не вы — позвоните.',next:'j2'},
+j2:{t:'msg',from:'Мама',text:'Сынок, не отвечай банку, это мошенники! Я уже еду к тебе.',next:'j3'},
+j3:{t:'choice',from:'Рассказчик',text:'Кому верить?',choices:[{text:'Позвонить в банк',next:'j4w'},{text:'Ждать маму',next:'j5'},{text:'Спросить Веру',next:'j6'}]},
+j4w:{t:'wait',obj:'phone',hint:'Позвони с телефона в гостиной.',next:'j4'},
+j4:{t:'call',from:'Банк',text:'— Назовите код из СМС для отмены операции.',choices:[{text:'Назвать код',next:'e_scam'},{text:'Положить трубку',next:'j5'},{text:'Потребовать данные сотрудника',next:'j7'}]},
+j7:{t:'msg',from:'Рассказчик',text:'В трубке гудки. Номер недоступен.',set:'suspect=1',next:'j5'},
+j5:{t:'wait',obj:'door',hint:'Мама звонит в дверь.',skip:20,next:'j8'},
+j8:{t:'choice',from:'Рассказчик',text:'На пороге женщина с маминым голосом, но чужим лицом.',choices:[{text:'Открыть',next:'suspect=1?e_wise;e_robbed'},{text:'Не открывать',next:'e_safe'}]},
+j6:{t:'wait',obj:'npc:vera',hint:'Спроси Веру.',next:'j9'},
+j9:{t:'choice',from:'Вера',text:'Это мошенники, дорогой. Мне такие звонили. Не называй код!',choices:[{text:'Поблагодарить',set:'advice=1',next:'j5'},{text:'Не слушать',next:'j4w'}]},
+e_scam:e('Концовка: Код ушёл','Вы назвали код. Деньги исчезли. Мама приехала слишком поздно.'),
+e_wise:e('Концовка: Бдительность','Вы вызвали полицию, не открывая. «Мамой» оказалась мошенница.'),
+e_robbed:e('Концовка: Ограбление','Вы открыли. Квартиру вынесли за десять минут.'),
+e_safe:e('Концовка: Закрытая дверь','Вы не открыли. Настоящая мама позвонила через час.')}}}
+function story10(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Старый дом',time:'04:00',light:'0',npcs:[],spawn:0,cast:[{n:'Хозяйка',col:'серый',trait:'ворчливый',room:'гостиная',phrase:'Не ходи по ночам по моему дому.'}],desc:'Хозяйка, которой нет. 5 концовок.',chars:'Хозяйка, Марк',start:'k0',nodes:{
+k0:{t:'msg',from:'Рассказчик',text:'Четыре утра. Скрипнула дверь шкафа. В гостиной кто-то ходит.',snd:'creak',next:'k1'},
+k1:{t:'choice',from:'Рассказчик',text:'Что делать?',choices:[{text:'Выглянуть в гостиную',next:'k2w'},{text:'Позвонить Марку',next:'k3w'},{text:'Включить свет и проверить архив',next:'k4'}]},
+k2w:{t:'wait',obj:'npc:Хозяйка',hint:'Поговори с Хозяйкой в гостиной.',next:'k2'},
+k2:{t:'choice',from:'Хозяйка',text:'Я хозяйка этого дома. Ты задолжал за три месяца. Или отвечай на загадку.',choices:[{text:'Заплатить',set:'paid=1',next:'k5'},{text:'Загадка',next:'k6'},{text:'Прогнать',next:'e_evict'}]},
+k3w:{t:'wait',obj:'phone',ring:true,hint:'Звонит Марк.',next:'k3'},
+k3:{t:'call',from:'Марк',text:'— Хозяйка умерла в 2009. Не верь ей.',choices:[{text:'Поверить',set:'believe=1',next:'k2w'},{text:'Не верить',next:'k2w'}]},
+k4:{t:'msg',from:'Рассказчик',text:'Свет вспыхнул. В гостиной никого, только запах старых духов.',lights:'1',next:'k7'},
+k7:{t:'wait',obj:'laptop',hint:'Загляни в архив дома на ноутбуке.',next:'k8'},
+k8:{t:'msg',from:'Архив',text:'Хозяйка умерла в 2009. Квартира проклята долгами.',set:'knows=1',next:'k2w'},
+k5:{t:'msg',from:'Хозяйка',text:'Долги прощены. Но дом не отпускает.',next:'believe=1?e_ghost;e_peace_k'},
+k6:{t:'choice',from:'Хозяйка',text:'Что остаётся, когда ты уходишь, но дом помнит?',choices:[{text:'Тень',next:'k9'},{text:'Память',next:'k9'},{text:'Не знаю',next:'e_evict'}]},
+k9:{t:'msg',from:'Рассказчик',text:'Ответ принят. Хозяйка медленно тает.',next:'knows=1?e_free;e_haunt'},
+e_evict:e('Концовка: Выселение','Вы оказались на лестнице с чемоданом. Дверь захлопнулась сама.'),
+e_ghost:e('Концовка: Призрак','Вы заплатили, но Хозяйка осталась. Теперь она платит вам за компанию.'),
+e_peace_k:e('Концовка: Мир','Долги прощены, дом затих. Утром вы просыпаетесь свободным.'),
+e_free:e('Концовка: Свобода','Вы знали правду, и Хозяйка исчезла навсегда. Дом принадлежит вам.'),
+e_haunt:e('Концовка: Привидение','Вы не знали правды. Хозяйка ушла, но шкаф скрипит каждую ночь.')}}}
+// ---------- v5 ----------
+let curRoom='';const ITEMS=[],FALL=[],ROOMPT={спальня:[-4.5,-1],гостиная:[.4,-.8],кухня:[4.6,1.8],ванная:[-4,2.3],подъезд:[8.6,-3.4],двор:[37,-3]};
+const clr=(v,def)=>{v=String(v||'').toLowerCase();return CLR[v]!=null?CLR[v]:(/^#[0-9a-f]{6}$/.test(v)?parseInt(v.slice(1),16):def)};
+function turnTo(g,ang,dt){let d=ang-g.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));g.rotation.y+=d*Math.min(1,dt*8)}
+function roomAt(){if(P.x>20)return'двор';if(P.x>6)return'подъезд';if(P.x<-1)return P.z<.5?'спальня':'ванная';return P.z<.5?'гостиная':'кухня'}
+function doorCol(){colD.length=0;for(const k in DOORS){const d=DOORS[k];if(!d.open)colD.push([d.x-.1,d.x+.1,d.hz,d.hz+1.9])}}
+function applyDoors(list){for(const k in DOORS){const d=DOORS[k];d.open=k!=='front';d.a=d.open?d.sgn*1.5:0;d.locked=false;d.key='';d.auto=0}(list||[]).forEach(c=>{const d=DOORS[c.id];if(d){d.locked=!!c.locked;d.key=c.key||'';if(d.locked){d.open=false;d.a=0}}});doorCol()}
+function doorUse(k){const d=DOORS[k];if(!d)return;
+ if(d.locked){if(St&&St.inv&&d.key&&St.inv.includes(d.key)){d.locked=false;snd('click');toast('Вы отперли дверь ключом.',2500)}else{snd('knock');return toast('Заперто.'+(d.key?' Нужен ключ.':''),2500)}}
+ if(d.open&&Math.hypot(P.x-d.x,P.z-(d.hz+.95))<.9)return toast('Вы стоите в проёме.',1500);
+ d.open=!d.open;d.auto=0;snd(d.open?'creak':'click');doorCol();if(k==='front')fire('door');if(d.open)fire('door:'+k)}
+function doorSet(k,v){const d=DOORS[k];if(!d)return;d.open=!!v;d.auto=0;snd('creak');doorCol()}
+function fire(id){if(!St||St.done||St.wait!==id)return;const nd=story.nodes[St.node],nx=nd&&resolve(nd.next);St.wait=null;St.waitAt=null;$('#hint').textContent='';nx?go(nx):toast('Нет перехода после ожидания',4000)}
+function buildItems(list,taken){ITEMS.splice(0).forEach(i=>{sc.remove(i.m);const k=IA.indexOf(i.ia);if(k>=0)IA.splice(k,1)});(list||[]).slice(0,12).forEach((c,idx)=>{const p=ROOMPT[String(c.room||'').toLowerCase()];if(!p||!c.id)return;
+ const m=bx(sc,.28,.28,.28,0,.35,0,clr(c.col,0xd8b030),false,0x221a05);m.position.set(p[0]+(idx%3)*.35,.35,p[1]+(idx%2)*.35);const tk=taken.includes(c.id);
+ const ia={id:'item:'+c.id,x:m.position.x,z:m.position.z,n:(/ключ/i.test(c.kind||'')?'взять: ':'осмотреть: ')+c.n,off:tk};IA.push(ia);ITEMS.push({c,m,ia,ph:idx,taken:tk})})}
+function itemUse(id){const it=ITEMS.find(i=>i.c.id===id);if(!it||!St||(it.taken&&/ключ/i.test(it.c.kind||'')))return;const c=it.c;if(c.set)setv(c.set);
+ if(/ключ/i.test(c.kind||'')){it.taken=true;it.ia.off=true;St.inv.push(id);St.taken.push(id);snd('click');toast('Вы взяли: '+c.n+(c.text?'. '+c.text:''),3500)}
+ else if(/запис/i.test(c.kind||'')){snd('click');dmenu(c.n,c.text||'…',[['Закрыть',()=>{pnl(null);fire('item:'+id)}]]);return}
+ else{snd('click');toast(c.n+': '+(c.text||'Вы осмотрели предмет.'),3500)}
+ fire('item:'+id)}
+function dropObj(){const m=bx(sc,.3,.3,.3,0,2,0,0xaa8844,false);const fx=-Math.sin(P.yaw),fz=-Math.cos(P.yaw);m.position.set(P.x+fx*1.6,2.2,P.z+fz*1.6);FALL.push({m,vy:0,t:25})}
+function flash(){LT.forEach(l=>l.L.intensity=3);snd('tick');setTimeout(setBr,100);setTimeout(()=>LT.forEach(l=>l.L.intensity=0),220);setTimeout(setBr,420)}
+function runFx(str){String(str).split(';').forEach(x=>{const q=x.trim().split(':'),k=q[0],a=q[1],b=q[2];
+ if(k==='open')doorSet(a,1);else if(k==='close')doorSet(a,0);else if(k==='lock'){if(DOORS[a])DOORS[a].locked=true}else if(k==='unlock'){if(DOORS[a])DOORS[a].locked=false}
+ else if(k==='drop')dropObj();else if(k==='flash')flash();else if(k==='knock')snd('knock');else if(k==='ring')snd('ring');
+ else if(k==='lights'){LT.forEach((l,i)=>l.on=a==='2'||(a==='1'&&i===0));setBr()}else if(k==='skip')gt+=+a||0;
+ else if(k==='arrive'||k==='leave'){const o=NPCS.find(z=>z.d.id===a);if(o){o.hid=k==='leave';if(k==='arrive')snd('knock')}}
+ else if(k==='go'){const o=NPCS.find(z=>z.d.id===a),rm=RS[b];if(o&&rm){o.force=rm[0];o.fT=40;o.path=null;o.w=0}}})}
+function worldUpd(dt){const tt=performance.now()/1000;
+ for(const k in DOORS){const d=DOORS[k],tg=d.open?d.sgn*1.5:0;d.a+=(tg-d.a)*Math.min(1,dt*5);d.g.rotation.y=d.a;
+  const cz=d.hz+.95,near=NPCS.some(o=>o.g.visible&&Math.hypot(o.g.position.x-d.x,o.g.position.z-cz)<1.3);
+  if(near&&!d.open&&!d.locked){d.open=true;d.auto=1;d.ct=0;doorCol();snd('creak')}else if(d.auto&&d.open&&!near&&Math.hypot(P.x-d.x,P.z-cz)>1.8){d.ct+=dt;if(d.ct>2.5){d.open=false;d.auto=0;doorCol()}}}
+ LIFT.a+=((LIFT.open?1:0)-LIFT.a)*Math.min(1,dt*3);LIFT.l.position.x=6.9-LIFT.a*.55;LIFT.r.position.x=7.5+LIFT.a*.55;
+ ITEMS.forEach(i=>{i.m.visible=mode==='play'&&!i.taken;i.m.position.y=.35+Math.sin(tt*2+i.ph)*.05;i.m.rotation.y=tt});
+ for(let k=FALL.length-1;k>=0;k--){const f=FALL[k];f.vy-=9.8*dt;f.m.position.y+=f.vy*dt;if(f.m.position.y<.15){f.m.position.y=.15;if(f.vy<-2){snd('knock');f.vy=-f.vy*.35}else f.vy=0}f.t-=dt;if(f.t<=0){sc.remove(f.m);FALL.splice(k,1)}}}
+setInterval(()=>{if(St&&!St.done&&mode==='play'&&St.waitAt!=null&&gt>=St.waitAt){St.waitAt=null;fire(St.wait)}},1000);
+function tp(x,z,yaw){const f=$('#fade');f.classList.add('on');setTimeout(()=>{P.x=x;P.z=z;P.yaw=yaw;P.pitch=0;f.classList.remove('on')},500)}
+LIFE.stairs=()=>dmenu('Лестница','Спуститься во двор?',[['Спуститься',()=>{pnl(null);tp(40,-6.2,0)}],['Остаться',()=>pnl(null)]]);
+LIFE.lift=()=>dmenu('Лифт','Что сделать?',[['Двери: открыть или закрыть',()=>{LIFT.open=!LIFT.open;snd('tick');pnl(null)}],['Спуститься во двор',()=>{pnl(null);snd('tick');tp(40,-6.2,0)}],['Отмена',()=>pnl(null)]]);
+LIFE.enter=()=>dmenu('Подъезд','Войти в подъезд?',[['Войти',()=>{pnl(null);tp(9,-3.2,0)}],['Остаться во дворе',()=>pnl(null)]]);
+LIFE.mail=()=>dmenu('Почтовые ящики','Проверить почту?',[['Открыть свой ящик',()=>{pnl(null);snd('click');toast(pick(['Реклама пиццы и счёт за свет.','Открытка от старой знакомой.','Пусто. Только пыль.']),3000)}],['Отмена',()=>pnl(null)]]);
+LIFE.bench=act(30,'Вы посидели на скамейке и подышали воздухом.');
+LIFE.wardrobe=()=>{snd('creak');toast(pick(['В шкафу одежда и запах нафталина.','В кармане старой куртки — билет на поезд.']),3000)};LIFE.drawer=()=>{snd('creak');toast(pick(['В тумбочке зарядка и пара носков.','Внутри старые часы. Они тикают.']),3000)};
+ACT.wardrobe=['wardrobe','открыть шкаф'];ACT.nightstand=['drawer','открыть тумбочку'];
+Object.assign(FL,{neigh:['За дверью играет радио.','Никто не открывает.','Слышно, как бегает собака.'],car:['Капот тёплый. Недавно приехала.','Фары мигнули, будто здороваются.']});
+const BK=['nc_stories','nc_layouts','nc_layout','nc_saves','nc_save','nc_mem','nc_set','nc_end','nc_active','nc_draft'];
+$('#bkExp').onclick=()=>{const d={};BK.forEach(k=>{const v=ld(k,undefined);if(v!==undefined)d[k]=v});dl('nc_backup',{app:'nc',v:3,data:d})};
+$('#bkImp').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.app!=='nc'||!o.data)throw Error('это не резервная копия игры');if(!confirm('Восстановить данные из копии? Текущие будут перезаписаны.'))return;let c=0;BK.forEach(k=>{if(o.data[k]!==undefined){sv(k,o.data[k]);c++}});toast('Восстановлено ключей: '+c+'. Перезагрузите страницу.',5000)}catch(er){toast('Ошибка: '+er.message,4500)}};r.readAsText(f)};
+function story11(){const e=(t,x)=>({t:'end',title:t,text:x});return{name:'Ночной визит',time:'22:00',light:'1',npcs:[],spawn:0,goal:'Выберитесь из запертой квартиры и узнайте, кто пришёл.',vars:'sign=0',
+ doors:[{id:'front',locked:true,key:'key1'}],items:[{id:'key1',n:'Ключ от входной двери',col:'жёлтый',room:'спальня',kind:'ключ',text:'Он лежал под подушкой.'},{id:'note',n:'Записка',col:'белый',room:'подъезд',kind:'записка',text:'«Не верь курьеру. Он знает, где стоит машина.»',set:'read=1'}],
+ cast:[{n:'Курьер',col:'оранжевый',trait:'ворчливый',room:'подъезд',phrase:'Подпишите здесь. Быстрее, у меня ещё три адреса.',hair:'чёрный',hid:'скрыт'}],
+ desc:'Запертая дверь, ключ, курьер и странная машина во дворе. 4 концовки.',chars:'Курьер',start:'p0',nodes:{
+p0:{t:'msg',from:'Рассказчик',text:'Ночь. Кто-то звонит в дверь, но она заперта, а ключ потерян.',fx:'knock',next:'p1'},
+p1:{t:'wait',obj:'item:key1',hint:'Найди ключ от входной двери (он где-то в спальне).',next:'p2'},
+p2:{t:'msg',from:'Рассказчик',text:'Ключ найден. За дверью слышны шаги.',fx:'knock',next:'p3'},
+p3:{t:'wait',obj:'door:front',hint:'Открой входную дверь.',next:'p4'},
+p4:{t:'msg',from:'Рассказчик',text:'За дверью курьер с коробкой. В подъезде мигает свет.',fx:'arrive:Курьер;flash',next:'p5'},
+p5:{t:'wait',obj:'npc:Курьер',hint:'Поговори с курьером в подъезде. Заодно осмотрись там.',next:'p6'},
+p6:{t:'choice',from:'Курьер',text:'Вам посылка. Подпишите. Только… внизу у лифта вас ждут.',choices:[{text:'Подписать',set:'sign=1',next:'p7'},{text:'Отказаться',next:'p8'}]},
+p7:{t:'msg',from:'Рассказчик',text:'В коробке записка: «Спустись во двор. Машина с зелёными фарами». Что-то падает в комнате.',fx:'drop',next:'p9'},
+p9:{t:'wait',obj:'room:двор',hint:'Спустись во двор на лифте или по лестнице.',next:'p10'},
+p10:{t:'choice',from:'Рассказчик',text:'Во дворе стоит синяя машина. Фары мигают зелёным.',choices:[{text:'Подойти к машине',next:'sign=1,read=1?e_secret;sign=1?e_car;e_cold'},{text:'Вернуться домой',next:'e_home'}]},
+p8:{t:'msg',from:'Курьер',text:'Как знаете. Но машина во дворе всё равно ждёт.',fx:'leave:Курьер;lights:0',next:'p9'},
+e_secret:e('Концовка: Тайна машины','Вы знали про записку и не поверили курьеру. В машине ждал тот, кто писал: старый друг.'),
+e_car:e('Концовка: Поездка','Вы сели в машину. Куда она едет, вы узнали уже в пути.'),
+e_cold:e('Концовка: Холодный двор','Вы подошли, но не подписали посылку. Машина уехала, а курьер исчез.'),
+e_home:e('Концовка: Дома','Вы вернулись и заперлись на два замка. Утром во дворе уже нет машин.')}}}
+window.__NC={fire,runFx,DOORS,ITEMS,buildItems,doorUse,startStory,go,interact,getSt:()=>St,findPath,hit,NPCS,NPCD,STORIES,navBuild,wizBuild,setCast,contGame,saveGame};
 // ---------- старт ----------
 rs();setBr();rebuild();pnl('menu');refreshMenu();tick();
 }
