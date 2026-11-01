@@ -9,6 +9,7 @@
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(1100px 600px at 15% -10%,#4c1d9566,transparent),radial-gradient(900px 500px at 100% 0,#0e749055,transparent),#0d0a1c;color:#ece9ff;min-height:100vh}
 header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 18px;position:sticky;top:0;background:#0d0a1ccc;backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid #ffffff14}
 #logo{font-size:20px;font-weight:800;cursor:pointer;white-space:nowrap}
+#me{cursor:pointer;font-weight:600;padding:6px 12px;background:#ffffff12;border-radius:20px;white-space:nowrap}
 input{background:#ffffff12;border:1px solid #ffffff26;color:#fff;border-radius:10px;padding:10px 12px;font-size:15px;outline:none;min-width:0}
 input:focus{border-color:#a78bfa}
 main{max-width:1000px;margin:0 auto;padding:18px}
@@ -18,16 +19,15 @@ main{max-width:1000px;margin:0 auto;padding:18px}
 .join{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center;margin:16px 0}
 .join input{width:130px;text-transform:uppercase;letter-spacing:3px;text-align:center}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:18px}
-.card{background:linear-gradient(160deg,#ffffff14,#ffffff06);border:1px solid #ffffff1f;border-top:4px solid var(--c);border-radius:18px;padding:18px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
-.card:hover{transform:translateY(-4px);box-shadow:0 12px 30px #0008,0 0 0 1px var(--c)}
+.card{background:linear-gradient(160deg,#ffffff14,#ffffff06);border:1px solid #ffffff1f;border-top:4px solid var(--c);border-radius:18px;padding:18px;transition:.18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #0008,0 0 0 1px var(--c)}
 .card .ic{font-size:44px}.card h3{margin:6px 0}.card p{margin:0 0 10px;color:#c9c4e8;font-size:14px;line-height:1.4}
-.card small{color:#a9a3cc}
-.card.soon{border-style:dashed;cursor:default;opacity:.6}.card.soon:hover{transform:none;box-shadow:none}
-.btn{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;margin:3px;transition:.15s}
+.card small{color:#a9a3cc;display:block;margin-bottom:8px}
+.btn{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;margin:3px;transition:.15s;font-family:inherit}
 .btn:hover{filter:brightness(1.15)}.btn:active{transform:scale(.97)}
 .btn.big{padding:13px 22px;font-size:17px}.btn.sm{padding:6px 12px;font-size:13px}
 .btn.ghost{background:#ffffff14}
-.bar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar b{font-size:18px;margin-right:auto}
+.bar{display:flex;gap:6px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar b{font-size:18px;margin-right:auto}
 .lob{max-width:560px;margin:20px auto;text-align:center;background:#ffffff0d;border:1px solid #ffffff1f;border-radius:20px;padding:22px}
 .lob h2{margin:4px 0}.code{font-size:56px;font-weight:900;letter-spacing:10px;color:#67e8f9;margin:6px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -35,10 +35,10 @@ main{max-width:1000px;margin:0 auto;padding:18px}
 .chip{display:inline-flex;gap:6px;align-items:center;background:#ffffff12;border:1px solid var(--c,#fff3);border-radius:20px;padding:5px 12px;font-size:14px}
 .chip.st{background:#7c3aed44}
 .rules{text-align:left;font-size:13px;color:#c9c4e8;background:#0004;border-radius:12px;padding:10px 14px;margin:10px 0}
+.av{font-size:30px;cursor:pointer;padding:6px;border-radius:12px;border:2px solid transparent;display:inline-block}.av.on{border-color:#a78bfa;background:#7c3aed33}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111c;border:1px solid #fff3;padding:10px 18px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
 #toast.on{opacity:1}
 .sc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-/* монополия */
 .mb{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:3px;aspect-ratio:1;max-width:680px;margin:0 auto}
 .mc{background:#ffffff10;border:1px solid #ffffff1a;border-radius:6px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(7px,1.5vw,11px);padding:2px;overflow:hidden;line-height:1.15}
 .mc i{position:absolute;top:0;left:0;right:0;height:6px}.mc u{position:absolute;bottom:0;left:0;right:0;height:5px}
@@ -47,31 +47,38 @@ main{max-width:1000px;margin:0 auto;padding:18px}
 .dice{font-size:clamp(30px,7vw,56px);letter-spacing:6px;line-height:1}
 .pp{display:flex;gap:8px;align-items:center;padding:6px 12px;border-radius:12px;background:#ffffff0d;border-left:4px solid var(--c);margin:4px 0}.pp.cur{background:#7c3aed44}.pp.out{opacity:.4;text-decoration:line-through}
 .log{font-size:12px;color:#b8b2dc;max-height:90px;overflow:hidden}
-/* карты имаджинариум */
 .hand,.tbl{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
 .pc{width:100px;height:140px;border-radius:12px;overflow:hidden;cursor:pointer;border:3px solid transparent;transition:.15s;flex:none}
 .pc:hover{transform:translateY(-4px)}.pc.sel{border-color:#fff;transform:translateY(-8px);box-shadow:0 0 18px #fff6}
 .ic3{width:100%;height:100%;display:flex;align-items:center;justify-content:space-around;font-size:30px}
 .ic3.l1{flex-direction:column}.ic3.l2{flex-wrap:wrap;padding:10px}.ic3 span:nth-child(2){font-size:42px}.ic3.l2 span:nth-child(1){font-size:50px}
 .tc{text-align:center;font-size:12px;display:flex;flex-direction:column;gap:3px;align-items:center}.tc.win .pc{border-color:#facc15;box-shadow:0 0 18px #facc1588}
-/* уно */
 .uc{width:64px;height:92px;border-radius:10px;border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;cursor:pointer;transition:.15s;flex:none;text-shadow:0 2px 4px #0006}
 .uc.no{opacity:.45;cursor:default}.uc.ok:hover{transform:translateY(-8px)}.uc.big{width:90px;height:130px;font-size:40px;cursor:default}
 .uno{display:flex;gap:18px;align-items:center;justify-content:center;margin:14px 0;flex-wrap:wrap}
 .dot{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid #fff;vertical-align:middle}
-/* шпион / крокодил */
 .role{font-size:22px;text-align:center;background:#ffffff10;border-radius:16px;padding:22px;margin:12px 0}
 .locs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 #cv{width:100%;max-width:640px;aspect-ratio:640/440;background:#fff;border-radius:14px;touch-action:none;display:block;margin:0 auto;cursor:crosshair}
 .tools{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0}
 .sw{width:28px;height:28px;border-radius:50%;border:2px solid #fff8;cursor:pointer;display:inline-block}
 .chat{max-width:640px;margin:10px auto;font-size:14px}.chat div{padding:3px 0}.chat .ok{color:#86efac;font-weight:700}
+.dk{width:58px;height:84px;background:#fff;color:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;cursor:pointer;flex:none;border:2px solid #0003;transition:.15s;flex-direction:column}
+.dk.r{color:#dc2626}.dk.big{width:70px;height:100px;cursor:default}.dk.no{opacity:.5;cursor:default}.dk:hover:not(.no):not(.big){transform:translateY(-6px)}
+.pair{position:relative;width:84px;height:100px}.pair .dk{position:absolute;left:0;top:0}.pair .dk.on{left:24px;top:14px;box-shadow:0 0 0 2px #22c55e}
+.dt{border-collapse:collapse;width:100%;max-width:640px;margin:10px auto;font-size:13px}.dt td,.dt th{border:1px solid #ffffff1f;padding:5px 7px;text-align:center}.dt td:first-child{text-align:left}.pk{background:#22c55e33;cursor:pointer;font-weight:700}
+.dd{font-size:54px;cursor:pointer;padding:0 4px;border-radius:10px;line-height:1.1;display:inline-block}.dd.hold{background:#facc1544;box-shadow:0 0 0 2px #facc15}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:10px auto}
+.mm{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:36px;background:#ffffff14;border:3px solid #ffffff22;border-radius:12px;cursor:pointer}.mm.up{background:#ffffff33}
+.c4{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:420px;margin:10px auto;background:#1d4ed8;padding:10px;border-radius:14px}
+.c4 i{aspect-ratio:1;border-radius:50%;background:#0d0a1c;display:block;cursor:pointer}.c4 i.p1{background:#ef4444}.c4 i.p2{background:#facc15}
+.qo{display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px;background:#ffffff14}.qo.ok{background:#16a34a}.qo.bad{background:#dc2626}.qo.me{box-shadow:0 0 0 2px #fff}
 </style>
 </head>
 <body>
 <header>
   <div id="logo" onclick="leave()">🎲 Игровая комната</div>
-  <input id="nm" placeholder="Твоё имя" maxlength="14" style="width:150px">
+  <div id="me" onclick="welcome()"></div>
 </header>
 <main id="app"></main>
 <div id="toast"></div>
@@ -79,7 +86,7 @@ main{max-width:1000px;margin:0 auto;padding:18px}
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 /* ============ утилиты ============ */
-var reg=[],sel=null,unoPend=null,STROKES=[],lastR=0,tool={c:'#111111',w:4},tmr=null;
+var reg=[],sel=null,unoPend=null,STROKES=[],lastR=0,tool={c:'#111111',w:4},tmr=null,net={},prof=null;
 const $=s=>document.querySelector(s),app=$('#app');
 const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const B=(l,f,c='')=>{reg.push(f);return `<button class="btn ${c}" onclick="reg[${reg.length-1}]()">${l}</button>`};
@@ -87,29 +94,53 @@ const H=f=>{reg.push(f);return `reg[${reg.length-1}]()`};
 const rnd=n=>Math.floor(Math.random()*n);
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const COL=['#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#f97316'];
-const TOK=['🔴','🔵','🟢','🟡','🟣','🟠'];
-try{$('#nm').value=localStorage.getItem('nm')||'';$('#nm').oninput=e=>localStorage.setItem('nm',e.target.value)}catch(e){}
-const nm=()=>(($('#nm').value||'').trim()||'Игрок'+(1+rnd(99))).slice(0,14);
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+const DEFTOK=['🔴','🔵','🟢','🟡','🟣','🟠'],TOK=DEFTOK.slice();
+const setTok=ps=>{for(let i=0;i<6;i++)TOK[i]=(ps[i]&&ps[i].av)||DEFTOK[i]};
+const AVS=['🦊','🐼','🐸','🐯','🦄','🐙','🦁','🐵','🐧','🐲','👽','🎃','🐱','🐶','🦉','🐻'];
+const BN=['Борис','Вера','Гоша','Дина','Ёжик'],BA=['🤖','👾','🧠','🎩','🦾'];
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2800)}
 function pickSel(el,id){sel=id;document.querySelectorAll('.hand .pc').forEach(e=>e.classList.remove('sel'));el.classList.add('sel')}
+try{prof=JSON.parse(localStorage.getItem('prof'))}catch(e){}
+const stats=()=>{try{return JSON.parse(localStorage.getItem('st'))||{}}catch(e){return{}}};
+function addStat(g,w){const s=stats();s[g]=s[g]||{p:0,w:0};s[g].p++;if(w)s[g].w++;try{localStorage.setItem('st',JSON.stringify(s))}catch(e){}}
+function setHead(){$('#me').innerHTML=prof?`${prof.av} ${E(prof.name)} ✎`:''}
+
+/* ============ регистрация (профиль) ============ */
+function welcome(then){
+  reg=[];let av=prof?prof.av:AVS[rnd(AVS.length)];
+  app.innerHTML=`<div class="lob"><h2>👋 ${prof?'Твой профиль':'Добро пожаловать!'}</h2><p class="muted">Придумай имя и выбери аватар — друзья увидят их в игре. Профиль хранится в твоём браузере.</p>
+  <input id="pn" value="${prof?E(prof.name):''}" maxlength="14" placeholder="Твоё имя" style="width:80%;font-size:18px;text-align:center">
+  <div style="margin:14px 0">${AVS.map(a=>`<span class="av ${a===av?'on':''}" onclick="${H(()=>{av=a;document.querySelectorAll('.av').forEach(e=>e.classList.toggle('on',e.textContent===a))})}">${a}</span>`).join('')}</div>
+  ${B('Готово ➜',()=>{const n=$('#pn').value.trim();if(!n)return toast('Введи имя');prof={name:n.slice(0,14),av};try{localStorage.setItem('prof',JSON.stringify(prof))}catch(e){}setHead();typeof then==='function'?then():home()},'big')}</div>`;
+}
 
 /* ============ сеть (WebRTC, PeerJS) ============ */
-var net={};
 const broadcast=m=>Object.values(net.conns||{}).forEach(c=>c.open&&c.send(m));
 const genCode=()=>Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[rnd(24)]).join('');
+const mePl=()=>({name:prof.name,av:prof.av});
 
 function hostRoom(gid){
-  net={host:true,gid,players:[{name:nm()}],conns:{},me:0,S:null,started:false};
-  openPeer(genCode());
+  net={host:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false};setTok(net.players);openPeer(genCode());
 }
+function soloGame(gid){
+  const G=GM[gid];net={host:true,solo:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false,code:'solo'};
+  for(let k=0;k<G.sb;k++)addBot();start();
+}
+function addBot(){const u=net.players.filter(p=>p.bot).length;net.players.push({name:'Бот '+BN[u%5],av:BA[u%5],bot:true})}
 function openPeer(code){
   net.code=code;
   const p=new Peer('ggames-'+code);net.peer=p;
   p.on('open',()=>{history.replaceState(null,'','#'+code);lobby()});
-  p.on('error',e=>{if(e.type==='unavailable-id'){p.destroy();openPeer(genCode())}else toast('Ошибка сети: '+e.type)});
+  p.on('disconnected',()=>{try{p.reconnect()}catch(e){}});
+  p.on('error',e=>{if(e.type==='unavailable-id'){p.destroy();openPeer(genCode())}else if(e.type!=='peer-unavailable')toast('Ошибка сети: '+e.type)});
   p.on('connection',c=>{
     c.on('data',m=>hostRecv(c,m));
-    c.on('close',()=>{if(c._i!=null&&!net.started){delete net.conns[c._i];}});
+    c.on('close',()=>{
+      const i=c._i;if(i==null||net.conns[i]!==c)return;const G=GM[net.gid];
+      if(!net.started)return removePlayer(i);
+      toast((net.players[i]?net.players[i].name:'Игрок')+' вышел');
+      if(G.bot){net.players[i].bot=true;botTick()}else{net.started=false;removePlayer(i)}
+    });
   });
 }
 function hostRecv(c,m){
@@ -117,77 +148,102 @@ function hostRecv(c,m){
   if(m.t==='join'){
     if(net.started)return c.send({t:'err',msg:'Игра уже идёт'});
     if(net.players.length>=G.max)return c.send({t:'err',msg:'Комната заполнена'});
-    const i=net.players.push({name:m.name})-1;net.conns[i]=c;c._i=i;
+    let av=m.av;if(net.players.some(p=>p.av===av))av=AVS.find(a=>!net.players.some(p=>p.av===a));
+    const i=net.players.push({name:String(m.name).slice(0,14),av})-1;net.conns[i]=c;c._i=i;
     c.send({t:'hi',idx:i});sendLobby();
-  }else if(m.t==='act')applyAct(c._i,m.a);
+  }else if(m.t==='start'){if(!net.started&&net.players.length>=G.min)start()}
+  else if(m.t==='act'&&net.started)applyAct(c._i,m.a);
   else if(m.t==='d'){drawSeg(m.seg);Object.values(net.conns).forEach(o=>o!==c&&o.open&&o.send(m))}
 }
-function sendLobby(){broadcast({t:'lobby',gid:net.gid,players:net.players,code:net.code});lobby()}
+function removePlayer(j){
+  net.players.splice(j,1);const nc={};
+  for(const k in net.conns){const o=+k;if(o===j)continue;const ni=o>j?o-1:o;nc[ni]=net.conns[k];nc[ni]._i=ni;if(ni!==o&&nc[ni].open)nc[ni].send({t:'hi',idx:ni})}
+  net.conns=nc;sendLobby();
+}
+function sendLobby(){net.started=false;setTok(net.players);broadcast({t:'lobby',gid:net.gid,players:net.players,code:net.code});lobby()}
 function joinRoom(code){
   code=(code||'').trim().toUpperCase();if(code.length<4)return toast('Введи код комнаты');
+  if(!prof)return welcome(()=>joinRoom(code));
   net={host:false,players:[],me:-1,code,S:null,started:false};
-  app.innerHTML='<p class="muted" style="text-align:center;margin-top:60px">Подключаемся…</p>';
+  app.innerHTML='<p class="muted" style="text-align:center;margin-top:60px">Подключаемся к комнате '+E(code)+'…</p>';
   const p=new Peer();net.peer=p;
+  net.jt=setTimeout(()=>{if(net.peer===p&&net.me<0){toast('Не удалось подключиться. Проверь код и сеть.');cleanup();home()}},12000);
   p.on('open',()=>{
     const c=p.connect('ggames-'+code,{reliable:true});net.conn=c;
-    c.on('open',()=>c.send({t:'join',name:nm()}));
+    c.on('open',()=>c.send({t:'join',name:prof.name,av:prof.av}));
     c.on('data',guestRecv);
     c.on('close',()=>{if(net.peer===p){toast('Связь с хостом потеряна');cleanup();home()}});
   });
-  p.on('error',e=>{toast(e.type==='peer-unavailable'?'Комната не найдена':'Ошибка: '+e.type);cleanup();home()});
+  p.on('error',e=>{if(net.peer!==p)return;toast(e.type==='peer-unavailable'?'Комната не найдена':'Ошибка сети: '+e.type);cleanup();home()});
 }
 function guestRecv(m){
-  if(m.t==='hi')net.me=m.idx;
-  else if(m.t==='lobby'){net.gid=m.gid;net.players=m.players;net.code=m.code;net.started=false;lobby()}
-  else if(m.t==='state'){net.S=m.S;net.started=true;showGame()}
+  if(m.t==='hi'){net.me=m.idx;clearTimeout(net.jt)}
+  else if(m.t==='lobby'){net.gid=m.gid;net.players=m.players;net.code=m.code;net.started=false;setTok(net.players);lobby()}
+  else if(m.t==='state'){setTok(net.players);net.S=m.S;net.started=true;showGame()}
   else if(m.t==='d')drawSeg(m.seg);
   else if(m.t==='err'){toast(m.msg);cleanup();home()}
   else if(m.t==='end'){toast('Хост закрыл комнату');cleanup();home()}
 }
-function cleanup(){try{net.peer&&net.peer.destroy()}catch(e){}net={};clearInterval(tmr);history.replaceState(null,'',location.pathname)}
-function leave(){if(net.host)broadcast({t:'end'});cleanup();home()}
-function toLobby(){net.started=false;sendLobby()}
+function cleanup(){clearTimeout(net.jt);clearTimeout(net.bt);clearTimeout(net.at);try{net.peer&&net.peer.destroy()}catch(e){}net={};clearInterval(tmr);try{history.replaceState(null,'',location.pathname)}catch(e){}}
+function leave(){if(net.host)broadcast({t:'end'});cleanup();if(prof)home();else welcome()}
+function toLobby(){sendLobby()}
+function reqStart(){if(net.host)start();else net.conn&&net.conn.send({t:'start'})}
 function start(){
-  const G=GM[net.gid];net.S=G.init(net.players.map(p=>p.name));net.started=true;
-  STROKES=[];lastR=0;broadcast({t:'state',S:net.S});showGame();
+  const G=GM[net.gid];if(net.players.length<G.min)return;
+  setTok(net.players);clearTimeout(net.bt);clearTimeout(net.at);
+  net.S=G.init(net.players.map(p=>p.name));net.S.gameId=Date.now()+'_'+rnd(1e6);net.started=true;
+  STROKES=[];lastR=0;broadcast({t:'state',S:net.S});showGame();botTick();
 }
 function send(a){sel=null;unoPend=null;if(net.host)applyAct(net.me,a);else net.conn&&net.conn.send({t:'act',a})}
 function applyAct(i,a){
-  try{GM[net.gid].act(net.S,i,a)}catch(e){console.error(e);return}
+  const G=GM[net.gid];try{G.act(net.S,i,a)}catch(e){console.error(e);return}
   broadcast({t:'state',S:net.S});showGame();
+  const S=net.S;clearTimeout(net.at);
+  if(S.auto){const au=S.auto;net.at=setTimeout(()=>{if(net.S===S)applyAct(-1,au)},au.ms)}
+  botTick();
+}
+function botTick(){
+  clearTimeout(net.bt);const G=GM[net.gid],S=net.S;
+  if(!net.host||!net.started||!S||!G.bot)return;
+  net.bt=setTimeout(()=>{
+    if(net.S!==S||!net.started)return;
+    const all=net.players.every(p=>p.bot);
+    for(let i=0;i<net.players.length;i++){if(!net.players[i].bot)continue;const a=G.bot(S,i,all);if(a){applyAct(i,a);return}}
+  },G.bd||900);
 }
 
 /* ============ экраны ============ */
 function home(){
-  reg=[];clearInterval(tmr);
+  reg=[];clearInterval(tmr);setHead();const st=stats();
   app.innerHTML=`<div class="hero"><h1>Играй с друзьями онлайн</h1>
-  <p class="muted">Выбери игру → создай комнату → отправь другу код или ссылку. Всё работает прямо в браузере, без регистрации.</p></div>
+  <p class="muted">Выбери игру → создай комнату → отправь другу код или ссылку. Или играй одному против ботов.</p></div>
   <div class="join"><span class="muted">Есть код комнаты?</span><input id="jc" maxlength="5" placeholder="КОД">${B('Войти',()=>joinRoom($('#jc').value))}</div>
-  <div class="grid">${GAMES.map(g=>`<div class="card" style="--c:${g.color}" onclick="${H(()=>hostRoom(g.id))}">
-    <div class="ic">${g.icon}</div><h3>${g.name}</h3><p>${g.desc}</p><small>👥 ${g.min}–${g.max} игроков</small></div>`).join('')}
-    <div class="card soon" style="--c:#64748b"><div class="ic">✨</div><h3>Скоро ещё</h3><p>Дурак, Мафия, Активити, Codenames… Напиши, что добавить!</p></div></div>`;
+  <div class="grid">${GAMES.map(g=>`<div class="card" style="--c:${g.color}"><div class="ic">${g.icon}</div><h3>${g.name}</h3><p>${g.desc}</p>
+    <small>👥 ${g.min}–${g.max} · ${st[g.id]?`🏆 ${st[g.id].w} побед из ${st[g.id].p}`:'ещё не играл'}</small>
+    ${B('👥 С друзьями',()=>hostRoom(g.id),'sm')}${g.sb!=null?B('🤖 Против ботов',()=>soloGame(g.id),'sm ghost'):''}</div>`).join('')}</div>`;
 }
 function lobby(){
-  reg=[];clearInterval(tmr);const G=GM[net.gid];const url=location.href.split('#')[0]+'#'+net.code;
+  reg=[];clearInterval(tmr);const G=GM[net.gid],url=location.href.split('#')[0]+'#'+net.code,np=net.players.length;
   app.innerHTML=`<div class="lob"><div class="muted">Комната</div><h2>${G.icon} ${G.name}</h2>
-  <div class="code">${net.code}</div>
-  <p class="muted">Друг заходит на сайт → «Войти по коду», или отправь ему ссылку:</p>
+  <div class="code">${net.code}</div><p class="muted">Отправь другу код или ссылку:</p>
   <div class="row"><input readonly value="${url}" onclick="this.select()" style="flex:1">${B('Копировать',()=>{try{navigator.clipboard.writeText(url)}catch(e){}toast('Ссылка скопирована')},'sm')}</div>
   <div class="rules">${G.rules}</div>
-  <h3>Игроки (${net.players.length}/${G.max})</h3>
-  <div class="pl">${net.players.map((p,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(p.name)}${i===0?' 👑':''}${i===net.me?' (ты)':''}</span>`).join('')}</div>
-  ${net.host?(net.players.length>=G.min?B('▶ Начать игру',start,'big'):`<p class="muted">Нужно минимум ${G.min} игрока(ов)</p>`):'<p class="muted">Ждём, пока хост начнёт игру…</p>'}
-  <div>${B('← В меню',leave,'ghost sm')}</div></div>`;
+  <h3>Игроки (${np}/${G.max})</h3>
+  <div class="pl">${net.players.map((p,i)=>`<span class="chip" style="--c:${COL[i]}">${p.av} ${E(p.name)}${i===0?' 👑':''}${i===net.me?' (ты)':''}</span>`).join('')}</div>
+  ${net.host&&G.bot?`<div>${np<G.max?B('➕ Добавить бота',()=>{addBot();sendLobby()},'sm ghost'):''}${net.players.some(p=>p.bot)?B('➖ Убрать бота',()=>removePlayer(net.players.map(p=>!!p.bot).lastIndexOf(true)),'sm ghost'):''}</div>`:''}
+  ${np>=G.min?B('▶ Начать игру',reqStart,'big')+'<p class="muted" style="font-size:12px">Начать может любой игрок</p>':`<p class="muted">Нужно минимум ${G.min} игрока(ов) — позови друга${G.bot?' или добавь бота':''}</p>`}
+  <div>${B('← Выйти',leave,'ghost sm')}</div></div>`;
 }
 function showGame(){
   const G=GM[net.gid],S=net.S;
   const keep={};document.querySelectorAll('#app input[id]').forEach(i=>keep[i.id]=i.value);
   const fa=document.activeElement&&document.activeElement.id;
   clearInterval(tmr);reg=[];
-  app.innerHTML=`<div class="bar"><b>${G.icon} ${G.name}</b><span class="muted">комната ${net.code}</span>${net.host?B('В лобби',toLobby,'sm ghost'):''}${B('Выйти',leave,'sm ghost')}</div><div id="g">${G.render(S,net.me)}</div>`;
+  app.innerHTML=`<div class="bar"><b>${G.icon} ${G.name}</b><span class="muted">${net.solo?'против ботов':'комната '+net.code}</span>${net.host?B('↻ Заново',start,'sm ghost'):''}${net.host&&!net.solo?B('В лобби',toLobby,'sm ghost'):''}${B('Выйти',leave,'sm ghost')}</div><div id="g">${G.render(S,net.me)}</div>`;
   for(const k in keep){const el=document.getElementById(k);if(el)el.value=keep[k]}
   if(fa){const el=document.getElementById(fa);el&&el.focus()}
   G.after&&G.after(S,net.me);
+  if(G.win&&net.rec!==S.gameId){const w=G.win(S,net.me);if(w===true||w===false){net.rec=S.gameId;addStat(G.id,w)}}
 }
 
 /* ============ 1. МОНОПОЛИЯ ============ */
@@ -198,7 +254,9 @@ const MB=[['СТАРТ','s'],['Хлебная ул.','p',60,6,'#92400e'],['Ша�
 const CH=[['нашёл клад +150$',150],['штраф за парковку −80$',-80],['подарок от друга +100$',100],['ремонт машины −120$',-120],['налоговая вернула +60$',60],['купил билет в кино −40$',-40]];
 const cp=i=>i<=6?[1,i+1]:i<=12?[i-5,7]:i<=18?[7,7-(i-12)]:[7-(i-18),1];
 const lg=(S,t)=>{S.log.unshift(t);S.log.length=Math.min(S.log.length,6)};
-function monoNext(S){const n=S.names.length;do{S.turn=(S.turn+1)%n}while(S.out[S.turn]);S.ph='roll'}
+function monoNext(S){const n=S.names.length;do{S.turn=(S.turn+1)%n}while(S.out[S.turn]);S.ph='roll';S.cnt=(S.cnt||0)+1;
+  if(S.cnt>=30*S.out.filter(o=>!o).length){const w=S.names.map((_,i)=>S.out[i]?-1e9:S.money[i]+Object.entries(S.own).reduce((a,[k,o])=>a+(o===i?MB[k][2]:0),0));
+    S.win=w.indexOf(Math.max(...w));lg(S,'⏰ Время вышло — побеждает самый богатый!')}}
 function monoLand(S,i){
   const c=MB[S.pos[i]],N=S.names[i];S.ph='end';
   if(c[1]==='p'){const o=S.own[S.pos[i]];
@@ -213,20 +271,25 @@ function monoLand(S,i){
   if(S.money[i]<0){S.out[i]=true;for(const k in S.own)if(S.own[k]===i)delete S.own[k];lg(S,`💥 ${N} банкрот!`);
     const al=S.names.map((_,j)=>j).filter(j=>!S.out[j]);if(al.length===1){S.win=al[0];return}monoNext(S)}
 }
-const MONO={id:'mono',name:'Мини-Монополия',icon:'🏙️',color:'#f59e0b',min:2,max:4,
+const MONO={id:'mono',name:'Мини-Монополия',icon:'🏙️',color:'#f59e0b',min:2,max:4,sb:2,bd:800,
 desc:'Бросай кубики, скупай улицы и разоряй друзей. Побеждает последний не обанкротившийся.',
-rules:'🎲 Бросай кубики → если улица свободна, можешь купить. Наступил на чужую — платишь аренду. Прошёл СТАРТ — +200$. У кого деньги ушли в минус — банкрот. Выживает один!',
+rules:'🎲 Бросай кубики → если улица свободна, можешь купить. Наступил на чужую — платишь аренду. Прошёл СТАРТ — +150$. У кого деньги ушли в минус — банкрот. Через 30 ходов на игрока побеждает самый богатый (деньги + улицы)!',
 init(names){return{names,pos:names.map(()=>0),money:names.map(()=>1000),own:{},turn:0,ph:'roll',dice:[0,0],log:['Игра началась!'],out:names.map(()=>false),win:-1}},
 act(S,i,a){
   if(S.win>=0||i!==S.turn)return;
   if(a.t==='roll'&&S.ph==='roll'){
     const d=[1+rnd(6),1+rnd(6)];S.dice=d;const o=S.pos[i],n=(o+d[0]+d[1])%24;
-    if(n<o){S.money[i]+=200;lg(S,`${S.names[i]} прошёл СТАРТ +200$`)}
+    if(n<o){S.money[i]+=150;lg(S,`${S.names[i]} прошёл СТАРТ +150$`)}
     S.pos[i]=n;monoLand(S,i);
   }else if(a.t==='buy'&&S.ph==='buy'){const c=MB[S.pos[i]];S.money[i]-=c[2];S.own[S.pos[i]]=i;lg(S,`${S.names[i]} купил «${c[0]}» за ${c[2]}$`);S.ph='end'}
   else if(a.t==='skip'&&S.ph==='buy')S.ph='end';
   else if(a.t==='next'&&S.ph==='end')monoNext(S);
 },
+bot(S,i){if(S.win>=0||S.turn!==i)return null;
+  if(S.ph==='roll')return{t:'roll'};
+  if(S.ph==='buy'){const c=MB[S.pos[i]];return S.money[i]-c[2]>=100?{t:'buy'}:{t:'skip'}}
+  if(S.ph==='end')return{t:'next'};return null},
+win(S,me){return S.win>=0?S.win===me:null},
 render(S,me){
   const cell=(c,i)=>{const[r,k]=cp(i),own=S.own[i],here=S.pos.map((p,j)=>p===i&&!S.out[j]?TOK[j]:'').join('');
     const ic={s:'🏁',c:'❓',t:'💸',l:'🎰',v:'🏖️',f:'🅿️'}[c[1]]||'';
@@ -244,12 +307,13 @@ render(S,me){
 
 /* ============ 2. ИМАДЖИНАРИУМ ============ */
 const EM=['🌙','🌞','🌊','🔥','🌲','🏰','🚀','🐉','🦋','🐙','🎭','🔑','🔦','🌈','⛵','🦉','🍄','🎪','🧙','🪐','🌋','🦊','🐺','🎻','⏰','🌹','🐚','🦢','🗻','🎈','🧸','🐝','🌻','⛄','⚡','🍂','🗿','🛸','🐘','🦄','🎨','📜','⚓','🔮','🌵','🐢','🎡','🦁','🐬','🍎','🐦','🏺','🧭','🌴','🦇','👑'];
+const CLUES=['Тайна','Сон','Путь','Свобода','Ночь','Приключение','Воспоминание','Загадка','Детство','Одиночество'];
 const art=id=>{const L=EM.length,h=id*47%360,a=EM[id*7%L],b=EM[(id*13+5)%L],c=EM[(id*29+11)%L];
   return `<div class="ic3 l${id%3}" style="background:linear-gradient(${135+id*13%90}deg,hsl(${h},65%,32%),hsl(${(h+70)%360},70%,52%))"><span>${a}</span><span>${b}</span><span>${c}</span></div>`};
-const IMG={id:'img',name:'Имаджинариум',icon:'🎭',color:'#a855f7',min:3,max:6,
+const IMG={id:'img',name:'Имаджинариум',icon:'🎭',color:'#a855f7',min:3,max:6,sb:3,bd:1100,
 desc:'Загадывай картинку ассоциацией, а друзья угадывают, какая карта твоя. Не слишком очевидно и не слишком мудрёно!',
-rules:'🎤 Рассказчик выбирает карту и придумывает к ней ассоциацию. Остальные подкладывают свои карты под неё. Все карты перемешиваются — и все (кроме рассказчика) голосуют, какая карта рассказчика. Если угадали не все и не никто — рассказчик +3, угадавшие +3. За голоса на свою карту +1. Игра до 12 очков. Играйте с голосовой связью (Discord, Telegram) для общения!',
-init(names){const n=names.length,deck=shuf([...Array(120).keys()]);
+rules:'🎤 Рассказчик выбирает карту и придумывает ассоциацию. Остальные подкладывают свои карты. Все карты перемешиваются — и все (кроме рассказчика) голосуют, какая карта рассказчика. Угадали не все и не никто — рассказчик +3, угадавшие +3. За голоса на свою карту +1. Игра до 12 очков. Общайтесь голосом (Discord, Telegram)!',
+init(names){const deck=shuf([...Array(120).keys()]);
   return{names,hands:names.map(()=>deck.splice(0,6)),deck,score:names.map(()=>0),st:0,ph:'clue',clue:'',table:[],votes:{},d:null,rn:1,over:false}},
 act(S,i,a){
   const n=S.names.length;
@@ -267,12 +331,18 @@ act(S,i,a){
       S.score=S.score.map((s,j)=>s+d[j]);S.d=d;S.ph='result';if(Math.max(...S.score)>=12)S.over=true;
     }
   }else if(a.t==='next'&&S.ph==='result'&&!S.over){
-    const all=[...Array(120).keys()],used=new Set(S.hands.flat());
-    if(S.deck.length<n)S.deck=shuf(all.filter(x=>!used.has(x)));
+    const used=new Set(S.hands.flat());
+    if(S.deck.length<n)S.deck=shuf([...Array(120).keys()].filter(x=>!used.has(x)));
     S.hands.forEach(h=>{if(h.length<6)h.push(S.deck.pop())});
     S.st=(S.st+1)%n;S.rn++;S.ph='clue';S.clue='';S.table=[];S.votes={};S.d=null;
   }
 },
+bot(S,i,all){if(S.over)return null;
+  if(S.ph==='clue'&&i===S.st){const h=S.hands[i];return{t:'clue',c:h[rnd(h.length)],text:CLUES[rnd(CLUES.length)]}}
+  if(S.ph==='pick'&&i!==S.st&&!S.table.some(t=>t.o===i)){const h=S.hands[i];return{t:'pick',c:h[rnd(h.length)]}}
+  if(S.ph==='vote'&&i!==S.st&&S.votes[i]===undefined){const ks=S.table.map((t,k)=>k).filter(k=>S.table[k].o!==i);return{t:'vote',k:ks[rnd(ks.length)]}}
+  if(S.ph==='result'&&all)return{t:'next'};return null},
+win(S,me){return S.over?S.score[me]===Math.max(...S.score):null},
 render(S,me){
   const n=S.names.length,st=S.st;
   let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===st?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${S.d&&S.ph==='result'?`<small>(+${S.d[i]})</small>`:''}${i===st?' 🎤':''}</span>`).join('')}</div>`;
@@ -306,9 +376,9 @@ const ul=c=>c.v==='s'?'⛔':c.v==='r'?'⇄':c.v==='w'?'🌈':c.v;
 const ucard=(c,cls,on)=>`<div class="uc ${cls||''}" style="background:${UC[c.c]}" ${on?`onclick="${on}"`:''}>${ul(c)}</div>`;
 function unoDraw(S,p,k){for(let j=0;j<k;j++){if(!S.deck.length){S.deck=shuf(S.disc);S.disc=[]}if(!S.deck.length)return;S.hands[p].push(S.deck.pop())}}
 const unoOk=(S,c)=>c.c==='W'||c.c===S.col||c.v===S.top.v;
-const UNO={id:'uno',name:'Уно',icon:'🃏',color:'#ef4444',min:2,max:6,
+const UNO={id:'uno',name:'Уно',icon:'🃏',color:'#ef4444',min:2,max:6,sb:3,bd:900,
 desc:'Классические карточки: сбрасывай карты по цвету или значению и первым избавься от всех. Пропуски, развороты, +2 и +4!',
-rules:'Сбрось карту того же цвета или значения, что и верхняя. 🌈 дикая карта — выбираешь цвет. ⛔ пропуск, ⇄ разворот, +2 / +4 — следующий берёт карты и пропускает ход. Нет подходящей — тяни карту (ход переходит). Первый без карт побеждает.',
+rules:'Сбрось карту того же цвета или значения, что и верхняя. 🌈 дикая — выбираешь цвет. ⛔ пропуск, ⇄ разворот, +2 / +4 — следующий берёт карты и пропускает ход. Нет подходящей — тяни карту (ход переходит). Первый без карт побеждает.',
 init(names){const deck=[];for(const c of 'RGBY'){deck.push({c,v:'0'});for(const v of ['1','2','3','4','5','6','7','8','9','s','r','+2'])deck.push({c,v},{c,v})}
   for(let i=0;i<4;i++)deck.push({c:'W',v:'w'},{c:'W',v:'+4'});
   const d=shuf(deck),hands=names.map(()=>d.splice(0,7));let top;do{top=d.pop();if(top.c==='W'){d.unshift(top);top=null}}while(!top);
@@ -327,6 +397,12 @@ act(S,i,a){
     else adv(1);
   }
 },
+bot(S,i){if(S.win>=0||S.turn!==i)return null;const h=S.hands[i];
+  let k=h.findIndex(c=>c.c!=='W'&&unoOk(S,c));if(k<0)k=h.findIndex(c=>unoOk(S,c));
+  if(k<0)return{t:'draw'};const c=h[k];
+  if(c.c==='W'){const cnt={R:0,G:0,B:0,Y:0};h.forEach(x=>x.c!=='W'&&cnt[x.c]++);const col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];return{t:'play',k,col}}
+  return{t:'play',k}},
+win(S,me){return S.win>=0?S.win===me:null},
 render(S,me){
   const my=S.turn===me;
   let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} 🃏${S.hands[i].length}${S.hands[i].length===1?' <b>UNO!</b>':''}</span>`).join('')}</div>`;
@@ -343,7 +419,7 @@ render(S,me){
 const LOCS=['Пляж','Школа','Больница','Космическая станция','Цирк','Кинотеатр','Самолёт','Ресторан','Банк','Библиотека','Подводная лодка','Зоопарк','Супермаркет','Университет','Вокзал','Казино','Пиратский корабль','Музей','Спа-салон','Военная база'];
 const SPY={id:'spy',name:'Шпион',icon:'🕵️',color:'#06b6d4',min:3,max:6,
 desc:'Все знают место, кроме одного — шпиона. Задавай хитрые вопросы, вычисли чужака или не выдай, что ты не в теме.',
-rules:'Всем показывают одну локацию, а шпиону — нет. По очереди задавайте друг другу вопросы про это место (голосом в Discord/Telegram!). Шпион пытается понять локацию, остальные — вычислить шпиона. В любой момент шпион может назвать локацию, а все вместе — проголосовать. Таймер 8 минут.',
+rules:'Всем показывают одну локацию, а шпиону — нет. По очереди задавайте друг другу вопросы про это место (голосом в Discord/Telegram!). Шпион пытается понять локацию, остальные — вычислить шпиона. Шпион может назвать локацию, а все вместе — проголосовать. Таймер 8 минут. Только для живых игроков.',
 init(names){return{names,loc:rnd(LOCS.length),spy:rnd(names.length),ph:'play',t0:Date.now(),votes:{},res:null}},
 act(S,i,a){
   const n=S.names.length;
@@ -352,11 +428,12 @@ act(S,i,a){
     S.votes[i]=a.k;
     if(Object.keys(S.votes).length===n){const c=S.names.map(()=>0);Object.values(S.votes).forEach(v=>c[v]++);const mx=Math.max(...c),top=c.map((x,j)=>x===mx?j:-1).filter(j=>j>=0);
       const caught=top.length===1&&top[0]===S.spy;S.res={team:caught,why:caught?`Шпиона вычислили — это ${S.names[S.spy]}!`:`Шпиона не поймали! Это был ${S.names[S.spy]}.`};S.ph='end'}
-  }else if(a.t==='again'&&S.ph==='end'){S.loc=rnd(LOCS.length);S.spy=rnd(n);S.ph='play';S.t0=Date.now();S.votes={};S.res=null}
+  }
 },
+win(S,me){return S.ph==='end'?(me===S.spy?!S.res.team:S.res.team):null},
 render(S,me){
   const spy=me===S.spy;
-  if(S.ph==='end')return `<div class="role">${S.res.team?'🎉 Победила команда!':'🕵️ Победил шпион!'}<br><small>${E(S.res.why)}</small><br><br>Локация была: <b>${LOCS[S.loc]}</b><br>Шпион: <b>${TOK[S.spy]} ${E(S.names[S.spy])}</b></div><div style="text-align:center">${net.host?B('Новый раунд',()=>send({t:'again'}),'big'):''}${net.host?'':'<p class="muted">Ждём хоста…</p>'}</div>`;
+  if(S.ph==='end')return `<div class="role">${S.res.team?'🎉 Победила команда!':'🕵️ Победил шпион!'}<br><small>${E(S.res.why)}</small><br><br>Локация была: <b>${LOCS[S.loc]}</b><br>Шпион: <b>${TOK[S.spy]} ${E(S.names[S.spy])}</b></div><p class="muted" style="text-align:center">${net.host?'Нажми «↻ Заново» для нового раунда':'Хост может начать новый раунд'}</p>`;
   let h=`<div class="role">${spy?'🕵️ Ты — <b>ШПИОН</b><br><small>Не выдай себя и угадай локацию!</small>':`📍 Локация: <b>${LOCS[S.loc]}</b><br><small>Найди шпиона вопросами. Не называй место прямо!</small>`}<br><small>⏱ <span id="tm">8:00</span></small></div>`;
   if(spy)h+=`<h4>Знаешь, где вы? Назови локацию (если ошибёшься — проиграешь):</h4><div class="locs">${LOCS.map((l,k)=>B(l,()=>{if(confirm('Точно «'+l+'»?'))send({t:'guess',loc:k})},'sm ghost')).join('')}</div>`;
   else h+=`<details><summary class="muted">Список возможных локаций</summary><p class="muted">${LOCS.join(' · ')}</p></details>`;
@@ -370,16 +447,15 @@ const WORDS=['Кот','Самолёт','Холодильник','Пицца','Д
 const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').trim();
 function line(x,s){x.strokeStyle=s.c;x.lineWidth=s.w*2;x.lineCap='round';x.beginPath();x.moveTo(s.p[0][0]*640,s.p[0][1]*440);x.lineTo(s.p[1][0]*640,s.p[1][1]*440);x.stroke()}
 function drawSeg(s){
-  const cv=$('#cv'),x=cv&&cv.getContext('2d');
+  const cv=$('#cv'),x=cv&&cv.getContext&&cv.getContext('2d');
   if(s.clr){STROKES=[];if(x){x.fillStyle='#fff';x.fillRect(0,0,640,440)}}else{STROKES.push(s);x&&line(x,s)}
 }
 function emit(s){drawSeg(s);if(net.host)broadcast({t:'d',seg:s});else net.conn&&net.conn.send({t:'d',seg:s})}
 const CRO={id:'cro',name:'Крокодил',icon:'🐊',color:'#22c55e',min:2,max:6,
 desc:'Рисуй слово, а друзья отгадывают в чате. Кто угадал — получает очки и рисует следующим.',
-rules:'Один рисует загаданное слово (нельзя писать буквы!), остальные вводят догадки. Угадавший получает +2, художник +1, и угадавший становится следующим художником. Не нравится слово — нажми «Другое слово».',
+rules:'Один рисует загаданное слово (писать буквы нельзя!), остальные вводят догадки. Угадавший получает +2, художник +1, и угадавший становится следующим художником. Не нравится слово — «Другое слово». Только для живых игроков.',
 init(names){return{names,dr:0,word:WORDS[rnd(WORDS.length)],score:names.map(()=>0),chat:[],round:1}},
 act(S,i,a){
-  const n=S.names.length;
   if(a.t==='guess'&&i!==S.dr){const t=String(a.text||'').trim().slice(0,40);if(!t)return;
     if(norm(t)===norm(S.word)){S.score[i]+=2;S.score[S.dr]+=1;S.chat.push({n:i,t:`угадал(а)! Слово: «${S.word}»`,ok:1});S.dr=i;S.word=WORDS[rnd(WORDS.length)];S.round++}
     else S.chat.push({n:i,t});
@@ -407,10 +483,219 @@ after(S,me){
   cv.onpointerup=cv.onpointercancel=()=>{dn=false};
 }};
 
+/* ============ 6. ДУРАК (подкидной) ============ */
+const SU='♠♥♦♣',RK={11:'В',12:'Д',13:'К',14:'Т'};
+const dc=c=>({r:6+c%9,s:Math.floor(c/9)});
+const dlab=c=>{const x=dc(c);return (RK[x.r]||x.r)+SU[x.s]};
+const dbeat=(S,a,d)=>{const x=dc(a),y=dc(d);return (y.s===x.s&&y.r>x.r)||(y.s===S.tr&&x.s!==S.tr)};
+const dcard=(c,cls,on)=>`<div class="dk ${dc(c).s===1||dc(c).s===2?'r':''} ${cls||''}" ${on?`onclick="${on}"`:''}>${dlab(c)}</div>`;
+function dEnd(S,took){
+  const n=S.names.length;S.table=[];
+  const order=[S.att];for(let k=1;k<n;k++){const j=(S.att+k)%n;if(j!==S.def)order.push(j)}order.push(S.def);
+  order.forEach(p=>{while(S.hands[p].length<6&&S.deck.length)S.hands[p].push(S.deck.pop())});
+  if(!S.deck.length)S.hands.forEach((h,p)=>{if(!h.length)S.out[p]=true});
+  const alive=S.out.map((o,p)=>o?-1:p).filter(p=>p>=0);
+  if(alive.length<=1){S.over=true;S.lose=alive.length?alive[0]:-1;S.log=S.lose>=0?`Дурак — ${S.names[S.lose]}!`:'Ничья!';return}
+  const nxt=p=>{let q=p;do{q=(q+1)%n}while(S.out[q]);return q};
+  const na=took?nxt(S.def):(S.out[S.def]?nxt(S.def):S.def);
+  S.att=na;S.def=nxt(na);S.lim=Math.min(6,S.hands[S.def].length);
+}
+const DUR={id:'dur',name:'Дурак',icon:'♠️',color:'#64748b',min:2,max:4,sb:1,bd:900,
+desc:'Классический подкидной дурак колодой из 36 карт. Отбивайся, подкидывай и не останься последним с картами!',
+rules:'Козырь бьёт любую некозырную масть. Атакующий кладёт карту, защитник бьёт старшей картой той же масти или козырем (или «Беру»). Когда всё побито — атакующий подкидывает карты тех же значений или говорит «Бито». После хода все добирают до 6 карт. Кто последним остался с картами — дурак.',
+init(names){const n=names.length,d=shuf([...Array(36).keys()]),hands=names.map(()=>d.splice(0,6)),tr=dc(d[0]).s;
+  const S={names,deck:d,tr,hands,att:0,def:1%n,table:[],lim:6,out:names.map(()=>false),over:false,lose:-1,log:'Игра началась'};S.lim=Math.min(6,hands[S.def].length);return S},
+act(S,i,a){
+  if(S.over)return;const T=S.table,und=T.filter(p=>!p.d).length;
+  if(a.t==='att'&&i===S.att){const h=S.hands[i];if(!h.includes(a.c)||T.length>=S.lim)return;
+    if(T.length&&!T.some(p=>dc(p.a).r===dc(a.c).r||(p.d!=null&&dc(p.d).r===dc(a.c).r)))return;
+    h.splice(h.indexOf(a.c),1);T.push({a:a.c,d:null});S.log=`${S.names[i]} атакует`}
+  else if(a.t==='def'&&i===S.def){const h=S.hands[i];if(!h.includes(a.c))return;const p=T.find(p=>!p.d&&dbeat(S,p.a,a.c));if(!p)return;p.d=a.c;h.splice(h.indexOf(a.c),1)}
+  else if(a.t==='take'&&i===S.def&&und>0){S.hands[i].push(...T.flatMap(p=>[p.a,p.d].filter(x=>x!=null)));S.log=S.names[i]+' берёт';dEnd(S,true)}
+  else if(a.t==='done'&&i===S.att&&T.length&&und===0){S.log='Бито';dEnd(S,false)}
+},
+bot(S,i){if(S.over)return null;const h=S.hands[i],T=S.table,key=c=>dc(c).r+(dc(c).s===S.tr?20:0);
+  if(i===S.def){const und=T.filter(p=>!p.d);if(!und.length)return null;
+    const o=h.filter(c=>dbeat(S,und[0].a,c)).sort((a,b)=>key(a)-key(b));return o.length?{t:'def',c:o[0]}:{t:'take'}}
+  if(i===S.att){
+    const ok=h.filter(c=>!T.length||T.some(p=>dc(p.a).r===dc(c).r||(p.d!=null&&dc(p.d).r===dc(c).r))).sort((a,b)=>key(a)-key(b));
+    const cand=ok.filter(c=>dc(c).s!==S.tr);
+    if(!T.length)return ok.length?{t:'att',c:ok[0]}:null;
+    if(T.some(p=>!p.d))return(T.length<S.lim&&cand.length&&rnd(3)===0)?{t:'att',c:cand[0]}:null;
+    return(T.length<S.lim&&cand.length&&S.deck.length>0)?{t:'att',c:cand[0]}:{t:'done'}}
+  return null},
+win(S,me){return S.over?S.lose!==me:null},
+render(S,me){
+  const T=S.table,und=T.filter(p=>!p.d).length,tc=S.deck.length?S.deck[0]:null;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.att?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} 🃏${S.hands[i].length}${S.out[i]?' ✅':''}${i===S.att?' ⚔️':i===S.def?' 🛡️':''}</span>`).join('')}</div>`;
+  h+=`<div class="uno">${tc!=null?dcard(tc,'big'):`<div class="dk big ${S.tr===1||S.tr===2?'r':''}">${SU[S.tr]}</div>`}<div>Козырь ${SU[S.tr]} · в колоде: ${S.deck.length}<p class="muted">${E(S.log)}</p></div></div>`;
+  h+=`<div class="tbl" style="min-height:110px;justify-content:center">${T.map(p=>`<div class="pair">${dcard(p.a)}${p.d!=null?dcard(p.d,'on'):''}</div>`).join('')}</div>`;
+  if(S.over)h+=`<h2 style="text-align:center">${S.lose>=0?'🤡 Дурак — '+E(S.names[S.lose]):'Ничья'}</h2>`;
+  else if(S.out[me])h+=`<p style="text-align:center">🎉 Ты вышел из игры! Смотри, кто станет дураком.</p>`;
+  else{
+    if(me===S.att)h+=`<p style="text-align:center"><b>Ты атакуешь.</b> ${T.length?(und?'Ждём защитника…':'Подкинь карту или нажми «Бито»'):'Выбери карту для атаки'}</p>`+(T.length&&!und?`<div style="text-align:center">${B('Бито',()=>send({t:'done'}),'big')}</div>`:'');
+    else if(me===S.def)h+=`<p style="text-align:center"><b>Ты защищаешься.</b> ${und?'Побей карту старшей или козырем':'Ждём подкидывания…'}</p>`+(und?`<div style="text-align:center">${B('Беру',()=>send({t:'take'}),'ghost')}</div>`:'');
+    else h+=`<p class="muted" style="text-align:center">Ждём игроков…</p>`;
+    h+=`<div class="hand" style="justify-content:center">${S.hands[me].slice().sort((a,b)=>a-b).map(c=>dcard(c,'',H(()=>{if(me===S.att)send({t:'att',c});else if(me===S.def)send({t:'def',c})}))).join('')}</div>`;
+  }
+  return h;
+}};
+
+/* ============ 7. КОСТИ (покер на костях) ============ */
+const DCN=['Единицы','Двойки','Тройки','Четвёрки','Пятёрки','Шестёрки','Три одинаковых','Каре','Фулл-хаус','Малый стрит','Большой стрит','Генерала','Шанс'];
+const EXPECT=[2,4,6,8,10,12,15,10,12,12,10,5,22];
+function dscore(k,d){const c=[0,0,0,0,0,0,0],sum=d.reduce((a,b)=>a+b,0);d.forEach(x=>c[x]++);const v=c.slice(1),mx=Math.max(...v),s=new Set(d);
+  if(k<6)return c[k+1]*(k+1);
+  if(k===6)return mx>=3?sum:0;if(k===7)return mx>=4?sum:0;
+  if(k===8)return v.includes(3)&&v.includes(2)?25:0;
+  if(k===9)return [[1,2,3,4],[2,3,4,5],[3,4,5,6]].some(r=>r.every(x=>s.has(x)))?30:0;
+  if(k===10)return [[1,2,3,4,5],[2,3,4,5,6]].some(r=>r.every(x=>s.has(x)))?40:0;
+  if(k===11)return mx===5?50:0;return sum}
+const dtot=r=>{const up=r.slice(0,6).reduce((a,b)=>a+(b||0),0);return r.reduce((a,b)=>a+(b||0),0)+(up>=63?35:0)};
+const DICE={id:'dice',name:'Покер на костях',icon:'🎲',color:'#eab308',min:1,max:4,sb:1,bd:1000,
+desc:'Пять кубиков, три броска, 13 комбинаций: фулл-хаус, стриты, генерала! Можно играть и в одиночку на рекорд.',
+rules:'Бросай кубики до 3 раз, нажимая на кубики, чтобы оставить их. Потом запиши результат в одну из 13 комбинаций (кликни на зелёную ячейку). Верхние 6 строк дают бонус +35 при сумме от 63. Побеждает набравший больше всех очков.',
+init(names){return{names,dice:[0,0,0,0,0],held:[false,false,false,false,false],rolls:0,turn:0,sc:names.map(()=>Array(13).fill(null)),over:false}},
+act(S,i,a){
+  if(S.over||i!==S.turn)return;const n=S.names.length;
+  if(a.t==='roll'&&S.rolls<3){if(a.keep&&S.rolls>0)S.held=a.keep.map(Boolean);if(S.rolls===0)S.held=[false,false,false,false,false];
+    for(let k=0;k<5;k++)if(!S.held[k])S.dice[k]=1+rnd(6);S.rolls++}
+  else if(a.t==='hold'&&S.rolls>0&&S.rolls<3)S.held[a.k]=!S.held[a.k];
+  else if(a.t==='pick'&&S.rolls>0&&S.sc[i][a.cat]===null){S.sc[i][a.cat]=dscore(a.cat,S.dice);
+    S.turn=(S.turn+1)%n;S.dice=[0,0,0,0,0];S.held=[false,false,false,false,false];S.rolls=0;
+    if(S.sc.every(r=>r.every(x=>x!==null)))S.over=true}
+},
+bot(S,i){if(S.over||S.turn!==i)return null;if(S.rolls===0)return{t:'roll'};const d=S.dice;
+  if(S.rolls<3){const c=[0,0,0,0,0,0,0];d.forEach(x=>c[x]++);let best=1;for(let v=1;v<=6;v++)if(c[v]>=c[best])best=v;
+    if(!S.sc[i].some((x,k)=>x===null&&dscore(k,d)>=EXPECT[k]+4))return{t:'roll',keep:d.map(x=>x===best)}}
+  let bk=-1,bv=-1e9;S.sc[i].forEach((x,k)=>{if(x!==null)return;const v=dscore(k,d)-EXPECT[k]*0.7;if(v>bv){bv=v;bk=k}});return{t:'pick',cat:bk}},
+win(S,me){if(!S.over)return null;const t=S.sc.map(dtot);return t[me]===Math.max(...t)},
+render(S,me){
+  const my=S.turn===me&&!S.over;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${dtot(S.sc[i])}</b></span>`).join('')}</div>`;
+  if(S.over){const t=S.sc.map(dtot),w=t.indexOf(Math.max(...t));h+=`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${t[w]} очков!</h2>`}
+  h+=`<div style="text-align:center">${S.dice.map((d,k)=>`<span class="dd ${S.held[k]?'hold':''}" ${my&&S.rolls>0&&S.rolls<3?`onclick="${H(()=>send({t:'hold',k}))}"`:''}>${d?'⚀⚁⚂⚃⚄⚅'[d-1]:'▫️'}</span>`).join('')}</div>`;
+  h+=`<div style="text-align:center">${my?(S.rolls<3?B(`🎲 Бросить (осталось ${3-S.rolls})`,()=>send({t:'roll'}),'big'):'')+(S.rolls>0?'<p class="muted">Нажми на кубик, чтобы оставить его. Выбери комбинацию в таблице (зелёные ячейки)</p>':''):`<p class="muted">${S.over?'':'Ходит '+E(S.names[S.turn])+'…'}</p>`}</div>`;
+  h+=`<table class="dt"><tr><th></th>${S.names.map((x,i)=>`<th>${TOK[i]}</th>`).join('')}</tr>${DCN.map((c,k)=>`<tr><td>${c}</td>${S.sc.map((r,p)=>{const v=r[k];if(v!==null)return `<td>${v}</td>`;
+    if(p===me&&my&&S.rolls>0)return `<td class="pk" onclick="${H(()=>send({t:'pick',cat:k}))}">${dscore(k,S.dice)}</td>`;return '<td></td>'}).join('')}</tr>`).join('')}<tr><th>Итого</th>${S.sc.map(r=>`<th>${dtot(r)}</th>`).join('')}</tr></table>`;
+  return h;
+}};
+
+/* ============ 8. ВИКТОРИНА ============ */
+const QB=[['Столица Австралии?',['Сидней','Канберра','Мельбурн','Перт'],1],['Сколько планет в Солнечной системе?',['7','8','9','10'],1],['Кто написал «Войну и мир»?',['Достоевский','Толстой','Чехов','Тургенев'],1],
+['Химический символ золота?',['Ag','Au','Gd','Fe'],1],['Самая большая планета Солнечной системы?',['Сатурн','Юпитер','Нептун','Земля'],1],['В каком году Гагарин полетел в космос?',['1957','1961','1965','1969'],1],
+['Самый большой океан?',['Атлантический','Индийский','Тихий','Северный Ледовитый'],2],['Сколько костей у взрослого человека?',['186','206','226','246'],1],['Кто написал «Мону Лизу»?',['Микеланджело','Рафаэль','Леонардо да Винчи','Ван Гог'],2],
+['Каким газом мы дышим для жизни?',['Азот','Кислород','Гелий','Углекислый газ'],1],['Столица Японии?',['Киото','Осака','Токио','Нагоя'],2],['Сколько цветов в радуге?',['5','6','7','8'],2],
+['Самое высокое животное?',['Слон','Жираф','Верблюд','Лось'],1],['Самая большая страна по площади?',['Канада','Китай','США','Россия'],3],['Сколько игроков одной команды на поле в футболе?',['9','10','11','12'],2],
+['Кто считается изобретателем телефона?',['Эдисон','Белл','Тесла','Маркони'],1],['Самый твёрдый природный минерал?',['Кварц','Алмаз','Сапфир','Гранит'],1],['Столица Канады?',['Торонто','Ванкувер','Оттава','Монреаль'],2],
+['Кто автор «Мастера и Маргариты»?',['Булгаков','Пастернак','Набоков','Горький'],0],['Сколько секунд в одном часе?',['3000','3600','6000','360'],1],['Самая маленькая планета Солнечной системы?',['Марс','Меркурий','Венера','Юпитер'],1],
+['Кто нарисовал «Звёздную ночь»?',['Моне','Ван Гог','Пикассо','Дали'],1],['В каком городе находится Колизей?',['Афины','Рим','Милан','Венеция'],1],['Сколько сторон у шестиугольника?',['5','6','7','8'],1],
+['Какое млекопитающее умеет летать?',['Белка','Летучая мышь','Страус','Ёж'],1],['Кто первым ступил на Луну?',['Гагарин','Армстронг','Олдрин','Леонов'],1],['Сколько континентов принято выделять на Земле?',['5','6','7','8'],2],
+['Какая птица не умеет летать?',['Ласточка','Пингвин','Орёл','Сокол'],1],['Самая высокая гора мира?',['Эльбрус','Эверест','Килиманджаро','Монблан'],1],['Сколько клавиш на стандартном пианино?',['76','88','96','100'],1],
+['Какая планета известна своими кольцами?',['Марс','Сатурн','Меркурий','Венера'],1],['Кто написал «Гарри Поттера»?',['Толкин','Роулинг','Льюис','Кинг'],1],['При какой температуре кипит вода (°C, норм. давление)?',['90','100','110','120'],1],
+['Столица Египта?',['Каир','Александрия','Луксор','Гиза'],0],['В каких единицах измеряют напряжение?',['Амперы','Вольты','Ватты','Омы'],1],['Самое быстрое наземное животное?',['Лев','Гепард','Антилопа','Лошадь'],1],
+['Сколько хромосом у человека?',['23','44','46','48'],2],['Какой язык самый распространённый по числу носителей?',['Английский','Китайский','Испанский','Хинди'],1],['Столица Германии?',['Берлин','Мюнхен','Гамбург','Бонн'],0],
+['Из чего в основном делают стекло?',['Глина','Песок','Мел','Соль'],1],['Какой металл жидкий при комнатной температуре?',['Свинец','Ртуть','Олово','Цинк'],1]];
+const QUIZ={id:'quiz',name:'Викторина',icon:'🧠',color:'#f43f5e',min:1,max:6,sb:2,bd:1200,
+desc:'10 вопросов на скорость и эрудицию. Чем быстрее правильный ответ, тем больше очков. Кто умнее?',
+rules:'Отвечай на вопросы как можно быстрее: правильный ответ даёт 100 очков + бонус за скорость (первые 10 секунд). После ответа всех (или через 15 секунд) показывается верный ответ.',
+init(names){const qs=shuf(QB).slice(0,10).map(([q,o,a])=>{const p=shuf([0,1,2,3]);return{q,o:p.map(j=>o[j]),a:p.indexOf(a)}});
+  return{names,qs,qi:0,ph:'q',t0:Date.now(),ans:{},gain:{},sc:names.map(()=>0)}},
+act(S,i,a){
+  const n=S.names.length,Q=S.qs[S.qi];
+  if(a.t==='ans'&&S.ph==='q'&&S.ans[i]===undefined&&a.k>=0&&a.k<4){
+    S.ans[i]=a.k;if(a.k===Q.a){const g=100+Math.max(0,10-Math.floor((Date.now()-S.t0)/1000))*5;S.sc[i]+=g;S.gain[i]=g}
+    if(Object.keys(S.ans).length===n)S.ph='r';
+  }else if(a.t==='reveal'&&S.ph==='q'&&Date.now()-S.t0>=15000)S.ph='r';
+  else if(a.t==='next'&&S.ph==='r'){S.qi++;if(S.qi>=S.qs.length){S.qi=S.qs.length-1;S.ph='over'}else{S.ph='q';S.t0=Date.now();S.ans={};S.gain={}}}
+},
+bot(S,i,all){
+  if(S.ph==='q'&&S.ans[i]===undefined){const Q=S.qs[S.qi];return{t:'ans',k:rnd(10)<6?Q.a:rnd(4)}}
+  if(S.ph==='r'&&all)return{t:'next'};return null},
+win(S,me){return S.ph==='over'?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){
+  const Q=S.qs[S.qi];
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b>${S.ph==='q'&&S.ans[i]!==undefined?' ✔':''}${S.ph==='r'&&S.gain[i]?`<small>+${S.gain[i]}</small>`:''}</span>`).join('')}</div>`;
+  if(S.ph==='over'){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очков!</h2><p class="muted" style="text-align:center">Игра окончена. Нажми «↻ Заново» (хост), чтобы сыграть ещё.</p>`}
+  h+=`<div class="role" style="padding:14px">Вопрос ${S.qi+1}/${S.qs.length}${S.ph==='q'?` · ⏱ <span id="tm">15</span>`:''}<br><b>${E(Q.q)}</b></div>`;
+  h+=Q.o.map((o,k)=>{const mine=S.ans[me]===k,cls=S.ph==='r'?(k===Q.a?'ok':mine?'bad':''):'';
+    return `<button class="btn qo ${cls} ${mine?'me':''}" ${S.ph==='q'&&S.ans[me]===undefined?`onclick="${H(()=>send({t:'ans',k}))}"`:''}>${'ABCD'[k]}. ${E(o)}</button>`}).join('');
+  if(S.ph==='q')h+=`<p class="muted" style="text-align:center">Ответили: ${Object.keys(S.ans).length}/${S.names.length} ${S.ans[me]!==undefined?B('Показать ответ (после таймера)',()=>send({t:'reveal'}),'sm ghost'):''}</p>`;
+  else h+=`<div style="text-align:center">${B(S.qi+1>=S.qs.length?'Итоги ➜':'Дальше ➜',()=>send({t:'next'}),'big')}</div>`;
+  return h;
+},
+after(S){const el=$('#tm');if(!el||S.ph!=='q')return;const f=()=>{el.textContent=Math.max(0,15-Math.floor((Date.now()-S.t0)/1000))};f();tmr=setInterval(f,500)}};
+
+/* ============ 9. ПАМЯТЬ ============ */
+const MEM={id:'mem',name:'Память',icon:'🧩',color:'#14b8a6',min:1,max:4,sb:1,bd:900,
+desc:'Открывай по две карточки и находи пары. Угадал — ходишь снова. Кто соберёт больше пар?',
+rules:'В свой ход открой две карточки. Совпали — забираешь пару и ходишь ещё раз. Не совпали — ход переходит. Побеждает тот, у кого больше пар.',
+init(names){const e=shuf(EM).slice(0,8);return{names,cards:shuf([...e,...e]),open:[],match:Array(16).fill(-1),turn:0,sc:names.map(()=>0),moves:0,seen:{},auto:null,over:false}},
+act(S,i,a){
+  const n=S.names.length;
+  if(i<0&&a.t==='hide'){S.open=[];S.turn=(S.turn+1)%n;S.auto=null;return}
+  if(S.over||S.auto||i!==S.turn||a.t!=='flip')return;const k=a.k;
+  if(!(k>=0&&k<16)||S.match[k]>=0||S.open.includes(k)||S.open.length>=2)return;
+  S.open.push(k);S.seen[k]=1;
+  if(S.open.length===2){S.moves++;const[x,y]=S.open;
+    if(S.cards[x]===S.cards[y]){S.match[x]=S.match[y]=i;S.sc[i]++;S.open=[];if(S.match.every(m=>m>=0))S.over=true}
+    else S.auto={t:'hide',ms:1100}}
+},
+bot(S,i){if(S.over||S.auto||S.turn!==i)return null;
+  const un=[...S.cards.keys()].filter(k=>S.match[k]<0&&!S.open.includes(k));
+  const pickNew=()=>{const u=un.filter(k=>!S.seen[k]),p=u.length?u:un;return{t:'flip',k:p[rnd(p.length)]}};
+  if(S.open.length===1){const c=S.cards[S.open[0]],m=un.find(k=>S.seen[k]&&S.cards[k]===c);return(m!==undefined&&rnd(10)<8)?{t:'flip',k:m}:pickNew()}
+  for(const k of un)if(S.seen[k]&&un.some(j=>j!==k&&S.seen[j]&&S.cards[j]===S.cards[k])&&rnd(10)<8)return{t:'flip',k};
+  return pickNew()},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){
+  const my=S.turn===me&&!S.over&&!S.auto;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">ходов: ${S.moves}</span></div>`;
+  if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));h+=`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} пар! (ходов: ${S.moves})</h2>`}
+  else h+=`<p class="muted" style="text-align:center">${S.turn===me?'Твой ход!':'Ходит '+E(S.names[S.turn])+'…'}</p>`;
+  h+=`<div class="mg">${S.cards.map((c,k)=>{const m=S.match[k],up=m>=0||S.open.includes(k);
+    return `<div class="mm ${up?'up':''}" style="${m>=0?`border-color:${COL[m]}`:''}" ${my&&!up?`onclick="${H(()=>send({t:'flip',k}))}"`:''}>${up?c:'❓'}</div>`}).join('')}</div>`;
+  return h;
+}};
+
+/* ============ 10. ЧЕТЫРЕ В РЯД ============ */
+const c4drop=(b,c,p)=>{for(let r=5;r>=0;r--)if(b[r*7+c]===0){b[r*7+c]=p;return r}return -1};
+const C4D=[[0,1],[1,0],[1,1],[1,-1]];
+function c4win(b,p){for(let r=0;r<6;r++)for(let c=0;c<7;c++)for(const[dr,dd]of C4D){let k=0;for(;k<4;k++){const rr=r+dr*k,cc=c+dd*k;if(rr<0||rr>5||cc<0||cc>6||b[rr*7+cc]!==p)break}if(k===4)return true}return false}
+function c4eval(b,p){let s=0;const o=3-p;for(let r=0;r<6;r++){if(b[r*7+3]===p)s+=3;}
+  for(let r=0;r<6;r++)for(let c=0;c<7;c++)for(const[dr,dd]of C4D){let a=0,x=0,bad=false;for(let k=0;k<4;k++){const rr=r+dr*k,cc=c+dd*k;if(rr<0||rr>5||cc<0||cc>6){bad=true;break}const v=b[rr*7+cc];if(v===p)a++;else if(v===o)x++}
+    if(bad)continue;if(x===0)s+=[0,1,5,50,0][a];else if(a===0)s-=[0,1,5,50,0][x]}return s}
+function c4mm(b,d,al,be,mx,p){const o=3-p;if(c4win(b,p))return 1e5+d;if(c4win(b,o))return -1e5-d;
+  const cols=[3,2,4,1,5,0,6].filter(c=>b[c]===0);if(!cols.length||d===0)return c4eval(b,p);
+  if(mx){let v=-1e9;for(const c of cols){const nb=b.slice();c4drop(nb,c,p);v=Math.max(v,c4mm(nb,d-1,al,be,false,p));al=Math.max(al,v);if(al>=be)break}return v}
+  let v=1e9;for(const c of cols){const nb=b.slice();c4drop(nb,c,o);v=Math.min(v,c4mm(nb,d-1,al,be,true,p));be=Math.min(be,v);if(al>=be)break}return v}
+const C4={id:'c4',name:'Четыре в ряд',icon:'🔴',color:'#3b82f6',min:2,max:2,sb:1,bd:700,
+desc:'Роняй фишки в колонки и собери четыре в ряд по горизонтали, вертикали или диагонали. Бот не поддаётся!',
+rules:'Игроки по очереди роняют фишку в любую колонку. Кто первым выстроит четыре своих фишки в линию (в любую сторону) — побеждает.',
+init(names){return{names,b:Array(42).fill(0),turn:0,win:-1}},
+act(S,i,a){
+  if(S.win!==-1||i!==S.turn||a.t!=='drop'||!(a.c>=0&&a.c<7))return;
+  if(c4drop(S.b,a.c,i+1)<0)return;
+  if(c4win(S.b,i+1))S.win=i;else if(S.b.every(x=>x))S.win=-2;else S.turn=1-S.turn;
+},
+bot(S,i){if(S.win!==-1||S.turn!==i)return null;const p=i+1;let best=-1e9,bc=[];
+  for(const c of [0,1,2,3,4,5,6]){if(S.b[c]!==0)continue;const nb=S.b.slice();c4drop(nb,c,p);const v=c4win(nb,p)?1e6:c4mm(nb,3,-1e9,1e9,false,p);
+    if(v>best){best=v;bc=[c]}else if(v===best)bc.push(c)}
+  return bc.length?{t:'drop',c:bc[rnd(bc.length)]}:null},
+win(S,me){return S.win===-1?null:S.win===me},
+render(S,me){
+  const my=S.turn===me&&S.win===-1;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&S.win===-1?'st':''}" style="--c:${i?'#facc15':'#ef4444'}">${i?'🟡':'🔴'} ${E(x)}${i===me?' (ты)':''}</span>`).join('')}</div>`;
+  h+=S.win===-2?'<h2 style="text-align:center">Ничья!</h2>':S.win>=0?`<h2 style="text-align:center">🏆 ${E(S.names[S.win])} победил(а)!</h2>`:`<p class="muted" style="text-align:center">${S.turn===me?'Твой ход — нажми на колонку':'Ходит '+E(S.names[S.turn])+'…'}</p>`;
+  h+=`<div class="c4">${S.b.map((v,k)=>`<i class="${v?'p'+v:''}" ${my?`onclick="${H(()=>send({t:'drop',c:k%7}))}"`:''}></i>`).join('')}</div>`;
+  return h;
+}};
+
 /* ============ запуск ============ */
-const GAMES=[MONO,IMG,UNO,SPY,CRO],GM=Object.fromEntries(GAMES.map(g=>[g.id,g]));
-home();
-if(location.hash.length>3)joinRoom(location.hash.slice(1));
+const GAMES=[MONO,IMG,UNO,DUR,DICE,QUIZ,MEM,C4,SPY,CRO],GM=Object.fromEntries(GAMES.map(g=>[g.id,g]));
+if(location.hash.length>3)prof?joinRoom(location.hash.slice(1)):welcome(()=>joinRoom(location.hash.slice(1)));
+else prof?home():welcome();
+setHead();
 </script>
 </body>
 </html>
