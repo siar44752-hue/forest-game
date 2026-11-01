@@ -1,409 +1,416 @@
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Последняя жара</title>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Игровая комната — играй с друзьями</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#0a0605;color:#f1e3c8;font:15px 'Courier New',monospace;user-select:none;-webkit-user-select:none}
-#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;filter:contrast(1.06) saturate(1.12)}
-#glare{position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 8%,rgba(255,170,70,.35),transparent 55%);mix-blend-mode:screen;transition:opacity 3s}
-#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.75) 100%);z-index:2}
-#grain{position:fixed;inset:-50%;pointer-events:none;opacity:.07;z-index:2;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");animation:gr .6s steps(5) infinite}
-@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}100%{transform:translate(3%,3%)}}
-#flash{position:fixed;inset:0;background:#a00;opacity:0;pointer-events:none;z-index:6;transition:opacity .6s}
-button{font:inherit;color:#f1e3c8;background:rgba(40,22,14,.85);border:1px solid #8a4a22;border-radius:4px;padding:10px 14px;cursor:pointer;transition:.15s}
-button:hover{background:#6a2e14;border-color:#e8923a}button:disabled{opacity:.4;pointer-events:none}.ok{border-color:#4a8a3a}.bad{border-color:#b02a1a;color:#ff9a8a}
-.pn{position:fixed;background:rgba(14,8,5,.88);border:1px solid #6a3416;border-radius:8px;padding:14px;backdrop-filter:blur(3px);z-index:4}
-#hud{position:fixed;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:flex-start;padding:10px 12px;z-index:3;pointer-events:none}#hud>*{pointer-events:auto}
-#st{display:flex;flex-direction:column;gap:6px;text-shadow:0 1px 3px #000}#pips{letter-spacing:3px;color:#e8923a}
-#rs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.chip{padding:5px 9px;font-size:13px}.chip.g{}
-#tb{display:flex;gap:6px}#tb button{padding:8px 11px}
-#dlg{left:50%;bottom:14px;transform:translateX(-50%);width:min(720px,96vw);display:none}
-#who{color:#e8923a;font-size:16px}#say{margin:8px 0;line-height:1.5;font-size:16px}#rev{min-height:20px;color:#ffd08a;font-size:14px;margin-bottom:8px}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-#rm{left:12px;top:92px;display:none;gap:6px;flex-direction:column}#shop{left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,94vw);display:none}
-#shop .it{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0}
-.ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(6,3,2,.8);z-index:5;padding:14px}
-.ov.on{display:flex;animation:f .6s}@keyframes f{from{opacity:0}}
-.box{max-width:560px;width:100%;text-align:center;display:flex;flex-direction:column;gap:12px}
-h1{font:400 52px Georgia,serif;letter-spacing:.08em;margin:0;color:#e8923a;text-shadow:0 0 28px rgba(232,146,58,.55)}h2{font:400 30px Georgia,serif;margin:0;color:#e8923a}
-.sub{color:#b89a78;margin:0}#menu{background:radial-gradient(ellipse at 30% 40%,rgba(40,14,6,.55),rgba(6,3,2,.9))}
-#menu .box{align-items:flex-start;text-align:left;margin-left:6vw}#menu button.big{font-size:19px;padding:14px 22px;width:260px;text-align:left}
-#card p{font:italic 19px/1.6 Georgia,serif;margin:0}#toast{position:fixed;top:60px;left:50%;transform:translate(-50%,-90px);background:#2a140a;border:1px solid #e8923a;padding:9px 16px;border-radius:6px;z-index:9;transition:transform .35s;max-width:92%;text-align:center}#toast.on{transform:translate(-50%,0)}
-#fatal{display:none;position:fixed;inset:0;background:#0a0605;color:#e8923a;z-index:99;align-items:center;justify-content:center;padding:30px;text-align:center;font-size:18px}
-#hint{position:fixed;bottom:14px;left:0;right:0;text-align:center;color:#b89a78;font-size:13px;pointer-events:none;z-index:3}
-input[type=range]{width:100%}@media(max-width:700px){h1{font-size:34px}#menu .box{margin-left:0}}
-html{-webkit-tap-highlight-color:transparent}select{font:inherit;color:#f1e3c8;background:#1d0f08;border:1px solid #8a4a22;padding:8px;border-radius:4px;width:100%}label{display:block;text-align:left}
-#pat{height:4px;background:#2a140a;border-radius:2px;margin-bottom:8px}#pat i{display:block;height:100%;width:100%;background:#b02a1a;border-radius:2px}
-#stick{position:fixed;left:max(18px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:120px;height:120px;border:2px solid rgba(232,146,58,.45);border-radius:50%;background:rgba(20,10,5,.35);display:none;z-index:3;touch-action:none}
-#stick i{position:absolute;left:35px;top:35px;width:50px;height:50px;border-radius:50%;background:rgba(232,146,58,.55)}.tch.play #stick{display:block}
-.tch button{min-height:46px;font-size:16px}.tch #dlg .row{display:grid;grid-template-columns:1fr 1fr}.tch #dlg .row:last-child{grid-template-columns:1fr 1fr 1fr}.tch #tb button{padding:10px 13px;font-size:18px}
-@media(max-height:520px){#dlg{padding:8px}#say{font-size:14px;margin:4px 0}#rev{font-size:12px;margin-bottom:4px}.tch #dlg button{min-height:36px;padding:5px;font-size:13px}#stick{width:96px;height:96px}#stick i{left:28px;top:28px;width:40px;height:40px}#hud{transform:scale(.9);transform-origin:top left}}
-#hud{padding-top:max(10px,env(safe-area-inset-top))}#nav{position:fixed;right:10px;top:64px;display:none;flex-direction:column;gap:6px;z-index:3}.play #nav{display:flex}#nav button{padding:7px 10px;font-size:13px;text-align:left}.tch #nav button{min-height:38px}#trow{max-height:34vh;overflow:auto}@media(max-height:520px){#nav{top:50px}#nav button{padding:4px 8px;font-size:12px;min-height:30px}}@keyframes rise{from{opacity:0;transform:translateY(14px)}}@keyframes ti{from{opacity:0;letter-spacing:.4em;filter:blur(8px)}}
-#menu h1{animation:ti 3s ease-out both}#menu .box>*:not(h1){animation:rise .9s both}#menu .box>*:nth-child(3){animation-delay:.3s}#menu .box>*:nth-child(4){animation-delay:.45s}#menu .box>*:nth-child(5){animation-delay:.6s}#menu .box>*:nth-child(6){animation-delay:.75s}
-</style></head><body>
-<canvas id="c"></canvas><div id="glare"></div><div id="vig"></div><div id="grain"></div><div id="flash"></div>
-<div id="hud"><div id="st"><div id="dayl"></div><div id="pips"></div><div id="inv"></div><div id="rs"></div></div><div id="tb"><button id="bShop">💻 ForRest</button><button id="bRadio">📻</button><button id="bMute">🔊</button><button id="bMenu">☰</button></div></div>
-<div id="hint"></div><div id="nav"><button data-r="hall">🚪 Холл</button><button data-r="kitchen">🍳 Кухня</button><button data-r="bath">🛁 Ванная</button><button data-r="bed">🛏 Спальня</button><button data-r="base" id="nbase" disabled>🕳 Подвал</button></div><div id="stick"><i></i></div>
-<div id="rm" class="pn"></div>
-<div id="dlg" class="pn"><div id="who"></div><div id="say"></div><div id="rev"></div><div id="pat"><i></i></div>
-<canvas id="aura" width="110" height="130" style="display:none;float:right;border:1px solid #6a3416;border-radius:6px;margin-left:8px"></canvas><div class="row" id="trow"></div>
-<div class="row"><button data-a="in" class="ok">Впустить</button><button data-a="out">Прогнать</button><button data-a="kill" class="bad">Застрелить</button><button data-a="give" id="give" style="display:none">🎁 Отдать припасы</button></div></div>
-<div id="shop" class="pn"><h2>ForRest</h2><div class="sub" id="cr"></div><div id="shopl"></div><div class="row"><button id="shopx">Закрыть</button></div></div>
-<div id="card" class="ov"><div class="box"><h2 id="ct"></h2><p id="cx"></p><div class="row" id="cb" style="justify-content:center"></div></div></div>
-<div id="end" class="ov"><div class="box"><h1 id="et" style="font-size:40px"></h1><p id="ex" class="sub" style="font-size:17px;line-height:1.6"></p><div class="row" style="justify-content:center"><button id="eAgain">Сыграть снова</button><button id="eMenu">В меню</button></div></div></div>
-<div id="menu" class="ov on"><div class="box"><h1>ПОСЛЕДНЯЯ<br>ЖАРА</h1><p class="sub">Снаружи +52°. Они стучат в дверь. Не все из них люди.</p>
-<button class="big" id="mPlay">Играть</button><button class="big" id="mCont">Продолжить</button><button class="big" id="mEnds">Концовки</button><button class="big" id="mSet">Настройки</button><p class="sub" id="mInfo"></p></div></div>
-<div id="pause" class="ov"><div class="box"><h2>Пауза</h2><button id="pRes">Продолжить</button><button id="pSet">Настройки</button><button id="pMenu">Сохранить и выйти в меню</button></div></div>
-<div id="set" class="ov"><div class="box"><h2>Настройки</h2><label>Общая громкость<input type="range" id="sVol" min="0" max="1" step=".05"></label><label>Музыка<input type="range" id="sMus" min="0" max="1.5" step=".05"></label><label>Эффекты и голоса<input type="range" id="sSfx" min="0" max="1.5" step=".05"></label><label>Чувствительность камеры<input type="range" id="sSens" min=".4" max="2.5" step=".1"></label><label>Графика<select id="sQ"><option value="0">Низкая (телефоны)</option><option value="1">Средняя</option><option value="2">Высокая</option></select></label><label><input type="checkbox" id="sMute"> Без звука</label><button id="sBack">Назад</button></div></div>
-<div id="ends" class="ov"><div class="box"><h2>Концовки</h2><div id="el" style="text-align:left;line-height:1.8"></div><button id="eBack">Назад</button></div></div>
-<div id="toast"></div><div id="fatal"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(1100px 600px at 15% -10%,#4c1d9566,transparent),radial-gradient(900px 500px at 100% 0,#0e749055,transparent),#0d0a1c;color:#ece9ff;min-height:100vh}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 18px;position:sticky;top:0;background:#0d0a1ccc;backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid #ffffff14}
+#logo{font-size:20px;font-weight:800;cursor:pointer;white-space:nowrap}
+input{background:#ffffff12;border:1px solid #ffffff26;color:#fff;border-radius:10px;padding:10px 12px;font-size:15px;outline:none;min-width:0}
+input:focus{border-color:#a78bfa}
+main{max-width:1000px;margin:0 auto;padding:18px}
+.hero{text-align:center;padding:22px 0 6px}
+.hero h1{font-size:clamp(28px,6vw,50px);margin:0 0 6px;background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:#a9a3cc}
+.join{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center;margin:16px 0}
+.join input{width:130px;text-transform:uppercase;letter-spacing:3px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:18px}
+.card{background:linear-gradient(160deg,#ffffff14,#ffffff06);border:1px solid #ffffff1f;border-top:4px solid var(--c);border-radius:18px;padding:18px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 30px #0008,0 0 0 1px var(--c)}
+.card .ic{font-size:44px}.card h3{margin:6px 0}.card p{margin:0 0 10px;color:#c9c4e8;font-size:14px;line-height:1.4}
+.card small{color:#a9a3cc}
+.card.soon{border-style:dashed;cursor:default;opacity:.6}.card.soon:hover{transform:none;box-shadow:none}
+.btn{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;margin:3px;transition:.15s}
+.btn:hover{filter:brightness(1.15)}.btn:active{transform:scale(.97)}
+.btn.big{padding:13px 22px;font-size:17px}.btn.sm{padding:6px 12px;font-size:13px}
+.btn.ghost{background:#ffffff14}
+.bar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar b{font-size:18px;margin-right:auto}
+.lob{max-width:560px;margin:20px auto;text-align:center;background:#ffffff0d;border:1px solid #ffffff1f;border-radius:20px;padding:22px}
+.lob h2{margin:4px 0}.code{font-size:56px;font-weight:900;letter-spacing:10px;color:#67e8f9;margin:6px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0 16px}
+.chip{display:inline-flex;gap:6px;align-items:center;background:#ffffff12;border:1px solid var(--c,#fff3);border-radius:20px;padding:5px 12px;font-size:14px}
+.chip.st{background:#7c3aed44}
+.rules{text-align:left;font-size:13px;color:#c9c4e8;background:#0004;border-radius:12px;padding:10px 14px;margin:10px 0}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111c;border:1px solid #fff3;padding:10px 18px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
+#toast.on{opacity:1}
+.sc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+/* монополия */
+.mb{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:3px;aspect-ratio:1;max-width:680px;margin:0 auto}
+.mc{background:#ffffff10;border:1px solid #ffffff1a;border-radius:6px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(7px,1.5vw,11px);padding:2px;overflow:hidden;line-height:1.15}
+.mc i{position:absolute;top:0;left:0;right:0;height:6px}.mc u{position:absolute;bottom:0;left:0;right:0;height:5px}
+.mc .tk{font-size:clamp(10px,2.2vw,18px);line-height:1}
+.mid{grid-area:2/2/7/7;background:#0005;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;text-align:center;font-size:clamp(11px,1.8vw,14px)}
+.dice{font-size:clamp(30px,7vw,56px);letter-spacing:6px;line-height:1}
+.pp{display:flex;gap:8px;align-items:center;padding:6px 12px;border-radius:12px;background:#ffffff0d;border-left:4px solid var(--c);margin:4px 0}.pp.cur{background:#7c3aed44}.pp.out{opacity:.4;text-decoration:line-through}
+.log{font-size:12px;color:#b8b2dc;max-height:90px;overflow:hidden}
+/* карты имаджинариум */
+.hand,.tbl{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.pc{width:100px;height:140px;border-radius:12px;overflow:hidden;cursor:pointer;border:3px solid transparent;transition:.15s;flex:none}
+.pc:hover{transform:translateY(-4px)}.pc.sel{border-color:#fff;transform:translateY(-8px);box-shadow:0 0 18px #fff6}
+.ic3{width:100%;height:100%;display:flex;align-items:center;justify-content:space-around;font-size:30px}
+.ic3.l1{flex-direction:column}.ic3.l2{flex-wrap:wrap;padding:10px}.ic3 span:nth-child(2){font-size:42px}.ic3.l2 span:nth-child(1){font-size:50px}
+.tc{text-align:center;font-size:12px;display:flex;flex-direction:column;gap:3px;align-items:center}.tc.win .pc{border-color:#facc15;box-shadow:0 0 18px #facc1588}
+/* уно */
+.uc{width:64px;height:92px;border-radius:10px;border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;cursor:pointer;transition:.15s;flex:none;text-shadow:0 2px 4px #0006}
+.uc.no{opacity:.45;cursor:default}.uc.ok:hover{transform:translateY(-8px)}.uc.big{width:90px;height:130px;font-size:40px;cursor:default}
+.uno{display:flex;gap:18px;align-items:center;justify-content:center;margin:14px 0;flex-wrap:wrap}
+.dot{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid #fff;vertical-align:middle}
+/* шпион / крокодил */
+.role{font-size:22px;text-align:center;background:#ffffff10;border-radius:16px;padding:22px;margin:12px 0}
+.locs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+#cv{width:100%;max-width:640px;aspect-ratio:640/440;background:#fff;border-radius:14px;touch-action:none;display:block;margin:0 auto;cursor:crosshair}
+.tools{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.sw{width:28px;height:28px;border-radius:50%;border:2px solid #fff8;cursor:pointer;display:inline-block}
+.chat{max-width:640px;margin:10px auto;font-size:14px}.chat div{padding:3px 0}.chat .ok{color:#86efac;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div id="logo" onclick="leave()">🎲 Игровая комната</div>
+  <input id="nm" placeholder="Твоё имя" maxlength="14" style="width:150px">
+</header>
+<main id="app"></main>
+<div id="toast"></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-'use strict';
-const $=s=>document.querySelector(s),Rn=Math.random,rnd=a=>a[Rn()*a.length|0],cl=(v,a,b)=>Math.max(a,Math.min(b,v));
-const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
-const TOUCH=matchMedia('(pointer:coarse)').matches;let S=Object.assign({vol:.7,mute:false,mus:.6,sfx:1,sens:1,q:TOUCH?0:2},store.get('nh_set',{}));if(TOUCH)document.body.classList.add('tch');
-function toast(t,ms=3000){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),ms)}
-function fatal(m){const f=$('#fatal');f.style.display='flex';f.textContent=m}
-addEventListener('error',e=>toast('Ошибка: '+e.message,5000));
-// ---------- звук ----------
-let AC,MG,CIC,SG,MU,musOn=false;
-function A(){if(AC){if(AC.state==='suspended')AC.resume();return AC}try{AC=new(window.AudioContext||window.webkitAudioContext)();MG=AC.createGain();MG.gain.value=S.mute?0:S.vol;MG.connect(AC.destination);SG=AC.createGain();SG.gain.value=S.sfx;SG.connect(MG);MU=AC.createGain();MU.gain.value=S.mus;MU.connect(MG);amb();setTimeout(music,600)}catch(e){}return AC}
-function nb(len){const b=AC.createBuffer(1,AC.sampleRate*len,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b}
-function amb(){const n=AC.createBufferSource();n.buffer=nb(3);n.loop=true;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=420;f.Q.value=.6;const g=AC.createGain();g.gain.value=.1;n.connect(f);f.connect(g);g.connect(MG);n.start();
- const lf=AC.createOscillator(),lg=AC.createGain();lf.frequency.value=.12;lg.gain.value=220;lf.connect(lg);lg.connect(f.frequency);lf.start();
- [55,55.8,82.4].forEach(fr=>{const o=AC.createOscillator(),og=AC.createGain(),lp=AC.createBiquadFilter();o.type='sawtooth';o.frequency.value=fr;lp.type='lowpass';lp.frequency.value=150;og.gain.value=.03;o.connect(lp);lp.connect(og);og.connect(MG);o.start()});
- const c=AC.createBufferSource();c.buffer=nb(2);c.loop=true;const cf=AC.createBiquadFilter();cf.type='bandpass';cf.frequency.value=6500;cf.Q.value=8;CIC=AC.createGain();CIC.gain.value=.03;const tr=AC.createOscillator(),tg=AC.createGain();tr.frequency.value=22;tg.gain.value=.03;tr.connect(tg);tg.connect(CIC.gain);tr.start();c.connect(cf);cf.connect(CIC);CIC.connect(MG);c.start()}
-function T(f,d,type='sine',v=.2,f2,dest){if(!A())return;const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime;o.type=type;o.frequency.setValueAtTime(f,n);if(f2)o.frequency.exponentialRampToValueAtTime(f2,n+d);g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g);g.connect(dest||SG);o.start(n);o.stop(n+d+.05)}
-function Nz(d,fc,v=.3,ty='lowpass'){if(!A())return;const s=AC.createBufferSource();s.buffer=nb(d);const f=AC.createBiquadFilter();f.type=ty;f.frequency.value=fc;const g=AC.createGain(),n=AC.currentTime;g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);s.connect(f);f.connect(g);g.connect(SG);s.start()}
-const sfx={knock:n=>{for(let i=0;i<n;i++)setTimeout(()=>{T(110,.18,'sine',.5,55);Nz(.1,500,.3);Fx.swing(.5);Fx.shake()},i*280)},creak:()=>T(90,.8,'sawtooth',.07,170),meow:()=>{T(600,.15,'triangle',.16,900);setTimeout(()=>T(900,.3,'triangle',.16,500),150)},
- beat:()=>{T(60,.12,'sine',.5);setTimeout(()=>T(50,.14,'sine',.4),170)},ding:()=>{T(880,.4,'sine',.18);setTimeout(()=>T(1320,.5,'sine',.14),90)},shot:()=>{Nz(.5,3000,.8);T(70,.4,'square',.35,30);Fx.swing(1.6)},
- click:()=>T(500,.05,'triangle',.12),stinger:()=>{T(45,2.6,'sawtooth',.18,40);T(47.5,2.6,'sawtooth',.12,42);T(300,1.6,'sine',.04,150)},voice:v=>{const b=v?95+((v.id*53)%90):140,g=v&&v.guest,k=8+(Math.random()*6|0);for(let i=0;i<k;i++)setTimeout(()=>{const f=b*(1+Math.random()*.5);T(f,.07,g?'sawtooth':'triangle',g?.03:.05,f*.9);if(g)T(f*.5,.09,'square',.02)},i*(g?105:85))},stat:()=>Nz(.7,2500,.12,'bandpass'),step:()=>{T(70,.08,'sine',.12);Nz(.06,260,.06)},slam:()=>{Nz(.3,400,.5);T(60,.3,'sine',.5,30);Fx.swing(1.2)},zoom:()=>{T(200,.35,'sine',.05,520);Nz(.3,1800,.04,'bandpass')},tick:()=>T(1800,.02,'square',.035),
- siren:()=>{if(!A())return;Fx.siren();const o=AC.createOscillator(),g=AC.createGain(),lp=AC.createBiquadFilter(),n=AC.currentTime;o.type='sawtooth';lp.type='lowpass';lp.frequency.value=650;o.frequency.setValueAtTime(420,n);for(let i=0;i<4;i++){o.frequency.linearRampToValueAtTime(760,n+i*2.2+1.1);o.frequency.linearRampToValueAtTime(420,n+i*2.2+2.2)}g.gain.setValueAtTime(.0001,n);g.gain.linearRampToValueAtTime(.05,n+1.5);g.gain.linearRampToValueAtTime(.0001,n+9);o.connect(lp);lp.connect(g);g.connect(SG);o.start(n);o.stop(n+9.2)}};
-function music(){if(musOn||!AC)return;musOn=true;const SC=[110,130.8,146.8,164.8,196,220];setInterval(()=>{if(S.mute||!AC||window.__AUTO)return;const f=SC[(Math.random()*SC.length)|0]*(Math.random()<.3?.5:1);T(f,5,'sine',.09,f*.99,MU);T(f*1.5,5,'triangle',.03,undefined,MU);if(Math.random()<.2)T(f*(Math.random()<.5?2.997:4.04),2.5,'sine',.025,undefined,MU)},3800)}
-function applyVol(){if(MG)MG.gain.value=S.mute?0:S.vol;if(SG)SG.gain.value=S.sfx;if(MU)MU.gain.value=S.mus;$('#bMute').textContent=S.mute?'🔇':'🔊';store.set('nh_set',S)}
-// ---------- данные ----------
-const NAMES=['Марк','Лена','Игорь','Соня','Павел','Оля','Тимур','Вера','Глеб','Нина','Артём','Мила'],ROLES=['сосед','учительница','дальнобойщик','студентка','пожарный','врач','пенсионер','курьер'];
-const SK=[0xe6c4a4,0xc99a76,0x8d5a3a,0xf0d4b8],CLO=[0x4a6a8a,0x7a3a3a,0x3a6a4a,0x8a7a4a,0x5a4a7a,0x6a6a6a],HAIR=[0x2a1a10,0x6a4a20,0xc8b070,0x1a1a1a,0xcfcfcf];
-const PALE=[3,5,9,11],FEMA=[4,5,8,10],VIG=[8,10,12],LAST=14,MAXE=5,MAXR=8;
-const ENDS={the_end:['Это конец?','Вы заколотили окна и дожили до конца жары. В доме остались только люди. Снаружи впервые за много дней дует прохладный ветер… но вы всё ещё не уверены, кто сидит рядом.'],not_alone:['Нет, я не один','Окна заколочены, жара спала. Но среди тех, кто делил с вами дом, был Гость. Он улыбнулся идеально белыми зубами: «Теперь мы одна семья».'],alone:['Да, я один','«Ты один?» — «Да». Свет погас. Больше вас никто не видел.'],murderer:['Да, я убийца','Слишком много крови на ваших руках. На пороге стоит Пророк и вслух читает приговор.'],devoured:['Дом принадлежит Гостям','В доме не осталось людей, кроме вас. Ночью Гость подошёл к вашей кровати.'],
-vigilante:['Гнев Стрелка','«Ты солгал мне», — сказал Стрелок. Вспышки выстрелов в темноте, и дом больше не ваш.'],cult:['Да очистит смерть наши грехи','Трое последователей дожили до ночи ритуала. Лидер культа кивает: «Теперь вы с нами». Огонь очищает дом и ваши грехи.'],embrace:['Прими неизбежное','Пророк не обманул. Вы выкопали яму в подвале и прыгнули вниз, в тишину, где жара не достаёт.'],shroom:['Гриб или гибель','Гриб, яблоко, часы. Пол в подвале раскрылся, и вы шагнули в Страну грибов. Там тоже кто-то стучит.'],child:['Дитя гибели','Вы нашли младенца во всех трёх углах дома. Ночью посмотрели в окно, и он посмотрел на вас оттуда.'],fema:['Добро пожаловать в FEMA','Три звонка, три уведомления, никаких ошибок. Люди в форме разрешили вам стать одним из них.'],dark:['В темноте','Вы не заколотили окна и погасили свет. В темноте кто-то сел рядом и тихо сказал: «Мы подождём».']};
-const RADIO=['«…сегодня +49°. Не выходите без воды. Бледный человек заходит по нечётным ночам, не оставайтесь в одиночестве…»','«…по данным FEMA, проверки в домах пройдут на четвёртую, пятую, восьмую и десятую ночь. Уведомления принимаются…»','«…Гости не знают, как выглядит усталость. Смотрите на зубы, ногти и глаза…»','«…кошки чувствуют Гостей. Корм творит чудеса…»','«…министр кофе обещает припасы тем, кто принесёт пиво, сигареты и кофе…»','«…Стрелок обходит дома по ночам. Отвечайте честно…»'];
-const CLH=[[3,'Диктор: «Гости слишком часто улыбаются идеально белыми зубами».'],[4,'Диктор: «У Гостей нет волос под мышками».'],[6,'Диктор: «На аура-фото Гости оставляют чёрные пятна».'],[8,'Диктор: «В ушах у Гостей замечали жуков».'],[9,'Диктор: «У Гостей кровоточат дёсны».'],[13,'Диктор: «Зрачки Гостей дёргаются слишком быстро».']];
-const fresh=()=>({day:1,clock:14,res:[],cat:false,food:0,notice:1,energy:5,credits:6,kills:0,hkills:0,over:false,cur:null,endId:null,beer:2,coffee:0,cig:0,orders:[],skip:0,babies:0,babyOK:{},seduct:false,shroom:0,dig:0,digN:0,femaCalls:0,given:0,noTest:0,usedTest:false,hatch:false,cult:false,prophet:false,dark:false});
-const G=Object.assign({id:0},fresh());
-let tests=0;
-const ROST={teacher:{n:'Учитель',h:1,intro:'«Я учитель. Мои ученики остались без воды, пожалуйста…»'},girl:{n:'Маленькая девочка',h:1,sc:[.62,.62],intro:'«Дяденька, мне страшно. Можно к вам?»',ask:'«Мама сказала не разговаривать с незнакомыми…»'},tall:{n:'Высокий мужчина',h:1,sc:[1.08,1.18],intro:'«Я высокий, но не страшный. Пустите погреться… то есть остыть.»'},
-sewn:{n:'Человек с зашитым ртом',h:1,sewn:1,intro:'(Он молча протягивает записку: «Пожалуйста».)',ask:'(Он только мычит.)'},fema:{n:'Сотрудник FEMA',h:1,intro:'«Сотрудник FEMA. Провожу проверку. Не волнуйтесь, вы в списках.»'},fire:{n:'Обгоревший пожарный',h:1,skin:0x3a2018,intro:'«Я пожарный. Сгорел на последнем вызове. Мне нужна вода.»'},blind:{n:'Слепой',h:1,blind:1,intro:'«Я ничего не вижу, но слышу, что вы дома. Пустите?»',ask:'«Я не видел, как всё началось. Только слышал.»'},widow:{n:'Вдова',h:1,intro:'«Мой муж умер на прошлой неделе. Не прогоняйте меня.»'},
-cash:{n:'Кассир',g:1,harm:1,sig:['teeth','nails','arm'],intro:'«Здравствуйте, я кассир. Пакет нужен? Шучу. Пустите?»',ask:'«Я просто работаю на кассе. Всегда.»'},coat:{n:'Человек в пальто',g:1,sig:['teeth','arm','gums'],cloth:0x2a2a30,intro:'«В пальто жарко, но я люблю пальто. Откройте.»'},fat:{n:'Толстуха',g:1,sc:[1.35,1],sig:['pupil','aura','nails'],intro:'«Милый, я столько прошла! Накормите бедную женщину.»'},old:{n:'Старуха',g:1,hair:0xcfcfcf,sc:[.92,.94],sig:['ear','eyes','lie'],intro:'«Внучек, пусти бабушку. Я пирожков принесла.»'},
-imm:{n:'Бессмертный',g:1,imm:1,sig:['teeth','aura','pupil','gums'],intro:'«Я живу очень давно. Давайте не будем спорить.»',ask:'«Я старше, чем выгляжу. Намного старше.»'},catw:{n:'Женщина с кошкой',g:1,harm:1,cat:1,sig:['eyes','gums','lie'],intro:'«Здравствуйте! У меня кошка. Ей жарко, пожалуйста.»'},seduct:{n:'Соблазнительная женщина',sed:1,cloth:0x8a1a2a,intro:'«Мне так одиноко… Можно я останусь у вас? Только в спальне, дорогой.»'},
-nun:{n:'Монахиня',g:1,nun:1,cloth:0x1a1a1a,sig:['ear','teeth','aura'],intro:'«Благослови вас Бог. Мне нужен тихий угол и вода.»',ask:'«Я молюсь за вас, дитя.»'},minister:{n:'Министр',min:1,cloth:0x2a3a5a,intro:'«Я министр кофе. Принесите пиво, сигареты и кофе, и я расплачусь припасами.»'}};
-const SCH={1:['teacher','coat'],2:['catw','girl'],3:['cash','blind'],4:['tall','fat'],5:['widow','old'],6:['seduct','sewn'],7:['fire','nun','imm'],8:['fema'],9:['minister']};
-const SIGS=['teeth','nails','eyes','lie','arm','aura','gums','pupil','ear'],GP={teeth:.7,nails:.6,eyes:.55,lie:.55,arm:.5,aura:.5,gums:.45,pupil:.4,ear:.15};
-function genVisitor(sp){const r=sp&&sp.k?ROST[sp.k]:null;let guest=r?!!r.g:sp?!!sp.guest:Rn()<cl(.3+G.day*.02,0,.62);if(r&&r.min)guest=Rn()<.5;
- const t={fung:false};SIGS.forEach(k=>t[k]=false);
- if(r&&r.g)(r.sig||[]).forEach(k=>t[k]=true);else if(r&&r.min){if(guest){t.fung=true;t.arm=true;t.pupil=Rn()<.5}}
- else if(!r){SIGS.forEach(k=>t[k]=guest?Rn()<GP[k]:(k!=='lie'&&Rn()<.06));if(guest){const pool=G.day<3?['nails','eyes','lie']:SIGS,need=G.day<3?2:3;let c=SIGS.filter(k=>t[k]).length;for(let i=0;c<need&&i<40;i++){const k=rnd(pool);if(!t[k]){t[k]=true;c++}}if(!pool.some(k=>t[k]))t[rnd(pool)]=true}}
- return{beh:rnd(['calm','nervous','hostile']),id:++G.id,k:r?sp.k:null,name:r?r.n:sp&&sp.name||rnd(NAMES),role:r?'':sp&&sp.role||rnd(ROLES),guest,t,cat:!!(r&&r.cat)||!!(sp&&sp.cat),harm:!!(r&&r.harm),imm:!!(r&&r.imm),sed:!!(r&&r.sed),nun:!!(r&&r.nun),min:!!(r&&r.min),sewn:!!(r&&r.sewn),blind:!!(r&&r.blind),skin:r&&r.skin||rnd(SK),cloth:r&&r.cloth||rnd(CLO),hair:r&&r.hair||rnd(HAIR),sc:r&&r.sc||null,notice:false,rev:{},pos:0}}
-const sayIntro=v=>v.k?ROST[v.k].intro:`«Здравствуйте! Я ${v.name}, ${v.role}. На улице смертельная жара, впустите, пожалуйста.»`;
-const sayAsk=v=>v.k&&ROST[v.k].ask?ROST[v.k].ask:v.t.lie?rnd(['«Меня выгнали из убежища. Сказали, что я лишний.»','«Из убежища меня выставили за дверь, представляете?»']):v.guest?rnd(['«Я просто шёл мимо и увидел ваш дом.»','«У меня никого нет. Я хочу к людям.»']):rnd(['«Я ушёл сам: в убежище закончилась вода.»','«Мы разошлись с соседями по убежищу, когда сломался генератор.»']);
-const tRes={teeth:v=>v.sewn?'🦷 Рот зашит, зубов не видно.':v.t.teeth?'🦷 Зубы слишком белые и идеально ровные.':'🦷 Зубы жёлтые и неровные. Обычные.',nails:v=>v.t.nails?'✋ Под ногтями чёрная земля.':'✋ Ногти чистые.',eyes:v=>v.blind?'👁 Мутные, незрячие глаза.':v.t.eyes?'👁 Глаза воспалены, налиты кровью.':'👁 Глаза усталые, но нормальные.',
-arm:v=>v.t.fung?'💪 Подмышки покрыты грибком.':v.t.arm?'💪 Подмышки гладкие, ни одного волоска.':'💪 Обычные подмышки с волосами.',aura:v=>v.t.aura?'📷 На аура-фото чёрные пятна.':'📷 Аура тёплая, без пятен.',gums:v=>v.sewn?'🩸 Рот зашит.':v.t.gums?'🩸 Дёсны кровоточат.':'🩸 Дёсны в норме.',pupil:v=>v.blind?'🎯 Зрачки не реагируют (слепой).':v.t.pupil?'🎯 Зрачки дёргаются слишком быстро.':'🎯 Зрачки двигаются нормально.',ear:v=>v.t.ear?'🪲 Из уха выползает жук.':'👂 В ушах чисто.',ask:v=>'💬 '+sayAsk(v)};
-const TD=[['teeth','🦷 Зубы',3],['nails','✋ Ногти',1],['eyes','👁 Глаза',1],['arm','💪 Подмышки',4],['aura','📷 Аура-фото',6],['gums','🩸 Дёсны',9],['pupil','🎯 Зрачки',13],['ear','👂 Уши',8],['ask','💬 Расспросить',1]];
-const isPos=(v,k)=>k==='ask'?!!v.t.lie:k==='arm'?!!(v.t.arm||v.t.fung):k==='eyes'?!v.blind&&!!v.t.eyes:!!v.t[k]&&!v.sewn;
-// ---------- игровая логика (без графики) ----------
-const waitMs=ms=>window.__AUTO?Promise.resolve():new Promise(r=>setTimeout(r,ms));
-let decideRes=null,paused=false;
-function card(title,text,btns){if(window.__AUTO)return Promise.resolve(window.__AUTO(btns,title));return new Promise(res=>{$('#ct').textContent=title;$('#cx').textContent=text;const b=$('#cb');b.innerHTML='';btns.forEach(x=>{const e=document.createElement('button');e.textContent=x[0];e.onclick=()=>{sfx.click();$('#card').classList.remove('on');res(x[1])};b.appendChild(e)});$('#card').classList.add('on')})}
-const humans=()=>G.res.filter(r=>!r.guest);
-function ending(id){if(G.over)return;G.over=true;store.del('nh_save');const f=store.get('nh_ends',[]);if(!f.includes(id)){f.push(id);store.set('nh_ends',f)}
- Fx.flash(id==='the_end'?0:1);sfx.stinger();$('#dlg').style.display='none';$('#hud').style.display='none';$('#et').textContent=ENDS[id][0];$('#ex').textContent=ENDS[id][1];setTimeout(()=>$('#end').classList.add('on'),window.__AUTO?0:1500);G.endId=id}
-function save(){const o=Object.assign({},G);['cur','over','endId','dark','id'].forEach(k=>delete o[k]);store.set('nh_save',o)}
-const LIVE=r=>!r.sed&&!r.nun;
-function makeQueue(){const ks=(SCH[G.day]||[]).slice(),q=[];ks.forEach(k=>{if(k==='catw'&&G.cat)return;if(k==='seduct'&&G.seduct)return;q.push(genVisitor({k}))});while(q.length<3)q.push(genVisitor());for(let i=q.length-1;i>0;i--){const j=Rn()*(i+1)|0;[q[i],q[j]]=[q[j],q[i]]}return q}
-function applyTest(v,k){if(G.energy<1){toast('Нет сил. Закажите EnerJeka или выпейте пива.');return false}G.energy--;G.usedTest=true;tests++;if(G.dark&&k!=='ask'&&Math.random()<.4){toast('В темноте ничего не разобрать. Силы потрачены зря.',3000);return true}v.rev[k]=tRes[k](v);if(isPos(v,k))v.pos=(v.pos||0)+1;return true}
-function admit(v){if(!v.sed&&G.res.filter(LIVE).length>=MAXR){toast('В доме нет места.');return false}
- const r={id:v.id,k:v.k,beh:v.beh,name:v.name,guest:v.guest,harm:v.harm,imm:v.imm,notice:false,skin:v.skin,cloth:v.cloth,hair:v.hair,t:v.t,sc:v.sc,sed:v.sed,nun:v.nun,min:v.min,sewn:v.sewn,blind:v.blind};G.res.push(r);
- if(v.cat){G.cat=true;toast('Вы получили кошку!');sfx.meow()}
- if(v.sed){G.seduct=true;toast('Она ушла в спальню. В таком доме малыши прячутся в трёх местах…',4500);setTimeout(()=>Fx.sync(),50)}
- return r}
-function killV(v){G.kills++;if(!v.guest&&!v.sed)G.hkills++;if(v.sed)G.hkills++;toast(v.guest?'Из раны потекла чёрная жидкость. Это был Гость.':'Он истекал кровью… Это был человек.',3500)}
-const REAC={nervous:['«З-зачем вы так на меня смотрите?»','«Мне нужна вода. Быстрее, пожалуйста…»'],calm:['«Проверяйте. Мне скрывать нечего.»','«Понимаю. Времена такие.»'],hostile:['«Хватит меня разглядывать!»','«Вы думаете, я один из них?!»']};
-const reac=v=>v.guest&&Math.random()<.5?'(Он улыбается и не моргает.)':rnd(REAC[v.beh||'calm']);
-let sayIv=null;function sayT(t){clearInterval(sayIv);const e=$('#say');if(window.__AUTO){e.textContent=t;return}let i=0;sayIv=setInterval(()=>{e.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(sayIv)},22)}
-function startPat(){const b=$('#pat').firstElementChild;b.style.transition='none';b.style.width='100%';void b.offsetWidth;b.style.transition='width 16s linear';b.style.width='0%'}
-async function decide(v){if(window.__AUTO_V)return window.__AUTO_V(v);return new Promise(res=>{decideRes=res;showDlg(v);let n=0;const iv=setInterval(()=>{if(G.cur!==v||G.over||!decideRes){clearInterval(iv);return}if(paused)return;n++;if(n<3){sfx.knock(2+n);sayT(rnd(['«Пожалуйста, откройте! Мне плохо!»','«Я слышу, что вы там! Откройте!»']));sfx.voice(v);Fx.talk(1600);toast('Он стучит всё настойчивее…',2500);startPat()}else{clearInterval(iv);toast('Посетитель ушёл, не дождавшись ответа.',3000);$('#dlg').style.display='none';Fx.pose('idle');const r=decideRes;decideRes=null;r&&r('out')}},16000)})}
-const WIN={c:['Тихая дорога. Вдалеке пьяница шатается и поёт.','Двое пьяных спорят у забора и падают в пыль.','По дороге медленно едет военный патруль, фары выключены.','Фургон FEMA стоит у соседнего дома. Из него выводят людей.','Солдаты проверяют дом через дорогу. Слышен крик.','Дорога пуста. Только чья-то тень с мешком.','На дороге резня. Силуэты дерутся молча.','Патруль расстреливает пьяницу у фонаря.','Дорога заполнена тихим шёпотом.','Фургон FEMA снова. Они берут всех подряд.','Военные жгут что-то за поворотом.','Тишина. Слишком тихо.','Единственный фонарь мигает. Под ним кто-то смотрит на ваш дом.','Почти рассвет. Дорога пуста и красна.'],
-r:['Поля. По тропинке идут трое подростков.','Подростки смеются и пинают банку.','Они остановились. Один показывает на ваш дом.','Что-то выскакивает из кукурузы. Крик обрывается.','Один подросток стучит в окно соседнего дома.','Двоих больше нет. Третий бежит.','Третий падает посреди поля и больше не встаёт.','В поле горит костёр. Вокруг стоят неподвижные фигуры.','Гость на тропинке шепчет: «Берегитесь…»','Поле тихо. Колосья шевелятся без ветра.','Кто-то машет вам из кукурузы.','Фигуры в поле повернулись к дому.','Все огни в поле погасли.','На тропинке следы босых ног. Они ведут к вашему порогу.'],
-l:['В доме соседа горит свет. Вся семья ужинает.','Сосед выходит покурить и машет вам рукой.','Сосед закрывает ставни и гасит свет.','В окнах дома мелькают тени.','Сосед рубит что-то во дворе.','Из окон соседа валит дым!','Дом соседа в огне. Никто не выходит.','Дом догорает. Остался обугленный каркас.','Руины ещё дымятся.','Среди руин кто-то копается.','Руины. Только руины.','Что-то тёмное ползёт между балок.','В руинах горит один огонёк.','Руины остыли. Ветер гонит пепел к вашему дому.']};
-function winLine(w,n){let t=WIN[w][Math.min(n,14)-1];if(w==='r'&&n>=3)t+=' '+(G.res.some(r=>r.guest)?'Из поля шепчут: «Один из тех, кто в доме, — наш».':'Из поля шепчут: «В доме одни люди. Берегите их».');return t}
-const OK1=[['Дальше',1]];
-async function night(){const n=G.day;let protect=false;Fx.setTod(1);sfx.siren();Fx.neighbor(n);
- await card('Ночь '+n,'Солнце уходит, но жара не спадает. Дом затихает, слышен только вентилятор.',OK1);
- if(G.cat&&G.food>0){const v=await card('Кошка','Покормить кошку особым кормом? Говорят, ночью она оберегает дом.',[['Покормить',1],['Не сейчас',0]]);if(v){G.food--;protect=true;sfx.meow()}}
- const seen=[];for(let g=0;g<4;g++){const opts=[['🪟 Окно с занавесками (дорога)','c'],['🪟 Правое окно (поля)','r'],['🪟 Левое окно (дом соседа)','l']].filter(o=>!seen.includes(o[1]));opts.push(['🛏 Продолжить ночь','z']);const v=await card('Ночь '+n,'Днём из-за солнца смотреть в окна нельзя. Ночью можно посмотреть, что творится снаружи.',opts);if(v==='z')break;seen.push(v);Fx.window(v,n);sfx.stat();await card('За окном',winLine(v,n),[['Отойти',1]]);if(G.seduct&&G.babies>=3){ending('child');return false}}
- if(Rn()<.4&&!window.__NOKNOCK){const v=genVisitor();sfx.knock(3);const o=await card('Стук ночью','В дверь кто-то стучит. Проверить гостя в темноте нельзя: '+v.name+' просит впустить.',[['Открыть',1],['Не открывать',0]]);if(o&&G.res.filter(LIVE).length<MAXR){const r=admit(v);if(r){Fx.addRes(r);sfx.creak()}}}
- if(FEMA.includes(n)){if(G.femaCalls>=3&&G.given>=3){ending('fema');return false}const tk=G.res.filter(r=>r.notice);G.res=G.res.filter(r=>!r.notice);tk.forEach(r=>Fx.removeRes(r,'fade'));await card('FEMA',tk.length?'В дверь вежливо постучали люди в форме. Они забрали: '+tk.map(r=>r.name).join(', ')+'.':'Люди из FEMA осмотрели дом и ушли, ничего не сказав.',OK1)}
- if(VIG.includes(n)){const v=await card('Стрелок','Человек в плаще вскидывает ружьё: «Проверка. В вашем доме есть Гость? Отвечай честно».',[['Нет, все люди',0],['Да, есть',1],['Не знаю',2]]),truth=G.res.some(r=>r.guest);
-  if(v===2?Rn()<.5:(v===1)!==truth){ending('vigilante');return false}
-  if(truth){const gl=G.res.filter(r=>r.guest),x=rnd(gl);G.res=G.res.filter(r=>r!==x);Fx.removeRes(x,'kill');await card('Стрелок','Он не промахнулся: Гостя ('+x.name+') больше нет. «Хорошо. Живи».',OK1)}else await card('Стрелок','Он молча кивает и уходит в темноту.',OK1)}
- if(n===6&&!G.shroom){const v=await card('Грибной человек','В окно заглядывает человек с грибом на голове. Он протягивает вам гриб: «Съешь. Потом яблоко. Потом часы. И дверь откроется».',[['Взять гриб',1],['Прогнать',0]]);if(v){G.shroom=1;Fx.sync();toast('Гриб лежит на кухонном столе. Яблоко рядом, часы на стене в холле.',5000)}}
- if(n===8){const live=G.res.filter(LIVE).length;if(live+3<=MAXR){const v=await card('Лидер культа','В дверь стучит человек в багровой мантии: «Я оставлю у вас троих. Берегите их до одиннадцатой ночи. Тогда мы вернёмся».',[['Согласиться',1],['Отказать',0]]);if(v){for(const nm of['Брат Иов','Сестра Рут','Брат Лука']){const r={id:++G.id,name:nm,guest:false,cult:true,notice:false,skin:rnd(SK),cloth:0x6a1a1a,hair:rnd(HAIR),t:{},beh:'calm'};G.res.push(r);Fx.addRes(r)}G.cult=true}}else toast('Лидер культа не нашёл места и ушёл.')}
- if(!G.prophet&&G.cat&&G.noTest>=6){G.prophet=true;const v=await card('Пророк','Он стоит в проёме: «Ты шесть дней не смотрел в лица. Ты готов. В подвале есть место. Копай яму и прыгни».',[['Принять',1],['Отказаться',0]]);if(v){G.dig=1;G.hatch=true;Fx.sync();toast('Под ковром в холле люк. Копайте в подвале.',5000)}}
- const gs=G.res.filter(r=>r.guest&&!r.harm);
- if(gs.length){if(protect)await card('Ночь прошла','Кошка шипела в темноту до утра. Никто не пострадал.',OK1);else{const hs=G.res.filter(r=>!r.guest&&!r.sed);if(!hs.length){ending('devoured');return false}const k=Math.min(gs.length>1?2:1,hs.length),dead=[];for(let i=0;i<k;i++){const x=rnd(hs.filter(h=>!dead.includes(h)));dead.push(x)}G.res=G.res.filter(r=>!dead.includes(r));dead.forEach(r=>Fx.removeRes(r,'kill'));sfx.stinger();await card('Утро','Ночью что-то случилось. Не вышли к завтраку: '+dead.map(r=>r.name).join(', ')+'.',OK1)}}
- if(PALE.includes(n)){Fx.swing(2);sfx.stinger();const v=await card('Бледный человек','Он стоит у окна и не моргает. Ладони прижаты к стеклу.\n— Ты один?',[['Да, я один',1],['Нет, нас здесь несколько',0]]);if(v||!G.res.length){ending('alone');return false}await card('…','Он долго смотрит на силуэты в комнате. Потом уходит, оставив на стекле влажные следы.',OK1)}
- if(n===11&&G.cult){const alive=G.res.filter(r=>r.cult).length;if(alive>=3){const v=await card('Ритуал','Лидер культа вернулся: «Вы сберегли троих. Присоединитесь к ритуалу?»',[['Участвовать',1],['Отказаться',0]]);if(v){ending('cult');return false}}else await card('Лидер культа','Он видит, что его людей стало меньше. «Вы подвели нас». Он уходит.',OK1)}
- if(G.hkills>=3){ending('murderer');return false}
- if(n===LAST){const v=await card('Последняя ночь','Жара спадает, но тени за стёклами шевелятся. Что делать с окнами?',[['Заколотить окна досками',1],['Погасить свет и ждать в темноте',0]]);if(v){Fx.boards();sfx.knock(4);await card('Окна заколочены','Молотком, гвоздями, из последних сил. Дом стал убежищем… или клеткой.',OK1);ending(G.res.some(r=>r.guest)?'not_alone':'the_end')}else ending('dark');return false}
- G.day++;G.energy=Math.min(MAXE,G.energy+2);G.credits+=4;G.clock=14;G.noTest=G.usedTest?0:G.noTest+1;G.usedTest=false;
- if(G.orders.length){const o=G.orders.splice(0);o.forEach(i=>GOODS[i][2]());sfx.knock(2);await card('Курьер','Утром в дверь постучал курьер ForRest. Он оставил коробки на крыльце и убежал. Доставлено: '+o.map(i=>GOODS[i][0]).join(', ')+'.',[['Забрать',1]])}
- if(G.day===8&&G.res.some(r=>r.nun&&r.guest))await card('Ванная','Монахиня в ванной застыла. Из её уха выползает жук. Она Гость.',OK1);
- save();Fx.setTod(0);return true}
-async function runDay(){while(!G.over){G.clock=14;const q=makeQueue();Fx.setTod(0);Fx.draw();hud();
- while(q.length){if(G.over)return;const v=q.shift();if(G.skip>0){G.skip--;continue}if(!window.__AUTO&&Math.random()<.15){G.dark=true;toast('Свет погас. Генератор не тянет…',4000);sfx.stinger();setTimeout(()=>{G.dark=false},9000)}await Fx.arrive(v);G.cur=v;const d=await decide(v);G.cur=null;if(G.over)return;
-  if(d==='in'){const r=admit(v);if(!r){await Fx.leave(v)}else await Fx.enter(v,r)}else if(d==='out')await Fx.leave(v);else{killV(v);await Fx.kill(v)}
-  G.clock+=1.6;Fx.setTod(cl((G.clock-14)/9,0,.7));hud()}
- if(!(await night()))return;hud()}}
-function giveMin(v){if(v.paid)return toast('Он уже получил припасы.');let c=0;if(G.beer>0){G.beer--;c++}if(G.cig>0){G.cig--;c++}if(G.coffee>0){G.coffee--;c++}if(!c)return toast('У вас нет пива, сигарет и кофе.');v.paid=true;G.energy=Math.min(MAXE,G.energy+c);G.credits+=2*c;if(c===3)G.notice++;sfx.ding();toast('Министр принял '+c+' из 3 припасов и расплатился.'+(c===3?' Бонус: уведомление FEMA.':''),4000);hud()}
-function auraPhoto(v){const c=$('#aura');c.style.display='block';const x=c.getContext('2d');x.fillStyle='#10080a';x.fillRect(0,0,110,130);const g=x.createRadialGradient(55,70,10,55,70,60);g.addColorStop(0,v.t.aura?'#443':'#ffd27a');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,110,130);x.fillStyle='#0a0a0a';x.beginPath();x.arc(55,45,16,0,6.3);x.fill();x.fillRect(38,60,34,50);if(v.t.aura){x.fillStyle='rgba(0,0,0,.85)';for(let i=0;i<7;i++){x.beginPath();x.arc(20+Math.random()*70,30+Math.random()*80,5+Math.random()*8,0,6.3);x.fill()}}setTimeout(()=>c.style.display='none',3500)}
-async function hotspot(a){if(G.over||paused||$('#menu').classList.contains('on'))return;
- if(a==='phone'){const v=await card('Телефон','Выберите действие.',[['Позвонить в FEMA',1],['Заказать на ForRest',2],['Отмена',0]]);if(v===1){G.femaCalls++;sfx.ding();toast(G.femaCalls<3?'Оператор FEMA записал вас. Звонков: '+G.femaCalls+'/3.':'Третий звонок принят. Вручайте уведомления жильцам и ждите ночи FEMA.',4500)}else if(v===2)shop()}
- else if(a==='fridge'){const v=await card('Холодильник','Пива: '+G.beer+'. Выпить — потратить 1⚡ и ускорить день (следующий гость не придёт).',[['Выпить пиво',1],['Закрыть',0]]);if(v){if(G.beer<1)toast('Пива нет. Закажите на ForRest.');else if(G.energy<1)toast('Нет сил даже на пиво.');else{G.beer--;G.energy--;G.skip++;G.clock+=1.6;sfx.click();toast('Время потекло быстрее. Следующий гость не придёт.',3500);hud()}}}
- else if(a==='rug'){if(!G.hatch){G.hatch=true;Fx.sync();sfx.creak();toast('Под ковром люк в подвал. Теперь доступна кнопка «Подвал».',4000);hud()}else toast('Люк под ковром уже открыт.')}
- else if(a==='tv'){const k=CLH.filter(c=>G.day>=c[0]);toast('📺 '+(k.length&&Math.random()<.7?rnd(k)[1]:rnd(RADIO)),6000)}
- else if(a==='mirror')toast(G.energy<=1?'Из зеркала смотрит измождённое лицо. Вы всё ещё человек. Кажется.':'Вы выглядите уставшим, но человеком. Зубы жёлтые. Волосы под мышками на месте.',4000);
- else if(a==='mush'){if(G.shroom===1){G.shroom=2;sfx.stat();toast('Вы съели гриб. Мир поплыл. Теперь яблоко.',4000);Fx.sync()}else toast('Гриб. Лучше не трогать.')}
- else if(a==='apple'){if(G.shroom===2){G.shroom=3;sfx.click();toast('Вы нажали на яблоко. Оно запело. Теперь часы в холле.',4500)}else toast('Красное блестящее яблоко.')}
- else if(a==='clockw'){if(G.shroom===3){G.shroom=4;G.hatch=true;sfx.creak();toast('Стрелки побежали назад. В подвале что-то открылось.',4500);Fx.sync();hud()}else toast('Часы: '+Fx.clockStr())}
- else if(a==='portal'){if(G.shroom===4)ending('shroom');else toast('Пол как пол.')}
- else if(a==='dig'){if(G.dig===1){G.digN++;sfx.step();Fx.swing(.3);if(G.digN>=6){G.dig=2;toast('Яма готова. Нажмите на неё, чтобы прыгнуть.',4500)}else toast('Копаете… '+G.digN+'/6')}else if(G.dig===2){const v=await card('Яма','Прыгнуть?',[['Прыгнуть',1],['Отойти',0]]);if(v)ending('embrace')}else toast('Утоптанная земля.')}
- else if(a.startsWith('baby_')){if(!G.seduct)return toast('Здесь пусто.');if(G.babyOK[a])return toast('Здесь уже никого.');G.babyOK[a]=1;G.babies++;sfx.meow();toast('Вы нашли свёрток с младенцем ('+G.babies+'/3).'+(G.babies>=3?' Теперь посмотрите ночью в окно.':''),4500);Fx.sync()}
+/* ============ утилиты ============ */
+var reg=[],sel=null,unoPend=null,STROKES=[],lastR=0,tool={c:'#111111',w:4},tmr=null;
+const $=s=>document.querySelector(s),app=$('#app');
+const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const B=(l,f,c='')=>{reg.push(f);return `<button class="btn ${c}" onclick="reg[${reg.length-1}]()">${l}</button>`};
+const H=f=>{reg.push(f);return `reg[${reg.length-1}]()`};
+const rnd=n=>Math.floor(Math.random()*n);
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const COL=['#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#f97316'];
+const TOK=['🔴','🔵','🟢','🟡','🟣','🟠'];
+try{$('#nm').value=localStorage.getItem('nm')||'';$('#nm').oninput=e=>localStorage.setItem('nm',e.target.value)}catch(e){}
+const nm=()=>(($('#nm').value||'').trim()||'Игрок'+(1+rnd(99))).slice(0,14);
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)}
+function pickSel(el,id){sel=id;document.querySelectorAll('.hand .pc').forEach(e=>e.classList.remove('sel'));el.classList.add('sel')}
+
+/* ============ сеть (WebRTC, PeerJS) ============ */
+var net={};
+const broadcast=m=>Object.values(net.conns||{}).forEach(c=>c.open&&c.send(m));
+const genCode=()=>Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[rnd(24)]).join('');
+
+function hostRoom(gid){
+  net={host:true,gid,players:[{name:nm()}],conns:{},me:0,S:null,started:false};
+  openPeer(genCode());
 }
-// ---------- 3D ----------
-const Fx={sync(){},go(){},window(){},neighbor(){},boards(){},addRes(){},clockStr(){return''},shake(){},siren(){},talk(){},applyQ(){},setTod(){},swing(){},flash(){},draw(){},arrive:async()=>{},enter:async()=>{},leave:async()=>{},kill:async()=>{},removeRes(){}};
-function hud(){const e=Math.max(0,G.energy);$('#dayl').textContent=`ДЕНЬ ${G.day}/${LAST} · ${String(G.clock|0).padStart(2,'0')}:${String((G.clock%1*60)|0).padStart(2,'0')} · 🌡 ${44+G.day}°C · ${G.credits} кр.`;
- $('#pips').textContent='⚡'.repeat(e)+'·'.repeat(MAXE-e);$('#inv').textContent=`🐈 ${G.cat?'да':'нет'} · корм ${G.food} · FEMA ${G.notice} · 🍺${G.beer} ☕${G.coffee} 🚬${G.cig}`;const nb=$('#nbase');if(nb)nb.disabled=!G.hatch;
- const rs=$('#rs');rs.innerHTML='';G.res.forEach((r,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=(r.notice?'📄 ':'')+r.name;b.onclick=()=>resMenu(r,i);rs.appendChild(b)})}
-function resMenu(r){const m=$('#rm');m.style.display='flex';m.innerHTML=`<b>${r.name}</b>`;const add=(t,f,c)=>{const b=document.createElement('button');b.textContent=t;if(c)b.className=c;b.onclick=()=>{m.style.display='none';f()};m.appendChild(b)};
- if(G.notice>0&&!r.notice)add('📄 Вручить уведомление FEMA',()=>{G.notice--;G.given++;r.notice=true;sfx.click();toast(r.name+' получил уведомление: FEMA заберёт его при визите.');hud()});
- add('Застрелить',()=>{if(G.over||G.cur)return;if(r.imm){sfx.shot();return toast('Пули проходят насквозь.')}G.res=G.res.filter(x=>x!==r);G.kills++;if(!r.guest)G.hkills++;sfx.shot();Fx.removeRes(r,'kill');toast(r.guest?'Это был Гость.':'Он был человеком…',3000);hud()},'bad');add('Закрыть',()=>{})}
-function renderTests(v){$('#trow').innerHTML=TD.filter(t=>G.day>=t[2]).map(t=>`<button data-a="${t[0]}">${t[1]} (1⚡)</button>`).join('')+'<button data-a="look">🔄 Осмотреться</button>';$('#give').style.display=v.min?'inline-block':'none'}
-function showDlg(v){const d=$('#dlg');d.style.display='block';$('#who').textContent=v.role?`${v.name}, ${v.role}`:v.name;renderTests(v);sayT(sayIntro(v));sfx.voice(v);Fx.talk(2600);updRev(v);syncBtns();startPat()}
-function updRev(v){const r=Object.values(v.rev).join('<br>');$('#rev').innerHTML=(r||'Проверки тратят энергию ⚡. Осмотрите гостя.')+(v.pos?`<br><b>Улик против гостя: ${v.pos}</b> (3 и больше — почти наверняка Гость)`:'')}
-function syncBtns(){document.querySelectorAll('#dlg [data-a]').forEach(b=>{const k=b.dataset.a;if(TD.some(t=>t[0]===k))b.disabled=!!(G.cur&&G.cur.rev[k])||G.energy<1});hud()}
-function dlgAct(k){const v=G.cur;if(!v)return;A();
- if(TD.some(t=>t[0]===k)){if(!applyTest(v,k))return;sfx.click();sfx.zoom();if(k==='ask'){sayT(sayAsk(v));if(!v.sewn)sfx.voice(v);Fx.talk(2200)}else if(Math.random()<.7&&!v.sewn){setTimeout(()=>{if(G.cur===v){sayT(reac(v));sfx.voice(v);Fx.talk(1800)}},900)}if(k==='aura')auraPhoto(v);Fx.pose(k);updRev(v);syncBtns();setTimeout(()=>Fx.pose('idle'),k==='ask'?800:2800)}
- else if(k==='look')Fx.look();
- else if(k==='give')giveMin(v);
- else{if(k==='in'&&!v.sed&&G.res.filter(LIVE).length>=MAXR)return toast('В доме нет места.');if(k==='kill'&&v.imm){sfx.shot();Fx.flash(1);toast('Пули проходят сквозь него. Он улыбается и уходит.',3500);k='out'}$('#dlg').style.display='none';Fx.pose('idle');Fx.look(true);const r=decideRes;decideRes=null;if(r)r(k)}}
-$('#dlg').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&!b.disabled)dlgAct(b.dataset.a)});
-document.querySelectorAll('#nav [data-r]').forEach(b=>b.onclick=()=>{A();if(!G.over)Fx.go(b.dataset.r)});
-// магазин
-const GOODS=[['EnerJeka (+3 ⚡)',2,()=>{G.energy=Math.min(MAXE,G.energy+3)}],['Корм для кошки',3,()=>{G.food++}],['Уведомление FEMA',2,()=>{G.notice++}],['Кофе',2,()=>{G.coffee++}],['Сигареты',2,()=>{G.cig++}],['Пиво (2 бутылки)',2,()=>{G.beer+=2}]];
-function shop(){const s=$('#shop');s.style.display='block';$('#cr').textContent='Кредиты: '+G.credits+(G.orders.length?' · в пути: '+G.orders.length:'')+' · доставка утром';const l=$('#shopl');l.innerHTML='';GOODS.forEach((g,i)=>{const d=document.createElement('div');d.className='it';d.innerHTML=`<span>${g[0]} — ${g[1]} кр.</span>`;const b=document.createElement('button');b.textContent='Заказать';b.disabled=G.credits<g[1];b.onclick=()=>{G.credits-=g[1];G.orders.push(i);sfx.ding();toast('Заказ принят. Курьер придёт утром.');hud();shop()};d.appendChild(b);l.appendChild(d)})}
-$('#bShop').onclick=()=>{A();if(G.over||$('#menu').classList.contains('on'))return;shop()};$('#shopx').onclick=()=>$('#shop').style.display='none';
-$('#bMute').onclick=()=>{S.mute=!S.mute;$('#sMute').checked=S.mute;applyVol()};
-let radioOn=false;function radio(){A();radioOn=!radioOn;if(radioOn){sfx.stat();toast(rnd(RADIO),6000)}else toast('Радио выключено',1200)}$('#bRadio').onclick=radio;
-// меню
-function ov(id){document.querySelectorAll('.ov').forEach(e=>e.classList.toggle('on',e.id===id))}
-function menuInfo(){const f=store.get('nh_ends',[]);$('#mInfo').textContent='Найдено концовок: '+f.length+'/'+Object.keys(ENDS).length;$('#mCont').disabled=!store.get('nh_save',null)}
-function newGame(c){Object.assign(G,fresh());
- if(c){const s=store.get('nh_save',null);if(s)Object.assign(G,s,{over:false,cur:null})}
- ov(null);paused=false;document.body.classList.add('play');$('#hud').style.display='flex';$('#dlg').style.display='none';Fx.reset();hud();if(!c)save();$('#hint').textContent='Перетащите, чтобы осмотреться. Кнопки справа переходят между комнатами. Клик по предметам: телефон, ноутбук, холодильник, ковёр, часы.';setTimeout(()=>$('#hint').textContent='',12000);runDay()}
-$('#mPlay').onclick=()=>{A();newGame(false)};$('#mCont').onclick=()=>{A();newGame(true)};$('#eAgain').onclick=()=>{$('#end').classList.remove('on');newGame(false)};
-$('#eMenu').onclick=()=>{ov('menu');menuInfo();document.body.classList.remove('play');Fx.reset(true)};const show=id=>$('#'+id).classList.add('on'),hide=id=>$('#'+id).classList.remove('on');
-function pauseOn(){if(G.over||$('#menu').classList.contains('on')||paused)return;paused=true;show('pause')}function pauseOff(){paused=false;hide('pause');hide('set')}
-$('#bMenu').onclick=pauseOn;
-addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#set').classList.contains('on'))hide('set');else if(paused)pauseOff();else pauseOn();return}if(paused||!G.cur||$('#dlg').style.display!=='block')return;const kk=e.key.toLowerCase(),bs=[...document.querySelectorAll('#dlg [data-a]')].filter(x=>!['in','out','kill','look','give'].includes(x.dataset.a));const b=/^[1-9]$/.test(kk)?bs[+kk-1]:document.querySelector('#dlg [data-a="'+({i:'in',o:'out',k:'kill'})[kk]+'"]');if(b&&!b.disabled)b.click()});
-const stk=$('#stick'),knob=stk.firstElementChild,stickV={x:0,y:0};let sid=null;
-function stkMove(e){const r=stk.getBoundingClientRect();let dx=(e.clientX-r.left-r.width/2)/(r.width/2),dy=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l}stickV.x=dx;stickV.y=dy;knob.style.transform=`translate(${dx*34}px,${dy*34}px)`}
-stk.addEventListener('pointerdown',e=>{sid=e.pointerId;try{stk.setPointerCapture(sid)}catch(_){}stkMove(e);A()});stk.addEventListener('pointermove',e=>{if(e.pointerId===sid)stkMove(e)});
-const stkEnd=e=>{if(e.pointerId!==sid)return;sid=null;stickV.x=stickV.y=0;knob.style.transform=''};stk.addEventListener('pointerup',stkEnd);stk.addEventListener('pointercancel',stkEnd);
-setInterval(()=>{if(!paused&&!G.over&&!window.__AUTO&&AC&&!S.mute&&$('#hud').style.display==='flex')sfx.tick()},1000);
-$('#mSet').onclick=()=>show('set');$('#pSet').onclick=()=>show('set');$('#sBack').onclick=()=>hide('set');$('#pRes').onclick=pauseOff;$('#pMenu').onclick=()=>{save();G.over=true;decideRes=null;paused=false;hide('pause');ov('menu');menuInfo();document.body.classList.remove('play');$('#hud').style.display='none';$('#dlg').style.display='none';Fx.reset(true)};$('#mEnds').onclick=()=>{const f=store.get('nh_ends',[]);$('#el').innerHTML=Object.keys(ENDS).map(k=>f.includes(k)?`<b style="color:#e8923a">${ENDS[k][0]}</b>`:'<span class="sub">??? скрытая концовка</span>').join('<br>');ov('ends')};$('#eBack').onclick=()=>ov('menu');
-$('#sVol').value=S.vol;$('#sMus').value=S.mus;$('#sSfx').value=S.sfx;$('#sSens').value=S.sens;$('#sQ').value=S.q;$('#sMus').oninput=e=>{S.mus=+e.target.value;applyVol()};$('#sSfx').oninput=e=>{S.sfx=+e.target.value;applyVol();sfx.click()};$('#sSens').oninput=e=>{S.sens=+e.target.value;applyVol()};$('#sQ').onchange=e=>{S.q=+e.target.value;applyVol();Fx.applyQ()};$('#sVol').oninput=e=>{S.vol=+e.target.value;applyVol()};$('#sMute').onchange=e=>{S.mute=e.target.checked;applyVol()};
-if(typeof THREE==='undefined')fatal('Не удалось загрузить Three.js (cdnjs). Проверьте интернет и обновите страницу.');else try{boot3d()}catch(e){fatal('Ошибка запуска: '+e.message)}
-setInterval(()=>{if(!G.over&&G.energy<=1&&$('#hud').style.display==='flex')sfx.beat()},1300);
-function boot3d(){
-let R;try{R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true})}catch(e){return fatal('WebGL недоступен: '+e.message)}
-R.setPixelRatio(Math.min(devicePixelRatio||1,2));R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
-const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(62,1,.05,150);sc.fog=new THREE.Fog(0xd98a4a,10,80);
-function rs(){const w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}addEventListener('resize',rs);
-function ctex(w,h,fn,rx=1,ry=1){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);return t}
-const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.85},o||{}));
-const Bx=(p,w,h,d,x,y,z,m,sh=true)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);b.position.set(x,y,z);b.castShadow=sh;b.receiveShadow=true;p.add(b);return b};
-// текстуры
-const woodT=ctex(256,256,(x,w,h)=>{x.fillStyle='#4a3020';x.fillRect(0,0,w,h);for(let i=0;i<8;i++){x.fillStyle='hsl(26,38%,'+(18+Math.random()*10)+'%)';x.fillRect(0,i*32+1,w,30);x.fillStyle='rgba(0,0,0,.25)';for(let j=0;j<12;j++)x.fillRect(Math.random()*w,i*32+Math.random()*30,20+Math.random()*40,1)}},3,3);
-const wallT=ctex(128,128,(x,w,h)=>{x.fillStyle='#8a6a48';x.fillRect(0,0,w,h);x.fillStyle='rgba(60,30,10,.25)';for(let i=0;i<w;i+=16)x.fillRect(i,0,6,h);for(let i=0;i<500;i++){x.fillStyle='rgba(0,0,0,'+Math.random()*.08+')';x.fillRect(Math.random()*w,Math.random()*h,2,2)}},4,2);
-const sandT=ctex(256,256,(x,w,h)=>{x.fillStyle='#b88a4a';x.fillRect(0,0,w,h);for(let i=0;i<2500;i++){x.fillStyle='rgba('+(Math.random()<.5?'80,50,20':'230,190,120')+','+Math.random()*.25+')';x.fillRect(Math.random()*w,Math.random()*h,2,2)}},30,30);
-const floorM=M(0xffffff,{map:woodT,roughness:.55}),wallM=M(0xffffff,{map:wallT,roughness:.95});
-// комната
-const room=new THREE.Group();sc.add(room);
-const fl=new THREE.Mesh(new THREE.PlaneGeometry(8,6.5),floorM);fl.rotation.x=-Math.PI/2;fl.position.set(0,0,.25);fl.receiveShadow=true;room.add(fl);
-Bx(room,8,.1,6.5,0,2.85,.25,M(0x5a4430));
-[[-2.65,1.4,-3,2.7,2.8],[0,.45,-3,2.6,.9],[0,2.55,-3,2.6,.5],[1.725,1.4,-3,.85,2.8],[2.7,2.45,-3,1.1,.7],[3.625,1.4,-3,.75,2.8]].forEach(a=>Bx(room,a[3],a[4],.2,a[0],a[1],a[2],wallM));
-Bx(room,.2,2.8,6.5,-4,1.4,.25,wallM);Bx(room,.2,2.8,6.5,4,1.4,.25,wallM);Bx(room,8,2.8,.2,0,1.4,3.55,wallM);
-[[0,.08,-2.88,8,.16,.06],[-3.88,.08,.25,.06,.16,6.5],[3.88,.08,.25,.06,.16,6.5]].forEach(a=>Bx(room,a[3],a[4],a[5],a[0],a[1],a[2],M(0x2a1a10)));
-const glass=new THREE.Mesh(new THREE.PlaneGeometry(2.6,1.4),new THREE.MeshStandardMaterial({color:0xaaccdd,transparent:true,opacity:.12,roughness:.2,metalness:.2}));glass.position.set(0,1.6,-3);glass.userData.act='window';room.add(glass);
-[[0,.88,2.7,.08],[0,2.32,2.7,.08],[-1.3,1.6,.08,1.5],[1.3,1.6,.08,1.5],[0,1.6,.04,1.4]].forEach(a=>Bx(room,a[2],a[3],.1,a[0],a[1],-3,M(0x3a2414),false));
-const doorG=new THREE.Group();doorG.position.set(3.25,0,-3);room.add(doorG);Bx(doorG,1.1,2.1,.07,-.55,1.05,0,M(0x5a3a22));Bx(doorG,.06,.06,.12,-1,1,.06,M(0xccaa66,{metalness:.8,roughness:.3}));let doorT=0;
-const ceilY=2.85;
-// улица
-const gr=new THREE.Mesh(new THREE.PlaneGeometry(200,160),M(0xffffff,{map:sandT,roughness:1}));gr.rotation.x=-Math.PI/2;gr.position.set(0,-.01,-80);gr.receiveShadow=true;sc.add(gr);
-const out=new THREE.Group();sc.add(out);for(let i=0;i<9;i++)Bx(out,3.2,.12,.5,0,0,-3.5-i*.5-.25,M(0x5a3a22));
-for(let i=0;i<14;i++)Bx(out,.1,1,.1,-6+i*.9,.5,-14,M(0x4a3a2a));Bx(out,12,.1,.06,0,.8,-14,M(0x4a3a2a));
-function tree(x,z){Bx(out,.3,3,.3,x,1.5,z,M(0x2a1c10));for(let i=0;i<5;i++){const b=Bx(out,.08,1.4,.08,x+(i-2)*.25,3+i%2*.3,z,M(0x2a1c10));b.rotation.z=(i-2)*.5}}
-tree(-5,-9);tree(6,-12);tree(-9,-20);tree(11,-25);
-for(let i=0;i<6;i++)Bx(out,4+Rn()*3,3+Rn()*3,4,-40+i*16,2,-60-Rn()*20,M(0x7a5a3a),false);
-const sun=new THREE.Mesh(new THREE.SphereGeometry(4,16,12),new THREE.MeshBasicMaterial({color:0xffcc88,fog:false}));sc.add(sun);
-const moon=new THREE.Mesh(new THREE.SphereGeometry(2.2,16,12),new THREE.MeshBasicMaterial({color:0xcfd8ff,fog:false}));sc.add(moon);
-const stg=new THREE.BufferGeometry(),sp=[];for(let i=0;i<300;i++)sp.push((Rn()-.5)*200,20+Rn()*50,-40-Rn()*60);stg.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));const stars=new THREE.Points(stg,new THREE.PointsMaterial({color:0xffffff,size:.5,transparent:true,opacity:0,fog:false}));sc.add(stars);
-// свет
-const hemi=new THREE.HemisphereLight(0xffcc99,0x301810,.35);sc.add(hemi);
-const sunL=new THREE.SpotLight(0xffc080,1.8,60,.5,.6,1);sunL.position.set(-2,4,-14);sunL.target.position.set(0,0,0);sunL.castShadow=true;sunL.shadow.mapSize.set(1024,1024);sunL.shadow.bias=-.0005;sc.add(sunL,sunL.target);
-const porch=new THREE.PointLight(0xffd9a0,0,14,2);porch.position.set(2,2.4,-4.5);sc.add(porch);const sirenL=new THREE.PointLight(0xff2020,0,28,2);sirenL.position.set(-3,2,-6);sc.add(sirenL);
-// маятник-лампа
-const pend=new THREE.Group();pend.position.set(0,ceilY,0);room.add(pend);Bx(pend,.02,1,.02,0,-.5,0,M(0x111111),false);const bulb=new THREE.Mesh(new THREE.SphereGeometry(.09,12,8),new THREE.MeshBasicMaterial({color:0xffe0a0}));bulb.position.y=-1.05;pend.add(bulb);
-const lamp=new THREE.PointLight(0xffb066,.6,12,2);lamp.position.y=-1.05;pend.add(lamp);const th={x:0,z:0,vx:0,vz:0};
-function swing(f){th.vx+=(Rn()-.5)*f*.6;th.vz+=(Rn()-.5)*f*.6}Fx.swing=swing;
-// мебель
-const sofa=new THREE.Group();sofa.position.set(-2.65,0,-2.35);room.add(sofa);Bx(sofa,2.3,.45,.9,0,.25,0,M(0x6a2a2a));Bx(sofa,2.3,.6,.22,0,.7,-.35,M(0x6a2a2a));Bx(sofa,.22,.5,.9,-1.1,.5,0,M(0x5a2020));Bx(sofa,.22,.5,.9,1.1,.5,0,M(0x5a2020));
-Bx(room,2.4,.02,1.5,-2.6,.01,-1.3,M(0x7a2a2a,{roughness:1}),false);
-const dk=new THREE.Group();dk.position.set(2,0,-.3);room.add(dk);Bx(dk,1.5,.05,.7,0,.75,0,M(0x6a4a2a));[[-.7,-.3],[.7,-.3],[-.7,.3],[.7,.3]].forEach(a=>Bx(dk,.06,.75,.06,a[0],.37,a[1],M(0x2a1a10)));
-const scrT=ctex(128,80,(x,w,h)=>{x.fillStyle='#10301a';x.fillRect(0,0,w,h);x.fillStyle='#5aff8a';x.font='bold 18px monospace';x.fillText('ForRest',8,30);x.font='11px monospace';x.fillText('доставка 24/7',8,50);x.fillText('EnerJeka · Корм',8,66)});
-const lap=new THREE.Group();lap.position.set(0,.78,.05);dk.add(lap);Bx(lap,.4,.02,.28,0,0,0,M(0x222222));const scr=Bx(lap,.4,.26,.02,0,.14,-.14,new THREE.MeshStandardMaterial({color:0x111111,map:scrT,emissive:0xffffff,emissiveMap:scrT,emissiveIntensity:.9}));scr.rotation.x=-.25;lap.userData.act='laptop';scr.userData.act='laptop';
-Bx(dk,.5,.5,.5,-.3,.25,.8,M(0x4a3a2a));
-const rd=new THREE.Group();rd.position.set(-2.2,.5,.2);room.add(rd);Bx(room,1,.45,.6,-2.2,.225,.2,M(0x4a3020));const rb=Bx(rd,.34,.2,.14,0,.1,0,M(0x3a2a1a));Bx(rd,.12,.06,.02,.06,.1,.08,M(0xffaa44,{emissive:0xff8822}),false);rb.userData.act='radio';rd.children.forEach(c=>c.userData.act='radio');
-const frg=new THREE.Group();frg.position.set(3.55,0,.4);frg.rotation.y=-Math.PI/2;room.add(frg);Bx(frg,.75,1.8,.7,0,.9,0,M(0xdfe3e6,{roughness:.4}));Bx(frg,.04,.5,.04,.3,1.2,.37,M(0x888888));
-const calT=ctex(128,160,()=>{}),cc=calT.image.getContext('2d');function drawCal(){cc.fillStyle='#e8dcc0';cc.fillRect(0,0,128,160);cc.fillStyle='#a02a1a';cc.fillRect(0,0,128,34);cc.fillStyle='#fff';cc.font='bold 18px monospace';cc.fillText('ЖАРА',34,24);cc.fillStyle='#222';cc.font='bold 64px Georgia';cc.fillText(String(G.day),G.day>9?20:40,100);cc.font='12px monospace';cc.fillText('день из '+LAST,32,130);calT.needsUpdate=true}
-const cal=Bx(room,.5,.62,.02,1.95,1.7,-2.88,M(0xffffff,{map:calT}),false);cal.userData.act='cal';
-const fan=new THREE.Group();fan.position.set(-.9,0,.7);room.add(fan);Bx(fan,.1,.9,.1,0,.45,0,M(0x333333));const blades=new THREE.Group();blades.position.set(0,.95,.06);fan.add(blades);for(let i=0;i<3;i++){const b=Bx(blades,.06,.3,.01,0,.15,0,M(0x999999),false);b.rotation.z=i*2.09;b.position.set(Math.sin(i*2.09)*-.15,Math.cos(i*2.09)*.15,0)}fan.userData.act='fan';fan.traverse(c=>c.userData.act='fan');
-let fanOn=true;
-// полка с банками (физика)
-Bx(room,.9,.05,.3,-.9,1.1,-2.8,M(0x4a3020));const cans=[];for(let i=0;i<3;i++){const m=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.12,10),M(0xb04a2a,{metalness:.4}));m.position.set(-1.1+i*.2,1.19,-2.8);m.castShadow=true;room.add(m);cans.push({m,hx:m.position.x,hz:m.position.z,vx:0,vy:0,vz:0,fall:false})}
-function dropCans(){cans.forEach((c,i)=>{if(!c.fall&&Rn()<.7){c.fall=true;c.vx=(Rn()-.5)*1.2;c.vz=.8+Rn();c.vy=0}})}
-// пыль
-const dg=new THREE.BufferGeometry(),dp=[];for(let i=0;i<160;i++)dp.push((Rn()-.5)*6,.2+Rn()*2.4,-2.5+Rn()*5.5);dg.setAttribute('position',new THREE.Float32BufferAttribute(dp,3));const dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xffd9a0,size:.025,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false}));room.add(dust);
-const beamT=ctex(64,128,(x,w,h)=>{const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,200,120,.35)');g.addColorStop(1,'rgba(255,200,120,0)');x.fillStyle=g;x.fillRect(0,0,w,h)});
-const beam=new THREE.Mesh(new THREE.PlaneGeometry(2.4,4.6),new THREE.MeshBasicMaterial({map:beamT,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide}));beam.position.set(0,.9,-.6);beam.rotation.x=-1.05;room.add(beam);
-// декор
-const curT=M(0x7a3a2a,{roughness:1}),curL=Bx(room,.5,1.9,.06,-1.55,1.55,-2.85,curT),curR=Bx(room,.5,1.9,.06,1.55,1.55,-2.85,curT);
-Bx(room,.5,.65,.03,-3.2,1.8,-2.88,M(0x2a1a10),false);Bx(room,.42,.55,.04,-3.2,1.8,-2.86,M(0x6a7a8a,{emissive:0x0a1018}),false);Bx(room,.4,.5,.03,-2.4,1.9,-2.88,M(0x2a1a10),false);Bx(room,.32,.42,.04,-2.4,1.9,-2.86,M(0x8a6a4a),false);
-Bx(room,.1,.4,1,-3.85,2.3,-1.5,M(0xcccccc),false);Bx(dk,.07,.09,.07,.5,.82,.1,M(0xeeeeee),false);Bx(room,.3,.3,.3,3.5,.15,1.7,M(0x4a2a1a));for(let i=0;i<4;i++){const b=Bx(room,.03,.5,.03,3.5+(i-1.5)*.05,.55,1.7,M(0x2a1c10),false);b.rotation.z=(i-1.5)*.3}
-const wclk=new THREE.Group();wclk.position.set(1.95,2.42,-2.86);room.add(wclk);const cf=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,.03,20),M(0xeeeeee));cf.rotation.x=Math.PI/2;wclk.add(cf);const hH=new THREE.Group(),hM=new THREE.Group();hH.position.z=hM.position.z=.025;wclk.add(hH,hM);Bx(hH,.012,.07,.008,0,.03,0,M(0x111111),false);Bx(hM,.008,.1,.008,0,.045,0,M(0x111111),false);
-const mir=new THREE.Mesh(new THREE.PlaneGeometry(240,10),new THREE.MeshBasicMaterial({color:0xffa050,transparent:true,opacity:.2,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));mir.position.set(0,3,-110);sc.add(mir);
-// комнаты
-const STN={hall:[0,1.5,3],kitchen:[14,1.5,1.9],bath:[24,1.5,1.9],bed:[34,1.5,1.9],base:[44,1.5,1.9]};let stn='hall',nst=0;
-const tag=(m,a)=>{m.userData.act=a;m.traverse(c=>c.userData.act=a);return m};
-const WM2=M(0x8a6a48,{roughness:.95});
-function mkRoom(ox,fcol,lc,li,wc){const g=new THREE.Group();g.position.set(ox,0,0);room.add(g);const fl=new THREE.Mesh(new THREE.PlaneGeometry(5,4.5),M(fcol,{roughness:.9}));fl.rotation.x=-Math.PI/2;fl.receiveShadow=true;g.add(fl);
- [[5,2.8,.2,0,1.4,-2.25],[5,2.8,.2,0,1.4,2.3],[.2,2.8,4.6,-2.5,1.4,0],[.2,2.8,4.6,2.5,1.4,0],[5,.1,4.6,0,2.85,0]].forEach(a=>Bx(g,a[0],a[1],a[2],a[3],a[4],a[5],a[4]>2?M(0x3a2a1a):M(wc||0x8a6a48,{roughness:.95})));
- const L=new THREE.PointLight(lc,li,9,2);L.position.set(0,2.4,0);g.add(L);return g}
-const baby=(par,x,y,z,a)=>{const b=new THREE.Group();Bx(b,.24,.1,.14,0,0,0,M(0xe8dcc8));Bx(b,.1,.1,.1,.14,.02,0,M(0xe6c4a4));b.position.set(x,y,z);par.add(b);b.visible=false;return tag(b,a)};
-const kit=mkRoom(14,0x6a5a4a,0xffe0a0,.9),f2=new THREE.Group();kit.add(f2);Bx(f2,.8,1.8,.7,1.8,.9,-1.7,M(0xdfe3e6,{roughness:.4}));Bx(f2,.04,.5,.04,1.45,1.2,-1.33,M(0x888888));tag(f2,'fridge');
-Bx(kit,1.4,.05,.9,-.8,.75,-.5,M(0x6a4a2a));[[-1.4,-.8],[-.2,-.8],[-1.4,-.2],[-.2,-.2]].forEach(a=>Bx(kit,.06,.75,.06,a[0],.37,a[1],M(0x2a1a10)));Bx(kit,.6,.9,3,-2.1,.45,-.3,M(0x5a4a3a));
-const apple=tag(new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),M(0xc02020,{emissive:0x300000})),'apple');apple.position.set(-1.05,.84,-.5);kit.add(apple);
-const mush=new THREE.Group();Bx(mush,.04,.1,.04,0,.05,0,M(0xe8dcc8),false);const cap=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),M(0xb02a8a,{emissive:0x300030}));cap.position.y=.12;cap.scale.y=.6;mush.add(cap);mush.position.set(-.5,.78,-.5);kit.add(tag(mush,'mush'));mush.visible=false;const babyK=baby(kit,-1.0,.08,.1,'baby_k');
-const bath=mkRoom(24,0x7a8288,0xe8f0ff,.8,0x9aa6ac);Bx(bath,1.8,.55,.8,-1.3,.275,-1.5,M(0xe6eef2));Bx(bath,.6,.85,.4,1.5,.43,-1.9,M(0xe6eef2));tag(Bx(bath,.9,1.1,.03,1.5,1.6,-2.2,M(0x9ab0c0,{metalness:.9,roughness:.1,emissive:0x1a2a3a})),'mirror');Bx(bath,.4,.4,.6,-.2,.2,-1.9,M(0xeeeeee));const babyB=baby(bath,-1.3,.6,-1.5,'baby_b');
-const bd=mkRoom(34,0x5a3a3a,0xffb070,.6,0x7a5a5a);Bx(bd,2,.4,2.2,-1.2,.2,-1,M(0x4b3a6a));Bx(bd,1.9,.2,2,-1.2,.5,-1,M(0x6a5a8a));Bx(bd,1,.1,.4,-1.2,.65,-1.9,M(0xeeeeee));Bx(bd,1.2,.6,.5,1.5,.3,-1.9,M(0x2a1a10));
-const tvM=tag(Bx(bd,1,.6,.05,1.5,.95,-1.7,M(0x111111,{emissive:0x335566,emissiveIntensity:.6})),'tv');const babyP=baby(bd,-1.2,.08,-.1,'baby_p');
-const bs=mkRoom(44,0x3a2a1a,0x88ff99,.45,0x4a3a2a);const mound=tag(Bx(bs,1.4,.15,1.4,0,.07,-1,M(0x4a3218)),'dig');
-const portalM=tag(new THREE.Mesh(new THREE.TorusGeometry(.7,.08,8,24),new THREE.MeshBasicMaterial({color:0xaa66ff})),'portal');portalM.position.set(0,1.2,-2.05);portalM.visible=false;bs.add(portalM);for(let i=0;i<6;i++){const c=new THREE.Mesh(new THREE.SphereGeometry(.12,8,6),M(0x8a4a8a,{emissive:0x200020}));c.position.set(-2+i*.3,.1,-1.9);c.scale.y=.6;bs.add(c)}Bx(bs,.1,2.6,.5,1.8,1.3,-1.8,M(0x4a3a2a));
-const phone=new THREE.Group();Bx(phone,.4,.45,.4,2.0,.225,-2.4,M(0x3a2a1a));Bx(phone,.22,.07,.16,2.0,.5,-2.4,M(0x111111,{emissive:0x331111}));tag(phone,'phone');room.add(phone);
-const rugM=tag(Bx(room,1.6,.03,1.1,.8,.015,.9,M(0x5a2a2a,{roughness:1}),false),'rug'),hatchM=Bx(room,.9,.04,.9,.8,.005,.9,M(0x1a0f08),false);hatchM.visible=false;
-wclk.traverse(c=>c.userData.act='clockw');
-const babyH=[babyK,babyB,babyP];
-const boardsG=new THREE.Group();room.add(boardsG);for(let i=0;i<5;i++){const b=Bx(boardsG,2.9,.2,.05,0,.95+i*.32,-2.9,M(0x6a4a2a),false);b.rotation.z=(i%2?.03:-.03)}boardsG.visible=false;
-const nb=new THREE.Group();nb.position.set(-6.5,0,-30);out.add(nb);Bx(nb,6,4,4,0,2,0,M(0x6a4a3a),false);Bx(nb,6.4,.8,4.4,0,4.4,0,M(0x3a2a22),false);const nwin=[-1.8,0,1.8].map(x=>Bx(nb,.9,1,.1,x,2.2,2.05,M(0x111111,{emissive:0xffaa44}),false));
-const nfire=new THREE.Group();nb.add(nfire);for(let i=0;i<4;i++)Bx(nfire,.9,1.6+i*.3,.9,-2+i*1.3,3.6,2,M(0xff6a10,{emissive:0xff4400}),false);nfire.visible=false;const nfl=new THREE.PointLight(0xff7a20,0,40,2);nfl.position.set(0,4,4);nb.add(nfl);
-function neighborSet(n){nst=n<6?0:n<8?1:2;nfire.visible=nst===1;nwin.forEach(w=>w.material.emissive.setHex(nst===0?0xffaa44:0x000000))}neighborSet(1);
-Fx.neighbor=neighborSet;Fx.boards=()=>{boardsG.visible=true};Fx.addRes=r=>{placeRes(r,slotFor())};Fx.clockStr=()=>String(G.clock|0).padStart(2,'0')+':'+String((G.clock%1*60)|0).padStart(2,'0');
-Fx.sync=()=>{hatchM.visible=!!G.hatch;rugM.position.x=G.hatch?2.0:.8;rugM.rotation.y=G.hatch?.4:0;babyH.forEach((b,i)=>b.visible=G.seduct&&!G.babyOK[['baby_k','baby_b','baby_p'][i]]);mush.visible=G.shroom===1;portalM.visible=G.shroom===4;boardsG.visible=false;neighborSet(G.day);cat.visible=!!G.cat&&!menuMode};
-Fx.go=nm=>{stn=nm;FOC.room.p=STN[nm].slice();yaw=0;pitch=0;if(nm==='hall'){free=false;focus=vis?'door':'room'}else{free=true;focus='room'}};
-Fx.window=(w,nn)=>{stn='hall';FOC.room.p=STN.hall.slice();free=true;focus='room';yaw=w==='l'?.12:w==='r'?-.12:0;pitch=0;neighborSet(nn)};
-// фигуры
-function fig(o){const g=new THREE.Group(),sk=M(o.skin),cm=M(o.cloth),pa=M(0x2a2a38),hr=M(o.hair);
- Bx(g,.15,.8,.18,-.11,.4,0,pa);Bx(g,.15,.8,.18,.11,.4,0,pa);Bx(g,.46,.62,.26,0,1.11,0,cm);Bx(g,.5,.1,.3,0,1.38,0,cm);Bx(g,.2,.04,.1,0,1.43,.1,M(0xe8e8e8),false);
- const pits=[];const arm=s=>{const p=new THREE.Group();p.position.set(s*.32,1.38,0);g.add(p);Bx(p,.12,.58,.12,0,-.29,0,cm);const pt=Bx(p,.05,.05,.05,-s*.065,-.03,0,M(o.t&&o.t.fung?0x4a8a3a:o.t&&o.t.arm?o.skin:0x1a1008),false);pt.visible=false;pits.push(pt);const h=new THREE.Group();h.position.set(0,-.62,0);p.add(h);Bx(h,.13,.13,.1,0,0,0,sk);const nm=M(o.t&&o.t.nails?0x2b1d12:0xe6c4b4);for(let i=0;i<4;i++)Bx(h,.026,.03,.014,-.04+i*.027,-.05,.055,nm,false);return p};
- const aL=arm(-1),aR=arm(1),head=new THREE.Group();head.position.set(0,1.68,0);g.add(head);
- const hs=new THREE.Mesh(new THREE.SphereGeometry(.17,16,12),sk);hs.scale.set(.92,1.1,.95);hs.castShadow=true;head.add(hs);Bx(head,.33,.09,.33,0,.14,-.01,hr,false);Bx(head,.34,.2,.1,0,.04,-.12,hr,false);Bx(head,.03,.07,.04,-.16,0,0,sk,false);Bx(head,.03,.07,.04,.16,0,0,sk,false);Bx(head,.03,.05,.04,0,-.02,.17,sk,false);
- const lids=[],irs=[],brows=[];for(const s of[-1,1]){const e=new THREE.Mesh(new THREE.SphereGeometry(.036,10,8),o.blind?M(0xcfd6d6):o.t&&o.t.eyes?M(0xc02020,{emissive:0x500000}):M(0xf4f4f4));e.position.set(s*.065,.03,.14);head.add(e);const ir=new THREE.Mesh(new THREE.SphereGeometry(.017,8,6),M(0x1a1008));ir.position.set(s*.065,.03,.172);head.add(ir);irs.push(ir);
-  lids.push(Bx(head,.085,.075,.03,s*.065,.075,.155,sk,false));brows.push(Bx(head,.075,.012,.012,s*.065,.1,.16,hr,false))}
- const mouth=Bx(head,.14,.012,.012,0,-.075,.155,M(0x2a0808),false),teeth=new THREE.Group();teeth.position.set(0,-.07,.158);teeth.visible=false;head.add(teeth);const gt=o.t&&o.t.teeth;
- for(let i=0;i<8;i++){const hh=gt?.016:.008+Rn()*.01;Bx(teeth,.0155,hh,.01,(i-3.5)*.0165,gt?0:(Rn()-.5)*.006,0,gt?M(0xffffff,{emissive:0x666666}):M(0xcdbb7c),false)}
- Bx(teeth,.14,.012,.01,0,.016,0,M(o.t&&o.t.gums?0xa01010:0xd88a8a),false);const bug=Bx(head,.025,.012,.04,.172,0,0,M(0x0a0a0a),false);bug.visible=false;if(o.sewn)for(let i=0;i<5;i++)Bx(head,.008,.04,.01,-.05+i*.025,-.075,.162,M(0x111111),false);g.userData={bug,pits,t:o.t||{},sewn:!!o.sewn,az:0,head,mouth,teeth,aL,aR,mo:0,arm:0,breath:Rn()*6,lids,irs,brows,bt:1+Rn()*3,bl:0,bd:0,ex:0,ey:0,tx:0,ty:0,et:0,wt:3+Rn()*5,beh:o.beh||'calm',g:!!o.g,emo:null};return g}
-function face(f,dt,tt,isV){const u=f.userData;if(!u.lids)return;
- u.bt-=dt;if(u.bt<0&&u.bd<=0){u.bd=.16;u.bt=u.g?5+Rn()*6:u.beh==='nervous'?.9+Rn()*1.6:2+Rn()*3.5}
- if(u.bd>0){u.bd-=dt;u.bl=Math.sin(Math.max(0,u.bd)/.16*Math.PI)}else u.bl=0;
- u.et-=dt;if(u.et<0){u.et=(isV&&pose==='pupil'&&u.t&&u.t.pupil)?.06:.5+Rn()*1.5;u.tx=u.g?0:(Rn()-.5)*(isV&&pose==='pupil'&&u.t&&u.t.pupil?.04:.022);if(isV&&pose==='pupil'&&u.t&&u.t.pupil)u.tx=(Rn()-.5)*.045;u.ty=u.g?0:(Rn()-.5)*.012}
- const k=Math.min(1,dt*12);u.ex+=(u.tx-u.ex)*k;u.ey+=(u.ty-u.ey)*k;
- const emo=u.emo||(u.beh==='hostile'?'a':u.beh==='nervous'?'w':'n'),ba=emo==='a'?-.35:emo==='w'?.3:0;
- for(let i=0;i<2;i++){u.lids[i].scale.y=.05+.95*u.bl;u.lids[i].position.y=.075-.045*u.bl;u.irs[i].position.set((i?1:-1)*.065+u.ex,.03+u.ey,.172);u.brows[i].rotation.z=i?-ba:ba;u.brows[i].position.y=.1+(emo==='w'?.012:0)-(emo==='a'?.012:0)}
- u.mouth.scale.x=emo==='s'?1.25:1;
- const dx=cam.position.x-f.position.x,dz=cam.position.z-f.position.z,want=isV&&pose==='ear'?1.15:isV?cl(Math.atan2(dx,dz)-f.rotation.y,-.5,.5):Math.sin(tt*.3+u.breath)*.25;u.head.rotation.y+=(want-u.head.rotation.y)*Math.min(1,dt*3);u.head.rotation.x=Math.sin(tt*.7+u.breath)*.04;u.bug.visible=isV&&pose==='ear'&&!!(u.t&&u.t.ear);if(u.bug.visible)u.bug.position.y=Math.sin(tt*3)*.03;u.pits.forEach(q=>q.visible=u.az>.5)}
-function mkCat(c){const g=new THREE.Group(),m=M(c||0x2a2a2a);Bx(g,.14,.12,.34,0,.17,0,m);Bx(g,.12,.11,.11,0,.24,.2,m);Bx(g,.03,.05,.02,-.04,.31,.2,m);Bx(g,.03,.05,.02,.04,.31,.2,m);const t=Bx(g,.03,.03,.3,0,.26,-.28,m);t.rotation.x=.7;[[-.05,.14],[.05,.14],[-.05,-.12],[.05,-.12]].forEach(a=>Bx(g,.035,.12,.035,a[0],.06,a[1],m));g.userData.tail=t;return g}
-// кошка
-const cat=mkCat(0x3a3a3a);cat.visible=false;cat.position.set(-1.5,0,1);room.add(cat);let catT={x:-1.5,z:1,w:2};cat.userData.act='cat';cat.traverse(c=>c.userData.act='cat');
-// слоты жильцов
-const SLOT=[[-3.2,.28,-2.3,0],[-2.65,.28,-2.3,0],[-2.1,.28,-2.3,0],[-3.3,0,-.9,.6],[-3.4,0,.4,.8],[3,0,-2,-.4],[2.6,0,-1.2,-.3],[-1.2,0,-.8,0]];
-const resM=new Map();let vis=null,focus='room',pose='idle',tod=0,todT=0,yaw=0,pitch=0,free=false,menuMode=true;
-const movers=[];
-function walk(f,pts,sp,done){if(window.__AUTO){const p=pts[pts.length-1];f.position.set(p[0],f.position.y,p[1]);done&&done();return}movers.push({f,pts:pts.slice(),sp,done,t:0})}
-function walkP(f,pts,sp){return new Promise(r=>walk(f,pts,sp,r))}
-function slotFor(){for(let i=0;i<SLOT.length;i++)if(![...resM.values()].some(m=>m.userData.slot===i))return i;return 0}
-function placeRes(r,i){const f=fig({skin:r.skin,cloth:r.cloth,hair:r.hair,t:r.t,beh:r.beh,g:r.guest,sewn:r.sewn,blind:r.blind});const sp=r.sed||r.nun,s=r.sed?[33.4,.5,-1.0,-.5]:r.nun?[25.6,0,.2,-.8]:SLOT[i];f.userData.slot=sp?null:i;f.userData.guest=!!r.guest;if(r.sc)f.scale.set(r.sc[0],r.sc[1],r.sc[0]);f.position.set(s[0],s[1],s[2]);f.rotation.y=s[3];room.add(f);resM.set(r.id,f);return f}
-Fx.reset=menu=>{menuMode=!!menu;if(vis){room.remove(vis);out.remove(vis);vis=null}resM.forEach(f=>room.remove(f));resM.clear();movers.length=0;cat.visible=false;doorT=0;focus='room';free=false;pose='idle';if(!menu){G.res.forEach(r=>placeRes(r,slotFor()));cat.visible=G.cat}drawCal();Fx.setTod(menu?.3:0);Fx.go('hall');if(!menu)Fx.sync()};
-Fx.setTod=v=>{todT=v};Fx.draw=drawCal;Fx.pose=p=>{pose=p;focus=!vis?'room':free?'room':['teeth','eyes','gums','pupil','ear'].includes(p)?'face':p==='nails'?'hands':p==='arm'?'arm':'door'};Fx.look=off=>{if(off){free=false;focus=vis?'door':'room';return}free=!free;focus=free?'room':'door'};
-Fx.flash=k=>{const f=$('#flash');f.style.background=k?'#a00':'#fff';f.style.opacity=.7;setTimeout(()=>f.style.opacity=0,120)};
-Fx.removeRes=(r,how)=>{const f=resM.get(r.id);if(!f)return;resM.delete(r.id);if(how==='kill'){sfx.shot();Fx.flash(1);dropCans();swing(2)}else sfx.creak();const t0=performance.now();const iv=setInterval(()=>{const k=(performance.now()-t0)/700;f.scale.setScalar(Math.max(.01,1-k));f.rotation.x=how==='kill'?-k*1.4:0;if(k>=1||window.__AUTO){clearInterval(iv);room.remove(f)}},30)};
-Fx.arrive=async v=>{if(window.__AUTO)return;const f=fig({skin:v.skin,cloth:v.cloth,hair:v.hair,t:v.t,beh:v.beh,g:v.guest,sewn:v.sewn,blind:v.blind});if(v.sc)f.scale.set(v.sc[0],v.sc[1],v.sc[0]);if(v.cat){const c=mkCat(0xaa6a2a);c.position.set(.2,.85,.2);c.scale.setScalar(.8);f.add(c)}f.position.set(0,0,-14);f.userData.v=v;out.add(f);vis=f;focus='door';free=false;stn='hall';FOC.room.p=STN.hall.slice();await walkP(f,[[0,-3.9]],1.6);f.rotation.y=0;sfx.knock(3);porch.intensity=1.1;await waitMs(900)};
-Fx.leave=async v=>{if(!vis)return;const f=vis;vis=null;focus='room';f.userData.emo='a';toast('«'+rnd(['Вы пожалеете.','Люди так не поступают.','Как знаете…'])+'»',2500);sfx.voice(v);Fx.talk(1200);await waitMs(900);f.rotation.y=Math.PI;await walkP(f,[[0,-14]],1.5);out.remove(f)};
-Fx.kill=async v=>{if(!vis)return;sfx.shot();Fx.flash(1);swing(2);dropCans();const f=vis;vis=null;focus='room';const t0=performance.now();await new Promise(r=>{const iv=setInterval(()=>{const k=Math.min(1,(performance.now()-t0)/700);f.rotation.x=-k*1.5;f.position.y=-k*.15;if(k>=1||window.__AUTO){clearInterval(iv);r()}},30)});await waitMs(500);out.remove(f)};
-Fx.enter=async(v,r)=>{if(!vis){placeRes(r,slotFor());return}const f=vis;vis=null;focus='room';f.userData.emo='s';doorT=1.4;sfx.creak();await waitMs(500);const sp=r.sed||r.nun,i=sp?0:slotFor(),s=r.sed?[33.4,.5,-1.0,-.5]:r.nun?[25.6,0,.2,-.8]:SLOT[i];out.remove(f);room.add(f);f.userData.slot=sp?null:i;f.userData.guest=!!v.guest;resM.set(r.id,f);f.position.set(0,0,-3.9);await walkP(f,sp?[[2.7,-3.9],[2.7,-2.2]]:[[2.7,-3.9],[2.7,-2.2],[s[0],s[2]]],1.7);f.position.set(s[0],s[1],s[2]);f.rotation.y=s[3];doorT=0;sfx.slam();if(G.cat)cat.visible=true;porch.intensity=0};
-// ввод
-const cv=$('#c'),RC=new THREE.Raycaster(),V2=new THREE.Vector2();let drag=null,moved=0;
-cv.addEventListener('pointerdown',e=>{A();drag={x:e.clientX,y:e.clientY};moved=0;try{cv.setPointerCapture(e.pointerId)}catch(_){}});
-cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;moved+=Math.abs(dx)+Math.abs(dy);if(focus==='room'&&!menuMode){yaw=cl(yaw-dx*.004*S.sens,-1.25,1.25);pitch=cl(pitch-dy*.003*S.sens,-.35,.35)}drag.x=e.clientX;drag.y=e.clientY});
-cv.addEventListener('pointerup',e=>{if(drag&&moved<8&&!menuMode&&!G.over){V2.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);RC.setFromCamera(V2,cam);const hits=RC.intersectObjects(room.children,true);for(const h of hits){let o=h.object,a=null;while(o&&!a){a=o.userData&&o.userData.act;o=o.parent}if(a){act(a);break}}}drag=null});
-function act(a){if(a==='laptop')$('#bShop').click();else if(a==='radio')radio();else if(a==='cal')toast('День '+G.day+' из '+LAST+'. Ночи с Бледным человеком: 3, 5, 9, 11. FEMA: 4, 5, 8, 10.',5000);else if(a==='fan'){fanOn=!fanOn;sfx.click()}else if(a==='cat'){if(cat.visible){sfx.meow();catT.w=3}}else if(a==='window'&&vis&&G.cur){free=false;focus='door'}else hotspot(a)}
-// цикл
-const FOC={room:{p:[0,1.5,3],l:null,f:62},door:{p:[0,1.55,1.5],l:[0,1.55,-3.9],f:46},face:{p:[0,1.68,-2.7],l:[0,1.68,-3.75],f:22},hands:{p:[0,1.42,-2.45],l:[0,1.3,-3.3],f:40},arm:{p:[0,1.5,-2.3],l:[0,1.4,-3.8],f:50}};
-const lk=new THREE.Vector3(0,1.5,-3),clk=new THREE.Clock(),cs={day:new THREE.Color(0xf0a860),dusk:new THREE.Color(0x8a2a2a),night:new THREE.Color(0x070a1c)},tmp=new THREE.Color();
-function applyTod(){const t=tod;if(t<.5)tmp.copy(cs.day).lerp(cs.dusk,t*2);else tmp.copy(cs.dusk).lerp(cs.night,(t-.5)*2);sc.background=tmp.clone();sc.fog.color.copy(tmp);
- sunL.intensity=1.8*(1-t)+.35*t;sunL.color.setHex(t<.6?0xffc080:0x7fa0ff);hemi.intensity=.35*(1-t)+.12*t;lampB=.5+t*.8;beam.material.opacity=1-t*.85;$('#glare').style.opacity=1-t;
- sun.position.set(-14,10-t*18,-60);moon.position.set(16,14,-60);moon.visible=t>.4;sun.visible=t<.85;stars.material.opacity=Math.max(0,(t-.5)*2);if(CIC)CIC.gain.value=.03*(1-t*.8)}
-let lastRs=0,lampB=.5,flk=0,shake=0,sirenT=0,talkUntil=0,fe=.016,slow=0;Fx.shake=()=>{shake=1};Fx.siren=()=>{sirenT=9};Fx.talk=ms=>{talkUntil=performance.now()+ms};
-function loop(){requestAnimationFrame(loop);const dt=Math.min(clock_.getDelta(),.05),tt=performance.now()/1000;
- if(!window.__AUTO){fe=fe*.95+dt*.05;if(fe>.034&&S.q>0){if(++slow>240){S.q--;slow=0;applyQ();$('#sQ').value=S.q;applyVol();toast('Графика снижена для плавности',3000)}}else slow=0}
- if(focus==='room'&&!menuMode&&(stickV.x||stickV.y)){yaw=cl(yaw-stickV.x*dt*1.6*S.sens,-1.25,1.25);pitch=cl(pitch-stickV.y*dt*.9*S.sens,-.35,.35)}stk.style.visibility=focus==='room'&&!menuMode?'visible':'hidden';
- tod+=(todT-tod)*Math.min(1,dt*.7);applyTod();
- if(Math.random()<.004+tod*.012)flk=.7;flk*=.9;lamp.intensity=lampB*(1-flk)*(G.dark?.04:1);bulb.material.color.setHex(G.dark?0x222222:0xffe0a0);
- sirenT-=dt;sirenL.intensity=sirenT>0&&Math.sin(tt*6)>0?2.4:0;shake*=.93;nfl.intensity=nst===1?1.4+Math.sin(tt*17)*.5+Rn()*.4:0;portalM.rotation.z=tt;tvM.material.emissiveIntensity=.6+Math.sin(tt*9)*.25;curL.rotation.z=Math.sin(tt*.8)*(fanOn?.03:.008);curR.rotation.z=-curL.rotation.z;hH.rotation.z=-(G.clock%12)/12*6.283;hM.rotation.z=-(G.clock%1)*6.283;mir.material.opacity=(.18+Math.sin(tt*1.3)*.05)*(1-tod*.9);
- // физика лампы
- const g=9.8/1.05;th.vx+=(-g*th.x-.5*th.vx)*dt;th.vz+=(-g*th.z-.5*th.vz)*dt;th.x+=th.vx*dt;th.z+=th.vz*dt;pend.rotation.x=th.z;pend.rotation.z=-th.x;
- // банки
- cans.forEach(c=>{if(!c.fall)return;c.vy-=9.8*dt;c.m.position.x+=c.vx*dt;c.m.position.y+=c.vy*dt;c.m.position.z+=c.vz*dt;if(c.m.position.y<.06){c.m.position.y=.06;if(c.vy<-1.5){T(300,.1,'square',.1,150)}c.vy=-c.vy*.3;c.vx*=.85;c.vz*=.85;c.m.rotation.z+=c.vz*dt*4}if(c.m.position.z>3.2)c.vz=-Math.abs(c.vz)*.3});
- if(fanOn)blades.rotation.z+=dt*9;fan.rotation.y=Math.sin(tt*.5)*.5;
- dust.position.y=Math.sin(tt*.3)*.05;dust.rotation.y=tt*.01;
- porch.intensity=vis?(.9+Math.sin(tt*20)*.05+(Rn()<.02?-.5:0)):porch.intensity*.95;
- doorG.rotation.y+=(doorT-doorG.rotation.y)*Math.min(1,dt*3)+Math.sin(tt*70)*.012*shake;
- // ходьба
- for(let i=movers.length-1;i>=0;i--){const m=movers[i],p=m.pts[0],dx=p[0]-m.f.position.x,dz=p[1]-m.f.position.z,d=Math.hypot(dx,dz);if(d<.08){m.pts.shift();if(!m.pts.length){movers.splice(i,1);m.done&&m.done()}}else{m.f.position.x+=dx/d*m.sp*dt;m.f.position.z+=dz/d*m.sp*dt;m.f.rotation.y=Math.atan2(dx,dz);m.t+=dt;m.f.position.y=Math.abs(Math.sin(m.t*8))*.04;const u=m.f.userData;if(u.aL){u.aL.rotation.x=Math.sin(m.t*8)*.5;u.aR.rotation.x=-Math.sin(m.t*8)*.5}if(Math.sin(m.t*8)>.98)sfx.step()}}
- // позы и жильцы
- const talk=performance.now()<talkUntil,fu=[vis,...resM.values()];fu.forEach(f=>{if(!f)return;const u=f.userData;if(!u.head)return;u.breath+=dt;f.children[2].scale.y=1+Math.sin(u.breath*1.6)*.012;face(f,dt,tt,f===vis);
-  if(f===vis&&!movers.some(m=>m.f===f)){const wantM=pose==='teeth'||pose==='gums'?1:0,wantA=pose==='nails'?-1.35:0;u.az+=((pose==='arm'?1:0)-u.az)*Math.min(1,dt*5);u.aL.rotation.z=-2.2*u.az;u.aR.rotation.z=2.2*u.az;u.mo+=(wantM-u.mo)*Math.min(1,dt*6);u.arm+=(wantA-u.arm)*Math.min(1,dt*5);const tk=talk&&pose==='idle';u.mouth.scale.y=1+u.mo*9+(tk?Math.abs(Math.sin(tt*13))*5:0);u.teeth.visible=u.mo>.3;
-   u.aR.rotation.x=u.arm+(tk?-.5+Math.sin(tt*5)*.25:0);u.wt-=dt;const wipe=u.beh==='nervous'&&u.wt<0&&u.wt>-1.3&&pose==='idle';if(u.wt<-1.3)u.wt=5+Rn()*5;u.aL.rotation.x=u.arm+(wipe?-2.3+Math.sin(tt*10)*.15:0);f.rotation.z=Math.sin(tt*(u.beh==='nervous'?2.4:.9))*(u.beh==='nervous'?.03:.012)}
-  else if(f!==vis&&u.guest&&u.slot!=null){const k=Math.sin(tt*.35+u.breath);u.head.rotation.z=k>.97?.35:0}});
- // кошка
- if(cat.visible){const dx=catT.x-cat.position.x,dz=catT.z-cat.position.z,d=Math.hypot(dx,dz);if(d>.08){cat.position.x+=dx/d*.5*dt;cat.position.z+=dz/d*.5*dt;cat.rotation.y=Math.atan2(dx,dz)}else{catT.w-=dt;if(catT.w<0){catT={x:-3+Rn()*5.5,z:-.5+Rn()*3,w:2+Rn()*4};if(Rn()<.3&&G.cat)sfx.meow()}}cat.userData.tail.rotation.z=Math.sin(tt*3)*.4}
- // камера
- const fc=menuMode?{p:[Math.sin(tt*.1)*1.4,1.5+Math.sin(tt*.07)*.15,3.2-Math.sin(tt*.05)*.7],l:null,f:56}:FOC[focus],t=1-Math.exp(-dt*3.5);cam.position.x+=(fc.p[0]-cam.position.x)*t;cam.position.y+=(fc.p[1]-cam.position.y)*t;cam.position.z+=(fc.p[2]-cam.position.z)*t;cam.fov+=(fc.f-cam.fov)*t;cam.updateProjectionMatrix();
- let tx,ty,tz;if(fc.l){tx=fc.l[0];ty=fc.l[1];tz=fc.l[2]}else{const yy=menuMode?Math.sin(tt*.12)*.5+.3:yaw,pp=menuMode?-.03:pitch;tx=cam.position.x-Math.sin(yy)*5;ty=cam.position.y+Math.sin(pp)*5;tz=cam.position.z-Math.cos(yy)*5}
- lk.x+=(tx-lk.x)*t*1.3;lk.y+=(ty-lk.y)*t*1.3;lk.z+=(tz-lk.z)*t*1.3;cam.lookAt(lk);
- sun.lookAt(cam.position);R.render(sc,cam)}
-const clock_=new THREE.Clock();rs();Fx.reset(true);cam.position.set(0,1.5,3);function applyQ(){const q=S.q;R.setPixelRatio(q===0?1:Math.min(devicePixelRatio||1,q===1?1.5:2));R.shadowMap.enabled=q>0;sunL.castShadow=q>0;sunL.shadow.mapSize.set(q===2?1024:512,q===2?1024:512);if(sunL.shadow.map){sunL.shadow.map.dispose();sunL.shadow.map=null}sc.traverse(o=>{if(o.material)o.material.needsUpdate=true});dust.visible=q>0;rs()}Fx.applyQ=applyQ;applyQ();loop();
-window.__NH={hotspot,fresh,ROST,SCH,TD,G,genVisitor,Fx,newGame,ending,runDay,night,ENDS,admit,killV,applyTest,tRes,PALE,FEMA};
+function openPeer(code){
+  net.code=code;
+  const p=new Peer('ggames-'+code);net.peer=p;
+  p.on('open',()=>{history.replaceState(null,'','#'+code);lobby()});
+  p.on('error',e=>{if(e.type==='unavailable-id'){p.destroy();openPeer(genCode())}else toast('Ошибка сети: '+e.type)});
+  p.on('connection',c=>{
+    c.on('data',m=>hostRecv(c,m));
+    c.on('close',()=>{if(c._i!=null&&!net.started){delete net.conns[c._i];}});
+  });
 }
-menuInfo();
-</script></body></html>
+function hostRecv(c,m){
+  const G=GM[net.gid];
+  if(m.t==='join'){
+    if(net.started)return c.send({t:'err',msg:'Игра уже идёт'});
+    if(net.players.length>=G.max)return c.send({t:'err',msg:'Комната заполнена'});
+    const i=net.players.push({name:m.name})-1;net.conns[i]=c;c._i=i;
+    c.send({t:'hi',idx:i});sendLobby();
+  }else if(m.t==='act')applyAct(c._i,m.a);
+  else if(m.t==='d'){drawSeg(m.seg);Object.values(net.conns).forEach(o=>o!==c&&o.open&&o.send(m))}
+}
+function sendLobby(){broadcast({t:'lobby',gid:net.gid,players:net.players,code:net.code});lobby()}
+function joinRoom(code){
+  code=(code||'').trim().toUpperCase();if(code.length<4)return toast('Введи код комнаты');
+  net={host:false,players:[],me:-1,code,S:null,started:false};
+  app.innerHTML='<p class="muted" style="text-align:center;margin-top:60px">Подключаемся…</p>';
+  const p=new Peer();net.peer=p;
+  p.on('open',()=>{
+    const c=p.connect('ggames-'+code,{reliable:true});net.conn=c;
+    c.on('open',()=>c.send({t:'join',name:nm()}));
+    c.on('data',guestRecv);
+    c.on('close',()=>{if(net.peer===p){toast('Связь с хостом потеряна');cleanup();home()}});
+  });
+  p.on('error',e=>{toast(e.type==='peer-unavailable'?'Комната не найдена':'Ошибка: '+e.type);cleanup();home()});
+}
+function guestRecv(m){
+  if(m.t==='hi')net.me=m.idx;
+  else if(m.t==='lobby'){net.gid=m.gid;net.players=m.players;net.code=m.code;net.started=false;lobby()}
+  else if(m.t==='state'){net.S=m.S;net.started=true;showGame()}
+  else if(m.t==='d')drawSeg(m.seg);
+  else if(m.t==='err'){toast(m.msg);cleanup();home()}
+  else if(m.t==='end'){toast('Хост закрыл комнату');cleanup();home()}
+}
+function cleanup(){try{net.peer&&net.peer.destroy()}catch(e){}net={};clearInterval(tmr);history.replaceState(null,'',location.pathname)}
+function leave(){if(net.host)broadcast({t:'end'});cleanup();home()}
+function toLobby(){net.started=false;sendLobby()}
+function start(){
+  const G=GM[net.gid];net.S=G.init(net.players.map(p=>p.name));net.started=true;
+  STROKES=[];lastR=0;broadcast({t:'state',S:net.S});showGame();
+}
+function send(a){sel=null;unoPend=null;if(net.host)applyAct(net.me,a);else net.conn&&net.conn.send({t:'act',a})}
+function applyAct(i,a){
+  try{GM[net.gid].act(net.S,i,a)}catch(e){console.error(e);return}
+  broadcast({t:'state',S:net.S});showGame();
+}
+
+/* ============ экраны ============ */
+function home(){
+  reg=[];clearInterval(tmr);
+  app.innerHTML=`<div class="hero"><h1>Играй с друзьями онлайн</h1>
+  <p class="muted">Выбери игру → создай комнату → отправь другу код или ссылку. Всё работает прямо в браузере, без регистрации.</p></div>
+  <div class="join"><span class="muted">Есть код комнаты?</span><input id="jc" maxlength="5" placeholder="КОД">${B('Войти',()=>joinRoom($('#jc').value))}</div>
+  <div class="grid">${GAMES.map(g=>`<div class="card" style="--c:${g.color}" onclick="${H(()=>hostRoom(g.id))}">
+    <div class="ic">${g.icon}</div><h3>${g.name}</h3><p>${g.desc}</p><small>👥 ${g.min}–${g.max} игроков</small></div>`).join('')}
+    <div class="card soon" style="--c:#64748b"><div class="ic">✨</div><h3>Скоро ещё</h3><p>Дурак, Мафия, Активити, Codenames… Напиши, что добавить!</p></div></div>`;
+}
+function lobby(){
+  reg=[];clearInterval(tmr);const G=GM[net.gid];const url=location.href.split('#')[0]+'#'+net.code;
+  app.innerHTML=`<div class="lob"><div class="muted">Комната</div><h2>${G.icon} ${G.name}</h2>
+  <div class="code">${net.code}</div>
+  <p class="muted">Друг заходит на сайт → «Войти по коду», или отправь ему ссылку:</p>
+  <div class="row"><input readonly value="${url}" onclick="this.select()" style="flex:1">${B('Копировать',()=>{try{navigator.clipboard.writeText(url)}catch(e){}toast('Ссылка скопирована')},'sm')}</div>
+  <div class="rules">${G.rules}</div>
+  <h3>Игроки (${net.players.length}/${G.max})</h3>
+  <div class="pl">${net.players.map((p,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(p.name)}${i===0?' 👑':''}${i===net.me?' (ты)':''}</span>`).join('')}</div>
+  ${net.host?(net.players.length>=G.min?B('▶ Начать игру',start,'big'):`<p class="muted">Нужно минимум ${G.min} игрока(ов)</p>`):'<p class="muted">Ждём, пока хост начнёт игру…</p>'}
+  <div>${B('← В меню',leave,'ghost sm')}</div></div>`;
+}
+function showGame(){
+  const G=GM[net.gid],S=net.S;
+  const keep={};document.querySelectorAll('#app input[id]').forEach(i=>keep[i.id]=i.value);
+  const fa=document.activeElement&&document.activeElement.id;
+  clearInterval(tmr);reg=[];
+  app.innerHTML=`<div class="bar"><b>${G.icon} ${G.name}</b><span class="muted">комната ${net.code}</span>${net.host?B('В лобби',toLobby,'sm ghost'):''}${B('Выйти',leave,'sm ghost')}</div><div id="g">${G.render(S,net.me)}</div>`;
+  for(const k in keep){const el=document.getElementById(k);if(el)el.value=keep[k]}
+  if(fa){const el=document.getElementById(fa);el&&el.focus()}
+  G.after&&G.after(S,net.me);
+}
+
+/* ============ 1. МОНОПОЛИЯ ============ */
+const MB=[['СТАРТ','s'],['Хлебная ул.','p',60,6,'#92400e'],['Шанс','c'],['Кофейня','p',80,8,'#92400e'],['Налог','t',100],['Вокзал','p',150,20,'#64748b'],['Парк','p',100,10,'#16a34a'],
+['Парковка','f'],['Кинотеатр','p',120,12,'#0ea5e9'],['Шанс','c'],['Музей','p',140,14,'#0ea5e9'],['Библиотека','p',140,14,'#0ea5e9'],['Отпуск','v'],
+['Аэропорт','p',200,25,'#64748b'],['Отель','p',220,22,'#ec4899'],['Шанс','c'],['Казино','p',240,24,'#ec4899'],['Налог','t',150],['Порт','p',200,25,'#64748b'],
+['Башня','p',260,26,'#f59e0b'],['Шанс','c'],['Небоскрёб','p',300,30,'#f59e0b'],['Дворец','p',350,40,'#ef4444'],['Лотерея','l']];
+const CH=[['нашёл клад +150$',150],['штраф за парковку −80$',-80],['подарок от друга +100$',100],['ремонт машины −120$',-120],['налоговая вернула +60$',60],['купил билет в кино −40$',-40]];
+const cp=i=>i<=6?[1,i+1]:i<=12?[i-5,7]:i<=18?[7,7-(i-12)]:[7-(i-18),1];
+const lg=(S,t)=>{S.log.unshift(t);S.log.length=Math.min(S.log.length,6)};
+function monoNext(S){const n=S.names.length;do{S.turn=(S.turn+1)%n}while(S.out[S.turn]);S.ph='roll'}
+function monoLand(S,i){
+  const c=MB[S.pos[i]],N=S.names[i];S.ph='end';
+  if(c[1]==='p'){const o=S.own[S.pos[i]];
+    if(o===undefined){if(S.money[i]>=c[2]){S.ph='buy';lg(S,`${N} на «${c[0]}»`)}else lg(S,`${N} на «${c[0]}», но не хватает денег`)}
+    else if(o!==i){S.money[i]-=c[3];S.money[o]+=c[3];lg(S,`${N} платит ${c[3]}$ игроку ${S.names[o]} за «${c[0]}»`)}
+    else lg(S,`${N} отдыхает на своей «${c[0]}»`)}
+  else if(c[1]==='t'){S.money[i]-=c[2];lg(S,`${N} платит налог ${c[2]}$`)}
+  else if(c[1]==='c'){const e=CH[rnd(CH.length)];S.money[i]+=e[1];lg(S,`${N}: ${e[0]}`)}
+  else if(c[1]==='l'){const v=[-50,0,100,250][rnd(4)];S.money[i]+=v;lg(S,`${N} в лотерее: ${v>=0?'+':''}${v}$`)}
+  else if(c[1]==='v'){S.money[i]+=50;lg(S,`${N} в отпуске: +50$`)}
+  else lg(S,`${N} на «${c[0]}»`);
+  if(S.money[i]<0){S.out[i]=true;for(const k in S.own)if(S.own[k]===i)delete S.own[k];lg(S,`💥 ${N} банкрот!`);
+    const al=S.names.map((_,j)=>j).filter(j=>!S.out[j]);if(al.length===1){S.win=al[0];return}monoNext(S)}
+}
+const MONO={id:'mono',name:'Мини-Монополия',icon:'🏙️',color:'#f59e0b',min:2,max:4,
+desc:'Бросай кубики, скупай улицы и разоряй друзей. Побеждает последний не обанкротившийся.',
+rules:'🎲 Бросай кубики → если улица свободна, можешь купить. Наступил на чужую — платишь аренду. Прошёл СТАРТ — +200$. У кого деньги ушли в минус — банкрот. Выживает один!',
+init(names){return{names,pos:names.map(()=>0),money:names.map(()=>1000),own:{},turn:0,ph:'roll',dice:[0,0],log:['Игра началась!'],out:names.map(()=>false),win:-1}},
+act(S,i,a){
+  if(S.win>=0||i!==S.turn)return;
+  if(a.t==='roll'&&S.ph==='roll'){
+    const d=[1+rnd(6),1+rnd(6)];S.dice=d;const o=S.pos[i],n=(o+d[0]+d[1])%24;
+    if(n<o){S.money[i]+=200;lg(S,`${S.names[i]} прошёл СТАРТ +200$`)}
+    S.pos[i]=n;monoLand(S,i);
+  }else if(a.t==='buy'&&S.ph==='buy'){const c=MB[S.pos[i]];S.money[i]-=c[2];S.own[S.pos[i]]=i;lg(S,`${S.names[i]} купил «${c[0]}» за ${c[2]}$`);S.ph='end'}
+  else if(a.t==='skip'&&S.ph==='buy')S.ph='end';
+  else if(a.t==='next'&&S.ph==='end')monoNext(S);
+},
+render(S,me){
+  const cell=(c,i)=>{const[r,k]=cp(i),own=S.own[i],here=S.pos.map((p,j)=>p===i&&!S.out[j]?TOK[j]:'').join('');
+    const ic={s:'🏁',c:'❓',t:'💸',l:'🎰',v:'🏖️',f:'🅿️'}[c[1]]||'';
+    return `<div class="mc" style="grid-row:${r};grid-column:${k}">${c[1]==='p'?`<i style="background:${c[4]}"></i>`:''}<b>${ic} ${c[0]}</b>${c[1]==='p'?`<small>${c[2]}$</small>`:c[1]==='t'?`<small>−${c[2]}$</small>`:''}${own!==undefined?`<u style="background:${COL[own]}"></u>`:''}<span class="tk">${here}</span></div>`};
+  let ui;const my=S.turn===me;
+  if(S.win>=0)ui=`<h2>🏆 ${E(S.names[S.win])} победил(а)!</h2>`;
+  else if(my&&S.ph==='roll')ui=B('🎲 Бросить кубики',()=>send({t:'roll'}),'big');
+  else if(my&&S.ph==='buy'){const c=MB[S.pos[me]];ui=`<div>Купить «${c[0]}» за ${c[2]}$ (аренда ${c[3]}$)?</div>`+B('Купить',()=>send({t:'buy'}))+B('Нет',()=>send({t:'skip'}),'ghost')}
+  else if(my&&S.ph==='end')ui=B('Закончить ход ➜',()=>send({t:'next'}),'big');
+  else ui=`<div class="muted">Ходит ${TOK[S.turn]} ${E(S.names[S.turn])}…</div>`;
+  const dice=S.dice[0]?S.dice.map(d=>'⚀⚁⚂⚃⚄⚅'[d-1]).join(''):'🎲🎲';
+  return `<div class="mb">${MB.map(cell).join('')}<div class="mid"><div class="dice">${dice}</div>${ui}<div class="log">${S.log.map(E).join('<br>')}</div></div></div>
+  <div style="max-width:680px;margin:12px auto">${S.names.map((n,i)=>`<div class="pp ${i===S.turn?'cur':''} ${S.out[i]?'out':''}" style="--c:${COL[i]}">${TOK[i]} ${E(n)}${i===me?' (ты)':''} <b style="margin-left:auto">${S.money[i]}$</b> <small class="muted">${Object.values(S.own).filter(o=>o===i).length} улиц</small></div>`).join('')}</div>`;
+}};
+
+/* ============ 2. ИМАДЖИНАРИУМ ============ */
+const EM=['🌙','🌞','🌊','🔥','🌲','🏰','🚀','🐉','🦋','🐙','🎭','🔑','🔦','🌈','⛵','🦉','🍄','🎪','🧙','🪐','🌋','🦊','🐺','🎻','⏰','🌹','🐚','🦢','🗻','🎈','🧸','🐝','🌻','⛄','⚡','🍂','🗿','🛸','🐘','🦄','🎨','📜','⚓','🔮','🌵','🐢','🎡','🦁','🐬','🍎','🐦','🏺','🧭','🌴','🦇','👑'];
+const art=id=>{const L=EM.length,h=id*47%360,a=EM[id*7%L],b=EM[(id*13+5)%L],c=EM[(id*29+11)%L];
+  return `<div class="ic3 l${id%3}" style="background:linear-gradient(${135+id*13%90}deg,hsl(${h},65%,32%),hsl(${(h+70)%360},70%,52%))"><span>${a}</span><span>${b}</span><span>${c}</span></div>`};
+const IMG={id:'img',name:'Имаджинариум',icon:'🎭',color:'#a855f7',min:3,max:6,
+desc:'Загадывай картинку ассоциацией, а друзья угадывают, какая карта твоя. Не слишком очевидно и не слишком мудрёно!',
+rules:'🎤 Рассказчик выбирает карту и придумывает к ней ассоциацию. Остальные подкладывают свои карты под неё. Все карты перемешиваются — и все (кроме рассказчика) голосуют, какая карта рассказчика. Если угадали не все и не никто — рассказчик +3, угадавшие +3. За голоса на свою карту +1. Игра до 12 очков. Играйте с голосовой связью (Discord, Telegram) для общения!',
+init(names){const n=names.length,deck=shuf([...Array(120).keys()]);
+  return{names,hands:names.map(()=>deck.splice(0,6)),deck,score:names.map(()=>0),st:0,ph:'clue',clue:'',table:[],votes:{},d:null,rn:1,over:false}},
+act(S,i,a){
+  const n=S.names.length;
+  if(a.t==='clue'&&S.ph==='clue'&&i===S.st&&S.hands[i].includes(a.c)&&a.text){
+    S.clue=String(a.text).slice(0,80);S.hands[i]=S.hands[i].filter(x=>x!==a.c);S.table=[{c:a.c,o:i}];S.ph='pick';
+  }else if(a.t==='pick'&&S.ph==='pick'&&i!==S.st&&!S.table.some(t=>t.o===i)&&S.hands[i].includes(a.c)){
+    S.hands[i]=S.hands[i].filter(x=>x!==a.c);S.table.push({c:a.c,o:i});
+    if(S.table.length===n){S.table=shuf(S.table);S.ph='vote';S.votes={}}
+  }else if(a.t==='vote'&&S.ph==='vote'&&i!==S.st&&S.votes[i]===undefined&&S.table[a.k]&&S.table[a.k].o!==i){
+    S.votes[i]=a.k;
+    if(Object.keys(S.votes).length===n-1){
+      const k=Object.entries(S.votes),si=S.table.findIndex(t=>t.o===S.st),right=k.filter(([p,v])=>v===si).length,d=S.names.map(()=>0);
+      if(right===0||right===n-1){for(let p=0;p<n;p++)if(p!==S.st)d[p]+=2}else{d[S.st]+=3;k.forEach(([p,v])=>{if(v===si)d[+p]+=3})}
+      k.forEach(([p,v])=>{const o=S.table[v].o;if(o!==S.st)d[o]+=1});
+      S.score=S.score.map((s,j)=>s+d[j]);S.d=d;S.ph='result';if(Math.max(...S.score)>=12)S.over=true;
+    }
+  }else if(a.t==='next'&&S.ph==='result'&&!S.over){
+    const all=[...Array(120).keys()],used=new Set(S.hands.flat());
+    if(S.deck.length<n)S.deck=shuf(all.filter(x=>!used.has(x)));
+    S.hands.forEach(h=>{if(h.length<6)h.push(S.deck.pop())});
+    S.st=(S.st+1)%n;S.rn++;S.ph='clue';S.clue='';S.table=[];S.votes={};S.d=null;
+  }
+},
+render(S,me){
+  const n=S.names.length,st=S.st;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===st?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${S.d&&S.ph==='result'?`<small>(+${S.d[i]})</small>`:''}${i===st?' 🎤':''}</span>`).join('')}</div>`;
+  if(S.over){const w=S.score.indexOf(Math.max(...S.score));h+=`<h2>🏆 Победил(а) ${E(S.names[w])}!</h2>`}
+  const hand=()=>`<h4>Твои карты</h4><div class="hand">${S.hands[me].map(c=>`<div class="pc" onclick="pickSel(this,${c})">${art(c)}</div>`).join('')}</div>`;
+  const played=S.table.some(t=>t.o===me);
+  if(S.ph==='clue'){
+    if(me===st)h+=`<p>🎤 Ты рассказчик! Выбери карту и придумай ассоциацию (слово, фраза, звук…)</p><div class="row"><input id="cl${S.rn}" placeholder="Твоя ассоциация" style="flex:1" maxlength="80">${B('Загадать',()=>{const t=($('#cl'+S.rn).value||'').trim();if(sel==null||!t)return toast('Выбери карту и напиши ассоциацию');send({t:'clue',c:sel,text:t})},'big')}</div>`+hand();
+    else h+=`<p class="muted">Рассказчик ${E(S.names[st])} выбирает карту и придумывает ассоциацию…</p>`+hand();
+  }else if(S.ph==='pick'){
+    h+=`<p>Ассоциация: <b style="font-size:20px">«${E(S.clue)}»</b></p>`;
+    if(me!==st&&!played)h+=`<p>Выбери свою карту, которая подходит под ассоциацию:</p>`+B('Подложить карту',()=>{if(sel==null)return toast('Сначала выбери карту');send({t:'pick',c:sel})},'big')+hand();
+    else h+=`<p class="muted">Ждём остальных… (${S.table.length}/${n})</p>`+(me!==st?hand():'');
+  }else if(S.ph==='vote'){
+    h+=`<p>Ассоциация: <b style="font-size:20px">«${E(S.clue)}»</b></p>`;
+    const can=me!==st&&S.votes[me]===undefined;
+    h+=can?`<p>Какая карта принадлежит рассказчику? Нажми на неё:</p>`:`<p class="muted">Ждём голосов… (${Object.keys(S.votes).length}/${n-1})</p>`;
+    h+=`<div class="tbl">${S.table.map((t,k)=>{const mine=t.o===me;return `<div class="tc"><div class="pc" style="${mine?'opacity:.55;cursor:default':''}" ${can&&!mine?`onclick="${H(()=>send({t:'vote',k}))}"`:''}>${art(t.c)}</div>${mine?'твоя':''}</div>`}).join('')}</div>`;
+  }else{
+    h+=`<p>Ассоциация: <b style="font-size:20px">«${E(S.clue)}»</b></p><div class="tbl">${S.table.map((t,k)=>{
+      const vs=Object.entries(S.votes).filter(([p,v])=>v===k).map(([p])=>TOK[+p]).join('');
+      return `<div class="tc ${t.o===st?'win':''}"><div class="pc" style="cursor:default">${art(t.c)}</div><b>${TOK[t.o]} ${E(S.names[t.o])}</b><span>${vs||'—'}</span></div>`}).join('')}</div>`;
+    h+=S.over?'':B('Следующий раунд ➜',()=>send({t:'next'}),'big');
+  }
+  return h;
+}};
+
+/* ============ 3. УНО ============ */
+const UC={R:'#dc2626',G:'#16a34a',B:'#2563eb',Y:'#ca8a04',W:'#1f2937'},UN={R:'🔴',G:'🟢',B:'🔵',Y:'🟡'};
+const ul=c=>c.v==='s'?'⛔':c.v==='r'?'⇄':c.v==='w'?'🌈':c.v;
+const ucard=(c,cls,on)=>`<div class="uc ${cls||''}" style="background:${UC[c.c]}" ${on?`onclick="${on}"`:''}>${ul(c)}</div>`;
+function unoDraw(S,p,k){for(let j=0;j<k;j++){if(!S.deck.length){S.deck=shuf(S.disc);S.disc=[]}if(!S.deck.length)return;S.hands[p].push(S.deck.pop())}}
+const unoOk=(S,c)=>c.c==='W'||c.c===S.col||c.v===S.top.v;
+const UNO={id:'uno',name:'Уно',icon:'🃏',color:'#ef4444',min:2,max:6,
+desc:'Классические карточки: сбрасывай карты по цвету или значению и первым избавься от всех. Пропуски, развороты, +2 и +4!',
+rules:'Сбрось карту того же цвета или значения, что и верхняя. 🌈 дикая карта — выбираешь цвет. ⛔ пропуск, ⇄ разворот, +2 / +4 — следующий берёт карты и пропускает ход. Нет подходящей — тяни карту (ход переходит). Первый без карт побеждает.',
+init(names){const deck=[];for(const c of 'RGBY'){deck.push({c,v:'0'});for(const v of ['1','2','3','4','5','6','7','8','9','s','r','+2'])deck.push({c,v},{c,v})}
+  for(let i=0;i<4;i++)deck.push({c:'W',v:'w'},{c:'W',v:'+4'});
+  const d=shuf(deck),hands=names.map(()=>d.splice(0,7));let top;do{top=d.pop();if(top.c==='W'){d.unshift(top);top=null}}while(!top);
+  return{names,hands,deck:d,disc:[],top,col:top.c,turn:0,dir:1,win:-1,log:'Игра началась!'}},
+act(S,i,a){
+  if(S.win>=0||i!==S.turn)return;const n=S.names.length;
+  const adv=s=>{S.turn=((S.turn+S.dir*s)%n+n)%n},nx=()=>((S.turn+S.dir)%n+n)%n;
+  if(a.t==='draw'){unoDraw(S,i,1);S.log=`${S.names[i]} берёт карту`;adv(1)}
+  else if(a.t==='play'){const c=S.hands[i][a.k];if(!c||!unoOk(S,c))return;if(c.c==='W'&&!UN[a.col])return;
+    S.hands[i].splice(a.k,1);S.disc.push(S.top);S.top=c;S.col=c.c==='W'?a.col:c.c;S.log=`${S.names[i]} → ${ul(c)}`;
+    if(!S.hands[i].length){S.win=i;return}
+    if(c.v==='r'&&n>2){S.dir*=-1;adv(1)}
+    else if(c.v==='s'||c.v==='r')adv(2);
+    else if(c.v==='+2'){unoDraw(S,nx(),2);adv(2)}
+    else if(c.v==='+4'){unoDraw(S,nx(),4);adv(2)}
+    else adv(1);
+  }
+},
+render(S,me){
+  const my=S.turn===me;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} 🃏${S.hands[i].length}${S.hands[i].length===1?' <b>UNO!</b>':''}</span>`).join('')}</div>`;
+  if(S.win>=0)h+=`<h2>🏆 ${E(S.names[S.win])} победил(а)!</h2>`;
+  h+=`<div class="uno">${ucard(S.top,'big')}<div><div>Цвет: <span class="dot" style="background:${UC[S.col]}"></span></div><p class="muted">${E(S.log)}</p>${my&&S.win<0?B('Взять карту',()=>send({t:'draw'}),'ghost'):''}</div></div>`;
+  if(my&&unoPend!=null)h+=`<p style="text-align:center">Выбери цвет:</p><div class="tools">${'RGBY'.split('').map(c=>B(UN[c],()=>{const k=unoPend;send({t:'play',k,col:c})},'big')).join('')}</div>`;
+  else if(my&&S.win<0)h+=`<p style="text-align:center"><b>Твой ход!</b></p>`;
+  h+=`<div class="hand" style="justify-content:center">${S.hands[me].map((c,k)=>{const ok=my&&S.win<0&&unoOk(S,c);
+    return ucard(c,ok?'ok':'no',ok?H(()=>{if(c.c==='W'){unoPend=k;showGame()}else send({t:'play',k})}):'')}).join('')}</div>`;
+  return h;
+}};
+
+/* ============ 4. ШПИОН ============ */
+const LOCS=['Пляж','Школа','Больница','Космическая станция','Цирк','Кинотеатр','Самолёт','Ресторан','Банк','Библиотека','Подводная лодка','Зоопарк','Супермаркет','Университет','Вокзал','Казино','Пиратский корабль','Музей','Спа-салон','Военная база'];
+const SPY={id:'spy',name:'Шпион',icon:'🕵️',color:'#06b6d4',min:3,max:6,
+desc:'Все знают место, кроме одного — шпиона. Задавай хитрые вопросы, вычисли чужака или не выдай, что ты не в теме.',
+rules:'Всем показывают одну локацию, а шпиону — нет. По очереди задавайте друг другу вопросы про это место (голосом в Discord/Telegram!). Шпион пытается понять локацию, остальные — вычислить шпиона. В любой момент шпион может назвать локацию, а все вместе — проголосовать. Таймер 8 минут.',
+init(names){return{names,loc:rnd(LOCS.length),spy:rnd(names.length),ph:'play',t0:Date.now(),votes:{},res:null}},
+act(S,i,a){
+  const n=S.names.length;
+  if(a.t==='guess'&&S.ph==='play'&&i===S.spy){const ok=a.loc===S.loc;S.res={team:!ok,why:`Шпион назвал «${LOCS[a.loc]}» — ${ok?'верно, шпион победил!':'неверно, шпион проиграл!'}`};S.ph='end'}
+  else if(a.t==='vote'&&S.ph==='play'&&S.votes[i]===undefined&&a.k!==i&&a.k>=0&&a.k<n){
+    S.votes[i]=a.k;
+    if(Object.keys(S.votes).length===n){const c=S.names.map(()=>0);Object.values(S.votes).forEach(v=>c[v]++);const mx=Math.max(...c),top=c.map((x,j)=>x===mx?j:-1).filter(j=>j>=0);
+      const caught=top.length===1&&top[0]===S.spy;S.res={team:caught,why:caught?`Шпиона вычислили — это ${S.names[S.spy]}!`:`Шпиона не поймали! Это был ${S.names[S.spy]}.`};S.ph='end'}
+  }else if(a.t==='again'&&S.ph==='end'){S.loc=rnd(LOCS.length);S.spy=rnd(n);S.ph='play';S.t0=Date.now();S.votes={};S.res=null}
+},
+render(S,me){
+  const spy=me===S.spy;
+  if(S.ph==='end')return `<div class="role">${S.res.team?'🎉 Победила команда!':'🕵️ Победил шпион!'}<br><small>${E(S.res.why)}</small><br><br>Локация была: <b>${LOCS[S.loc]}</b><br>Шпион: <b>${TOK[S.spy]} ${E(S.names[S.spy])}</b></div><div style="text-align:center">${net.host?B('Новый раунд',()=>send({t:'again'}),'big'):''}${net.host?'':'<p class="muted">Ждём хоста…</p>'}</div>`;
+  let h=`<div class="role">${spy?'🕵️ Ты — <b>ШПИОН</b><br><small>Не выдай себя и угадай локацию!</small>':`📍 Локация: <b>${LOCS[S.loc]}</b><br><small>Найди шпиона вопросами. Не называй место прямо!</small>`}<br><small>⏱ <span id="tm">8:00</span></small></div>`;
+  if(spy)h+=`<h4>Знаешь, где вы? Назови локацию (если ошибёшься — проиграешь):</h4><div class="locs">${LOCS.map((l,k)=>B(l,()=>{if(confirm('Точно «'+l+'»?'))send({t:'guess',loc:k})},'sm ghost')).join('')}</div>`;
+  else h+=`<details><summary class="muted">Список возможных локаций</summary><p class="muted">${LOCS.join(' · ')}</p></details>`;
+  h+=`<h4>Голосование: кто шпион? ${S.votes[me]!==undefined?'(ты проголосовал)':''}</h4><div class="locs">${S.names.map((x,k)=>k===me?'':B(`${TOK[k]} ${E(x)}`,()=>{if(S.votes[me]===undefined&&confirm('Голосуешь за '+x+'?'))send({t:'vote',k})},S.votes[me]===k?'':'ghost')).join('')}</div><p class="muted">Проголосовало: ${Object.keys(S.votes).length}/${S.names.length}</p>`;
+  return h;
+},
+after(S){const el=$('#tm');if(!el||S.ph!=='play')return;const f=()=>{const s=Math.max(0,480-Math.floor((Date.now()-S.t0)/1000));el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};f();tmr=setInterval(f,1000)}};
+
+/* ============ 5. КРОКОДИЛ ============ */
+const WORDS=['Кот','Самолёт','Холодильник','Пицца','Дракон','Велосипед','Футбол','Космонавт','Зонтик','Робот','Динозавр','Гитара','Замок','Мороженое','Ёлка','Телефон','Акула','Радуга','Пират','Вулкан','Паук','Часы','Снеговик','Бабочка','Поезд','Маяк','Слон','Корона','Ракета','Банан','Мост','Очки','Ведро','Попугай','Тыква','Фонарь','Верблюд','Кактус','Лыжи','Утюг','Арбуз','Лодка','Сова','Ключ','Свеча','Пингвин','Барабан','Зебра','Домик','Кофе'];
+const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').trim();
+function line(x,s){x.strokeStyle=s.c;x.lineWidth=s.w*2;x.lineCap='round';x.beginPath();x.moveTo(s.p[0][0]*640,s.p[0][1]*440);x.lineTo(s.p[1][0]*640,s.p[1][1]*440);x.stroke()}
+function drawSeg(s){
+  const cv=$('#cv'),x=cv&&cv.getContext('2d');
+  if(s.clr){STROKES=[];if(x){x.fillStyle='#fff';x.fillRect(0,0,640,440)}}else{STROKES.push(s);x&&line(x,s)}
+}
+function emit(s){drawSeg(s);if(net.host)broadcast({t:'d',seg:s});else net.conn&&net.conn.send({t:'d',seg:s})}
+const CRO={id:'cro',name:'Крокодил',icon:'🐊',color:'#22c55e',min:2,max:6,
+desc:'Рисуй слово, а друзья отгадывают в чате. Кто угадал — получает очки и рисует следующим.',
+rules:'Один рисует загаданное слово (нельзя писать буквы!), остальные вводят догадки. Угадавший получает +2, художник +1, и угадавший становится следующим художником. Не нравится слово — нажми «Другое слово».',
+init(names){return{names,dr:0,word:WORDS[rnd(WORDS.length)],score:names.map(()=>0),chat:[],round:1}},
+act(S,i,a){
+  const n=S.names.length;
+  if(a.t==='guess'&&i!==S.dr){const t=String(a.text||'').trim().slice(0,40);if(!t)return;
+    if(norm(t)===norm(S.word)){S.score[i]+=2;S.score[S.dr]+=1;S.chat.push({n:i,t:`угадал(а)! Слово: «${S.word}»`,ok:1});S.dr=i;S.word=WORDS[rnd(WORDS.length)];S.round++}
+    else S.chat.push({n:i,t});
+    S.chat=S.chat.slice(-30);
+  }else if(a.t==='skip'&&i===S.dr){S.word=WORDS[rnd(WORDS.length)];S.round++;S.chat.push({n:i,t:'сменил(а) слово',ok:0})}
+},
+render(S,me){
+  const dr=me===S.dr;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.dr?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${i===S.dr?' ✏️':''}</span>`).join('')}</div>`;
+  h+=dr?`<div class="role" style="padding:10px">Рисуй: <b>${E(S.word)}</b> ${B('Другое слово',()=>send({t:'skip'}),'sm ghost')}</div>`:`<div class="role" style="padding:10px">${E(S.names[S.dr])} рисует: <b style="letter-spacing:4px">${S.word.split('').map(()=>'_').join(' ')}</b> <small>(${S.word.length} букв)</small></div>`;
+  h+=`<canvas id="cv" width="640" height="440"></canvas>`;
+  if(dr)h+=`<div class="tools">${['#111111','#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#ffffff'].map(c=>`<span class="sw" style="background:${c}" onclick="${H(()=>{tool.c=c})}"></span>`).join('')}${B('Тонко',()=>{tool.w=3},'sm ghost')}${B('Средне',()=>{tool.w=7},'sm ghost')}${B('Толсто',()=>{tool.w=16},'sm ghost')}${B('🗑 Очистить',()=>emit({clr:1}),'sm ghost')}<small class="muted">белый = ластик</small></div>`;
+  else{const go=H(()=>{const el=$('#gi'+S.round),t=el.value.trim();if(!t)return;el.value='';send({t:'guess',text:t})});
+    h+=`<div class="row" style="max-width:640px;margin:10px auto"><input id="gi${S.round}" placeholder="Твоя догадка…" style="flex:1" autocomplete="off" onkeydown="if(event.key==='Enter')${go}"><button class="btn" onclick="${go}">Отправить</button></div>`}
+  h+=`<div class="chat">${S.chat.slice().reverse().map(c=>`<div class="${c.ok?'ok':''}">${TOK[c.n]} <b>${E(S.names[c.n])}:</b> ${E(c.t)}</div>`).join('')}</div>`;
+  return h;
+},
+after(S,me){
+  if(lastR!==S.round){STROKES=[];lastR=S.round}
+  const cv=$('#cv');if(!cv)return;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,640,440);STROKES.forEach(s=>line(x,s));
+  if(me!==S.dr)return;let dn=false,last;
+  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+  cv.onpointerdown=e=>{dn=true;cv.setPointerCapture(e.pointerId);last=pt(e);emit({c:tool.c,w:tool.w,p:[last,last]})};
+  cv.onpointermove=e=>{if(!dn)return;const p=pt(e);emit({c:tool.c,w:tool.w,p:[last,p]});last=p};
+  cv.onpointerup=cv.onpointercancel=()=>{dn=false};
+}};
+
+/* ============ запуск ============ */
+const GAMES=[MONO,IMG,UNO,SPY,CRO],GM=Object.fromEntries(GAMES.map(g=>[g.id,g]));
+home();
+if(location.hash.length>3)joinRoom(location.hash.slice(1));
+</script>
+</body>
+</html>
