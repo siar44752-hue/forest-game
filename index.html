@@ -6,38 +6,61 @@
 <title>Игровая комната — играй с друзьями</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(1100px 600px at 15% -10%,#4c1d9566,transparent),radial-gradient(900px 500px at 100% 0,#0e749055,transparent),#0d0a1c;color:#ece9ff;min-height:100vh}
-header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 18px;position:sticky;top:0;background:#0d0a1ccc;backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid #ffffff14}
-#logo{font-size:20px;font-weight:800;cursor:pointer;white-space:nowrap}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0b0818;color:#ece9ff;min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(900px 600px at 10% -10%,#5b21b655,transparent),radial-gradient(800px 500px at 100% 10%,#0891b244,transparent),radial-gradient(700px 500px at 50% 110%,#be185d33,transparent);z-index:-2}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg i{position:absolute;font-style:normal;opacity:.07;animation:fl linear infinite}
+@keyframes fl{from{transform:translateY(110vh) rotate(0)}to{transform:translateY(-20vh) rotate(360deg)}}
+header{display:flex;gap:10px;align-items:center;padding:10px 18px;position:sticky;top:0;background:#0b0818dd;backdrop-filter:blur(10px);z-index:30;border-bottom:1px solid #ffffff14}
+#logo{font-size:20px;font-weight:800;cursor:pointer;white-space:nowrap;background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
 #me{cursor:pointer;font-weight:600;padding:6px 12px;background:#ffffff12;border-radius:20px;white-space:nowrap}
-input{background:#ffffff12;border:1px solid #ffffff26;color:#fff;border-radius:10px;padding:10px 12px;font-size:15px;outline:none;min-width:0}
+#frbtn{display:none}
+input{background:#ffffff12;border:1px solid #ffffff26;color:#fff;border-radius:10px;padding:10px 12px;font-size:15px;outline:none;min-width:0;font-family:inherit}
 input:focus{border-color:#a78bfa}
-main{max-width:1000px;margin:0 auto;padding:18px}
-.hero{text-align:center;padding:22px 0 6px}
-.hero h1{font-size:clamp(28px,6vw,50px);margin:0 0 6px;background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+#wrap{display:flex;gap:16px;max-width:1360px;margin:0 auto;padding:0 14px}
+main{flex:1;min-width:0;padding:16px 0 40px}
+#fr{width:250px;flex:none;position:sticky;top:62px;align-self:flex-start;max-height:calc(100vh - 74px);overflow:auto;background:#ffffff0c;border:1px solid #ffffff1c;border-radius:16px;padding:12px;margin-top:16px;font-size:14px}
+#fr h4{margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
+#fr small,.small{font-size:12px;color:#a9a3cc}
+.myid{background:#0004;border-radius:10px;padding:6px 10px;margin-bottom:8px;font-size:13px}.myid b{letter-spacing:2px;color:#67e8f9}
+.fr{display:flex;align-items:center;gap:8px;padding:6px 4px;border-radius:10px}.fr:hover{background:#ffffff0d}
+.fr .d{width:9px;height:9px;border-radius:50%;background:#64748b;flex:none}.fr.on .d{background:#22c55e;box-shadow:0 0 8px #22c55e}
+.fr .fn{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fr .x{cursor:pointer;opacity:.4}.fr .x:hover{opacity:1}
+.inv{background:#7c3aed33;border:1px solid #a78bfa66;border-radius:12px;padding:8px;margin:6px 0}
 .muted{color:#a9a3cc}
+.hero{text-align:center;padding:26px 0 8px}
+.hero h1{font-size:clamp(30px,6vw,54px);margin:8px 0;line-height:1.05}
+.hero h1 span{background:linear-gradient(90deg,#c4b5fd,#67e8f9,#f9a8d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pill{display:inline-block;padding:4px 14px;border-radius:20px;background:#ffffff12;border:1px solid #ffffff1f;font-size:13px}
 .join{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;align-items:center;margin:16px 0}
-.join input{width:130px;text-transform:uppercase;letter-spacing:3px;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:18px}
-.card{background:linear-gradient(160deg,#ffffff14,#ffffff06);border:1px solid #ffffff1f;border-top:4px solid var(--c);border-radius:18px;padding:18px;transition:.18s}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #0008,0 0 0 1px var(--c)}
-.card .ic{font-size:44px}.card h3{margin:6px 0}.card p{margin:0 0 10px;color:#c9c4e8;font-size:14px;line-height:1.4}
-.card small{color:#a9a3cc;display:block;margin-bottom:8px}
+.join input{width:150px;text-transform:uppercase;letter-spacing:3px;text-align:center}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:10px 0}.tabs input{margin-left:auto;width:190px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:12px}
+.card{background:#ffffff0b;border:1px solid #ffffff1c;border-radius:20px;overflow:hidden;transition:.2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-5px);box-shadow:0 16px 36px #0009,0 0 0 1px var(--c)}
+.ban{height:104px;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(circle at 30% 20%,var(--c),transparent 70%),linear-gradient(135deg,#ffffff0a,#0006)}
+.ban .ic{font-size:56px;filter:drop-shadow(0 6px 10px #0008);transition:.3s}.card:hover .ic{transform:scale(1.18) rotate(-6deg)}
+.ban .tag{position:absolute;top:8px;right:10px;font-size:12px;background:#0006;padding:2px 9px;border-radius:12px}
+.cb{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}.cb h3{margin:0 0 4px}.cb p{margin:0 0 10px;color:#c9c4e8;font-size:13.5px;line-height:1.4;flex:1}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.meta span{font-size:12px;background:#ffffff12;padding:2px 9px;border-radius:12px;color:#c9c4e8}
 .btn{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;border-radius:12px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;margin:3px;transition:.15s;font-family:inherit}
 .btn:hover{filter:brightness(1.15)}.btn:active{transform:scale(.97)}
-.btn.big{padding:13px 22px;font-size:17px}.btn.sm{padding:6px 12px;font-size:13px}
-.btn.ghost{background:#ffffff14}
+.btn.big{padding:13px 24px;font-size:17px}.btn.sm{padding:6px 12px;font-size:13px}.btn.ghost{background:#ffffff14}
 .bar{display:flex;gap:6px;align-items:center;margin-bottom:12px;flex-wrap:wrap}.bar b{font-size:18px;margin-right:auto}
-.lob{max-width:560px;margin:20px auto;text-align:center;background:#ffffff0d;border:1px solid #ffffff1f;border-radius:20px;padding:22px}
+.lob{max-width:600px;margin:20px auto;text-align:center;background:#ffffff0d;border:1px solid #ffffff1f;border-radius:22px;padding:22px}
 .lob h2{margin:4px 0}.code{font-size:56px;font-weight:900;letter-spacing:10px;color:#67e8f9;margin:6px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .pl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0 16px}
 .chip{display:inline-flex;gap:6px;align-items:center;background:#ffffff12;border:1px solid var(--c,#fff3);border-radius:20px;padding:5px 12px;font-size:14px}
-.chip.st{background:#7c3aed44}
+.chip.st{background:#7c3aed55}.chip.out{opacity:.45}
 .rules{text-align:left;font-size:13px;color:#c9c4e8;background:#0004;border-radius:12px;padding:10px 14px;margin:10px 0}
+.opts{background:#0003;border-radius:12px;padding:6px 10px;margin:10px 0;text-align:left}.orow{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:3px 0;font-size:14px}
 .av{font-size:30px;cursor:pointer;padding:6px;border-radius:12px;border:2px solid transparent;display:inline-block}.av.on{border-color:#a78bfa;background:#7c3aed33}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111c;border:1px solid #fff3;padding:10px 18px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111e;border:1px solid #fff3;padding:10px 18px;border-radius:12px;opacity:0;transition:.3s;pointer-events:none;z-index:50}
 #toast.on{opacity:1}
+.cf{position:fixed;top:-30px;font-size:26px;z-index:60;pointer-events:none;animation:cf 2.8s ease-in forwards}
+@keyframes cf{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 .sc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .mb{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:3px;aspect-ratio:1;max-width:680px;margin:0 auto}
 .mc{background:#ffffff10;border:1px solid #ffffff1a;border-radius:6px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(7px,1.5vw,11px);padding:2px;overflow:hidden;line-height:1.15}
@@ -48,88 +71,152 @@ main{max-width:1000px;margin:0 auto;padding:18px}
 .pp{display:flex;gap:8px;align-items:center;padding:6px 12px;border-radius:12px;background:#ffffff0d;border-left:4px solid var(--c);margin:4px 0}.pp.cur{background:#7c3aed44}.pp.out{opacity:.4;text-decoration:line-through}
 .log{font-size:12px;color:#b8b2dc;max-height:90px;overflow:hidden}
 .hand,.tbl{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
-.pc{width:100px;height:140px;border-radius:12px;overflow:hidden;cursor:pointer;border:3px solid transparent;transition:.15s;flex:none}
-.pc:hover{transform:translateY(-4px)}.pc.sel{border-color:#fff;transform:translateY(-8px);box-shadow:0 0 18px #fff6}
-.ic3{width:100%;height:100%;display:flex;align-items:center;justify-content:space-around;font-size:30px}
-.ic3.l1{flex-direction:column}.ic3.l2{flex-wrap:wrap;padding:10px}.ic3 span:nth-child(2){font-size:42px}.ic3.l2 span:nth-child(1){font-size:50px}
+.pc{width:104px;height:146px;border-radius:12px;overflow:hidden;cursor:pointer;border:3px solid transparent;transition:.15s;flex:none;background:#000}
+.pc svg{display:block;width:100%;height:100%}
+.pc:hover{transform:translateY(-4px) scale(1.04)}.pc.sel{border-color:#fff;transform:translateY(-8px);box-shadow:0 0 18px #fff6}
 .tc{text-align:center;font-size:12px;display:flex;flex-direction:column;gap:3px;align-items:center}.tc.win .pc{border-color:#facc15;box-shadow:0 0 18px #facc1588}
-.uc{width:64px;height:92px;border-radius:10px;border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;cursor:pointer;transition:.15s;flex:none;text-shadow:0 2px 4px #0006}
+.uc{width:64px;height:92px;border-radius:10px;border:3px solid #fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;cursor:pointer;transition:.15s;flex:none;text-shadow:0 2px 4px #0006;box-shadow:inset 0 0 0 4px #fff2}
 .uc.no{opacity:.45;cursor:default}.uc.ok:hover{transform:translateY(-8px)}.uc.big{width:90px;height:130px;font-size:40px;cursor:default}
 .uno{display:flex;gap:18px;align-items:center;justify-content:center;margin:14px 0;flex-wrap:wrap}
 .dot{display:inline-block;width:22px;height:22px;border-radius:50%;border:2px solid #fff;vertical-align:middle}
 .role{font-size:22px;text-align:center;background:#ffffff10;border-radius:16px;padding:22px;margin:12px 0}
 .locs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-#cv{width:100%;max-width:640px;aspect-ratio:640/440;background:#fff;border-radius:14px;touch-action:none;display:block;margin:0 auto;cursor:crosshair}
+#cv{width:100%;max-width:800px;background:#fff;border-radius:14px;touch-action:none;display:block;margin:0 auto;cursor:crosshair}
+#cv.hk{background:#0e4a5c;cursor:none}
 .tools{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0}
-.sw{width:28px;height:28px;border-radius:50%;border:2px solid #fff8;cursor:pointer;display:inline-block}
-.chat{max-width:640px;margin:10px auto;font-size:14px}.chat div{padding:3px 0}.chat .ok{color:#86efac;font-weight:700}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid #fff8;cursor:pointer;display:inline-block}
+.chat{max-width:640px;margin:10px auto;font-size:14px}.chat div{padding:3px 0}.chat .ok{color:#86efac;font-weight:700}.chat .sys{color:#fbbf24;font-style:italic}
 .dk{width:58px;height:84px;background:#fff;color:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;cursor:pointer;flex:none;border:2px solid #0003;transition:.15s;flex-direction:column}
 .dk.r{color:#dc2626}.dk.big{width:70px;height:100px;cursor:default}.dk.no{opacity:.5;cursor:default}.dk:hover:not(.no):not(.big){transform:translateY(-6px)}
 .pair{position:relative;width:84px;height:100px}.pair .dk{position:absolute;left:0;top:0}.pair .dk.on{left:24px;top:14px;box-shadow:0 0 0 2px #22c55e}
 .dt{border-collapse:collapse;width:100%;max-width:640px;margin:10px auto;font-size:13px}.dt td,.dt th{border:1px solid #ffffff1f;padding:5px 7px;text-align:center}.dt td:first-child{text-align:left}.pk{background:#22c55e33;cursor:pointer;font-weight:700}
 .dd{font-size:54px;cursor:pointer;padding:0 4px;border-radius:10px;line-height:1.1;display:inline-block}.dd.hold{background:#facc1544;box-shadow:0 0 0 2px #facc15}
-.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:10px auto}
-.mm{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:36px;background:#ffffff14;border:3px solid #ffffff22;border-radius:12px;cursor:pointer}.mm.up{background:#ffffff33}
+.mg{display:grid;gap:8px;max-width:420px;margin:10px auto}
+.mm{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,5vw,34px);background:#ffffff14;border:3px solid #ffffff22;border-radius:12px;cursor:pointer;transition:.2s}.mm.up{background:#ffffff33}
 .c4{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:420px;margin:10px auto;background:#1d4ed8;padding:10px;border-radius:14px}
-.c4 i{aspect-ratio:1;border-radius:50%;background:#0d0a1c;display:block;cursor:pointer}.c4 i.p1{background:#ef4444}.c4 i.p2{background:#facc15}
+.c4 i{aspect-ratio:1;border-radius:50%;background:#0b0818;display:block;cursor:pointer}.c4 i.p1{background:#ef4444}.c4 i.p2{background:#facc15}
+.rv{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-width:440px;margin:10px auto;background:#14532d;padding:6px;border-radius:12px}
+.rv i{aspect-ratio:1;background:#16a34a;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:clamp(16px,5vw,30px);border-radius:4px}.rv i.mv{cursor:pointer;background:#22c55e}.rv i.mv:after{content:"•";color:#fff8}
 .qo{display:block;width:100%;text-align:left;margin:6px 0;padding:12px 14px;background:#ffffff14}.qo.ok{background:#16a34a}.qo.bad{background:#dc2626}.qo.me{box-shadow:0 0 0 2px #fff}
+@media(max-width:900px){#fr{position:fixed;right:8px;top:58px;z-index:40;display:none;width:270px;margin:0}#fr.open{display:block}#frbtn{display:inline-block}}
 </style>
 </head>
 <body>
+<div class="bg" id="bg"></div>
 <header>
   <div id="logo" onclick="leave()">🎲 Игровая комната</div>
+  <div style="flex:1"></div>
+  <button id="frbtn" class="btn sm ghost" onclick="$('#fr').classList.toggle('open')">👥 <span id="frn"></span></button>
   <div id="me" onclick="welcome()"></div>
 </header>
-<main id="app"></main>
+<div id="wrap"><main id="app"></main><aside id="fr"></aside></div>
 <div id="toast"></div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 /* ============ утилиты ============ */
-var reg=[],sel=null,unoPend=null,STROKES=[],lastR=0,tool={c:'#111111',w:4},tmr=null,net={},prof=null;
+var reg=[],freg=[],sel=null,unoPend=null,STROKES=[],lastR=0,tool={c:'#111111',w:5},tmr=null,net={},prof=null,uid=null,FR=[],online={},pc={},pend=[],invs=[],pst='в меню',pp=null,presDup=false,HK=null,hkRaf=0,homeCat='all',homeQ='';
 const $=s=>document.querySelector(s),app=$('#app');
 const E=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const B=(l,f,c='')=>{reg.push(f);return `<button class="btn ${c}" onclick="reg[${reg.length-1}]()">${l}</button>`};
+const FB=(l,f,c='')=>{freg.push(f);return `<button class="btn ${c}" onclick="freg[${freg.length-1}]()">${l}</button>`};
+const FH=f=>{freg.push(f);return `freg[${freg.length-1}]()`};
 const H=f=>{reg.push(f);return `reg[${reg.length-1}]()`};
 const rnd=n=>Math.floor(Math.random()*n);
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
-const COL=['#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#f97316'];
-const DEFTOK=['🔴','🔵','🟢','🟡','🟣','🟠'],TOK=DEFTOK.slice();
-const setTok=ps=>{for(let i=0;i<6;i++)TOK[i]=(ps[i]&&ps[i].av)||DEFTOK[i]};
-const AVS=['🦊','🐼','🐸','🐯','🦄','🐙','🦁','🐵','🐧','🐲','👽','🎃','🐱','🐶','🦉','🐻'];
-const BN=['Борис','Вера','Гоша','Дина','Ёжик'],BA=['🤖','👾','🧠','🎩','🦾'];
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2800)}
+const COL=['#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#f97316','#14b8a6','#ec4899','#84cc16','#06b6d4'];
+const DEFTOK=['🔴','🔵','🟢','🟡','🟣','🟠','⚪','⚫','🟤','🔶'],TOK=DEFTOK.slice();
+const setTok=ps=>{for(let i=0;i<10;i++)TOK[i]=(ps[i]&&ps[i].av)||DEFTOK[i]};
+const AVS=['🦊','🐼','🐸','🐯','🦄','🐙','🦁','🐵','🐧','🐲','👽','🎃','🐱','🐶','🦉','🐻','🦖','🐰','🦈','🧛'];
+const BN=['Борис','Вера','Гоша','Дина','Ёжик','Зина','Иван','Клава','Лев'],BA=['🤖','👾','🧠','🎩','🦾','🛸','🎲','🔮','🧞'];
+const LV=()=>net.lvl==null?1:net.lvl;
+const v_=(o,k,d)=>o&&o[k]!=null?o[k]:d;
+const hnow=()=>Date.now()-(net.skew||0);
+const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').trim();
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),3000)}
 function pickSel(el,id){sel=id;document.querySelectorAll('.hand .pc').forEach(e=>e.classList.remove('sel'));el.classList.add('sel')}
-try{prof=JSON.parse(localStorage.getItem('prof'))}catch(e){}
+function confetti(){const a=['🎉','✨','⭐','🎊','🏆'];for(let i=0;i<36;i++){const d=document.createElement('div');d.className='cf';d.textContent=a[rnd(a.length)];d.style.left=rnd(100)+'vw';d.style.animationDelay=(Math.random()*.8)+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),4000)}}
+(function(){let h='';for(let i=0;i<16;i++)h+=`<i style="left:${rnd(100)}%;font-size:${24+rnd(40)}px;animation-duration:${25+rnd(35)}s;animation-delay:-${rnd(40)}s">${['🎲','🃏','♠️','🎯','🧩','🎭','🏙️','🎮'][rnd(8)]}</i>`;$('#bg').innerHTML=h})();
+try{prof=JSON.parse(localStorage.getItem('prof'));uid=localStorage.getItem('uid');FR=JSON.parse(localStorage.getItem('fr'))||[]}catch(e){}
+if(!uid){uid=Array.from({length:6},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[rnd(32)]).join('');try{localStorage.setItem('uid',uid)}catch(e){}}
+const saveFr=()=>{try{localStorage.setItem('fr',JSON.stringify(FR))}catch(e){}};
 const stats=()=>{try{return JSON.parse(localStorage.getItem('st'))||{}}catch(e){return{}}};
 function addStat(g,w){const s=stats();s[g]=s[g]||{p:0,w:0};s[g].p++;if(w)s[g].w++;try{localStorage.setItem('st',JSON.stringify(s))}catch(e){}}
 function setHead(){$('#me').innerHTML=prof?`${prof.av} ${E(prof.name)} ✎`:''}
 
-/* ============ регистрация (профиль) ============ */
+/* ============ регистрация ============ */
 function welcome(then){
   reg=[];let av=prof?prof.av:AVS[rnd(AVS.length)];
-  app.innerHTML=`<div class="lob"><h2>👋 ${prof?'Твой профиль':'Добро пожаловать!'}</h2><p class="muted">Придумай имя и выбери аватар — друзья увидят их в игре. Профиль хранится в твоём браузере.</p>
+  app.innerHTML=`<div class="lob"><h2>👋 ${prof?'Твой профиль':'Добро пожаловать!'}</h2><p class="muted">Придумай имя и выбери аватар — друзья увидят их в играх. Профиль и твой ID хранятся в браузере.</p>
   <input id="pn" value="${prof?E(prof.name):''}" maxlength="14" placeholder="Твоё имя" style="width:80%;font-size:18px;text-align:center">
   <div style="margin:14px 0">${AVS.map(a=>`<span class="av ${a===av?'on':''}" onclick="${H(()=>{av=a;document.querySelectorAll('.av').forEach(e=>e.classList.toggle('on',e.textContent===a))})}">${a}</span>`).join('')}</div>
-  ${B('Готово ➜',()=>{const n=$('#pn').value.trim();if(!n)return toast('Введи имя');prof={name:n.slice(0,14),av};try{localStorage.setItem('prof',JSON.stringify(prof))}catch(e){}setHead();typeof then==='function'?then():home()},'big')}</div>`;
+  ${B('Готово ➜',()=>{const n=$('#pn').value.trim();if(!n)return toast('Введи имя');prof={name:n.slice(0,14),av};try{localStorage.setItem('prof',JSON.stringify(prof))}catch(e){}setHead();initPresence();renderFr();typeof then==='function'?then():home()},'big')}</div>`;
 }
 
-/* ============ сеть (WebRTC, PeerJS) ============ */
+/* ============ друзья и присутствие ============ */
+function initPresence(){
+  if(pp||!prof)return;
+  pp=new Peer('ggu-'+uid);
+  pp.on('open',()=>{pollFriends();setInterval(pollFriends,10000)});
+  pp.on('connection',c=>presConn(c));
+  pp.on('disconnected',()=>{try{pp.reconnect()}catch(e){}});
+  pp.on('error',e=>{if(e.type==='unavailable-id'){presDup=true;renderFr()}});
+}
+function presConn(c){
+  c.on('open',()=>c.send({t:'me',uid,name:prof.name,av:prof.av,s:pst}));
+  c.on('data',m=>presRecv(c,m));
+  c.on('close',()=>{if(c._u&&pc[c._u]===c){delete pc[c._u];delete online[c._u];renderFr()}});
+}
+function connectFriend(f){if(!pp||!pp.open||presDup||(pc[f.id]&&pc[f.id].open))return;try{presConn(pp.connect('ggu-'+f.id))}catch(e){}}
+const pollFriends=()=>FR.forEach(connectFriend);
+function setSt(s){pst=s;Object.values(pc).forEach(c=>c.open&&c.send({t:'st',s}))}
+function presRecv(c,m){
+  if(m.t==='me'){c._u=m.uid;const f=FR.find(x=>x.id===m.uid);if(f){f.name=m.name;f.av=m.av;saveFr();pc[m.uid]=c;online[m.uid]=m.s||'в сети';renderFr()}}
+  else if(m.t==='st'&&c._u&&online[c._u]!==undefined){online[c._u]=m.s||'в сети';renderFr()}
+  else if(m.t==='req'){if(FR.some(x=>x.id===m.uid)){addFriend(m);c.send({t:'acc',uid,name:prof.name,av:prof.av})}else if(!pend.some(x=>x.uid===m.uid)){m.c=c;pend.push(m);renderFr();toast(m.name+' хочет добавить тебя в друзья')}}
+  else if(m.t==='acc'){addFriend(m);toast(m.name+' теперь твой друг!')}
+  else if(m.t==='inv'&&FR.some(x=>x.id===m.uid)){invs=invs.filter(i=>i.code!==m.code);invs.push(m);renderFr();toast(m.name+' зовёт тебя играть!');$('#fr').classList.add('open')}
+}
+function addFriend(m){let f=FR.find(x=>x.id===m.uid);if(!f){f={id:m.uid,name:m.name,av:m.av};FR.push(f)}else{f.name=m.name;f.av=m.av}saveFr();pend=pend.filter(x=>x.uid!==m.uid);connectFriend(f);renderFr()}
+function acceptReq(m){addFriend(m);try{m.c.open&&m.c.send({t:'acc',uid,name:prof.name,av:prof.av})}catch(e){}}
+function addById(id){
+  id=(id||'').trim().toUpperCase();if(!id)return;
+  if(id===uid)return toast('Это твой собственный ID 🙂');
+  if(FR.some(f=>f.id===id))return toast('Он уже в друзьях');
+  if(!pp||!pp.open)return toast('Сеть ещё подключается, попробуй через секунду');
+  const c=pp.connect('ggu-'+id);let ok=false;
+  c.on('open',()=>{ok=true;presConn(c);c.send({t:'req',uid,name:prof.name,av:prof.av});toast('Заявка отправлена! Друг должен её принять.')});
+  setTimeout(()=>{if(!ok){toast('Не нашли такого игрока онлайн. Друг должен быть на сайте.');try{c.close()}catch(e){}}},7000);
+}
+function invite(f){const c=pc[f.id];if(!c||!c.open)return toast('Друг не в сети');c.send({t:'inv',uid,name:prof.name,av:prof.av,code:net.code,gid:net.gid});toast('Приглашение отправлено: '+f.name)}
+function joinFromInvite(code){if(net.gid||net.peer)leave(true);joinRoom(code)}
+function renderFr(){
+  const el=$('#fr');if(!el)return;
+  if(!prof){el.style.display='none';return}el.style.display='';
+  const old=($('#fid')||{}).value||'',inLobby=net.code&&net.code!=='solo'&&!net.started&&net.gid,onl=FR.filter(f=>online[f.id]!==undefined).length;
+  freg=[];$('#frn').textContent=onl||'';
+  el.innerHTML=`<h4>👥 Друзья <small>${onl} в сети</small></h4>
+  <div class="myid">Мой ID: <b>${uid}</b> <span style="cursor:pointer" onclick="${"try{navigator.clipboard.writeText(uid)}catch(e){}toast('ID скопирован')"}">📋</span></div>
+  ${presDup?'<p class="small">⚠ Сайт открыт в другой вкладке — друзья видят тебя оттуда.</p>':''}
+  ${invs.map(i=>`<div class="inv">${i.av} <b>${E(i.name)}</b> зовёт в «${E(GM[i.gid]?GM[i.gid].name:'игру')}»<br>${FB('Войти',()=>{invs=invs.filter(x=>x!==i);joinFromInvite(i.code)},'sm')}${FB('✕',()=>{invs=invs.filter(x=>x!==i);renderFr()},'sm ghost')}</div>`).join('')}
+  ${pend.map(m=>`<div class="inv">${m.av} <b>${E(m.name)}</b> хочет дружить<br>${FB('Принять',()=>acceptReq(m),'sm')}${FB('✕',()=>{pend=pend.filter(x=>x!==m);renderFr()},'sm ghost')}</div>`).join('')}
+  ${FR.map(f=>{const on=online[f.id]!==undefined;return `<div class="fr ${on?'on':''}"><span class="d"></span><span>${f.av}</span><span class="fn">${E(f.name)}<small>${on?E(online[f.id]):'не в сети'}</small></span>${on&&inLobby?FB('➕',()=>invite(f),'sm'):''}<span class="x" onclick="${FH(()=>{if(confirm('Удалить '+f.name+' из друзей?')){FR=FR.filter(x=>x!==f);delete online[f.id];saveFr();renderFr()}})}">✕</span></div>`}).join('')||'<p class="small">Пока никого. Добавь друга по его ID — и зови в игры.</p>'}
+  <div class="row" style="margin-top:8px"><input id="fid" placeholder="ID друга" maxlength="8" style="width:110px;text-transform:uppercase" value="${E(old)}">${FB('Добавить',()=>addById($('#fid').value),'sm')}</div>
+  <p class="small">${inLobby?'Нажми ➕ у друга в сети, чтобы позвать в комнату.':'Чтобы пригласить — создай комнату любой игры.'}</p>`;
+}
+
+/* ============ сеть ============ */
 const broadcast=m=>Object.values(net.conns||{}).forEach(c=>c.open&&c.send(m));
 const genCode=()=>Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ'[rnd(24)]).join('');
 const mePl=()=>({name:prof.name,av:prof.av});
-
-function hostRoom(gid){
-  net={host:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false};setTok(net.players);openPeer(genCode());
-}
+function hostRoom(gid){net={host:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false,opts:{},lvl:1};setTok(net.players);openPeer(genCode())}
 function soloGame(gid){
-  const G=GM[gid];net={host:true,solo:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false,code:'solo'};
-  for(let k=0;k<G.sb;k++)addBot();start();
+  const G=GM[gid];net={host:true,solo:true,gid,players:[mePl()],conns:{},me:0,S:null,started:false,code:'solo',opts:{},lvl:1};
+  for(let k=0;k<G.sb;k++)addBot();setTok(net.players);lobby();
 }
-function addBot(){const u=net.players.filter(p=>p.bot).length;net.players.push({name:'Бот '+BN[u%5],av:BA[u%5],bot:true})}
+function addBot(){const u=net.players.filter(p=>p.bot).length;net.players.push({name:'Бот '+BN[u%9],av:BA[u%9],bot:true})}
 function openPeer(code){
-  net.code=code;
-  const p=new Peer('ggames-'+code);net.peer=p;
+  net.code=code;const p=new Peer('ggames-'+code);net.peer=p;
   p.on('open',()=>{history.replaceState(null,'','#'+code);lobby()});
   p.on('disconnected',()=>{try{p.reconnect()}catch(e){}});
   p.on('error',e=>{if(e.type==='unavailable-id'){p.destroy();openPeer(genCode())}else if(e.type!=='peer-unavailable')toast('Ошибка сети: '+e.type)});
@@ -139,7 +226,7 @@ function openPeer(code){
       const i=c._i;if(i==null||net.conns[i]!==c)return;const G=GM[net.gid];
       if(!net.started)return removePlayer(i);
       toast((net.players[i]?net.players[i].name:'Игрок')+' вышел');
-      if(G.bot){net.players[i].bot=true;botTick()}else{net.started=false;removePlayer(i)}
+      if(G.bot){net.players[i].bot=true;botTick()}else{clearInterval(net.rt);removePlayer(i)}
     });
   });
 }
@@ -153,6 +240,7 @@ function hostRecv(c,m){
     c.send({t:'hi',idx:i});sendLobby();
   }else if(m.t==='start'){if(!net.started&&net.players.length>=G.min)start()}
   else if(m.t==='act'&&net.started)applyAct(c._i,m.a);
+  else if(m.t==='mv'&&HK&&net.gid==='hock'&&c._i!=null)HK.tg[c._i]=[+m.x||0,+m.y||0];
   else if(m.t==='d'){drawSeg(m.seg);Object.values(net.conns).forEach(o=>o!==c&&o.open&&o.send(m))}
 }
 function removePlayer(j){
@@ -160,11 +248,11 @@ function removePlayer(j){
   for(const k in net.conns){const o=+k;if(o===j)continue;const ni=o>j?o-1:o;nc[ni]=net.conns[k];nc[ni]._i=ni;if(ni!==o&&nc[ni].open)nc[ni].send({t:'hi',idx:ni})}
   net.conns=nc;sendLobby();
 }
-function sendLobby(){net.started=false;setTok(net.players);broadcast({t:'lobby',gid:net.gid,players:net.players,code:net.code});lobby()}
+function sendLobby(){net.started=false;clearInterval(net.rt);clearTimeout(net.bt);clearTimeout(net.at);setTok(net.players);broadcast({t:'lobby',gid:net.gid,players:net.players,code:net.code,opts:net.opts});lobby()}
 function joinRoom(code){
   code=(code||'').trim().toUpperCase();if(code.length<4)return toast('Введи код комнаты');
   if(!prof)return welcome(()=>joinRoom(code));
-  net={host:false,players:[],me:-1,code,S:null,started:false};
+  net={host:false,players:[],me:-1,code,S:null,started:false,opts:{}};
   app.innerHTML='<p class="muted" style="text-align:center;margin-top:60px">Подключаемся к комнате '+E(code)+'…</p>';
   const p=new Peer();net.peer=p;
   net.jt=setTimeout(()=>{if(net.peer===p&&net.me<0){toast('Не удалось подключиться. Проверь код и сеть.');cleanup();home()}},12000);
@@ -178,29 +266,32 @@ function joinRoom(code){
 }
 function guestRecv(m){
   if(m.t==='hi'){net.me=m.idx;clearTimeout(net.jt)}
-  else if(m.t==='lobby'){net.gid=m.gid;net.players=m.players;net.code=m.code;net.started=false;setTok(net.players);lobby()}
-  else if(m.t==='state'){setTok(net.players);net.S=m.S;net.started=true;showGame()}
+  else if(m.t==='lobby'){net.gid=m.gid;net.players=m.players;net.code=m.code;net.opts=m.opts||{};net.started=false;setTok(net.players);lobby()}
+  else if(m.t==='state'){setTok(net.players);net.skew=Date.now()-(m.S.now||Date.now());net.S=m.S;net.started=true;showGame()}
+  else if(m.t==='rt'){const h=m.h;HK={k:[h[0],h[1],0,0],p:[[h[2],h[3]],[h[4],h[5]]]}}
   else if(m.t==='d')drawSeg(m.seg);
   else if(m.t==='err'){toast(m.msg);cleanup();home()}
   else if(m.t==='end'){toast('Хост закрыл комнату');cleanup();home()}
 }
-function cleanup(){clearTimeout(net.jt);clearTimeout(net.bt);clearTimeout(net.at);try{net.peer&&net.peer.destroy()}catch(e){}net={};clearInterval(tmr);try{history.replaceState(null,'',location.pathname)}catch(e){}}
-function leave(){if(net.host)broadcast({t:'end'});cleanup();if(prof)home();else welcome()}
-function toLobby(){sendLobby()}
-function reqStart(){if(net.host)start();else net.conn&&net.conn.send({t:'start'})}
+function cleanup(){clearTimeout(net.jt);clearTimeout(net.bt);clearTimeout(net.at);clearInterval(net.rt);try{net.peer&&net.peer.destroy()}catch(e){}net={};HK=null;clearInterval(tmr);try{history.replaceState(null,'',location.pathname)}catch(e){}}
+function leave(quiet){if(net.host)broadcast({t:'end'});cleanup();if(quiet===true)return;if(prof)home();else welcome()}
+const toLobby=()=>sendLobby();
+const reqStart=()=>{if(net.host)start();else net.conn&&net.conn.send({t:'start'})};
+const optsOf=G=>{const o={};(G.opts||[]).forEach(op=>o[op.k]=v_(net.opts,op.k,op.d||0));return o};
 function start(){
   const G=GM[net.gid];if(net.players.length<G.min)return;
-  setTok(net.players);clearTimeout(net.bt);clearTimeout(net.at);
-  net.S=G.init(net.players.map(p=>p.name));net.S.gameId=Date.now()+'_'+rnd(1e6);net.started=true;
-  STROKES=[];lastR=0;broadcast({t:'state',S:net.S});showGame();botTick();
+  setTok(net.players);clearTimeout(net.bt);clearTimeout(net.at);clearInterval(net.rt);
+  net.S=G.init(net.players.map(p=>p.name),optsOf(G));net.S.gameId=Date.now()+'_'+rnd(1e6);net.S.now=Date.now();net.started=true;
+  STROKES=[];lastR=0;HK=null;broadcast({t:'state',S:net.S});showGame();G.onStart&&G.onStart();schedAuto();botTick();
 }
 function send(a){sel=null;unoPend=null;if(net.host)applyAct(net.me,a);else net.conn&&net.conn.send({t:'act',a})}
+function schedAuto(){
+  const S=net.S;clearTimeout(net.at);
+  if(S&&S.auto){const au=S.auto,ms=au.at?Math.max(0,au.at-Date.now()):au.ms;net.at=setTimeout(()=>{if(net.S===S&&S.auto===au)applyAct(-1,au)},ms)}
+}
 function applyAct(i,a){
   const G=GM[net.gid];try{G.act(net.S,i,a)}catch(e){console.error(e);return}
-  broadcast({t:'state',S:net.S});showGame();
-  const S=net.S;clearTimeout(net.at);
-  if(S.auto){const au=S.auto;net.at=setTimeout(()=>{if(net.S===S)applyAct(-1,au)},au.ms)}
-  botTick();
+  net.S.now=Date.now();broadcast({t:'state',S:net.S});showGame();schedAuto();botTick();
 }
 function botTick(){
   clearTimeout(net.bt);const G=GM[net.gid],S=net.S;
@@ -213,29 +304,46 @@ function botTick(){
 }
 
 /* ============ экраны ============ */
+const CATS=[['all','🎮 Все'],['card','🃏 Карточные'],['board','♟ Настольные'],['party','🎉 Компания'],['fast','⚡ На скорость'],['solo','🤖 С ботами']];
 function home(){
-  reg=[];clearInterval(tmr);setHead();const st=stats();
-  app.innerHTML=`<div class="hero"><h1>Играй с друзьями онлайн</h1>
-  <p class="muted">Выбери игру → создай комнату → отправь другу код или ссылку. Или играй одному против ботов.</p></div>
-  <div class="join"><span class="muted">Есть код комнаты?</span><input id="jc" maxlength="5" placeholder="КОД">${B('Войти',()=>joinRoom($('#jc').value))}</div>
-  <div class="grid">${GAMES.map(g=>`<div class="card" style="--c:${g.color}"><div class="ic">${g.icon}</div><h3>${g.name}</h3><p>${g.desc}</p>
-    <small>👥 ${g.min}–${g.max} · ${st[g.id]?`🏆 ${st[g.id].w} побед из ${st[g.id].p}`:'ещё не играл'}</small>
-    ${B('👥 С друзьями',()=>hostRoom(g.id),'sm')}${g.sb!=null?B('🤖 Против ботов',()=>soloGame(g.id),'sm ghost'):''}</div>`).join('')}</div>`;
+  reg=[];clearInterval(tmr);setHead();setSt('в меню');const st=stats();
+  const tw=Object.values(st).reduce((a,s)=>a+s.w,0),tp=Object.values(st).reduce((a,s)=>a+s.p,0);
+  app.innerHTML=`<section class="hero"><span class="pill">🏆 ${tw} побед · ${tp} партий</span><h1>Играй с друзьями <span>онлайн</span></h1>
+  <p class="muted">${GAMES.length} игр прямо в браузере. Создай комнату, позови друга по ID или играй против ботов.</p>
+  <div class="join"><input id="jc" maxlength="5" placeholder="КОД">${B('Войти по коду ➜',()=>joinRoom($('#jc').value))}${B('🎲 Случайная игра',()=>{const g=GAMES.filter(x=>x.sb!=null);soloGame(g[rnd(g.length)].id)},'ghost')}</div></section>
+  <div class="tabs">${CATS.map(([k,l])=>B(l,()=>{homeCat=k;home()},'sm'+(homeCat===k?'':' ghost'))).join('')}<input id="hq" placeholder="🔍 Найти игру" value="${E(homeQ)}" oninput="homeQ=this.value;hgrid()"></div><div class="grid" id="hg"></div>`;
+  hgrid();renderFr();
+}
+function hgrid(){
+  const st=stats(),q=norm(homeQ);
+  const L=GAMES.filter(g=>(homeCat==='all'||(homeCat==='solo'?g.sb!=null:g.cat.includes(homeCat)))&&(!q||norm(g.name+' '+g.desc).includes(q)));
+  $('#hg').innerHTML=L.map(g=>`<div class="card" style="--c:${g.color}"><div class="ban"><span class="ic">${g.icon}</span><span class="tag">${g.time}</span></div><div class="cb"><h3>${g.name}</h3><p>${g.desc}</p>
+    <div class="meta"><span>👥 ${g.min===g.max?g.min:g.min+'–'+g.max}</span>${g.sb!=null?'<span>🤖 боты</span>':''}<span>${st[g.id]?'🏆 '+st[g.id].w+'/'+st[g.id].p:'✨ новая'}</span></div>
+    <div>${B('👥 С друзьями',()=>hostRoom(g.id),'sm')}${g.sb!=null?B('🤖 С ботами',()=>soloGame(g.id),'sm ghost'):''}</div></div></div>`).join('')||'<p class="muted">Ничего не найдено</p>';
+}
+function optsUI(G){
+  const host=net.host;let h='';
+  (G.opts||[]).forEach(op=>{const cur=v_(net.opts,op.k,op.d||0);
+    h+=`<div class="orow"><span>${op.n}</span><div>${op.v.map((l,ix)=>host?B(l,()=>{net.opts[op.k]=ix;net.solo?lobby():sendLobby()},'sm'+(ix===cur?'':' ghost')):`<span class="chip ${ix===cur?'st':''}">${l}</span>`).join('')}</div></div>`});
+  if(host&&G.bot)h+=`<div class="orow"><span>Уровень ботов</span><div>${['Лёгкий','Средний','Сильный'].map((l,ix)=>B(l,()=>{net.lvl=ix;lobby()},'sm'+(ix===LV()?'':' ghost'))).join('')}</div></div>`;
+  return h?`<div class="opts">${h}</div>`:'';
 }
 function lobby(){
-  reg=[];clearInterval(tmr);const G=GM[net.gid],url=location.href.split('#')[0]+'#'+net.code,np=net.players.length;
-  app.innerHTML=`<div class="lob"><div class="muted">Комната</div><h2>${G.icon} ${G.name}</h2>
-  <div class="code">${net.code}</div><p class="muted">Отправь другу код или ссылку:</p>
-  <div class="row"><input readonly value="${url}" onclick="this.select()" style="flex:1">${B('Копировать',()=>{try{navigator.clipboard.writeText(url)}catch(e){}toast('Ссылка скопирована')},'sm')}</div>
-  <div class="rules">${G.rules}</div>
+  reg=[];clearInterval(tmr);const G=GM[net.gid],np=net.players.length;setSt(net.solo?'играет с ботами':'в лобби: '+G.name);
+  const url=location.href.split('#')[0]+'#'+net.code;
+  const head=net.solo?`<div class="muted">Игра с ботами</div><h2>${G.icon} ${G.name}</h2>`:
+   `<div class="muted">Комната</div><h2>${G.icon} ${G.name}</h2><div class="code">${net.code}</div><p class="muted">Отправь код или ссылку — или позови друга из списка справа 👉</p>
+    <div class="row"><input readonly value="${url}" onclick="this.select()" style="flex:1">${B('Копировать',()=>{try{navigator.clipboard.writeText(url)}catch(e){}toast('Ссылка скопирована')},'sm')}</div>`;
+  app.innerHTML=`<div class="lob">${head}<div class="rules">${G.rules}</div>${optsUI(G)}
   <h3>Игроки (${np}/${G.max})</h3>
   <div class="pl">${net.players.map((p,i)=>`<span class="chip" style="--c:${COL[i]}">${p.av} ${E(p.name)}${i===0?' 👑':''}${i===net.me?' (ты)':''}</span>`).join('')}</div>
-  ${net.host&&G.bot?`<div>${np<G.max?B('➕ Добавить бота',()=>{addBot();sendLobby()},'sm ghost'):''}${net.players.some(p=>p.bot)?B('➖ Убрать бота',()=>removePlayer(net.players.map(p=>!!p.bot).lastIndexOf(true)),'sm ghost'):''}</div>`:''}
-  ${np>=G.min?B('▶ Начать игру',reqStart,'big')+'<p class="muted" style="font-size:12px">Начать может любой игрок</p>':`<p class="muted">Нужно минимум ${G.min} игрока(ов) — позови друга${G.bot?' или добавь бота':''}</p>`}
+  ${net.host&&G.bot?`<div>${np<G.max?B('➕ Добавить бота',()=>{addBot();net.solo?(setTok(net.players),lobby()):sendLobby()},'sm ghost'):''}${net.players.some(p=>p.bot)?B('➖ Убрать бота',()=>{const j=net.players.map(p=>!!p.bot).lastIndexOf(true);if(net.solo){net.players.splice(j,1);lobby()}else removePlayer(j)},'sm ghost'):''}</div>`:''}
+  ${np>=G.min?B(net.solo?'▶ Играть':'▶ Начать игру',reqStart,'big')+(net.solo?'':'<p class="muted small">Начать может любой игрок</p>'):`<p class="muted">Нужно минимум ${G.min} игрока(ов) — позови друга${G.bot?' или добавь бота':''}</p>`}
   <div>${B('← Выйти',leave,'ghost sm')}</div></div>`;
+  renderFr();
 }
 function showGame(){
-  const G=GM[net.gid],S=net.S;
+  const G=GM[net.gid],S=net.S;setSt('играет: '+G.name);
   const keep={};document.querySelectorAll('#app input[id]').forEach(i=>keep[i.id]=i.value);
   const fa=document.activeElement&&document.activeElement.id;
   clearInterval(tmr);reg=[];
@@ -243,8 +351,16 @@ function showGame(){
   for(const k in keep){const el=document.getElementById(k);if(el)el.value=keep[k]}
   if(fa){const el=document.getElementById(fa);el&&el.focus()}
   G.after&&G.after(S,net.me);
-  if(G.win&&net.rec!==S.gameId){const w=G.win(S,net.me);if(w===true||w===false){net.rec=S.gameId;addStat(G.id,w)}}
+  if(G.win&&net.rec!==S.gameId){const w=G.win(S,net.me);if(w===true||w===false){net.rec=S.gameId;addStat(G.id,w);if(w)confetti()}}
 }
+
+/* ============ слова ============ */
+const W1='кот собака дом дерево солнце луна звезда машина самолёт корабль поезд велосипед мост гора река море пляж цветок яблоко банан арбуз пицца торт мороженое хлеб сыр молоко яйцо стол стул кровать окно дверь лампа часы телефон компьютер книга ручка карандаш ножницы зонтик очки шляпа ботинок носок рубашка платье корона меч щит замок дракон ведьма принцесса рыцарь пират робот ракета космонавт динозавр акула кит дельфин бабочка паук змея лягушка черепаха слон жираф зебра лев тигр медведь обезьяна кролик мышь сова орёл пингвин попугай курица корова свинья лошадь верблюд кактус пальма ёлка гриб снеговик радуга молния дождь облако вулкан остров маяк пирамида гитара барабан пианино скрипка микрофон фотоаппарат телевизор холодильник утюг пылесос чайник ложка вилка нож тарелка ведро лопата молоток пила ключ свеча фонарь рюкзак чемодан карта компас якорь лодка парус футбол баскетбол теннис лыжи коньки шахматы кубик мяч подарок вертолёт трактор экскаватор мотоцикл автобус метро светофор банка бутылка конфета шоколад бутерброд суп каша блины пельмени огурец помидор морковь картошка клубника виноград лимон ананас орех мёд улитка краб осьминог медуза крокодил кенгуру панда волк лиса ёж белка заяц олень летучая_мышь'.split(' ');
+const W2='гравитация демократия вдохновение свобода ностальгия дружба тишина одиночество совесть любопытство суеверие компромисс инфляция революция эволюция прокрастинация метафора симметрия бесконечность горизонт атмосфера экватор архитектор дирижёр хирург археолог детектив шпион фокусник акробат клоун чёрная_дыра телескоп микроскоп термометр маятник магнит цунами землетрясение айсберг мираж водопад каньон пустыня тундра джунгли оазис эхо тень отражение сквозняк пробка очередь сюрприз неловкость дежавю бессонница аппетит щекотка икота мурашки талисман привидение вампир оборотень русалка кентавр феникс лабиринт сокровище шифр головоломка кроссворд бумеранг парашют катапульта подводная_лодка ледокол воздушный_змей светлячок хамелеон муравейник паутина стрекоза гусеница кокон хоровод маскарад карнавал фейерверк салют серпантин вышивка гобелен витраж мозаика скульптор карикатура граффити автограф вернисаж аплодисменты антракт суфлёр репетиция премьера'.split(' ');
+const wordPool=l=>shuf((l===0?W1:l===1?W2:W1.concat(W2)).map(w=>w.replace(/_/g,' ')));
+const chatLog=S=>`<div class="chat">${S.chat.slice().reverse().map(c=>`<div class="${c.ok?'ok':c.sys?'sys':''}">${c.n>=0?TOK[c.n]+' <b>'+E(S.names[c.n])+':</b> ':''}${E(c.t)}</div>`).join('')}</div>`;
+const chatIn=(ph,mk)=>{const go=H(()=>{const el=$('#ci'),t=el.value.trim();if(!t)return;el.value='';send(mk(t))});return `<div class="row" style="max-width:640px;margin:10px auto"><input id="ci" placeholder="${ph}" style="flex:1" autocomplete="off" maxlength="60" onkeydown="if(event.key==='Enter')${go}"><button class="btn" onclick="${go}">➤</button></div>`};
+const pushChat=(S,n,t,x)=>{S.chat.push(Object.assign({n,t},x||{}));S.chat=S.chat.slice(-40)};
 
 /* ============ 1. МОНОПОЛИЯ ============ */
 const MB=[['СТАРТ','s'],['Хлебная ул.','p',60,6,'#92400e'],['Шанс','c'],['Кофейня','p',80,8,'#92400e'],['Налог','t',100],['Вокзал','p',150,20,'#64748b'],['Парк','p',100,10,'#16a34a'],
@@ -255,7 +371,7 @@ const CH=[['нашёл клад +150$',150],['штраф за парковку �
 const cp=i=>i<=6?[1,i+1]:i<=12?[i-5,7]:i<=18?[7,7-(i-12)]:[7-(i-18),1];
 const lg=(S,t)=>{S.log.unshift(t);S.log.length=Math.min(S.log.length,6)};
 function monoNext(S){const n=S.names.length;do{S.turn=(S.turn+1)%n}while(S.out[S.turn]);S.ph='roll';S.cnt=(S.cnt||0)+1;
-  if(S.cnt>=30*S.out.filter(o=>!o).length){const w=S.names.map((_,i)=>S.out[i]?-1e9:S.money[i]+Object.entries(S.own).reduce((a,[k,o])=>a+(o===i?MB[k][2]:0),0));
+  if(S.cnt>=S.maxT*S.out.filter(o=>!o).length){const w=S.names.map((_,i)=>S.out[i]?-1e9:S.money[i]+Object.entries(S.own).reduce((a,[k,o])=>a+(o===i?MB[k][2]:0),0));
     S.win=w.indexOf(Math.max(...w));lg(S,'⏰ Время вышло — побеждает самый богатый!')}}
 function monoLand(S,i){
   const c=MB[S.pos[i]],N=S.names[i];S.ph='end';
@@ -271,10 +387,11 @@ function monoLand(S,i){
   if(S.money[i]<0){S.out[i]=true;for(const k in S.own)if(S.own[k]===i)delete S.own[k];lg(S,`💥 ${N} банкрот!`);
     const al=S.names.map((_,j)=>j).filter(j=>!S.out[j]);if(al.length===1){S.win=al[0];return}monoNext(S)}
 }
-const MONO={id:'mono',name:'Мини-Монополия',icon:'🏙️',color:'#f59e0b',min:2,max:4,sb:2,bd:800,
-desc:'Бросай кубики, скупай улицы и разоряй друзей. Побеждает последний не обанкротившийся.',
-rules:'🎲 Бросай кубики → если улица свободна, можешь купить. Наступил на чужую — платишь аренду. Прошёл СТАРТ — +150$. У кого деньги ушли в минус — банкрот. Через 30 ходов на игрока побеждает самый богатый (деньги + улицы)!',
-init(names){return{names,pos:names.map(()=>0),money:names.map(()=>1000),own:{},turn:0,ph:'roll',dice:[0,0],log:['Игра началась!'],out:names.map(()=>false),win:-1}},
+const MONO={id:'mono',name:'Мини-Монополия',icon:'🏙️',color:'#f59e0b',cat:['board'],time:'20 мин',min:2,max:4,sb:2,bd:800,
+desc:'Бросай кубики, скупай улицы и разоряй друзей. Побеждает последний не обанкротившийся или самый богатый.',
+opts:[{k:'len',n:'Длительность',v:['Короткая','Обычная','Долгая'],d:1}],
+rules:'🎲 Бросай кубики → свободную улицу можно купить. Наступил на чужую — платишь аренду. Прошёл СТАРТ — +150$. Деньги ушли в минус — банкрот. По окончании времени побеждает самый богатый (деньги + улицы).',
+init(names,o){return{names,pos:names.map(()=>0),money:names.map(()=>1000),own:{},turn:0,ph:'roll',dice:[0,0],log:['Игра началась!'],out:names.map(()=>false),win:-1,maxT:[15,30,50][v_(o,'len',1)]}},
 act(S,i,a){
   if(S.win>=0||i!==S.turn)return;
   if(a.t==='roll'&&S.ph==='roll'){
@@ -287,7 +404,7 @@ act(S,i,a){
 },
 bot(S,i){if(S.win>=0||S.turn!==i)return null;
   if(S.ph==='roll')return{t:'roll'};
-  if(S.ph==='buy'){const c=MB[S.pos[i]];return S.money[i]-c[2]>=100?{t:'buy'}:{t:'skip'}}
+  if(S.ph==='buy'){const c=MB[S.pos[i]];return S.money[i]-c[2]>=[200,100,40][LV()]?{t:'buy'}:{t:'skip'}}
   if(S.ph==='end')return{t:'next'};return null},
 win(S,me){return S.win>=0?S.win===me:null},
 render(S,me){
@@ -306,15 +423,27 @@ render(S,me){
 }};
 
 /* ============ 2. ИМАДЖИНАРИУМ ============ */
-const EM=['🌙','🌞','🌊','🔥','🌲','🏰','🚀','🐉','🦋','🐙','🎭','🔑','🔦','🌈','⛵','🦉','🍄','🎪','🧙','🪐','🌋','🦊','🐺','🎻','⏰','🌹','🐚','🦢','🗻','🎈','🧸','🐝','🌻','⛄','⚡','🍂','🗿','🛸','🐘','🦄','🎨','📜','⚓','🔮','🌵','🐢','🎡','🦁','🐬','🍎','🐦','🏺','🧭','🌴','🦇','👑'];
-const CLUES=['Тайна','Сон','Путь','Свобода','Ночь','Приключение','Воспоминание','Загадка','Детство','Одиночество'];
-const art=id=>{const L=EM.length,h=id*47%360,a=EM[id*7%L],b=EM[(id*13+5)%L],c=EM[(id*29+11)%L];
-  return `<div class="ic3 l${id%3}" style="background:linear-gradient(${135+id*13%90}deg,hsl(${h},65%,32%),hsl(${(h+70)%360},70%,52%))"><span>${a}</span><span>${b}</span><span>${c}</span></div>`};
-const IMG={id:'img',name:'Имаджинариум',icon:'🎭',color:'#a855f7',min:3,max:6,sb:3,bd:1100,
-desc:'Загадывай картинку ассоциацией, а друзья угадывают, какая карта твоя. Не слишком очевидно и не слишком мудрёно!',
-rules:'🎤 Рассказчик выбирает карту и придумывает ассоциацию. Остальные подкладывают свои карты. Все карты перемешиваются — и все (кроме рассказчика) голосуют, какая карта рассказчика. Угадали не все и не никто — рассказчик +3, угадавшие +3. За голоса на свою карту +1. Игра до 12 очков. Общайтесь голосом (Discord, Telegram)!',
-init(names){const deck=shuf([...Array(120).keys()]);
-  return{names,hands:names.map(()=>deck.splice(0,6)),deck,score:names.map(()=>0),st:0,ph:'clue',clue:'',table:[],votes:{},d:null,rn:1,over:false}},
+const EMW='🌙:луна 🌞:солнце 🌊:волна 🔥:огонь 🌲:лес 🏰:замок 🚀:ракета 🐉:дракон 🦋:бабочка 🐙:осьминог 🎭:маска 🔑:ключ 🔦:фонарь 🌈:радуга ⛵:парусник 🦉:сова 🍄:гриб 🎪:цирк 🧙:волшебник 🪐:планета 🌋:вулкан 🦊:лиса 🐺:волк 🎻:скрипка ⏰:время 🌹:роза 🐚:ракушка 🦢:лебедь 🗻:гора 🎈:шарик 🧸:мишка 🐝:пчела 🌻:подсолнух ⛄:снеговик ⚡:молния 🍂:осень 🗿:статуя 🛸:тарелка 🐘:слон 🦄:единорог 🎨:краски 📜:свиток ⚓:якорь 🔮:магия 🌵:кактус 🐢:черепаха 🎡:колесо 🦁:лев 🐬:дельфин 🍎:яблоко 🐦:птица 🏺:амфора 🧭:компас 🌴:пальма 🦇:летучая 👑:корона 🐌:улитка 🦀:краб 🐋:кит 🧚:фея 🏹:лук 💎:алмаз 🎯:мишень 🚂:поезд 🎠:карусель 🌠:звезда 🍀:клевер 🦅:орёл 🐞:жук 🔔:колокол 🧩:пазл 🎃:тыква'.split(' ').map(x=>x.split(':'));
+const EM=EMW.map(x=>x[0]),EW=Object.fromEntries(EMW);
+const prng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const NC=160,CE={},ART={};
+function cardEm(id){if(CE[id])return CE[id];const R=prng(id*7919+13);return CE[id]=[0,1,2].map(()=>EM[Math.floor(R()*EM.length)])}
+function art(id){
+  if(ART[id])return ART[id];
+  const R=prng(id*9973+7),h=R()*360,h2=(h+40+R()*80)%360,e=cardEm(id);
+  let s=`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl(${h|0},70%,${(25+R()*15)|0}%)"/><stop offset="1" stop-color="hsl(${h2|0},75%,${(45+R()*20)|0}%)"/></linearGradient></defs><rect width="100" height="140" fill="url(#g${id})"/>`;
+  for(let i=0;i<14;i++)s+=`<circle cx="${(R()*100)|0}" cy="${(R()*70)|0}" r="${(.4+R()*.8).toFixed(1)}" fill="#fff" opacity="${(.3+R()*.5).toFixed(2)}"/>`;
+  s+=`<circle cx="${(20+R()*60)|0}" cy="${(15+R()*30)|0}" r="${(8+R()*8)|0}" fill="hsl(${((h+180)%360)|0},90%,85%)" opacity=".85"/>`;
+  for(let k=0;k<2;k++){const y=80+k*22+R()*8;let d=`M0 140 L0 ${y|0}`;for(let x=0;x<100;x+=20)d+=` Q${x+10} ${(y-10-R()*18)|0} ${x+20} ${(y+R()*6)|0}`;d+=' L100 140Z';s+=`<path d="${d}" fill="hsl(${((h2+k*30)%360)|0},50%,${22-k*6}%)" opacity=".88"/>`}
+  e.forEach((m,i)=>{const sz=[30,22,18][i];s+=`<text x="${(8+R()*(78-sz/2))|0}" y="${([75,100,55][i]+R()*20)|0}" font-size="${sz}">${m}</text>`});
+  return ART[id]=s+'</svg>';
+}
+const IMG={id:'img',name:'Имаджинариум',icon:'🎭',color:'#a855f7',cat:['party','card'],time:'20 мин',min:3,max:6,sb:3,bd:1100,
+desc:'Загадывай картинку ассоциацией, а друзья угадывают, какая карта твоя. 160 уникальных карт, нарисованных на лету.',
+opts:[{k:'pts',n:'Очков до победы',v:['8','12','16'],d:1}],
+rules:'🎤 Рассказчик выбирает карту и придумывает ассоциацию. Остальные подкладывают свои карты, потом все (кроме рассказчика) голосуют, какая карта рассказчика. Угадали не все и не никто — рассказчик +3, угадавшие +3. За голоса на свою карту +1. Общайтесь голосом (Discord, Telegram)!',
+init(names,o){const deck=shuf([...Array(NC).keys()]);
+  return{names,hands:names.map(()=>deck.splice(0,6)),deck,score:names.map(()=>0),st:0,ph:'clue',clue:'',table:[],votes:{},d:null,rn:1,over:false,pts:[8,12,16][v_(o,'pts',1)]}},
 act(S,i,a){
   const n=S.names.length;
   if(a.t==='clue'&&S.ph==='clue'&&i===S.st&&S.hands[i].includes(a.c)&&a.text){
@@ -328,26 +457,30 @@ act(S,i,a){
       const k=Object.entries(S.votes),si=S.table.findIndex(t=>t.o===S.st),right=k.filter(([p,v])=>v===si).length,d=S.names.map(()=>0);
       if(right===0||right===n-1){for(let p=0;p<n;p++)if(p!==S.st)d[p]+=2}else{d[S.st]+=3;k.forEach(([p,v])=>{if(v===si)d[+p]+=3})}
       k.forEach(([p,v])=>{const o=S.table[v].o;if(o!==S.st)d[o]+=1});
-      S.score=S.score.map((s,j)=>s+d[j]);S.d=d;S.ph='result';if(Math.max(...S.score)>=12)S.over=true;
+      S.score=S.score.map((s,j)=>s+d[j]);S.d=d;S.ph='result';if(Math.max(...S.score)>=S.pts)S.over=true;
     }
   }else if(a.t==='next'&&S.ph==='result'&&!S.over){
     const used=new Set(S.hands.flat());
-    if(S.deck.length<n)S.deck=shuf([...Array(120).keys()].filter(x=>!used.has(x)));
+    if(S.deck.length<n)S.deck=shuf([...Array(NC).keys()].filter(x=>!used.has(x)));
     S.hands.forEach(h=>{if(h.length<6)h.push(S.deck.pop())});
     S.st=(S.st+1)%n;S.rn++;S.ph='clue';S.clue='';S.table=[];S.votes={};S.d=null;
   }
 },
 bot(S,i,all){if(S.over)return null;
-  if(S.ph==='clue'&&i===S.st){const h=S.hands[i];return{t:'clue',c:h[rnd(h.length)],text:CLUES[rnd(CLUES.length)]}}
-  if(S.ph==='pick'&&i!==S.st&&!S.table.some(t=>t.o===i)){const h=S.hands[i];return{t:'pick',c:h[rnd(h.length)]}}
-  if(S.ph==='vote'&&i!==S.st&&S.votes[i]===undefined){const ks=S.table.map((t,k)=>k).filter(k=>S.table[k].o!==i);return{t:'vote',k:ks[rnd(ks.length)]}}
+  if(S.ph==='clue'&&i===S.st){const h=S.hands[i],c=h[rnd(h.length)],e=cardEm(c);return{t:'clue',c,text:EW[e[rnd(3)]]}}
+  if(S.ph==='pick'&&i!==S.st&&!S.table.some(t=>t.o===i)){const h=S.hands[i],w=Object.entries(EW).filter(([e,wd])=>wd===norm(S.clue)).map(x=>x[0]);
+    const m=h.filter(c=>cardEm(c).some(e=>w.includes(e)));const p=m.length&&rnd(10)<6?m:h;return{t:'pick',c:p[rnd(p.length)]}}
+  if(S.ph==='vote'&&i!==S.st&&S.votes[i]===undefined){const ks=S.table.map((t,k)=>k).filter(k=>S.table[k].o!==i);
+    const w=Object.entries(EW).filter(([e,wd])=>wd===norm(S.clue)).map(x=>x[0]),m=ks.filter(k=>cardEm(S.table[k].c).some(e=>w.includes(e)));
+    const p=m.length&&rnd(10)<[4,6,8][LV()]?m:ks;return{t:'vote',k:p[rnd(p.length)]}}
   if(S.ph==='result'&&all)return{t:'next'};return null},
 win(S,me){return S.over?S.score[me]===Math.max(...S.score):null},
 render(S,me){
   const n=S.names.length,st=S.st;
-  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===st?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${S.d&&S.ph==='result'?`<small>(+${S.d[i]})</small>`:''}${i===st?' 🎤':''}</span>`).join('')}</div>`;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===st?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${S.d&&S.ph==='result'?`<small>(+${S.d[i]})</small>`:''}${i===st?' 🎤':''}</span>`).join('')}<span class="chip">до ${S.pts}</span></div>`;
   if(S.over){const w=S.score.indexOf(Math.max(...S.score));h+=`<h2>🏆 Победил(а) ${E(S.names[w])}!</h2>`}
-  const hand=()=>`<h4>Твои карты</h4><div class="hand">${S.hands[me].map(c=>`<div class="pc" onclick="pickSel(this,${c})">${art(c)}</div>`).join('')}</div>`;
+  const card=(c,x,cls)=>`<div class="pc ${cls||''}" ${x||''}>${art(c)}</div>`;
+  const hand=()=>`<h4>Твои карты</h4><div class="hand">${S.hands[me].slice().sort((a,b)=>a-b).map(c=>card(c,`onclick="pickSel(this,${c})"`)).join('')}</div>`;
   const played=S.table.some(t=>t.o===me);
   if(S.ph==='clue'){
     if(me===st)h+=`<p>🎤 Ты рассказчик! Выбери карту и придумай ассоциацию (слово, фраза, звук…)</p><div class="row"><input id="cl${S.rn}" placeholder="Твоя ассоциация" style="flex:1" maxlength="80">${B('Загадать',()=>{const t=($('#cl'+S.rn).value||'').trim();if(sel==null||!t)return toast('Выбери карту и напиши ассоциацию');send({t:'clue',c:sel,text:t})},'big')}</div>`+hand();
@@ -360,11 +493,11 @@ render(S,me){
     h+=`<p>Ассоциация: <b style="font-size:20px">«${E(S.clue)}»</b></p>`;
     const can=me!==st&&S.votes[me]===undefined;
     h+=can?`<p>Какая карта принадлежит рассказчику? Нажми на неё:</p>`:`<p class="muted">Ждём голосов… (${Object.keys(S.votes).length}/${n-1})</p>`;
-    h+=`<div class="tbl">${S.table.map((t,k)=>{const mine=t.o===me;return `<div class="tc"><div class="pc" style="${mine?'opacity:.55;cursor:default':''}" ${can&&!mine?`onclick="${H(()=>send({t:'vote',k}))}"`:''}>${art(t.c)}</div>${mine?'твоя':''}</div>`}).join('')}</div>`;
+    h+=`<div class="tbl">${S.table.map((t,k)=>{const mine=t.o===me;return `<div class="tc">${card(t.c,mine?'style="opacity:.55;cursor:default"':can?`onclick="${H(()=>send({t:'vote',k}))}"`:'style="cursor:default"')}${mine?'твоя':''}</div>`}).join('')}</div>`;
   }else{
     h+=`<p>Ассоциация: <b style="font-size:20px">«${E(S.clue)}»</b></p><div class="tbl">${S.table.map((t,k)=>{
       const vs=Object.entries(S.votes).filter(([p,v])=>v===k).map(([p])=>TOK[+p]).join('');
-      return `<div class="tc ${t.o===st?'win':''}"><div class="pc" style="cursor:default">${art(t.c)}</div><b>${TOK[t.o]} ${E(S.names[t.o])}</b><span>${vs||'—'}</span></div>`}).join('')}</div>`;
+      return `<div class="tc ${t.o===st?'win':''}">${card(t.c,'style="cursor:default"')}<b>${TOK[t.o]} ${E(S.names[t.o])}</b><span>${vs||'—'}</span></div>`}).join('')}</div>`;
     h+=S.over?'':B('Следующий раунд ➜',()=>send({t:'next'}),'big');
   }
   return h;
@@ -376,12 +509,13 @@ const ul=c=>c.v==='s'?'⛔':c.v==='r'?'⇄':c.v==='w'?'🌈':c.v;
 const ucard=(c,cls,on)=>`<div class="uc ${cls||''}" style="background:${UC[c.c]}" ${on?`onclick="${on}"`:''}>${ul(c)}</div>`;
 function unoDraw(S,p,k){for(let j=0;j<k;j++){if(!S.deck.length){S.deck=shuf(S.disc);S.disc=[]}if(!S.deck.length)return;S.hands[p].push(S.deck.pop())}}
 const unoOk=(S,c)=>c.c==='W'||c.c===S.col||c.v===S.top.v;
-const UNO={id:'uno',name:'Уно',icon:'🃏',color:'#ef4444',min:2,max:6,sb:3,bd:900,
+const UNO={id:'uno',name:'Уно',icon:'🃏',color:'#ef4444',cat:['card','fast'],time:'10 мин',min:2,max:6,sb:3,bd:900,
 desc:'Классические карточки: сбрасывай карты по цвету или значению и первым избавься от всех. Пропуски, развороты, +2 и +4!',
+opts:[{k:'hand',n:'Карт на руках',v:['5','7','10'],d:1}],
 rules:'Сбрось карту того же цвета или значения, что и верхняя. 🌈 дикая — выбираешь цвет. ⛔ пропуск, ⇄ разворот, +2 / +4 — следующий берёт карты и пропускает ход. Нет подходящей — тяни карту (ход переходит). Первый без карт побеждает.',
-init(names){const deck=[];for(const c of 'RGBY'){deck.push({c,v:'0'});for(const v of ['1','2','3','4','5','6','7','8','9','s','r','+2'])deck.push({c,v},{c,v})}
+init(names,o){const deck=[];for(const c of 'RGBY'){deck.push({c,v:'0'});for(const v of ['1','2','3','4','5','6','7','8','9','s','r','+2'])deck.push({c,v},{c,v})}
   for(let i=0;i<4;i++)deck.push({c:'W',v:'w'},{c:'W',v:'+4'});
-  const d=shuf(deck),hands=names.map(()=>d.splice(0,7));let top;do{top=d.pop();if(top.c==='W'){d.unshift(top);top=null}}while(!top);
+  const d=shuf(deck),hn=[5,7,10][v_(o,'hand',1)],hands=names.map(()=>d.splice(0,hn));let top;do{top=d.pop();if(top.c==='W'){d.unshift(top);top=null}}while(!top);
   return{names,hands,deck:d,disc:[],top,col:top.c,turn:0,dir:1,win:-1,log:'Игра началась!'}},
 act(S,i,a){
   if(S.win>=0||i!==S.turn)return;const n=S.names.length;
@@ -399,6 +533,7 @@ act(S,i,a){
 },
 bot(S,i){if(S.win>=0||S.turn!==i)return null;const h=S.hands[i];
   let k=h.findIndex(c=>c.c!=='W'&&unoOk(S,c));if(k<0)k=h.findIndex(c=>unoOk(S,c));
+  if(LV()===0&&rnd(3)===0)k=-1;
   if(k<0)return{t:'draw'};const c=h[k];
   if(c.c==='W'){const cnt={R:0,G:0,B:0,Y:0};h.forEach(x=>x.c!=='W'&&cnt[x.c]++);const col=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];return{t:'play',k,col}}
   return{t:'play',k}},
@@ -415,75 +550,7 @@ render(S,me){
   return h;
 }};
 
-/* ============ 4. ШПИОН ============ */
-const LOCS=['Пляж','Школа','Больница','Космическая станция','Цирк','Кинотеатр','Самолёт','Ресторан','Банк','Библиотека','Подводная лодка','Зоопарк','Супермаркет','Университет','Вокзал','Казино','Пиратский корабль','Музей','Спа-салон','Военная база'];
-const SPY={id:'spy',name:'Шпион',icon:'🕵️',color:'#06b6d4',min:3,max:6,
-desc:'Все знают место, кроме одного — шпиона. Задавай хитрые вопросы, вычисли чужака или не выдай, что ты не в теме.',
-rules:'Всем показывают одну локацию, а шпиону — нет. По очереди задавайте друг другу вопросы про это место (голосом в Discord/Telegram!). Шпион пытается понять локацию, остальные — вычислить шпиона. Шпион может назвать локацию, а все вместе — проголосовать. Таймер 8 минут. Только для живых игроков.',
-init(names){return{names,loc:rnd(LOCS.length),spy:rnd(names.length),ph:'play',t0:Date.now(),votes:{},res:null}},
-act(S,i,a){
-  const n=S.names.length;
-  if(a.t==='guess'&&S.ph==='play'&&i===S.spy){const ok=a.loc===S.loc;S.res={team:!ok,why:`Шпион назвал «${LOCS[a.loc]}» — ${ok?'верно, шпион победил!':'неверно, шпион проиграл!'}`};S.ph='end'}
-  else if(a.t==='vote'&&S.ph==='play'&&S.votes[i]===undefined&&a.k!==i&&a.k>=0&&a.k<n){
-    S.votes[i]=a.k;
-    if(Object.keys(S.votes).length===n){const c=S.names.map(()=>0);Object.values(S.votes).forEach(v=>c[v]++);const mx=Math.max(...c),top=c.map((x,j)=>x===mx?j:-1).filter(j=>j>=0);
-      const caught=top.length===1&&top[0]===S.spy;S.res={team:caught,why:caught?`Шпиона вычислили — это ${S.names[S.spy]}!`:`Шпиона не поймали! Это был ${S.names[S.spy]}.`};S.ph='end'}
-  }
-},
-win(S,me){return S.ph==='end'?(me===S.spy?!S.res.team:S.res.team):null},
-render(S,me){
-  const spy=me===S.spy;
-  if(S.ph==='end')return `<div class="role">${S.res.team?'🎉 Победила команда!':'🕵️ Победил шпион!'}<br><small>${E(S.res.why)}</small><br><br>Локация была: <b>${LOCS[S.loc]}</b><br>Шпион: <b>${TOK[S.spy]} ${E(S.names[S.spy])}</b></div><p class="muted" style="text-align:center">${net.host?'Нажми «↻ Заново» для нового раунда':'Хост может начать новый раунд'}</p>`;
-  let h=`<div class="role">${spy?'🕵️ Ты — <b>ШПИОН</b><br><small>Не выдай себя и угадай локацию!</small>':`📍 Локация: <b>${LOCS[S.loc]}</b><br><small>Найди шпиона вопросами. Не называй место прямо!</small>`}<br><small>⏱ <span id="tm">8:00</span></small></div>`;
-  if(spy)h+=`<h4>Знаешь, где вы? Назови локацию (если ошибёшься — проиграешь):</h4><div class="locs">${LOCS.map((l,k)=>B(l,()=>{if(confirm('Точно «'+l+'»?'))send({t:'guess',loc:k})},'sm ghost')).join('')}</div>`;
-  else h+=`<details><summary class="muted">Список возможных локаций</summary><p class="muted">${LOCS.join(' · ')}</p></details>`;
-  h+=`<h4>Голосование: кто шпион? ${S.votes[me]!==undefined?'(ты проголосовал)':''}</h4><div class="locs">${S.names.map((x,k)=>k===me?'':B(`${TOK[k]} ${E(x)}`,()=>{if(S.votes[me]===undefined&&confirm('Голосуешь за '+x+'?'))send({t:'vote',k})},S.votes[me]===k?'':'ghost')).join('')}</div><p class="muted">Проголосовало: ${Object.keys(S.votes).length}/${S.names.length}</p>`;
-  return h;
-},
-after(S){const el=$('#tm');if(!el||S.ph!=='play')return;const f=()=>{const s=Math.max(0,480-Math.floor((Date.now()-S.t0)/1000));el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};f();tmr=setInterval(f,1000)}};
-
-/* ============ 5. КРОКОДИЛ ============ */
-const WORDS=['Кот','Самолёт','Холодильник','Пицца','Дракон','Велосипед','Футбол','Космонавт','Зонтик','Робот','Динозавр','Гитара','Замок','Мороженое','Ёлка','Телефон','Акула','Радуга','Пират','Вулкан','Паук','Часы','Снеговик','Бабочка','Поезд','Маяк','Слон','Корона','Ракета','Банан','Мост','Очки','Ведро','Попугай','Тыква','Фонарь','Верблюд','Кактус','Лыжи','Утюг','Арбуз','Лодка','Сова','Ключ','Свеча','Пингвин','Барабан','Зебра','Домик','Кофе'];
-const norm=s=>String(s).toLowerCase().replace(/ё/g,'е').trim();
-function line(x,s){x.strokeStyle=s.c;x.lineWidth=s.w*2;x.lineCap='round';x.beginPath();x.moveTo(s.p[0][0]*640,s.p[0][1]*440);x.lineTo(s.p[1][0]*640,s.p[1][1]*440);x.stroke()}
-function drawSeg(s){
-  const cv=$('#cv'),x=cv&&cv.getContext&&cv.getContext('2d');
-  if(s.clr){STROKES=[];if(x){x.fillStyle='#fff';x.fillRect(0,0,640,440)}}else{STROKES.push(s);x&&line(x,s)}
-}
-function emit(s){drawSeg(s);if(net.host)broadcast({t:'d',seg:s});else net.conn&&net.conn.send({t:'d',seg:s})}
-const CRO={id:'cro',name:'Крокодил',icon:'🐊',color:'#22c55e',min:2,max:6,
-desc:'Рисуй слово, а друзья отгадывают в чате. Кто угадал — получает очки и рисует следующим.',
-rules:'Один рисует загаданное слово (писать буквы нельзя!), остальные вводят догадки. Угадавший получает +2, художник +1, и угадавший становится следующим художником. Не нравится слово — «Другое слово». Только для живых игроков.',
-init(names){return{names,dr:0,word:WORDS[rnd(WORDS.length)],score:names.map(()=>0),chat:[],round:1}},
-act(S,i,a){
-  if(a.t==='guess'&&i!==S.dr){const t=String(a.text||'').trim().slice(0,40);if(!t)return;
-    if(norm(t)===norm(S.word)){S.score[i]+=2;S.score[S.dr]+=1;S.chat.push({n:i,t:`угадал(а)! Слово: «${S.word}»`,ok:1});S.dr=i;S.word=WORDS[rnd(WORDS.length)];S.round++}
-    else S.chat.push({n:i,t});
-    S.chat=S.chat.slice(-30);
-  }else if(a.t==='skip'&&i===S.dr){S.word=WORDS[rnd(WORDS.length)];S.round++;S.chat.push({n:i,t:'сменил(а) слово',ok:0})}
-},
-render(S,me){
-  const dr=me===S.dr;
-  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.dr?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${i===S.dr?' ✏️':''}</span>`).join('')}</div>`;
-  h+=dr?`<div class="role" style="padding:10px">Рисуй: <b>${E(S.word)}</b> ${B('Другое слово',()=>send({t:'skip'}),'sm ghost')}</div>`:`<div class="role" style="padding:10px">${E(S.names[S.dr])} рисует: <b style="letter-spacing:4px">${S.word.split('').map(()=>'_').join(' ')}</b> <small>(${S.word.length} букв)</small></div>`;
-  h+=`<canvas id="cv" width="640" height="440"></canvas>`;
-  if(dr)h+=`<div class="tools">${['#111111','#ef4444','#3b82f6','#22c55e','#eab308','#a855f7','#ffffff'].map(c=>`<span class="sw" style="background:${c}" onclick="${H(()=>{tool.c=c})}"></span>`).join('')}${B('Тонко',()=>{tool.w=3},'sm ghost')}${B('Средне',()=>{tool.w=7},'sm ghost')}${B('Толсто',()=>{tool.w=16},'sm ghost')}${B('🗑 Очистить',()=>emit({clr:1}),'sm ghost')}<small class="muted">белый = ластик</small></div>`;
-  else{const go=H(()=>{const el=$('#gi'+S.round),t=el.value.trim();if(!t)return;el.value='';send({t:'guess',text:t})});
-    h+=`<div class="row" style="max-width:640px;margin:10px auto"><input id="gi${S.round}" placeholder="Твоя догадка…" style="flex:1" autocomplete="off" onkeydown="if(event.key==='Enter')${go}"><button class="btn" onclick="${go}">Отправить</button></div>`}
-  h+=`<div class="chat">${S.chat.slice().reverse().map(c=>`<div class="${c.ok?'ok':''}">${TOK[c.n]} <b>${E(S.names[c.n])}:</b> ${E(c.t)}</div>`).join('')}</div>`;
-  return h;
-},
-after(S,me){
-  if(lastR!==S.round){STROKES=[];lastR=S.round}
-  const cv=$('#cv');if(!cv)return;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,640,440);STROKES.forEach(s=>line(x,s));
-  if(me!==S.dr)return;let dn=false,last;
-  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
-  cv.onpointerdown=e=>{dn=true;cv.setPointerCapture(e.pointerId);last=pt(e);emit({c:tool.c,w:tool.w,p:[last,last]})};
-  cv.onpointermove=e=>{if(!dn)return;const p=pt(e);emit({c:tool.c,w:tool.w,p:[last,p]});last=p};
-  cv.onpointerup=cv.onpointercancel=()=>{dn=false};
-}};
-
-/* ============ 6. ДУРАК (подкидной) ============ */
+/* ============ 4. ДУРАК ============ */
 const SU='♠♥♦♣',RK={11:'В',12:'Д',13:'К',14:'Т'};
 const dc=c=>({r:6+c%9,s:Math.floor(c/9)});
 const dlab=c=>{const x=dc(c);return (RK[x.r]||x.r)+SU[x.s]};
@@ -500,7 +567,7 @@ function dEnd(S,took){
   const na=took?nxt(S.def):(S.out[S.def]?nxt(S.def):S.def);
   S.att=na;S.def=nxt(na);S.lim=Math.min(6,S.hands[S.def].length);
 }
-const DUR={id:'dur',name:'Дурак',icon:'♠️',color:'#64748b',min:2,max:4,sb:1,bd:900,
+const DUR={id:'dur',name:'Дурак',icon:'♠️',color:'#64748b',cat:['card'],time:'10 мин',min:2,max:4,sb:1,bd:900,
 desc:'Классический подкидной дурак колодой из 36 карт. Отбивайся, подкидывай и не останься последним с картами!',
 rules:'Козырь бьёт любую некозырную масть. Атакующий кладёт карту, защитник бьёт старшей картой той же масти или козырем (или «Беру»). Когда всё побито — атакующий подкидывает карты тех же значений или говорит «Бито». После хода все добирают до 6 карт. Кто последним остался с картами — дурак.',
 init(names){const n=names.length,d=shuf([...Array(36).keys()]),hands=names.map(()=>d.splice(0,6)),tr=dc(d[0]).s;
@@ -541,7 +608,437 @@ render(S,me){
   return h;
 }};
 
-/* ============ 7. КОСТИ (покер на костях) ============ */
+/* ============ 5. МАФИЯ ============ */
+const RNm={m:'🔪 Мафия',d:'💉 Доктор',s:'🕵️ Комиссар',c:'🙂 Мирный житель'},RNl={m:'мафией',d:'доктором',s:'комиссаром',c:'мирным жителем'};
+function mfWin(S){const m=S.alive.filter((a,k)=>a&&S.role[k]==='m').length,o=S.alive.filter((a,k)=>a&&S.role[k]!=='m').length;
+  if(m===0)S.win='civ';else if(m>=o)S.win='maf';else return false;S.ph='over';pushChat(S,-1,S.win==='civ'?'🎉 Победили мирные жители!':'😈 Победила мафия!',{sys:1});return true}
+function mfDay(S){const al=S.alive,cnt={};Object.values(S.act.m).forEach(t=>cnt[t]=(cnt[t]||0)+1);
+  let v=-1,b=0;for(const t in cnt)if(cnt[t]>b){b=cnt[t];v=+t}
+  let msg;if(v>=0&&S.act.d!==v){al[v]=false;msg=`☀️ Утро. Этой ночью убит(а) ${S.names[v]} — был(а) ${RNl[S.role[v]]}.`}else msg='☀️ Утро. Этой ночью никто не погиб.';
+  const si=S.role.indexOf('s');if(S.act.s!==undefined&&si>=0)(S.chk[si]=S.chk[si]||[]).push([S.act.s,S.role[S.act.s]==='m']);
+  pushChat(S,-1,msg,{sys:1});S.ph='day';S.ready={};mfWin(S)}
+function mfTally(S){const c={};Object.values(S.votes).forEach(k=>{if(k>=0)c[k]=(c[k]||0)+1});let mx=0,top=[];for(const k in c){if(c[k]>mx){mx=c[k];top=[+k]}else if(c[k]===mx)top.push(+k)}
+  if(top.length===1){S.alive[top[0]]=false;pushChat(S,-1,`🗳️ Город изгнал ${S.names[top[0]]} — был(а) ${RNl[S.role[top[0]]]}.`,{sys:1})}else pushChat(S,-1,'🗳️ Мнения разделились — никого не изгнали.',{sys:1});
+  if(!mfWin(S)){S.ph='night';S.day++;S.act={m:{}};S.ready={};S.votes={};pushChat(S,-1,'🌙 Наступает ночь…',{sys:1})}}
+const MAF={id:'maf',name:'Мафия',icon:'🕶️',color:'#7c3aed',cat:['party'],time:'15 мин',min:4,max:10,sb:5,bd:1000,
+desc:'Город засыпает — просыпается мафия. Вычисли преступников голосованием, пока они не перебили всех. С ботами для полной компании.',
+rules:'Роли: 🔪 мафия (ночью убивает), 💉 доктор (лечит), 🕵️ комиссар (проверяет), 🙂 мирные. Днём обсуждайте в чате и голосуйте за изгнание. Мирные побеждают, если убиты все мафиози; мафия — если её число сравнялось с остальными.',
+init(names){const n=names.length,m=n>=7?2:1,roles=Array(n).fill('c'),ix=shuf([...Array(n).keys()]);ix.slice(0,m).forEach(i=>roles[i]='m');if(n>=5){roles[ix[m]]='d';roles[ix[m+1]]='s'}
+  return{names,role:roles,alive:names.map(()=>true),ph:'night',day:1,act:{m:{}},ready:{},votes:{},chk:{},chat:[{n:-1,t:'🌙 Наступает ночь. Мафия выбирает жертву…',sys:1}],win:null}},
+act(S,i,a){
+  if(S.ph==='over')return;const al=S.alive,live=()=>al.map((x,k)=>x?k:-1).filter(k=>k>=0);
+  if(a.t==='say'&&i>=0&&al[i]&&(S.ph==='day'||S.ph==='vote')){const t=String(a.text||'').trim().slice(0,80);if(t)pushChat(S,i,t);return}
+  if(i<0||!al[i])return;const r=S.role[i];
+  if(a.t==='na'&&S.ph==='night'&&al[a.k]){
+    if(r==='m'&&S.role[a.k]!=='m')S.act.m[i]=a.k;else if(r==='d')S.act.d=a.k;else if(r==='s'&&a.k!==i)S.act.s=a.k;else return;
+    const L=live();if(L.filter(k=>S.role[k]==='m').every(k=>S.act.m[k]!==undefined)&&(!L.some(k=>S.role[k]==='d')||S.act.d!==undefined)&&(!L.some(k=>S.role[k]==='s')||S.act.s!==undefined))mfDay(S);
+  }else if(a.t==='rdy'&&S.ph==='day'){S.ready[i]=1;if(live().every(k=>S.ready[k])){S.ph='vote';S.votes={};pushChat(S,-1,'🗳️ Голосование! Кого изгоняем?',{sys:1})}}
+  else if(a.t==='vote'&&S.ph==='vote'&&S.votes[i]===undefined&&(a.k===-1||(al[a.k]&&a.k!==i))){S.votes[i]=a.k;if(live().every(k=>S.votes[k]!==undefined))mfTally(S)}
+},
+bot(S,i){
+  if(S.ph==='over'||!S.alive[i])return null;const al=S.alive.map((a,k)=>a?k:-1).filter(k=>k>=0),r=S.role[i];
+  if(S.ph==='night'){
+    if(r==='m'&&S.act.m[i]===undefined){const t=al.filter(k=>S.role[k]!=='m');return{t:'na',k:t[rnd(t.length)]}}
+    if(r==='d'&&S.act.d===undefined)return{t:'na',k:al[rnd(al.length)]};
+    if(r==='s'&&S.act.s===undefined){const t=al.filter(k=>k!==i);return{t:'na',k:t[rnd(t.length)]}}
+  }else if(S.ph==='day'&&!S.ready[i])return{t:'rdy'};
+  else if(S.ph==='vote'&&S.votes[i]===undefined){
+    const o=al.filter(k=>k!==i);
+    if(r==='s'&&S.chk[i]){const m=S.chk[i].find(x=>x[1]&&S.alive[x[0]]);if(m)return{t:'vote',k:m[0]}}
+    const t=r==='m'?o.filter(k=>S.role[k]!=='m'):o;return{t:'vote',k:rnd(8)===0?-1:t[rnd(t.length)]}}
+  return null},
+win(S,me){return S.ph==='over'?(S.win==='maf')===(S.role[me]==='m'):null},
+render(S,me){
+  const r=S.role[me],al=S.alive;
+  const showR=k=>S.ph==='over'||!al[k]||k===me||(r==='m'&&S.role[k]==='m');
+  let h=`<div class="role" style="padding:12px">${S.ph==='night'?'🌙 Ночь':S.ph==='over'?'🏁 Игра окончена':S.ph==='vote'?'🗳️ Голосование':'☀️ День'} ${S.day}<br><small>Ты: <b>${RNm[r]}</b>${!al[me]?' (выбыл)':''}</small></div>`;
+  h+=`<div class="sc">${S.names.map((x,k)=>`<span class="chip ${al[k]?'':'out'}" style="--c:${COL[k]}">${TOK[k]} ${E(x)}${!al[k]?' 💀':''}${showR(k)&&k!==me?' <small>'+RNm[S.role[k]].split(' ')[0]+'</small>':''}</span>`).join('')}</div>`;
+  const tg=(arr,mk)=>`<div class="locs">${arr.map(k=>B(`${TOK[k]} ${E(S.names[k])}`,()=>send(mk(k)),'sm ghost')).join('')}</div>`;
+  const L=al.map((x,k)=>x?k:-1).filter(k=>k>=0);
+  if(S.ph==='night'){
+    if(!al[me])h+='<p class="muted" style="text-align:center">Ты выбыл. Наблюдай за игрой.</p>';
+    else if(r==='m')h+=S.act.m[me]===undefined?`<p style="text-align:center">🔪 Кого убьём этой ночью?</p>`+tg(L.filter(k=>S.role[k]!=='m'),k=>({t:'na',k})):'<p class="muted" style="text-align:center">Выбор сделан. Ждём утра…</p>';
+    else if(r==='d')h+=S.act.d===undefined?`<p style="text-align:center">💉 Кого вылечить этой ночью?</p>`+tg(L,k=>({t:'na',k})):'<p class="muted" style="text-align:center">Ты сделал выбор. Ждём утра…</p>';
+    else if(r==='s')h+=(S.act.s===undefined?`<p style="text-align:center">🕵️ Кого проверить?</p>`+tg(L.filter(k=>k!==me),k=>({t:'na',k})):'<p class="muted" style="text-align:center">Проверка сделана. Ждём утра…</p>')+(S.chk[me]?`<p class="muted" style="text-align:center">Результаты: ${S.chk[me].map(x=>`${E(S.names[x[0]])} — ${x[1]?'🔪 мафия':'✅ не мафия'}`).join('; ')}</p>`:'');
+    else h+='<p class="muted" style="text-align:center">🌙 Город спит… Ждём утра.</p>';
+  }else if(S.ph==='day'){
+    h+=al[me]?(S.ready[me]?'<p class="muted" style="text-align:center">Ждём остальных…</p>':`<div style="text-align:center">${B('Готов голосовать ✋',()=>send({t:'rdy'}),'big')}</div>`)+chatIn('Скажи что-нибудь городу…',t=>({t:'say',text:t})):'';
+  }else if(S.ph==='vote'){
+    h+=al[me]?(S.votes[me]===undefined?`<p style="text-align:center">Кого изгоняем?</p>`+tg(L.filter(k=>k!==me),k=>({t:'vote',k}))+`<div style="text-align:center">${B('Воздержаться',()=>send({t:'vote',k:-1}),'sm ghost')}</div>`:'<p class="muted" style="text-align:center">Ты проголосовал. Ждём остальных…</p>')+chatIn('Скажи что-нибудь городу…',t=>({t:'say',text:t})):'';
+  }
+  return h+chatLog(S);
+}};
+
+/* ============ 6. АЭРОХОККЕЙ (физика) ============ */
+const HW=800,HH=440,PRD=34,KRD=17,GHT=160;
+const hkInit=()=>({k:[HW/2,HH/2,0,0],p:[[100,HH/2],[HW-100,HH/2]],pv:[[0,0],[0,0]],tg:[[100,HH/2],[HW-100,HH/2]],pause:75});
+function hkBot(i){const sp=[300,480,740][LV()]/60,K=HK.k,p=HK.p[i],own=i?HW:0,inHalf=i?K[0]>HW/2-45:K[0]<HW/2+45;let tx,ty;
+  if(inHalf&&HK.pause<=0){
+    const gx=i?0:HW,gy=HH/2+(Math.random()-.5)*60*(LV()?0:1),ax=gx-K[0],ay=gy-K[1],al=Math.hypot(ax,ay)||1,ux=ax/al,uy=ay/al,R=PRD+KRD;
+    const sx=K[0]-ux*(R+6),sy=K[1]-uy*(R+6),dot=(K[0]-p[0])*ux+(K[1]-p[1])*uy,perp=Math.abs((K[0]-p[0])*uy-(K[1]-p[1])*ux);
+    if(dot>0&&perp<PRD*.9){tx=K[0]+ux*60;ty=K[1]+uy*60}else{tx=sx;ty=sy}
+  }else{tx=own+(i?-90:90);ty=HH/2+(K[1]-HH/2)*.35}
+  const dx=tx-p[0],dy=ty-p[1],d=Math.hypot(dx,dy)||1,st=Math.min(d,sp);HK.tg[i]=[p[0]+dx/d*st,p[1]+dy/d*st]}
+function hkGoal(p){HK.k=[HW/2,HH/2,0,0];HK.pause=80;applyAct(-1,{t:'goal',p})}
+function hkStep(dt){
+  const K=HK.k;
+  for(let i=0;i<2;i++){
+    if(net.players[i]&&net.players[i].bot)hkBot(i);
+    let[tx,ty]=HK.tg[i];const lo=i?HW/2+PRD:PRD,hi=i?HW-PRD:HW/2-PRD;
+    tx=Math.max(lo,Math.min(hi,tx));ty=Math.max(PRD,Math.min(HH-PRD,ty));
+    const p=HK.p[i],dx=tx-p[0],dy=ty-p[1],d=Math.hypot(dx,dy),mx=1500*dt,s=d>mx?mx/d:1,nx=p[0]+dx*s,ny=p[1]+dy*s;
+    HK.pv[i]=[(nx-p[0])/dt,(ny-p[1])/dt];p[0]=nx;p[1]=ny;
+  }
+  if(HK.pause>0){HK.pause--;return}
+  K[0]+=K[2]*dt;K[1]+=K[3]*dt;const f=Math.pow(.6,dt);K[2]*=f;K[3]*=f;
+  if(K[1]<KRD){K[1]=KRD;K[3]=Math.abs(K[3])*.92}if(K[1]>HH-KRD){K[1]=HH-KRD;K[3]=-Math.abs(K[3])*.92}
+  const inG=K[1]>(HH-GHT)/2+KRD*.4&&K[1]<(HH+GHT)/2-KRD*.4;
+  if(K[0]<KRD&&!inG){K[0]=KRD;K[2]=Math.abs(K[2])*.92}
+  if(K[0]>HW-KRD&&!inG){K[0]=HW-KRD;K[2]=-Math.abs(K[2])*.92}
+  for(let i=0;i<2;i++){const p=HK.p[i],dx=K[0]-p[0],dy=K[1]-p[1],d=Math.hypot(dx,dy),R=PRD+KRD;
+    if(d<R&&d>0){const nx=dx/d,ny=dy/d;K[0]=p[0]+nx*R;K[1]=p[1]+ny*R;const vn=(K[2]-HK.pv[i][0])*nx+(K[3]-HK.pv[i][1])*ny;
+      if(vn<0){K[2]-=1.9*vn*nx;K[3]-=1.9*vn*ny}const sp=Math.hypot(K[2],K[3]);if(sp>1400){K[2]*=1400/sp;K[3]*=1400/sp}}}
+  if(K[0]<-KRD||K[0]>HW+KRD)hkGoal(K[0]<0?1:0);
+}
+function hkStart(){
+  clearInterval(net.rt);HK=hkInit();let f=0;
+  net.rt=setInterval(()=>{if(!net.S||net.S.over)return;hkStep(1/60);if(++f%2===0){const K=HK.k,p=HK.p;broadcast({t:'rt',h:[K[0]|0,K[1]|0,p[0][0]|0,p[0][1]|0,p[1][0]|0,p[1][1]|0]})}},16);
+}
+function hkDraw(cv){
+  const x=cv.getContext('2d');x.clearRect(0,0,HW,HH);
+  const g=x.createLinearGradient(0,0,0,HH);g.addColorStop(0,'#0e4a5c');g.addColorStop(1,'#08303d');x.fillStyle=g;x.fillRect(0,0,HW,HH);
+  x.strokeStyle='#ffffff55';x.lineWidth=4;x.strokeRect(2,2,HW-4,HH-4);x.beginPath();x.moveTo(HW/2,0);x.lineTo(HW/2,HH);x.stroke();x.beginPath();x.arc(HW/2,HH/2,70,0,7);x.stroke();
+  const gy=(HH-GHT)/2;x.fillStyle=COL[0]+'66';x.fillRect(0,gy,12,GHT);x.fillStyle=COL[1]+'66';x.fillRect(HW-12,gy,12,GHT);
+  if(!HK)return;
+  HK.p.forEach((p,i)=>{x.beginPath();x.arc(p[0],p[1],PRD,0,7);x.fillStyle=COL[i];x.shadowColor=COL[i];x.shadowBlur=18;x.fill();x.shadowBlur=0;x.beginPath();x.arc(p[0],p[1],PRD*.6,0,7);x.fillStyle='#ffffff33';x.fill();x.font='26px serif';x.textAlign='center';x.textBaseline='middle';x.fillStyle='#fff';x.fillText(TOK[i],p[0],p[1]+2)});
+  const K=HK.k;x.beginPath();x.arc(K[0],K[1],KRD,0,7);x.fillStyle='#111';x.shadowColor='#fff';x.shadowBlur=14;x.fill();x.shadowBlur=0;x.lineWidth=3;x.strokeStyle='#fff';x.stroke();
+}
+function hkLoop(){if(net.gid!=='hock'){hkRaf=0;return}const cv=$('#cv');if(cv)hkDraw(cv);hkRaf=requestAnimationFrame(hkLoop)}
+const HOCK={id:'hock',name:'Аэрохоккей',icon:'🏒',color:'#06b6d4',cat:['fast'],time:'5 мин',min:2,max:2,sb:1,bd:60000,
+desc:'Настоящая физика: шайба отскакивает от бортов и бит. Двигай биту мышью или пальцем и забивай в ворота соперника!',
+opts:[{k:'pts',n:'Игра до',v:['5','7','10'],d:1}],
+rules:'Ты управляешь битой мышью или пальцем — она двигается в твоей половине поля. Загони шайбу в ворота соперника (слева играет 1-й игрок, справа 2-й). Побеждает первый, кто забьёт нужное число голов.',
+init(names,o){return{names,sc:[0,0],lim:[5,7,10][v_(o,'pts',1)],over:false,log:'Вперёд!'}},
+onStart:hkStart,
+act(S,i,a){if(S.over||i!==-1||a.t!=='goal')return;S.sc[a.p]++;S.log=`Гол! ${S.names[a.p]}`;if(S.sc[a.p]>=S.lim)S.over=true},
+bot(){return null},
+win(S,me){return S.over?S.sc[me]>S.sc[1-me]:null},
+render(S,me){
+  return `<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)}${i===me?' (ты)':''} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">до ${S.lim}</span></div>
+  ${S.over?`<h2 style="text-align:center">🏆 ${E(S.names[S.sc[0]>S.sc[1]?0:1])} победил(а)!</h2>`:`<p class="muted" style="text-align:center">${E(S.log)} · ты играешь ${me?'справа':'слева'}</p>`}
+  <canvas id="cv" class="hk" width="${HW}" height="${HH}"></canvas>`;
+},
+after(S,me){
+  const cv=$('#cv');if(!cv)return;let ls=0;
+  const mv=e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*HW,y=(e.clientY-r.top)/r.height*HH;
+    if(net.host){if(HK)HK.tg[net.me]=[x,y]}else{const t=Date.now();if(t-ls>30){ls=t;net.conn&&net.conn.send({t:'mv',x,y})}}};
+  cv.onpointermove=mv;cv.onpointerdown=mv;
+  if(!hkRaf)hkRaf=requestAnimationFrame(hkLoop);
+}};
+
+/* ============ 7. ВИКТОРИНА ============ */
+const QS=`1|Гео|Столица Франции?|Париж|Лион|Марсель|Ницца
+1|Гео|Столица Италии?|Рим|Милан|Неаполь|Венеция
+1|Гео|Самый большой океан?|Тихий|Атлантический|Индийский|Северный Ледовитый
+1|Гео|На каком континенте находится Египет?|В Африке|В Азии|В Европе|В Южной Америке
+1|Гео|Самая большая страна по площади?|Россия|Канада|Китай|США
+1|Гео|Столица Японии?|Токио|Киото|Осака|Нагоя
+1|Гео|Столица Испании?|Мадрид|Барселона|Севилья|Валенсия
+1|Гео|Через какой город протекает Нева?|Санкт-Петербург|Москва|Казань|Самара
+1|Наука|Сколько планет в Солнечной системе?|8|7|9|10
+1|Наука|Какую планету называют красной?|Марс|Венера|Юпитер|Меркурий
+1|Наука|Какой газ мы вдыхаем для жизни?|Кислород|Азот|Гелий|Водород
+1|Наука|Из чего состоит вода?|Водород и кислород|Азот и кислород|Углерод и водород|Гелий и кислород
+1|Наука|Как называется ближайшая к Земле звезда?|Солнце|Сириус|Полярная|Альфа Центавра
+1|Природа|Какое животное самое высокое?|Жираф|Слон|Верблюд|Лось
+1|Природа|Какая из птиц не умеет летать?|Пингвин|Ласточка|Орёл|Сокол
+1|Природа|Какое животное считается «царём зверей»?|Лев|Тигр|Медведь|Волк
+1|Природа|Что вырабатывают пчёлы?|Мёд|Молоко|Шёлк|Сахар
+1|Природа|Сколько ног у паука?|8|6|10|4
+1|Природа|Самое большое животное на планете?|Синий кит|Слон|Акула|Жираф
+1|История|Кто первым полетел в космос?|Юрий Гагарин|Алексей Леонов|Нил Армстронг|Герман Титов
+1|История|Какой город был столицей Римской империи?|Рим|Афины|Спарта|Карфаген
+1|Культура|Кто написал «Евгения Онегина»?|Пушкин|Лермонтов|Гоголь|Некрасов
+1|Культура|Кто написал «Войну и мир»?|Лев Толстой|Фёдор Достоевский|Антон Чехов|Иван Тургенев
+1|Культура|Кто нарисовал «Мону Лизу»?|Леонардо да Винчи|Микеланджело|Рафаэль|Ван Гог
+1|Культура|Сколько клавиш на стандартном пианино?|88|76|96|100
+1|Кино|Как зовут юного волшебника со шрамом-молнией?|Гарри Поттер|Фродо Бэггинс|Люк Скайуокер|Перси Джексон
+1|Кино|Как зовут рыбку-клоуна из мультфильма «В поисках Немо»?|Немо|Дори|Марлин|Брюс
+1|Спорт|Сколько игроков одной команды на поле в футболе?|11|10|9|12
+1|Спорт|В каком виде спорта забивают шайбой?|Хоккей|Футбол|Волейбол|Теннис
+1|Спорт|Сколько колец на олимпийском флаге?|5|4|6|7
+1|Еда|Из чего делают сыр?|Из молока|Из яиц|Из муки|Из мяса
+1|Еда|Какой фрукт ассоциируется с Исааком Ньютоном?|Яблоко|Груша|Апельсин|Слива
+1|Игры|В какой игре строят из кубиков и копают шахты?|Minecraft|Tetris|Fortnite|Among Us
+1|Игры|Как зовут усатого водопроводчика в красной кепке от Nintendo?|Марио|Луиджи|Соник|Линк
+2|Гео|Столица Австралии?|Канберра|Сидней|Мельбурн|Перт
+2|Гео|Столица Канады?|Оттава|Торонто|Монреаль|Ванкувер
+2|Гео|Самая длинная река Европы?|Волга|Дунай|Рейн|Днепр
+2|Гео|Какая страна по форме напоминает сапог?|Италия|Греция|Испания|Португалия
+2|Гео|В какой стране находится Мачу-Пикчу?|Перу|Мексика|Чили|Боливия
+2|Гео|Столица Турции?|Анкара|Стамбул|Измир|Анталья
+2|Гео|Какое из этих морей самое солёное?|Мёртвое|Чёрное|Балтийское|Белое
+2|Гео|Самая высокая гора мира?|Эверест|Эльбрус|Монблан|Килиманджаро
+2|Гео|Столица Бразилии?|Бразилиа|Рио-де-Жанейро|Сан-Паулу|Сальвадор
+2|Наука|Химический символ золота?|Au|Ag|Fe|Go
+2|Наука|Сколько костей у взрослого человека?|206|186|226|246
+2|Наука|Самое твёрдое природное вещество?|Алмаз|Кварц|Гранит|Сталь
+2|Наука|Какой газ самый лёгкий?|Водород|Гелий|Кислород|Азот
+2|Наука|Какая планета самая большая?|Юпитер|Сатурн|Нептун|Уран
+2|Наука|Какой орган качает кровь?|Сердце|Лёгкие|Печень|Почки
+2|Наука|Сколько хромосом у человека?|46|23|44|48
+2|Наука|В чём измеряется сила тока?|В амперах|В вольтах|В ваттах|В омах
+2|Наука|Как называется наука о насекомых?|Энтомология|Этология|Орнитология|Ихтиология
+2|История|В каком году началась Первая мировая война?|1914|1912|1917|1939
+2|История|Кто был первым президентом США?|Джордж Вашингтон|Авраам Линкольн|Томас Джефферсон|Джон Адамс
+2|История|Какой город основал Пётр I?|Санкт-Петербург|Москву|Казань|Новгород
+2|История|В каком году Гагарин полетел в космос?|1961|1957|1965|1969
+2|История|Какая цивилизация построила пирамиды в Гизе?|Древний Египет|Майя|Древний Рим|Ацтеки
+2|Культура|Кто автор «Мастера и Маргариты»?|Булгаков|Пастернак|Набоков|Шолохов
+2|Культура|Кто написал оперу «Кармен»?|Жорж Бизе|Верди|Моцарт|Вагнер
+2|Культура|Кто написал «Преступление и наказание»?|Достоевский|Толстой|Гоголь|Тургенев
+2|Культура|Какой композитор создал балет «Лебединое озеро»?|Чайковский|Глинка|Рахманинов|Прокофьев
+2|Культура|Кто нарисовал «Звёздную ночь»?|Ван Гог|Моне|Пикассо|Дали
+2|Кино|Кто режиссёр фильма «Титаник» (1997)?|Джеймс Кэмерон|Стивен Спилберг|Кристофер Нолан|Ридли Скотт
+2|Кино|Как зовут львёнка — героя «Короля Льва»?|Симба|Муфаса|Шрам|Тимон
+2|Кино|Как называется школа магии в «Гарри Поттере»?|Хогвартс|Шармбатон|Дурмстранг|Ильверморни
+2|Спорт|В каком городе прошла Олимпиада 2014 года?|Сочи|Лондон|Пекин|Рио-де-Жанейро
+2|Спорт|Сколько очков даёт бросок из-за дуги в баскетболе?|3|2|4|5
+2|Спорт|Сколько минут длится основное время футбольного матча?|90|60|80|100
+2|Спорт|В каком виде спорта используют ракетку и волан?|Бадминтон|Сквош|Гольф|Крикет
+2|Природа|Какое животное самое быстрое на суше?|Гепард|Лев|Антилопа|Лошадь
+2|Природа|Какой океан омывает Африку с востока?|Индийский|Атлантический|Тихий|Северный Ледовитый
+2|Природа|Сколько сердец у осьминога?|3|1|2|4
+2|Природа|Какое дерево даёт жёлуди?|Дуб|Берёза|Сосна|Клён
+2|Еда|В какой стране появилась пицца?|В Италии|Во Франции|В Греции|В Испании
+2|Еда|Какой основной ингредиент суши?|Рис|Пшеница|Картофель|Кукуруза
+2|Еда|Какая специя считается самой дорогой в мире?|Шафран|Корица|Чёрный перец|Ваниль
+2|Игры|Как зовут героя Nintendo — эльфа с мечом, спасающего принцессу Зельду?|Линк|Марио|Донки Конг|Кирби
+2|Игры|В какой игре есть мобы-«крипперы»?|Minecraft|Roblox|Terraria|Fortnite
+2|Игры|Сколько фигур у каждого игрока в шахматах в начале партии?|16|12|18|20
+3|Гео|Какая река самая длинная в мире (по традиционным данным)?|Нил|Амазонка|Янцзы|Миссисипи
+3|Гео|Столица Казахстана?|Астана|Алма-Ата|Шымкент|Караганда
+3|Гео|Какая страна занимает первое место по числу часовых поясов (с заморскими территориями)?|Франция|Россия|США|Китай
+3|Гео|Какое озеро самое глубокое в мире?|Байкал|Танганьика|Виктория|Мичиган
+3|Гео|Столица Новой Зеландии?|Веллингтон|Окленд|Крайстчерч|Гамильтон
+3|Гео|Какой пролив отделяет Чукотку от Аляски?|Берингов|Магелланов|Гибралтарский|Босфор
+3|Наука|Какой элемент обозначается символом Fe?|Железо|Фтор|Фосфор|Франций
+3|Наука|Какая элементарная частица несёт отрицательный заряд?|Электрон|Протон|Нейтрон|Фотон
+3|Наука|Чему примерно равна скорость света в вакууме?|300 000 км/с|150 000 км/с|30 000 км/с|1 000 000 км/с
+3|Наука|Какой элемент обозначается символом Na?|Натрий|Азот|Неон|Никель
+3|Наука|Какая кислота содержится в желудочном соке?|Соляная|Серная|Уксусная|Азотная
+3|Наука|Какая планета ближе всех к Солнцу?|Меркурий|Венера|Марс|Земля
+3|Наука|Кто сформулировал закон всемирного тяготения?|Исаак Ньютон|Галилео Галилей|Альберт Эйнштейн|Иоганн Кеплер
+3|История|В каком году распался СССР?|1991|1989|1993|1985
+3|История|Кто был первым императором Рима?|Октавиан Август|Юлий Цезарь|Нерон|Калигула
+3|История|В каком году произошла Куликовская битва?|1380|1240|1480|1612
+3|История|Кто командовал русской армией в Бородинском сражении?|Кутузов|Суворов|Багратион|Барклай-де-Толли
+3|История|Какая династия правила Россией с 1613 года?|Романовы|Рюриковичи|Годуновы|Шуйские
+3|История|В каком году Колумб открыл Америку?|1492|1453|1517|1607
+3|Культура|Кто написал «Тихий Дон»?|Шолохов|Бунин|Фадеев|Паустовский
+3|Культура|Кто написал «Чёрный квадрат»?|Казимир Малевич|Василий Кандинский|Марк Шагал|Илья Репин
+3|Культура|Кто сочинил цикл «Времена года» для скрипки?|Вивальди|Бах|Моцарт|Бетховен
+3|Культура|Кто автор «Божественной комедии»?|Данте Алигьери|Петрарка|Боккаччо|Тассо
+3|Культура|В каком городе находится музей Прадо?|Мадрид|Париж|Рим|Лиссабон
+3|Культура|Какая из картин написана Ильёй Репиным?|«Бурлаки на Волге»|«Грачи прилетели»|«Утро в сосновом лесу»|«Девочка с персиками»
+3|Кино|Кто сыграл Джека Доусона в «Титанике»?|Леонардо ДиКаприо|Брэд Питт|Том Круз|Мэтт Дэймон
+3|Кино|Кто режиссёр фильма «Начало» (Inception)?|Кристофер Нолан|Ридли Скотт|Дэвид Финчер|Мартин Скорсезе
+3|Кино|Как называется планета, где происходит действие «Аватара» Кэмерона?|Пандора|Татуин|Арракис|Криптон
+3|Спорт|В какой стране прошёл первый чемпионат мира по футболу (1930)?|Уругвай|Бразилия|Италия|Франция
+3|Спорт|Сколько игроков волейбольной команды одновременно на площадке?|6|5|7|8
+3|Спорт|Какой теннисный турнир Большого шлема проводится на траве?|Уимблдон|Ролан Гаррос|Открытый чемпионат Австралии|US Open
+3|Спорт|Какова длина марафонской дистанции (примерно)?|42 км|21 км|50 км|32 км
+3|Природа|Какой самый крупный хищник на суше?|Белый медведь|Бурый медведь|Тигр|Лев
+3|Природа|Какая птица несёт самые крупные яйца?|Страус|Альбатрос|Орёл|Пингвин
+3|Природа|Из какого вещества в основном состоит раковина улитки?|Карбонат кальция|Кератин|Целлюлоза|Хитин
+3|Еда|Из какого растения делают текилу?|Агава|Кактус|Сахарный тростник|Виноград
+3|Еда|Как называется итальянский десерт с кофе и маскарпоне?|Тирамису|Панна-котта|Канноли|Джелато
+3|Игры|Как зовут главного героя серии игр The Witcher?|Геральт|Эскель|Лютик|Йеннифэр
+3|Игры|К какой серии игр относится Skyrim?|The Elder Scrolls|Fallout|Dark Souls|Dragon Age
+3|Игры|Кто создал «Тетрис»?|Алексей Пажитнов|Хидео Кодзима|Сид Мейер|Гейб Ньюэлл`;
+const QB=QS.split('\n').map(l=>l.split('|'));
+const QUIZ={id:'quiz',name:'Викторина',icon:'🧠',color:'#f43f5e',cat:['party','fast'],time:'7 мин',min:1,max:6,sb:2,bd:1200,
+desc:`${QB.length} вопросов в 3 уровнях сложности: география, наука, история, кино, игры и другое. Чем быстрее ответ, тем больше очков!`,
+opts:[{k:'lvl',n:'Сложность',v:['Лёгкая','Средняя','Сложная','Микс'],d:3},{k:'cnt',n:'Вопросов',v:['10','15','20'],d:0}],
+rules:'Отвечай как можно быстрее: правильный ответ даёт 100 очков + бонус за скорость (первые 10 секунд). После ответа всех (или через 15 секунд) показывается верный ответ.',
+init(names,o){const lv=v_(o,'lvl',3),pool=QB.filter(x=>lv===3||+x[0]===lv+1);
+  const qs=shuf(pool).slice(0,[10,15,20][v_(o,'cnt',0)]).map(x=>{const a=x.slice(3),p=shuf([0,1,2,3]);return{q:x[2],c:x[1],l:+x[0],o:p.map(j=>a[j]),a:p.indexOf(0)}});
+  return{names,qs,qi:0,ph:'q',t0:Date.now(),ans:{},gain:{},sc:names.map(()=>0)}},
+act(S,i,a){
+  const n=S.names.length,Q=S.qs[S.qi];
+  if(a.t==='ans'&&S.ph==='q'&&S.ans[i]===undefined&&a.k>=0&&a.k<4){
+    S.ans[i]=a.k;if(a.k===Q.a){const g=100*Q.l+Math.max(0,10-Math.floor((Date.now()-S.t0)/1000))*5;S.sc[i]+=g;S.gain[i]=g}
+    if(Object.keys(S.ans).length===n)S.ph='r';
+  }else if(a.t==='reveal'&&S.ph==='q'&&Date.now()-S.t0>=15000)S.ph='r';
+  else if(a.t==='next'&&S.ph==='r'){S.qi++;if(S.qi>=S.qs.length){S.qi=S.qs.length-1;S.ph='over'}else{S.ph='q';S.t0=Date.now();S.ans={};S.gain={}}}
+},
+bot(S,i,all){
+  if(S.ph==='q'&&S.ans[i]===undefined){const Q=S.qs[S.qi];return{t:'ans',k:Math.random()<[.4,.65,.9][LV()]-(Q.l-2)*.1?Q.a:rnd(4)}}
+  if(S.ph==='r'&&all)return{t:'next'};return null},
+win(S,me){return S.ph==='over'?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){
+  const Q=S.qs[S.qi];
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b>${S.ph==='q'&&S.ans[i]!==undefined?' ✔':''}${S.ph==='r'&&S.gain[i]?`<small>+${S.gain[i]}</small>`:''}</span>`).join('')}</div>`;
+  if(S.ph==='over'){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очков!</h2><p class="muted" style="text-align:center">Игра окончена. Нажми «↻ Заново» (хост), чтобы сыграть ещё.</p>`}
+  h+=`<div class="role" style="padding:14px"><small class="muted">${E(Q.c)} · ${'⭐'.repeat(Q.l)} · вопрос ${S.qi+1}/${S.qs.length}${S.ph==='q'?` · ⏱ <span id="tm">15</span>`:''}</small><br><b>${E(Q.q)}</b></div>`;
+  h+=Q.o.map((o,k)=>{const mine=S.ans[me]===k,cls=S.ph==='r'?(k===Q.a?'ok':mine?'bad':''):'';
+    return `<button class="btn qo ${cls} ${mine?'me':''}" ${S.ph==='q'&&S.ans[me]===undefined?`onclick="${H(()=>send({t:'ans',k}))}"`:''}>${'ABCD'[k]}. ${E(o)}</button>`}).join('');
+  if(S.ph==='q')h+=`<p class="muted" style="text-align:center">Ответили: ${Object.keys(S.ans).length}/${S.names.length} ${S.ans[me]!==undefined?B('Показать ответ (после таймера)',()=>send({t:'reveal'}),'sm ghost'):''}</p>`;
+  else h+=`<div style="text-align:center">${B(S.qi+1>=S.qs.length?'Итоги ➜':'Дальше ➜',()=>send({t:'next'}),'big')}</div>`;
+  return h;
+},
+after(S){const el=$('#tm');if(!el||S.ph!=='q')return;const f=()=>{el.textContent=Math.max(0,15-Math.floor((hnow()-S.t0)/1000))};f();tmr=setInterval(f,500)}};
+
+/* ============ 8. КРОКОДИЛ ============ */
+function line(x,s){x.strokeStyle=s.c;x.lineWidth=s.w*2;x.lineCap='round';x.beginPath();x.moveTo(s.p[0][0]*800,s.p[0][1]*550);x.lineTo(s.p[1][0]*800,s.p[1][1]*550);x.stroke()}
+function redraw(){const cv=$('#cv'),x=cv&&cv.getContext&&cv.getContext('2d');if(!x)return;x.fillStyle='#fff';x.fillRect(0,0,800,550);STROKES.forEach(s=>line(x,s))}
+function drawSeg(s){
+  if(s.clr){STROKES=[];redraw()}else if(s.undo){STROKES=STROKES.filter(x=>x.sid!==s.undo);redraw()}
+  else{STROKES.push(s);const cv=$('#cv'),x=cv&&cv.getContext&&cv.getContext('2d');x&&line(x,s)}
+}
+function emit(s){drawSeg(s);if(net.host)broadcast({t:'d',seg:s});else net.conn&&net.conn.send({t:'d',seg:s})}
+function crNew(S){S.word=S.pool.length?S.pool.pop():'слово';S.hint=shuf([...Array(S.word.length).keys()]);S.t0=Date.now();S.auto={t:'end',at:S.t0+S.lim*1000,r:S.round}}
+const CRO={id:'cro',name:'Крокодил',icon:'🐊',color:'#22c55e',cat:['party'],time:'10 мин',min:2,max:8,
+desc:`Рисуй слово, а друзья угадывают в чате. ${W1.length+W2.length} слов, подсказки-буквы, таймер, отмена штриха и 10 цветов.`,
+opts:[{k:'w',n:'Слова',v:['Лёгкие','Сложные','Все'],d:2},{k:'t',n:'Время раунда',v:['60 с','90 с','120 с'],d:1}],
+rules:'Один рисует загаданное слово (писать буквы нельзя!), остальные вводят догадки. Угадавший получает +2, художник +1, и угадавший рисует следующим. Если время вышло — слово раскрывается, рисует следующий. По ходу раунда открываются буквы-подсказки.',
+init(names,o){const S={names,dr:0,pool:wordPool(v_(o,'w',2)),lim:[60,90,120][v_(o,'t',1)],score:names.map(()=>0),chat:[],round:1};crNew(S);return S},
+act(S,i,a){
+  const n=S.names.length;
+  if(a.t==='guess'&&i>=0&&i!==S.dr){const t=String(a.text||'').trim().slice(0,40);if(!t)return;
+    if(norm(t)===norm(S.word)){S.score[i]+=2;S.score[S.dr]+=1;pushChat(S,i,`угадал(а)! Слово: «${S.word}»`,{ok:1});S.dr=i;S.round++;crNew(S)}
+    else pushChat(S,i,t);
+  }else if(a.t==='skip'&&i===S.dr){pushChat(S,i,'сменил(а) слово',{sys:1});S.round++;crNew(S)}
+  else if(a.t==='end'&&i<0&&a.r===S.round){pushChat(S,-1,`⏰ Время вышло! Слово было: «${S.word}»`,{sys:1});S.dr=(S.dr+1)%n;S.round++;crNew(S)}
+},
+render(S,me){
+  const dr=me===S.dr;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.dr?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.score[i]}</b>${i===S.dr?' ✏️':''}</span>`).join('')}</div>`;
+  h+=dr?`<div class="role" style="padding:10px">Рисуй: <b>${E(S.word)}</b> · ⏱ <span id="tm"></span> ${B('Другое слово',()=>send({t:'skip'}),'sm ghost')}</div>`:`<div class="role" style="padding:10px">${E(S.names[S.dr])} рисует: <b id="ht" style="letter-spacing:4px"></b> <small>(${S.word.length} букв)</small> · ⏱ <span id="tm"></span></div>`;
+  h+=`<canvas id="cv" width="800" height="550" style="aspect-ratio:800/550"></canvas>`;
+  if(dr)h+=`<div class="tools">${['#111111','#ef4444','#f97316','#eab308','#22c55e','#06b6d4','#3b82f6','#a855f7','#92400e','#ffffff'].map(c=>`<span class="sw" style="background:${c}" onclick="${H(()=>{tool.c=c})}"></span>`).join('')}${[3,6,12,22].map(w=>B('●',()=>{tool.w=w},'sm ghost')).join('')}${B('↶ Отмена',()=>{if(my.length)emit({undo:my.pop()})},'sm ghost')}${B('🗑',()=>{my=[];emit({clr:1})},'sm ghost')}<small class="muted">белый = ластик</small></div>`;
+  else{const go=H(()=>{const el=$('#gi'+S.round),t=el.value.trim();if(!t)return;el.value='';send({t:'guess',text:t})});
+    h+=`<div class="row" style="max-width:640px;margin:10px auto"><input id="gi${S.round}" placeholder="Твоя догадка…" style="flex:1" autocomplete="off" onkeydown="if(event.key==='Enter')${go}"><button class="btn" onclick="${go}">Отправить</button></div>`}
+  return h+chatLog(S);
+},
+after(S,me){
+  if(lastR!==S.round){STROKES=[];lastR=S.round;my=[]}
+  const cv=$('#cv');if(!cv)return;redraw();
+  const upd=()=>{const el=$('#tm');if(!el)return;const e=(hnow()-S.t0)/1000;el.textContent=Math.max(0,Math.ceil(S.lim-e));
+    const ht=$('#ht');if(ht){const nr=Math.min(Math.floor(e/S.lim*3),Math.max(0,S.word.length-2)),sh=S.hint.slice(0,nr);ht.textContent=S.word.split('').map((c,k)=>c===' '?'  ':sh.includes(k)?c:'_').join(' ')}};
+  upd();tmr=setInterval(upd,500);
+  if(me!==S.dr)return;let dn=false,last,sid=0;
+  const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+  cv.onpointerdown=e=>{dn=true;sid=Date.now();my.push(sid);cv.setPointerCapture(e.pointerId);last=pt(e);emit({c:tool.c,w:tool.w,p:[last,last],sid})};
+  cv.onpointermove=e=>{if(!dn)return;const p=pt(e);emit({c:tool.c,w:tool.w,p:[last,p],sid});last=p};
+  cv.onpointerup=cv.onpointercancel=()=>{dn=false};
+}};
+var my=[];
+
+/* ============ 9. ШПИОН ============ */
+const LOCS=['Пляж','Школа','Больница','Космическая станция','Цирк','Кинотеатр','Самолёт','Ресторан','Банк','Библиотека','Подводная лодка','Зоопарк','Супермаркет','Университет','Вокзал','Казино','Пиратский корабль','Музей','Спа-салон','Военная база','Дискотека','Аквапарк','Замок','Цветочный магазин','Стадион','Метро','Театр','Аэропорт','Полярная станция','Лагерь в лесу'];
+const SPY={id:'spy',name:'Шпион',icon:'🕵️',color:'#0ea5e9',cat:['party'],time:'10 мин',min:2,max:8,
+desc:'Все знают место, кроме шпиона. Вдвоём — режим «Двойной блеф»: одинаковое у вас место или разное? Есть чат прямо в игре.',
+rules:'От 3 игроков: всем показывают локацию, кроме шпиона. Задавайте вопросы в чате (или голосом), шпион пытается понять место, остальные — вычислить шпиона. ВДВОЁМ: каждому дают локацию, но она у вас может совпадать или нет! Выясните вопросами и угадайте: «одно место» или «разные».',
+init(names){const n=names.length;
+  if(n===2){const a=rnd(LOCS.length);let b=a;if(rnd(2)){do{b=rnd(LOCS.length)}while(b===a)}return{names,dbl:true,locs:[a,b],ph:'play',t0:Date.now(),votes:{},res:null,chat:[]}}
+  return{names,loc:rnd(LOCS.length),spy:rnd(n),ph:'play',t0:Date.now(),votes:{},res:null,chat:[]}},
+act(S,i,a){
+  const n=S.names.length;
+  if(a.t==='say'&&i>=0){const t=String(a.text||'').trim().slice(0,80);if(t)pushChat(S,i,t);return}
+  if(S.dbl){if(a.t==='dv'&&S.ph==='play'&&S.votes[i]===undefined){S.votes[i]=a.v?1:0;
+    if(Object.keys(S.votes).length===2){const same=S.locs[0]===S.locs[1]?1:0;S.res={same,ok:[S.votes[0]===same,S.votes[1]===same]};S.ph='end'}}return}
+  if(a.t==='guess'&&S.ph==='play'&&i===S.spy){const ok=a.loc===S.loc;S.res={team:!ok,why:`Шпион назвал «${LOCS[a.loc]}» — ${ok?'верно, шпион победил!':'неверно, шпион проиграл!'}`};S.ph='end'}
+  else if(a.t==='vote'&&S.ph==='play'&&S.votes[i]===undefined&&a.k!==i&&a.k>=0&&a.k<n){
+    S.votes[i]=a.k;
+    if(Object.keys(S.votes).length===n){const c=S.names.map(()=>0);Object.values(S.votes).forEach(v=>c[v]++);const mx=Math.max(...c),top=c.map((x,j)=>x===mx?j:-1).filter(j=>j>=0);
+      const caught=top.length===1&&top[0]===S.spy;S.res={team:caught,why:caught?`Шпиона вычислили — это ${S.names[S.spy]}!`:`Шпиона не поймали! Это был ${S.names[S.spy]}.`};S.ph='end'}
+  }
+},
+win(S,me){if(S.ph!=='end')return null;return S.dbl?S.res.ok[me]:(me===S.spy?!S.res.team:S.res.team)},
+render(S,me){
+  const foot=S.ph==='play'?chatIn('Задай вопрос или ответь…',t=>({t:'say',text:t})):'';
+  if(S.dbl){
+    if(S.ph==='end')return `<div class="role">${S.res.same?'📍 У вас было одно место':'🔀 У вас были разные места'}<br><small>${TOK[0]} ${E(S.names[0])}: <b>${LOCS[S.locs[0]]}</b> ${S.res.ok[0]?'✅':'❌'}<br>${TOK[1]} ${E(S.names[1])}: <b>${LOCS[S.locs[1]]}</b> ${S.res.ok[1]?'✅':'❌'}</small></div>${chatLog(S)}<p class="muted" style="text-align:center">«↻ Заново» — новый раунд</p>`;
+    return `<div class="role">📍 Твоя локация: <b>${LOCS[S.locs[me]]}</b><br><small>У соперника такая же локация или другая? Выясните вопросами в чате, не называя место прямо!</small><br><small>⏱ <span id="tm"></span></small></div>
+    <div style="text-align:center">${S.votes[me]===undefined?B('Одно и то же место',()=>send({t:'dv',v:1}),'big')+B('Разные места',()=>send({t:'dv',v:0}),'big ghost'):'<p class="muted">Ты ответил. Ждём соперника…</p>'}</div>${foot}${chatLog(S)}`;
+  }
+  const spy=me===S.spy;
+  if(S.ph==='end')return `<div class="role">${S.res.team?'🎉 Победила команда!':'🕵️ Победил шпион!'}<br><small>${E(S.res.why)}</small><br><br>Локация была: <b>${LOCS[S.loc]}</b><br>Шпион: <b>${TOK[S.spy]} ${E(S.names[S.spy])}</b></div>${chatLog(S)}<p class="muted" style="text-align:center">«↻ Заново» — новый раунд (хост)</p>`;
+  let h=`<div class="role">${spy?'🕵️ Ты — <b>ШПИОН</b><br><small>Не выдай себя и угадай локацию!</small>':`📍 Локация: <b>${LOCS[S.loc]}</b><br><small>Найди шпиона вопросами. Не называй место прямо!</small>`}<br><small>⏱ <span id="tm"></span></small></div>`;
+  if(spy)h+=`<h4>Знаешь, где вы? Назови локацию (ошибёшься — проиграешь):</h4><div class="locs">${LOCS.map((l,k)=>B(l,()=>{if(confirm('Точно «'+l+'»?'))send({t:'guess',loc:k})},'sm ghost')).join('')}</div>`;
+  else h+=`<details><summary class="muted">Список возможных локаций</summary><p class="muted">${LOCS.join(' · ')}</p></details>`;
+  h+=`<h4>Голосование: кто шпион? ${S.votes[me]!==undefined?'(ты проголосовал)':''}</h4><div class="locs">${S.names.map((x,k)=>k===me?'':B(`${TOK[k]} ${E(x)}`,()=>{if(S.votes[me]===undefined&&confirm('Голосуешь за '+x+'?'))send({t:'vote',k})},S.votes[me]===k?'':'ghost')).join('')}</div><p class="muted">Проголосовало: ${Object.keys(S.votes).length}/${S.names.length}</p>`;
+  return h+foot+chatLog(S);
+},
+after(S){const el=$('#tm');if(!el||S.ph!=='play')return;const f=()=>{const s=Math.max(0,600-Math.floor((hnow()-S.t0)/1000));el.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};f();tmr=setInterval(f,1000)}};
+
+/* ============ 10. ОБЪЯСНИ СЛОВО ============ */
+function alNew(S){S.word=S.pool.length?S.pool.pop():'слово'}
+const ALS={id:'als',name:'Объясни слово',icon:'🗣️',color:'#f97316',cat:['party','fast'],time:'10 мин',min:2,max:8,
+desc:'Объясняй слово подсказками в чате (или голосом), а друзья отгадывают. За 60 секунд — как можно больше слов!',
+opts:[{k:'w',n:'Слова',v:['Лёгкие','Сложные','Все'],d:2},{k:'r',n:'Кругов',v:['1','2','3'],d:1}],
+rules:'Игрок-объяснитель видит слово и пишет подсказки в чат (нельзя использовать само слово и однокоренные!) или говорит голосом. Остальные вводят догадки. За каждое угаданное слово: +1 объяснителю, +1 угадавшему. Раунд — 60 секунд, потом объясняет следующий.',
+init(names,o){const S={names,ex:0,pool:wordPool(v_(o,'w',2)),sc:names.map(()=>0),chat:[],turn:0,tot:names.length*[1,2,3][v_(o,'r',1)],over:false};alNew(S);S.t0=Date.now();S.auto={t:'end',at:S.t0+60000,r:0};return S},
+act(S,i,a){
+  const n=S.names.length;if(S.over)return;
+  if(a.t==='guess'&&i>=0&&i!==S.ex){const t=String(a.text||'').trim().slice(0,40);if(!t)return;
+    if(norm(t)===norm(S.word)){S.sc[i]++;S.sc[S.ex]++;pushChat(S,i,`угадал(а): «${S.word}»`,{ok:1});alNew(S)}else pushChat(S,i,t)}
+  else if(a.t==='hint'&&i===S.ex){const t=String(a.text||'').trim().slice(0,60),w=norm(S.word);if(!t)return;
+    if(norm(t).includes(w.slice(0,Math.max(3,w.length-3))))pushChat(S,-1,'🚫 Нельзя называть слово или однокоренное!',{sys:1});else pushChat(S,i,t)}
+  else if(a.t==='skip'&&i===S.ex){pushChat(S,-1,`Пропуск: «${S.word}»`,{sys:1});alNew(S)}
+  else if(a.t==='end'&&i<0&&a.r===S.turn){S.turn++;pushChat(S,-1,`⏰ Время! Слово было «${S.word}»`,{sys:1});
+    if(S.turn>=S.tot){S.over=true;S.auto=null}else{S.ex=S.turn%n;alNew(S);S.t0=Date.now();S.auto={t:'end',at:S.t0+60000,r:S.turn}}}
+},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){
+  const ex=me===S.ex;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.ex&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b>${i===S.ex&&!S.over?' 🗣️':''}</span>`).join('')}<span class="chip">раунд ${Math.min(S.turn+1,S.tot)}/${S.tot}</span></div>`;
+  if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очков!</h2>`+chatLog(S)}
+  h+=ex?`<div class="role" style="padding:12px">Объясняй: <b style="font-size:30px">${E(S.word)}</b><br><small>⏱ <span id="tm"></span> ${B('Пропустить',()=>send({t:'skip'}),'sm ghost')}</small></div>`+chatIn('Подсказка (без самого слова)…',t=>({t:'hint',text:t})):
+    `<div class="role" style="padding:12px">${E(S.names[S.ex])} объясняет слово<br><small>⏱ <span id="tm"></span> · ${S.word.length} букв</small></div>`+chatIn('Твоя догадка…',t=>({t:'guess',text:t}));
+  return h+chatLog(S);
+},
+after(S){const el=$('#tm');if(!el||S.over)return;const f=()=>{el.textContent=Math.max(0,60-Math.floor((hnow()-S.t0)/1000))};f();tmr=setInterval(f,500)}};
+
+/* ============ 11. РЕВЕРСИ ============ */
+const RD=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+function rvFlips(b,k,p){const r=k>>3,c=k&7,o=3-p,out=[];if(b[k])return out;
+  for(const[dr,dd]of RD){let rr=r+dr,cc=c+dd;const t=[];while(rr>=0&&rr<8&&cc>=0&&cc<8&&b[rr*8+cc]===o){t.push(rr*8+cc);rr+=dr;cc+=dd}
+    if(t.length&&rr>=0&&rr<8&&cc>=0&&cc<8&&b[rr*8+cc]===p)out.push(...t)}return out}
+const rvMoves=(b,p)=>{const m=[];for(let k=0;k<64;k++)if(!b[k]&&rvFlips(b,k,p).length)m.push(k);return m};
+const rvApply=(b,k,p)=>{const nb=b.slice();rvFlips(b,k,p).forEach(x=>nb[x]=p);nb[k]=p;return nb};
+const RQ=[[100,-20,10,5],[-20,-50,-2,-2],[10,-2,-1,-1],[5,-2,-1,-1]],RW=Array.from({length:64},(_,k)=>RQ[Math.min(k>>3,7-(k>>3))][Math.min(k&7,7-(k&7))]);
+const rvEval=(b,me)=>{let s=0;for(let k=0;k<64;k++)if(b[k])s+=b[k]===me?RW[k]:-RW[k];return s};
+function rvMM(b,p,d,me,al,be){const mv=rvMoves(b,p);
+  if(!mv.length){const o=rvMoves(b,3-p);if(!o.length||d===0)return rvEval(b,me);return rvMM(b,3-p,d-1,me,al,be)}
+  if(d===0)return rvEval(b,me);
+  if(p===me){let v=-1e9;for(const k of mv){v=Math.max(v,rvMM(rvApply(b,k,p),3-p,d-1,me,al,be));al=Math.max(al,v);if(al>=be)break}return v}
+  let v=1e9;for(const k of mv){v=Math.min(v,rvMM(rvApply(b,k,p),3-p,d-1,me,al,be));be=Math.min(be,v);if(al>=be)break}return v}
+const REV={id:'rev',name:'Реверси',icon:'⚫',color:'#16a34a',cat:['board'],time:'10 мин',min:2,max:2,sb:1,bd:800,
+desc:'Классическая стратегия на 64 клетках: зажимай фишки соперника и переворачивай их. Захвати углы — и победа близко!',
+rules:'Ходи на пустую клетку так, чтобы зажать ряд фишек соперника между новой фишкой и своей — они перевернутся. Подсвеченные клетки — допустимые ходы. Если ходов нет, ход пропускается. Побеждает тот, у кого больше фишек.',
+init(names){const b=Array(64).fill(0);b[27]=b[36]=2;b[28]=b[35]=1;return{names,b,turn:0,over:false,log:'Чёрные ходят первыми'}},
+act(S,i,a){
+  if(S.over||i!==S.turn||a.t!=='put')return;const p=i+1;if(!rvFlips(S.b,a.k,p).length)return;
+  S.b=rvApply(S.b,a.k,p);
+  if(rvMoves(S.b,3-p).length)S.turn=1-S.turn;
+  else if(rvMoves(S.b,p).length)S.log=`${S.names[1-i]} пропускает ход`;
+  else S.over=true;
+},
+bot(S,i){if(S.over||S.turn!==i)return null;const p=i+1,mv=rvMoves(S.b,p);if(!mv.length)return null;const lv=LV();
+  if(lv===0)return{t:'put',k:mv[rnd(mv.length)]};
+  let best=-1e9,bk=mv[0];for(const k of mv){const nb=rvApply(S.b,k,p),v=lv===1?rvEval(nb,p)+rnd(10):rvMM(nb,3-p,3,p,-1e9,1e9);if(v>best){best=v;bk=k}}
+  return{t:'put',k:bk}},
+win(S,me){if(!S.over)return null;const c=[1,2].map(p=>S.b.filter(x=>x===p).length);return c[me]>c[1-me]},
+render(S,me){
+  const c=[1,2].map(p=>S.b.filter(x=>x===p).length),my=S.turn===me&&!S.over,mv=my?rvMoves(S.b,me+1):[];
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&!S.over?'st':''}" style="--c:${i?'#e5e7eb':'#111'}">${i?'⚪':'⚫'} ${E(x)}${i===me?' (ты)':''} <b>${c[i]}</b></span>`).join('')}</div>`;
+  h+=S.over?`<h2 style="text-align:center">${c[0]===c[1]?'Ничья!':'🏆 '+E(S.names[c[0]>c[1]?0:1])+' победил(а)!'}</h2>`:`<p class="muted" style="text-align:center">${my?'Твой ход — выбери подсвеченную клетку':'Ходит '+E(S.names[S.turn])+'…'} ${E(S.log)}</p>`;
+  return h+`<div class="rv">${S.b.map((v,k)=>`<i class="${mv.includes(k)?'mv':''}" ${mv.includes(k)?`onclick="${H(()=>send({t:'put',k}))}"`:''}>${v===1?'⚫':v===2?'⚪':''}</i>`).join('')}</div>`;
+}};
+
+/* ============ 12. КОСТИ ============ */
 const DCN=['Единицы','Двойки','Тройки','Четвёрки','Пятёрки','Шестёрки','Три одинаковых','Каре','Фулл-хаус','Малый стрит','Большой стрит','Генерала','Шанс'];
 const EXPECT=[2,4,6,8,10,12,15,10,12,12,10,5,22];
 function dscore(k,d){const c=[0,0,0,0,0,0,0],sum=d.reduce((a,b)=>a+b,0);d.forEach(x=>c[x]++);const v=c.slice(1),mx=Math.max(...v),s=new Set(d);
@@ -552,9 +1049,9 @@ function dscore(k,d){const c=[0,0,0,0,0,0,0],sum=d.reduce((a,b)=>a+b,0);d.forEac
   if(k===10)return [[1,2,3,4,5],[2,3,4,5,6]].some(r=>r.every(x=>s.has(x)))?40:0;
   if(k===11)return mx===5?50:0;return sum}
 const dtot=r=>{const up=r.slice(0,6).reduce((a,b)=>a+(b||0),0);return r.reduce((a,b)=>a+(b||0),0)+(up>=63?35:0)};
-const DICE={id:'dice',name:'Покер на костях',icon:'🎲',color:'#eab308',min:1,max:4,sb:1,bd:1000,
+const DICE={id:'dice',name:'Покер на костях',icon:'🎲',color:'#eab308',cat:['board'],time:'10 мин',min:1,max:4,sb:1,bd:1000,
 desc:'Пять кубиков, три броска, 13 комбинаций: фулл-хаус, стриты, генерала! Можно играть и в одиночку на рекорд.',
-rules:'Бросай кубики до 3 раз, нажимая на кубики, чтобы оставить их. Потом запиши результат в одну из 13 комбинаций (кликни на зелёную ячейку). Верхние 6 строк дают бонус +35 при сумме от 63. Побеждает набравший больше всех очков.',
+rules:'Бросай кубики до 3 раз, нажимая на кубики, чтобы оставить их. Потом запиши результат в одну из 13 комбинаций (зелёные ячейки). Верхние 6 строк дают бонус +35 при сумме от 63. Побеждает набравший больше всех очков.',
 init(names){return{names,dice:[0,0,0,0,0],held:[false,false,false,false,false],rolls:0,turn:0,sc:names.map(()=>Array(13).fill(null)),over:false}},
 act(S,i,a){
   if(S.over||i!==S.turn)return;const n=S.names.length;
@@ -581,71 +1078,28 @@ render(S,me){
   return h;
 }};
 
-/* ============ 8. ВИКТОРИНА ============ */
-const QB=[['Столица Австралии?',['Сидней','Канберра','Мельбурн','Перт'],1],['Сколько планет в Солнечной системе?',['7','8','9','10'],1],['Кто написал «Войну и мир»?',['Достоевский','Толстой','Чехов','Тургенев'],1],
-['Химический символ золота?',['Ag','Au','Gd','Fe'],1],['Самая большая планета Солнечной системы?',['Сатурн','Юпитер','Нептун','Земля'],1],['В каком году Гагарин полетел в космос?',['1957','1961','1965','1969'],1],
-['Самый большой океан?',['Атлантический','Индийский','Тихий','Северный Ледовитый'],2],['Сколько костей у взрослого человека?',['186','206','226','246'],1],['Кто написал «Мону Лизу»?',['Микеланджело','Рафаэль','Леонардо да Винчи','Ван Гог'],2],
-['Каким газом мы дышим для жизни?',['Азот','Кислород','Гелий','Углекислый газ'],1],['Столица Японии?',['Киото','Осака','Токио','Нагоя'],2],['Сколько цветов в радуге?',['5','6','7','8'],2],
-['Самое высокое животное?',['Слон','Жираф','Верблюд','Лось'],1],['Самая большая страна по площади?',['Канада','Китай','США','Россия'],3],['Сколько игроков одной команды на поле в футболе?',['9','10','11','12'],2],
-['Кто считается изобретателем телефона?',['Эдисон','Белл','Тесла','Маркони'],1],['Самый твёрдый природный минерал?',['Кварц','Алмаз','Сапфир','Гранит'],1],['Столица Канады?',['Торонто','Ванкувер','Оттава','Монреаль'],2],
-['Кто автор «Мастера и Маргариты»?',['Булгаков','Пастернак','Набоков','Горький'],0],['Сколько секунд в одном часе?',['3000','3600','6000','360'],1],['Самая маленькая планета Солнечной системы?',['Марс','Меркурий','Венера','Юпитер'],1],
-['Кто нарисовал «Звёздную ночь»?',['Моне','Ван Гог','Пикассо','Дали'],1],['В каком городе находится Колизей?',['Афины','Рим','Милан','Венеция'],1],['Сколько сторон у шестиугольника?',['5','6','7','8'],1],
-['Какое млекопитающее умеет летать?',['Белка','Летучая мышь','Страус','Ёж'],1],['Кто первым ступил на Луну?',['Гагарин','Армстронг','Олдрин','Леонов'],1],['Сколько континентов принято выделять на Земле?',['5','6','7','8'],2],
-['Какая птица не умеет летать?',['Ласточка','Пингвин','Орёл','Сокол'],1],['Самая высокая гора мира?',['Эльбрус','Эверест','Килиманджаро','Монблан'],1],['Сколько клавиш на стандартном пианино?',['76','88','96','100'],1],
-['Какая планета известна своими кольцами?',['Марс','Сатурн','Меркурий','Венера'],1],['Кто написал «Гарри Поттера»?',['Толкин','Роулинг','Льюис','Кинг'],1],['При какой температуре кипит вода (°C, норм. давление)?',['90','100','110','120'],1],
-['Столица Египта?',['Каир','Александрия','Луксор','Гиза'],0],['В каких единицах измеряют напряжение?',['Амперы','Вольты','Ватты','Омы'],1],['Самое быстрое наземное животное?',['Лев','Гепард','Антилопа','Лошадь'],1],
-['Сколько хромосом у человека?',['23','44','46','48'],2],['Какой язык самый распространённый по числу носителей?',['Английский','Китайский','Испанский','Хинди'],1],['Столица Германии?',['Берлин','Мюнхен','Гамбург','Бонн'],0],
-['Из чего в основном делают стекло?',['Глина','Песок','Мел','Соль'],1],['Какой металл жидкий при комнатной температуре?',['Свинец','Ртуть','Олово','Цинк'],1]];
-const QUIZ={id:'quiz',name:'Викторина',icon:'🧠',color:'#f43f5e',min:1,max:6,sb:2,bd:1200,
-desc:'10 вопросов на скорость и эрудицию. Чем быстрее правильный ответ, тем больше очков. Кто умнее?',
-rules:'Отвечай на вопросы как можно быстрее: правильный ответ даёт 100 очков + бонус за скорость (первые 10 секунд). После ответа всех (или через 15 секунд) показывается верный ответ.',
-init(names){const qs=shuf(QB).slice(0,10).map(([q,o,a])=>{const p=shuf([0,1,2,3]);return{q,o:p.map(j=>o[j]),a:p.indexOf(a)}});
-  return{names,qs,qi:0,ph:'q',t0:Date.now(),ans:{},gain:{},sc:names.map(()=>0)}},
-act(S,i,a){
-  const n=S.names.length,Q=S.qs[S.qi];
-  if(a.t==='ans'&&S.ph==='q'&&S.ans[i]===undefined&&a.k>=0&&a.k<4){
-    S.ans[i]=a.k;if(a.k===Q.a){const g=100+Math.max(0,10-Math.floor((Date.now()-S.t0)/1000))*5;S.sc[i]+=g;S.gain[i]=g}
-    if(Object.keys(S.ans).length===n)S.ph='r';
-  }else if(a.t==='reveal'&&S.ph==='q'&&Date.now()-S.t0>=15000)S.ph='r';
-  else if(a.t==='next'&&S.ph==='r'){S.qi++;if(S.qi>=S.qs.length){S.qi=S.qs.length-1;S.ph='over'}else{S.ph='q';S.t0=Date.now();S.ans={};S.gain={}}}
-},
-bot(S,i,all){
-  if(S.ph==='q'&&S.ans[i]===undefined){const Q=S.qs[S.qi];return{t:'ans',k:rnd(10)<6?Q.a:rnd(4)}}
-  if(S.ph==='r'&&all)return{t:'next'};return null},
-win(S,me){return S.ph==='over'?S.sc[me]===Math.max(...S.sc):null},
-render(S,me){
-  const Q=S.qs[S.qi];
-  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b>${S.ph==='q'&&S.ans[i]!==undefined?' ✔':''}${S.ph==='r'&&S.gain[i]?`<small>+${S.gain[i]}</small>`:''}</span>`).join('')}</div>`;
-  if(S.ph==='over'){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очков!</h2><p class="muted" style="text-align:center">Игра окончена. Нажми «↻ Заново» (хост), чтобы сыграть ещё.</p>`}
-  h+=`<div class="role" style="padding:14px">Вопрос ${S.qi+1}/${S.qs.length}${S.ph==='q'?` · ⏱ <span id="tm">15</span>`:''}<br><b>${E(Q.q)}</b></div>`;
-  h+=Q.o.map((o,k)=>{const mine=S.ans[me]===k,cls=S.ph==='r'?(k===Q.a?'ok':mine?'bad':''):'';
-    return `<button class="btn qo ${cls} ${mine?'me':''}" ${S.ph==='q'&&S.ans[me]===undefined?`onclick="${H(()=>send({t:'ans',k}))}"`:''}>${'ABCD'[k]}. ${E(o)}</button>`}).join('');
-  if(S.ph==='q')h+=`<p class="muted" style="text-align:center">Ответили: ${Object.keys(S.ans).length}/${S.names.length} ${S.ans[me]!==undefined?B('Показать ответ (после таймера)',()=>send({t:'reveal'}),'sm ghost'):''}</p>`;
-  else h+=`<div style="text-align:center">${B(S.qi+1>=S.qs.length?'Итоги ➜':'Дальше ➜',()=>send({t:'next'}),'big')}</div>`;
-  return h;
-},
-after(S){const el=$('#tm');if(!el||S.ph!=='q')return;const f=()=>{el.textContent=Math.max(0,15-Math.floor((Date.now()-S.t0)/1000))};f();tmr=setInterval(f,500)}};
-
-/* ============ 9. ПАМЯТЬ ============ */
-const MEM={id:'mem',name:'Память',icon:'🧩',color:'#14b8a6',min:1,max:4,sb:1,bd:900,
-desc:'Открывай по две карточки и находи пары. Угадал — ходишь снова. Кто соберёт больше пар?',
+/* ============ 13. ПАМЯТЬ ============ */
+const MEM={id:'mem',name:'Память',icon:'🧩',color:'#14b8a6',cat:['board','fast'],time:'5 мин',min:1,max:4,sb:1,bd:900,
+desc:'Открывай по две карточки и находи пары. Три размера поля — от лёгкого до тренировки на память.',
+opts:[{k:'sz',n:'Размер поля',v:['4×4','5×4','6×6'],d:0}],
 rules:'В свой ход открой две карточки. Совпали — забираешь пару и ходишь ещё раз. Не совпали — ход переходит. Побеждает тот, у кого больше пар.',
-init(names){const e=shuf(EM).slice(0,8);return{names,cards:shuf([...e,...e]),open:[],match:Array(16).fill(-1),turn:0,sc:names.map(()=>0),moves:0,seen:{},auto:null,over:false}},
+init(names,o){const sz=v_(o,'sz',0),pairs=[8,10,18][sz],cols=[4,5,6][sz],e=shuf(EM).slice(0,pairs),N=pairs*2;
+  return{names,cols,cards:shuf([...e,...e]),open:[],match:Array(N).fill(-1),turn:0,sc:names.map(()=>0),moves:0,seen:{},auto:null,over:false}},
 act(S,i,a){
   const n=S.names.length;
   if(i<0&&a.t==='hide'){S.open=[];S.turn=(S.turn+1)%n;S.auto=null;return}
   if(S.over||S.auto||i!==S.turn||a.t!=='flip')return;const k=a.k;
-  if(!(k>=0&&k<16)||S.match[k]>=0||S.open.includes(k)||S.open.length>=2)return;
+  if(!(k>=0&&k<S.cards.length)||S.match[k]>=0||S.open.includes(k)||S.open.length>=2)return;
   S.open.push(k);S.seen[k]=1;
   if(S.open.length===2){S.moves++;const[x,y]=S.open;
     if(S.cards[x]===S.cards[y]){S.match[x]=S.match[y]=i;S.sc[i]++;S.open=[];if(S.match.every(m=>m>=0))S.over=true}
     else S.auto={t:'hide',ms:1100}}
 },
-bot(S,i){if(S.over||S.auto||S.turn!==i)return null;
+bot(S,i){if(S.over||S.auto||S.turn!==i)return null;const rc=[.4,.8,1][LV()]*10;
   const un=[...S.cards.keys()].filter(k=>S.match[k]<0&&!S.open.includes(k));
   const pickNew=()=>{const u=un.filter(k=>!S.seen[k]),p=u.length?u:un;return{t:'flip',k:p[rnd(p.length)]}};
-  if(S.open.length===1){const c=S.cards[S.open[0]],m=un.find(k=>S.seen[k]&&S.cards[k]===c);return(m!==undefined&&rnd(10)<8)?{t:'flip',k:m}:pickNew()}
-  for(const k of un)if(S.seen[k]&&un.some(j=>j!==k&&S.seen[j]&&S.cards[j]===S.cards[k])&&rnd(10)<8)return{t:'flip',k};
+  if(S.open.length===1){const c=S.cards[S.open[0]],m=un.find(k=>S.seen[k]&&S.cards[k]===c);return(m!==undefined&&rnd(10)<rc)?{t:'flip',k:m}:pickNew()}
+  for(const k of un)if(S.seen[k]&&un.some(j=>j!==k&&S.seen[j]&&S.cards[j]===S.cards[k])&&rnd(10)<rc)return{t:'flip',k};
   return pickNew()},
 win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
 render(S,me){
@@ -653,24 +1107,24 @@ render(S,me){
   let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">ходов: ${S.moves}</span></div>`;
   if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));h+=`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} пар! (ходов: ${S.moves})</h2>`}
   else h+=`<p class="muted" style="text-align:center">${S.turn===me?'Твой ход!':'Ходит '+E(S.names[S.turn])+'…'}</p>`;
-  h+=`<div class="mg">${S.cards.map((c,k)=>{const m=S.match[k],up=m>=0||S.open.includes(k);
+  h+=`<div class="mg" style="grid-template-columns:repeat(${S.cols},1fr)">${S.cards.map((c,k)=>{const m=S.match[k],up=m>=0||S.open.includes(k);
     return `<div class="mm ${up?'up':''}" style="${m>=0?`border-color:${COL[m]}`:''}" ${my&&!up?`onclick="${H(()=>send({t:'flip',k}))}"`:''}>${up?c:'❓'}</div>`}).join('')}</div>`;
   return h;
 }};
 
-/* ============ 10. ЧЕТЫРЕ В РЯД ============ */
+/* ============ 14. ЧЕТЫРЕ В РЯД ============ */
 const c4drop=(b,c,p)=>{for(let r=5;r>=0;r--)if(b[r*7+c]===0){b[r*7+c]=p;return r}return -1};
 const C4D=[[0,1],[1,0],[1,1],[1,-1]];
 function c4win(b,p){for(let r=0;r<6;r++)for(let c=0;c<7;c++)for(const[dr,dd]of C4D){let k=0;for(;k<4;k++){const rr=r+dr*k,cc=c+dd*k;if(rr<0||rr>5||cc<0||cc>6||b[rr*7+cc]!==p)break}if(k===4)return true}return false}
-function c4eval(b,p){let s=0;const o=3-p;for(let r=0;r<6;r++){if(b[r*7+3]===p)s+=3;}
+function c4eval(b,p){let s=0;const o=3-p;for(let r=0;r<6;r++)if(b[r*7+3]===p)s+=3;
   for(let r=0;r<6;r++)for(let c=0;c<7;c++)for(const[dr,dd]of C4D){let a=0,x=0,bad=false;for(let k=0;k<4;k++){const rr=r+dr*k,cc=c+dd*k;if(rr<0||rr>5||cc<0||cc>6){bad=true;break}const v=b[rr*7+cc];if(v===p)a++;else if(v===o)x++}
     if(bad)continue;if(x===0)s+=[0,1,5,50,0][a];else if(a===0)s-=[0,1,5,50,0][x]}return s}
 function c4mm(b,d,al,be,mx,p){const o=3-p;if(c4win(b,p))return 1e5+d;if(c4win(b,o))return -1e5-d;
   const cols=[3,2,4,1,5,0,6].filter(c=>b[c]===0);if(!cols.length||d===0)return c4eval(b,p);
   if(mx){let v=-1e9;for(const c of cols){const nb=b.slice();c4drop(nb,c,p);v=Math.max(v,c4mm(nb,d-1,al,be,false,p));al=Math.max(al,v);if(al>=be)break}return v}
   let v=1e9;for(const c of cols){const nb=b.slice();c4drop(nb,c,o);v=Math.min(v,c4mm(nb,d-1,al,be,true,p));be=Math.min(be,v);if(al>=be)break}return v}
-const C4={id:'c4',name:'Четыре в ряд',icon:'🔴',color:'#3b82f6',min:2,max:2,sb:1,bd:700,
-desc:'Роняй фишки в колонки и собери четыре в ряд по горизонтали, вертикали или диагонали. Бот не поддаётся!',
+const C4={id:'c4',name:'Четыре в ряд',icon:'🔴',color:'#3b82f6',cat:['board','fast'],time:'5 мин',min:2,max:2,sb:1,bd:700,
+desc:'Роняй фишки в колонки и собери четыре в ряд по горизонтали, вертикали или диагонали. Три уровня бота.',
 rules:'Игроки по очереди роняют фишку в любую колонку. Кто первым выстроит четыре своих фишки в линию (в любую сторону) — побеждает.',
 init(names){return{names,b:Array(42).fill(0),turn:0,win:-1}},
 act(S,i,a){
@@ -678,8 +1132,8 @@ act(S,i,a){
   if(c4drop(S.b,a.c,i+1)<0)return;
   if(c4win(S.b,i+1))S.win=i;else if(S.b.every(x=>x))S.win=-2;else S.turn=1-S.turn;
 },
-bot(S,i){if(S.win!==-1||S.turn!==i)return null;const p=i+1;let best=-1e9,bc=[];
-  for(const c of [0,1,2,3,4,5,6]){if(S.b[c]!==0)continue;const nb=S.b.slice();c4drop(nb,c,p);const v=c4win(nb,p)?1e6:c4mm(nb,3,-1e9,1e9,false,p);
+bot(S,i){if(S.win!==-1||S.turn!==i)return null;const p=i+1,dp=[1,3,4][LV()];let best=-1e9,bc=[];
+  for(const c of [0,1,2,3,4,5,6]){if(S.b[c]!==0)continue;const nb=S.b.slice();c4drop(nb,c,p);const v=c4win(nb,p)?1e6:c4mm(nb,dp-1,-1e9,1e9,false,p);
     if(v>best){best=v;bc=[c]}else if(v===best)bc.push(c)}
   return bc.length?{t:'drop',c:bc[rnd(bc.length)]}:null},
 win(S,me){return S.win===-1?null:S.win===me},
@@ -692,10 +1146,12 @@ render(S,me){
 }};
 
 /* ============ запуск ============ */
-const GAMES=[MONO,IMG,UNO,DUR,DICE,QUIZ,MEM,C4,SPY,CRO],GM=Object.fromEntries(GAMES.map(g=>[g.id,g]));
+const GAMES=[MONO,IMG,UNO,DUR,MAF,HOCK,QUIZ,CRO,SPY,ALS,REV,DICE,MEM,C4],GM=Object.fromEntries(GAMES.map(g=>[g.id,g]));
+setHead();
+if(prof)initPresence();
 if(location.hash.length>3)prof?joinRoom(location.hash.slice(1)):welcome(()=>joinRoom(location.hash.slice(1)));
 else prof?home():welcome();
-setHead();
+renderFr();
 </script>
 </body>
 </html>
