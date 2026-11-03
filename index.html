@@ -1831,6 +1831,34 @@ render(S,me){const my=S.turn===me&&S.ph==='g'&&!S.over;
   return h+`<div class="log" style="text-align:center;max-height:none;margin-top:10px">${S.hist.map(E).join('<br>')}</div>`}};
 [MINE,TYP,NUM].forEach(g=>{GAMES.push(g);GM[g.id]=g});
 
+/* ===== 5 ОБЩИХ ОБНОВЛЕНИЙ ДЛЯ ВСЕХ ИГР ===== */
+const st5=document.createElement('style');st5.textContent=`.em{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111e;border:1px solid #fff4;border-radius:16px;padding:8px 16px;font-size:20px;z-index:70;pointer-events:none;animation:emu 3s ease-out forwards;white-space:nowrap}@keyframes emu{to{transform:translate(-50%,-140px);opacity:0}}#emp{position:fixed;left:10px;bottom:10px;z-index:60;background:#111d;border:1px solid #fff3;border-radius:14px;padding:8px;display:none;max-width:260px}#emp.on{display:block}#emp .btn{margin:2px}`;document.head.appendChild(st5);
+/* 1. Реакции и быстрые фразы (видят все в комнате) */
+const EMS=['😂','😮','👍','😡','🔥','🤔','GG','Ходи!','Молодец!','Ой…'];
+function showEm(m){const p=net.players&&net.players[m.n],d=document.createElement('div');d.className='em';d.style.bottom=(90+rnd(60))+'px';d.textContent=(p?p.av+' '+p.name+': ':'')+m.e;document.body.appendChild(d);setTimeout(()=>d.remove(),3000)}
+function sendEm(e){const msg={t:'em',n:net.me,e};showEm(msg);if(net.host)broadcast(msg);else net.conn&&net.conn.send({t:'em',e});const p=$('#emp');p&&p.classList.remove('on')}
+const _hrc=hostRecv;hostRecv=function(c,m){if(m&&m.t==='em'){if(c._i!=null){const msg={t:'em',n:c._i,e:String(m.e).slice(0,24)};showEm(msg);Object.values(net.conns).forEach(o=>o!==c&&o.open&&o.send(msg))}return}_hrc(c,m)};
+const _grc=guestRecv;guestRecv=function(m){if(m&&m.t==='em'){showEm(m);return}_grc(m)};
+const emp=document.createElement('div');emp.id='emp';emp.innerHTML=EMS.map(e=>`<button class="btn sm ghost" data-e="${e}">${e}</button>`).join('');document.body.appendChild(emp);
+/* 4. Окно правил внутри игры, 5. Полноэкранный режим */
+document.addEventListener('click',e=>{const t=e.target&&e.target.closest?e.target.closest('.xb,#emp [data-e]'):null;if(!t)return;
+  if(t.dataset.e)return sendEm(t.dataset.e);
+  const k=t.dataset.x;
+  if(k==='e')emp.classList.toggle('on');
+  else if(k==='f'){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(_){}}
+  else if(k==='r'){const G=GM[net.gid];if(!G)return;const d=document.createElement('div');d.className='deedbg';d.innerHTML=`<div class="deed" style="width:min(420px,92vw);text-align:left;color:#111"><div class="dh" style="background:${G.color}">${G.icon} ${G.name}</div><div class="db">${G.rules}</div><div style="text-align:center;padding-bottom:12px"><button class="btn">Понятно</button></div></div>`;d.onclick=ev=>{if(ev.target===d||ev.target.tagName==='BUTTON')d.remove()};document.body.appendChild(d)}});
+/* 2. Звук и заголовок вкладки, когда настал твой ход */
+var wasMine=false;
+function beep(){if(!snd)return;try{const c=sfx.c||(sfx.c=new (window.AudioContext||window.webkitAudioContext)()),o=c.createOscillator(),g=c.createGain();o.frequency.value=880;o.type='sine';g.gain.value=.06;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.12)}catch(e){}}
+const _sg=showGame;showGame=function(){_sg();
+  const bar=document.querySelector('.bar');if(bar)bar.insertAdjacentHTML('beforeend','<button class="btn sm ghost xb" data-x="r" title="Правила">❔</button><button class="btn sm ghost xb" data-x="e" title="Реакции">😀</button><button class="btn sm ghost xb" data-x="f" title="Полный экран">⛶</button>');
+  const S=net.S,mine=!!(S&&typeof S.turn==='number'&&S.turn===net.me&&!S.over&&!(S.win>=0)&&net.gid!=='dur');
+  if(mine&&!wasMine){beep();document.title='▶ Твой ход!'}else if(!mine)document.title='Игровая комната — играй с друзьями';wasMine=mine};
+const _lv=leave;leave=function(q){wasMine=false;document.title='Игровая комната — играй с друзьями';emp.classList.remove('on');_lv(q)};
+/* 3. Серия побед подряд */
+const _as=addStat;addStat=function(g,w){_as(g,w);try{let s=(+localStorage.getItem('streak')||0),b=(+localStorage.getItem('best')||0);s=w?s+1:0;localStorage.setItem('streak',s);localStorage.setItem('best',Math.max(b,s))}catch(e){}};
+const _hm=home;home=function(){_hm();const p=document.querySelector('.pill');if(p){let s=0,b=0;try{s=+localStorage.getItem('streak')||0;b=+localStorage.getItem('best')||0}catch(e){}p.textContent+=` · 🔥 серия ${s} (рекорд ${b})`}};
+
 if(!net.gid&&prof)home();
 })();
 
