@@ -1619,6 +1619,136 @@ artBoom=function(S,hx,hy){S.tk.forEach(t=>{if(t.hp<=0)return;const d=Math.hypot(
 const _ar=ARTL.render;ARTL.render=(S,me)=>`<p class="muted" style="text-align:center;margin:4px">🛡 Броня: ${S.names.map((x,i)=>TOK[i]+' '+'🛡'.repeat(S.tk[i].ar||0)||'—').join(' · ')} (каждый щит −12% урона)</p>`+_ar(S,me);
 ARTL.rules+=' У каждого танка случайная броня (до 3 щитов).';
 
+/* ===== 5 НОВЫХ ИГР: Пять в ряд, Морской бой, Лжец, Реакция, Горячая бомба ===== */
+const st3=document.createElement('style');st3.textContent=`
+.gm{display:grid;grid-template-columns:repeat(13,1fr);gap:1px;max-width:520px;margin:10px auto;background:#92400e;padding:6px;border-radius:10px}
+.gm i{aspect-ratio:1;background:#fbbf24;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:clamp(9px,2.8vw,22px);cursor:pointer}.gm i.lm{box-shadow:inset 0 0 0 3px #ef4444}
+.sea{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;width:min(300px,92vw);background:#0c4a6e;padding:5px;border-radius:10px}
+.sea i{aspect-ratio:1;background:#0369a1;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:clamp(11px,3.4vw,18px);border-radius:3px}.sea i.f{cursor:pointer;background:#0ea5e9}.sea i.f:hover{background:#7dd3fc}.sea i.sh{background:#475569}
+.boards{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+@keyframes shk{25%{transform:rotate(-10deg) scale(1.1)}75%{transform:rotate(10deg) scale(1.1)}}.bmb{display:inline-block;font-size:64px;animation:shk .35s infinite}
+.pad{width:100%;max-width:520px;height:230px;font-size:28px;font-weight:800;border:0;border-radius:22px;color:#fff;cursor:pointer;display:block;margin:12px auto;touch-action:manipulation;user-select:none}
+`;document.head.appendChild(st3);
+
+/* 1. ПЯТЬ В РЯД */
+const GD=[[0,1],[1,0],[1,1],[1,-1]],gIn=(r,c)=>r>=0&&r<13&&c>=0&&c<13;
+function gmWin(b,k,p){const r=k/13|0,c=k%13;for(const[dr,dc]of GD){let n=1;for(const s of[1,-1]){let rr=r+dr*s,cc=c+dc*s;while(gIn(rr,cc)&&b[rr*13+cc]===p){n++;rr+=dr*s;cc+=dc*s}}if(n>=5)return true}return false}
+function gmSc(b,k,p){let t=0;const r=k/13|0,c=k%13;for(const[dr,dc]of GD){let n=1,o=0;for(const s of[1,-1]){let rr=r+dr*s,cc=c+dc*s;while(gIn(rr,cc)&&b[rr*13+cc]===p){n++;rr+=dr*s;cc+=dc*s}if(gIn(rr,cc)&&!b[rr*13+cc])o++}t+=n>=5?1e6:[0,1,12,150,2000][n]*(o===2?2:o===1?1:.05)}return t}
+const GMK={id:'gmk',name:'Пять в ряд',icon:'⭕',color:'#f59e0b',cat:['board'],time:'8 мин',min:2,max:2,sb:1,bd:700,
+desc:'Гомоку: ставь камни на поле 13×13 и первым выстрой пять в ряд — по горизонтали, вертикали или диагонали.',
+rules:'По очереди ставь камень на любое пустое пересечение. Кто первым выстроит пять своих камней подряд (в любую сторону) — побеждает. Следи за открытыми тройками и четвёрками соперника и блокируй их!',
+init(names){return{names,b:Array(169).fill(0),turn:0,win:-1,last:-1}},
+act(S,i,a){if(S.win!==-1||i!==S.turn||a.t!=='put'||!(a.k>=0&&a.k<169)||S.b[a.k])return;S.b[a.k]=i+1;S.last=a.k;if(gmWin(S.b,a.k,i+1))S.win=i;else if(S.b.every(x=>x))S.win=-2;else S.turn=1-i},
+bot(S,i){if(S.win!==-1||S.turn!==i)return null;const b=S.b,p=i+1,cand=[];
+  for(let k=0;k<169;k++){if(b[k])continue;const r=k/13|0,c=k%13;let nr=false;for(let a=-2;a<=2&&!nr;a++)for(let d=-2;d<=2;d++)if(gIn(r+a,c+d)&&b[(r+a)*13+c+d]){nr=true;break}if(nr)cand.push(k)}
+  if(!cand.length)return{t:'put',k:84};let best=-1,bk=cand[0];
+  cand.forEach(k=>{const s=gmSc(b,k,p)*(LV()?1:.5)+gmSc(b,k,3-p)*[.5,.9,1.05][LV()]+Math.random()*3;if(s>best){best=s;bk=k}});return{t:'put',k:bk}},
+win(S,me){return S.win===-1?null:S.win===me},
+render(S,me){const my=S.turn===me&&S.win===-1;
+  return `<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&S.win===-1?'st':''}" style="--c:${i?'#e5e7eb':'#111'}">${i?'⚪':'⚫'} ${E(x)}${i===me?' (ты)':''}</span>`).join('')}</div>
+  ${S.win===-2?'<h2 style="text-align:center">Ничья!</h2>':S.win>=0?`<h2 style="text-align:center">🏆 ${E(S.names[S.win])} победил(а)!</h2>`:`<p class="muted" style="text-align:center">${my?'Твой ход — поставь камень':'Ходит '+E(S.names[S.turn])+'…'}</p>`}
+  <div class="gm">${S.b.map((v,k)=>`<i class="${k===S.last?'lm':''}" ${my&&!v?`onclick="${H(()=>send({t:'put',k}))}"`:''}>${v===1?'⚫':v===2?'⚪':''}</i>`).join('')}</div>`}};
+
+/* 2. МОРСКОЙ БОЙ */
+function seaPlace(){const g=Array(64).fill(0);[4,3,3,2,2].forEach((L,id)=>{for(;;){const h=rnd(2),r=rnd(8),c=rnd(8),cells=[];if(h?c+L>8:r+L>8)continue;for(let j=0;j<L;j++)cells.push(h?r*8+c+j:(r+j)*8+c);if(cells.every(x=>!g[x])){cells.forEach(x=>g[x]=id+1);break}}});return g}
+const sunk=(g,sh,id)=>g.every((v,j)=>v!==id||sh[j]);
+const SEA={id:'sea',name:'Морской бой',icon:'🚢',color:'#0284c7',cat:['board'],time:'10 мин',min:2,max:2,sb:1,bd:900,
+desc:'Классика на двоих: корабли расставлены случайно, стреляй по клеткам и потопи весь флот соперника. Попал — стреляешь снова!',
+rules:'У каждого 5 кораблей (4, 3, 3, 2, 2 клетки) — они расставлены случайно и скрыты. Нажимай на клетки вражеского поля. 💥 попадание (ходишь ещё раз), ○ промах (ход переходит). Побеждает тот, кто первым потопит все корабли.',
+init(names){return{names,g:[seaPlace(),seaPlace()],sh:[Array(64).fill(0),Array(64).fill(0)],turn:0,over:false,win:-1,log:['Бой начался!']}},
+act(S,i,a){if(S.over||i!==S.turn||a.t!=='f')return;const o=1-i,k=a.k;if(!(k>=0&&k<64)||S.sh[o][k])return;S.sh[o][k]=1;const id=S.g[o][k];
+  if(id){S.log.unshift(`${S.names[i]}: ${sunk(S.g[o],S.sh[o],id)?'💥 корабль потоплен!':'💥 попадание!'}`);if(S.g[o].every((v,j)=>!v||S.sh[o][j])){S.over=true;S.win=i}}
+  else{S.log.unshift(`${S.names[i]}: промах`);S.turn=o}S.log.length=Math.min(S.log.length,4)},
+bot(S,i){if(S.over||S.turn!==i)return null;const o=1-i,g=S.g[o],sh=S.sh[o];let c=[];
+  if(LV()>0)g.forEach((v,k)=>{if(sh[k]&&v&&!sunk(g,sh,v))[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>{const r=(k>>3)+dr,q=(k&7)+dc;if(r>=0&&r<8&&q>=0&&q<8&&!sh[r*8+q])c.push(r*8+q)})});
+  if(!c.length){const f=[];sh.forEach((v,k)=>{if(!v&&(LV()<2||((k>>3)+(k&7))%2===0))f.push(k)});c=f.length?f:sh.map((v,k)=>v?-1:k).filter(k=>k>=0)}
+  return{t:'f',k:c[rnd(c.length)]}},
+view(S,i){return{...S,g:S.g.map((g,p)=>p===i?g:g.map((v,k)=>S.sh[p][k]?v:0))}},
+win(S,me){return S.over?S.win===me:null},
+render(S,me){const o=1-me,my=S.turn===me&&!S.over;
+  const mine=S.g[me].map((v,k)=>{const sh=S.sh[me][k];return `<i class="${v?'sh':''}">${sh?(v?'💥':'○'):''}</i>`}).join('');
+  const en=S.g[o].map((v,k)=>{const sh=S.sh[o][k];return sh?`<i>${v?'💥':'○'}</i>`:`<i class="${my?'f':''}" ${my?`onclick="${H(()=>send({t:'f',k}))}"`:''}></i>`}).join('');
+  return `<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)}${i===me?' (ты)':''}</span>`).join('')}</div>
+  ${S.over?`<h2 style="text-align:center">🏆 ${E(S.names[S.win])} потопил(а) весь флот!</h2>`:`<p class="muted" style="text-align:center">${my?'Твой выстрел — нажми на клетку врага':'Стреляет '+E(S.names[S.turn])+'…'}</p>`}
+  <div class="boards"><div><div class="muted" style="text-align:center">Враг</div><div class="sea">${en}</div></div><div><div class="muted" style="text-align:center">Твой флот</div><div class="sea">${mine}</div></div></div>
+  <div class="log" style="text-align:center">${S.log.map(E).join('<br>')}</div>`}};
+
+/* 3. ЛЖЕЦ (кости с блефом) */
+const DF='⚀⚁⚂⚃⚄⚅';var LQ=1,LF=2;
+const lOK=(S,q,f)=>q>=1&&f>=1&&f<=6&&(!S.bid||q>S.bid.q||(q===S.bid.q&&f>S.bid.f));
+const lTot=S=>S.dice.reduce((a,d)=>a+d.length,0),lNxt=(S,p)=>{let q=p;do{q=(q+1)%S.names.length}while(S.cnt[q]<=0);return q};
+const lRoll=S=>{S.dice=S.cnt.map(c=>Array.from({length:Math.max(0,c)},()=>1+rnd(6)))};
+const LIAR={id:'liar',name:'Лжец',icon:'🎲',color:'#a855f7',cat:['party','card'],time:'10 мин',min:2,max:6,sb:2,bd:1300,
+desc:'Блеф на костях: у каждого скрытые кубики. Назови, сколько одинаковых костей на столе, — или поймай соперника на лжи!',
+opts:[{k:'dc',n:'Кубиков у каждого',v:['3','5'],d:1}],
+rules:'Все бросают кубики и видят только свои. По кругу делай ставку «не меньше N кубиков со значением X» среди ВСЕХ игроков — каждая ставка должна быть выше предыдущей (больше количество или то же количество с большим значением). Не веришь предыдущей ставке — жми «Не верю!»: кубики вскрываются. Ставка верна — проигрывает сомневавшийся, нет — проигрывает назвавший. Проигравший теряет кубик. Последний с кубиками побеждает.',
+init(names,o){const S={names,cnt:names.map(()=>[3,5][v_(o,'dc',1)]),dice:[],turn:0,bid:null,ph:'bid',res:'',over:false,win:-1,loser:-1};lRoll(S);return S},
+act(S,i,a){if(S.over)return;const n=S.names.length;
+  if(a.t==='bid'&&S.ph==='bid'&&i===S.turn&&lOK(S,a.q,a.f)&&a.q<=lTot(S)){S.bid={q:a.q,f:a.f,by:i};S.turn=lNxt(S,i)}
+  else if(a.t==='chal'&&S.ph==='bid'&&i===S.turn&&S.bid){const act=S.dice.flat().filter(x=>x===S.bid.f).length,ok=act>=S.bid.q,lo=ok?i:S.bid.by;
+    S.cnt[lo]--;S.loser=lo;S.ph='reveal';S.res=`На столе ${act} × ${DF[S.bid.f-1]} — ставка ${S.bid.q}×${DF[S.bid.f-1]} ${ok?'верна':'была ложью'}. ${S.names[lo]} теряет кубик.`;
+    const al=S.cnt.map((c,k)=>c>0?k:-1).filter(k=>k>=0);if(al.length===1){S.over=true;S.win=al[0]}}
+  else if(a.t==='next'&&S.ph==='reveal'&&i>=0&&!S.over){lRoll(S);S.turn=S.cnt[S.loser]>0?S.loser:lNxt(S,S.loser);S.bid=null;S.ph='bid';S.res=''}},
+bot(S,i,all){if(S.over)return null;if(S.ph==='reveal')return all?{t:'next'}:null;if(S.turn!==i||S.cnt[i]<=0)return null;
+  const mine=S.dice[i],tot=lTot(S),ex=f=>mine.filter(x=>x===f).length+(tot-mine.length)/6;
+  if(!S.bid){let f=1,m=-1;for(let v=1;v<=6;v++){const c=mine.filter(x=>x===v).length;if(c>m){m=c;f=v}}return{t:'bid',q:Math.max(1,Math.floor(ex(f))),f}}
+  const cs=[];for(let q=S.bid.q;q<=Math.min(tot,S.bid.q+2);q++)for(let f=1;f<=6;f++)if(lOK(S,q,f))cs.push([q,f,ex(f)-q+Math.random()*.4]);
+  cs.sort((a,b)=>b[2]-a[2]);const p=ex(S.bid.f)-S.bid.q,th=[-.8,-1.3,-1.8][LV()];
+  if(p<th||!cs.length||cs[0][2]<th-1)return{t:'chal'};return{t:'bid',q:cs[0][0],f:cs[0][1]}},
+view(S,i){return{...S,dice:S.dice.map((d,k)=>k===i||S.ph==='reveal'?d:d.map(()=>0))}},
+win(S,me){return S.over?S.win===me:null},
+render(S,me){const my=S.turn===me&&S.ph==='bid'&&!S.over,tot=lTot(S);
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&S.ph==='bid'&&!S.over?'st':''} ${S.cnt[i]<=0?'out':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} 🎲×${Math.max(0,S.cnt[i])}</span>`).join('')}</div>`;
+  if(S.over)h+=`<h2 style="text-align:center">🏆 ${E(S.names[S.win])} победил(а)!</h2>`;
+  h+=`<div class="role" style="padding:12px">${S.bid?`Ставка ${TOK[S.bid.by]} ${E(S.names[S.bid.by])}: <b style="font-size:26px">${S.bid.q} × ${DF[S.bid.f-1]}</b>`:'Ставок пока нет'}<br><small class="muted">Всего кубиков на столе: ${tot}</small></div>`;
+  if(S.ph==='reveal'){h+=S.names.map((x,k)=>S.dice[k].length?`<div style="text-align:center">${TOK[k]} ${E(x)}: ${S.dice[k].map(d=>`<span class="dd ${S.bid&&d===S.bid.f?'hold':''}">${DF[d-1]}</span>`).join('')}</div>`:'').join('');
+    h+=`<p style="text-align:center"><b>${E(S.res)}</b></p>`+(S.over?'':`<div style="text-align:center">${B('Следующий раунд ➜',()=>send({t:'next'}),'big')}</div>`)}
+  else h+=`<div style="text-align:center"><small class="muted">Твои кубики:</small><br>${S.dice[me].map(d=>`<span class="dd">${DF[d-1]}</span>`).join('')||'—'}</div>`;
+  if(my){if(!lOK(S,LQ,LF)||LQ>tot){const b=S.bid;if(!b){LQ=1;LF=2}else{LQ=b.q;LF=Math.min(6,b.f+1);if(!lOK(S,LQ,LF)){LQ=b.q+1;LF=1}}}
+    h+=`<div class="role" style="padding:12px;text-align:center">Количество: ${B('−',()=>{LQ=Math.max(1,LQ-1);showGame()},'sm ghost')} <b style="font-size:24px">${LQ}</b> ${B('+',()=>{LQ=Math.min(tot,LQ+1);showGame()},'sm ghost')}<br>${[1,2,3,4,5,6].map(f=>`<span class="dd ${f===LF?'hold':''}" onclick="${H(()=>{LF=f;showGame()})}">${DF[f-1]}</span>`).join('')}<br>${B(`Ставка: ${LQ} × ${DF[LF-1]}`,()=>{if(!lOK(S,LQ,LF))return toast('Ставка должна быть выше предыдущей');send({t:'bid',q:LQ,f:LF})},'big')}${S.bid?B('🤥 Не верю!',()=>send({t:'chal'}),'big ghost'):''}</div>`}
+  else if(!S.over&&S.ph==='bid')h+=`<p class="muted" style="text-align:center">Ходит ${E(S.names[S.turn])}…</p>`;
+  return h}};
+
+/* 4. РЕАКЦИЯ */
+const RCT={id:'rct',name:'Реакция',icon:'⚡',color:'#22c55e',cat:['fast','party'],time:'3 мин',min:2,max:8,sb:2,bd:380,
+desc:'Кто быстрее? Жди, пока поле станет зелёным, и жми первым. Нажал раньше времени — фальстарт!',
+opts:[{k:'r',n:'Раундов',v:['5','8','12'],d:1}],
+rules:'Поле красное — ЖДИ. Как только оно станет зелёным, нажимай как можно быстрее: первый получает очко. Нажал на красном — фальстарт, в этом раунде ты выбываешь. Побеждает тот, у кого больше очков.',
+init(names,o){return{names,R:[5,8,12][v_(o,'r',1)],r:1,ph:'wait',lock:{},sc:names.map(()=>0),who:-1,ms:0,over:false,t0:0,auto:{t:'go',at:Date.now()+1500+rnd(3500)}}},
+act(S,i,a){if(S.over)return;const res=()=>{S.ph='res';S.auto={t:'nx',at:Date.now()+2200}};
+  if(a.t==='c'&&i>=0&&!S.lock[i]){if(S.ph==='wait'){S.lock[i]=1;if(S.names.every((_,k)=>S.lock[k])){S.who=-1;res()}}
+    else if(S.ph==='go'){S.sc[i]++;S.who=i;S.ms=Date.now()-S.t0;res()}}
+  else if(a.t==='go'&&i<0&&S.ph==='wait'){S.ph='go';S.t0=Date.now();S.auto={t:'to',at:S.t0+3000}}
+  else if(a.t==='to'&&i<0&&S.ph==='go'){S.who=-1;res()}
+  else if(a.t==='nx'&&i<0&&S.ph==='res'){if(S.r>=S.R){S.over=true;S.auto=null}else{S.r++;S.ph='wait';S.lock={};S.who=-1;S.auto={t:'go',at:Date.now()+1500+rnd(3500)}}}},
+bot(S,i){if(S.over||S.ph!=='go'||S.lock[i])return null;return rnd(100)<[30,55,85][LV()]?{t:'c'}:null},
+view(S){return{...S,auto:null}},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)} <b>${S.sc[i]}</b>${S.lock[i]&&S.ph!=='res'?' ❌':''}</span>`).join('')}<span class="chip">раунд ${S.r}/${S.R}</span></div>`;
+  if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очк.</h2><p class="muted" style="text-align:center">Нажми «↻ Заново» (хост), чтобы сыграть ещё.</p>`}
+  const p=S.ph==='wait'?(S.lock[me]?['#7f1d1d','Фальстарт! Ждём остальных…']:['#b91c1c','ЖДИ… не жми раньше времени!']):S.ph==='go'?['#16a34a','ЖМИ!!!']:['#334155',S.who>=0?`${TOK[S.who]} ${E(S.names[S.who])} быстрее всех — ${S.ms} мс`:'Никто не успел'];
+  return h+`<button class="pad" style="background:${p[0]}" onpointerdown="${H(()=>send({t:'c'}))}">${p[1]}</button>`}};
+
+/* 5. ГОРЯЧАЯ БОМБА */
+const rf=()=>7000+rnd(14000);
+const BOMB={id:'bomb',name:'Горячая бомба',icon:'💣',color:'#ef4444',cat:['party','fast'],time:'5 мин',min:3,max:8,sb:3,bd:800,
+desc:'Бомба с невидимым таймером! Быстро передай её другому игроку, пока она не рванула у тебя в руках.',
+rules:'У одного игрока бомба. Нажми на любого живого игрока, чтобы передать её ему. Когда рванёт — неизвестно (7–20 секунд)! У кого взорвалась, тот теряет жизнь (всего 3). Остаётся последний — побеждает.',
+init(names){const S={names,lives:names.map(()=>3),h:rnd(names.length),rn:1,over:false,win:-1,log:['💣 Бомба пошла по рукам!']};S.auto={t:'boom',at:Date.now()+rf(),r:1};return S},
+act(S,i,a){if(S.over)return;const al=()=>S.lives.map((l,k)=>l>0?k:-1).filter(k=>k>=0);
+  if(a.t==='pass'&&i===S.h&&a.k!==i&&S.lives[a.k]>0){S.h=a.k;S.log.unshift(`${S.names[i]} → ${S.names[a.k]}`);S.log.length=Math.min(S.log.length,4)}
+  else if(a.t==='boom'&&i<0&&a.r===S.rn){const h=S.h;S.lives[h]--;S.log.unshift(`💥 БАХ! ${S.names[h]} теряет жизнь${S.lives[h]<=0?' и выбывает':''}`);S.log.length=Math.min(S.log.length,4);
+    const L=al();if(L.length<=1){S.over=true;S.win=L.length?L[0]:-1;S.auto=null;return}S.rn++;S.h=L[rnd(L.length)];S.auto={t:'boom',at:Date.now()+rf(),r:S.rn}}},
+bot(S,i){if(S.over||S.h!==i)return null;const o=S.lives.map((l,k)=>l>0&&k!==i?k:-1).filter(k=>k>=0);return o.length?{t:'pass',k:o[rnd(o.length)]}:null},
+view(S){return{...S,auto:null}},
+win(S,me){return S.over?S.win===me:null},
+render(S,me){const my=S.h===me&&!S.over&&S.lives[me]>0;
+  return `<div class="sc">${S.names.map((x,i)=>`<span class="chip ${S.lives[i]<=0?'out':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} ${'❤'.repeat(Math.max(0,S.lives[i]))}</span>`).join('')}</div>
+  ${S.over?`<h2 style="text-align:center">${S.win>=0?'🏆 '+E(S.names[S.win])+' победил(а)!':'Ничья!'}</h2>`:`<div style="text-align:center"><span class="bmb">💣</span><p>${my?'<b>Бомба у тебя! Быстро передай!</b>':'Бомба у '+TOK[S.h]+' '+E(S.names[S.h])}</p></div>`}
+  <div class="locs">${S.names.map((x,k)=>k===me||S.lives[k]<=0||S.over?'':B(`${TOK[k]} ${E(x)}`,()=>send({t:'pass',k}),my?'big':'ghost')).join('')}</div>
+  <div class="log" style="text-align:center;max-height:none">${S.log.map(E).join('<br>')}</div>`}};
+[GMK,SEA,LIAR,RCT,BOMB].forEach(g=>{GAMES.push(g);GM[g.id]=g});
+
 if(!net.gid&&prof)home();
 })();
 
