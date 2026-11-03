@@ -581,27 +581,27 @@ rules:'Козырь бьёт любую некозырную масть. Ата�
 init(names){const n=names.length,d=shuf([...Array(36).keys()]),hands=names.map(()=>d.splice(0,6)),tr=dc(d[0]).s;
   const S={names,deck:d,tr,hands,att:0,def:1%n,table:[],lim:6,out:names.map(()=>false),over:false,lose:-1,log:'Игра началась'};S.lim=Math.min(6,hands[S.def].length);return S},
 act(S,i,a){
-  if(S.over)return;const T=S.table,und=T.filter(p=>!p.d).length;
+  if(S.over)return;const T=S.table,und=T.filter(p=>p.d==null).length;
   if(a.t==='att'&&i===S.att){const h=S.hands[i];if(!h.includes(a.c)||T.length>=S.lim)return;
     if(T.length&&!T.some(p=>dc(p.a).r===dc(a.c).r||(p.d!=null&&dc(p.d).r===dc(a.c).r)))return;
     h.splice(h.indexOf(a.c),1);T.push({a:a.c,d:null});S.log=`${S.names[i]} атакует`}
-  else if(a.t==='def'&&i===S.def){const h=S.hands[i];if(!h.includes(a.c))return;const p=T.find(p=>!p.d&&dbeat(S,p.a,a.c));if(!p)return;p.d=a.c;h.splice(h.indexOf(a.c),1)}
+  else if(a.t==='def'&&i===S.def){const h=S.hands[i];if(!h.includes(a.c))return;const p=T.find(p=>p.d==null&&dbeat(S,p.a,a.c));if(!p)return;p.d=a.c;h.splice(h.indexOf(a.c),1)}
   else if(a.t==='take'&&i===S.def&&und>0){S.hands[i].push(...T.flatMap(p=>[p.a,p.d].filter(x=>x!=null)));S.log=S.names[i]+' берёт';dEnd(S,true)}
   else if(a.t==='done'&&i===S.att&&T.length&&und===0){S.log='Бито';dEnd(S,false)}
 },
 bot(S,i){if(S.over)return null;const h=S.hands[i],T=S.table,key=c=>dc(c).r+(dc(c).s===S.tr?20:0);
-  if(i===S.def){const und=T.filter(p=>!p.d);if(!und.length)return null;
+  if(i===S.def){const und=T.filter(p=>p.d==null);if(!und.length)return null;
     const o=h.filter(c=>dbeat(S,und[0].a,c)).sort((a,b)=>key(a)-key(b));return o.length?{t:'def',c:o[0]}:{t:'take'}}
   if(i===S.att){
     const ok=h.filter(c=>!T.length||T.some(p=>dc(p.a).r===dc(c).r||(p.d!=null&&dc(p.d).r===dc(c).r))).sort((a,b)=>key(a)-key(b));
     const cand=ok.filter(c=>dc(c).s!==S.tr);
     if(!T.length)return ok.length?{t:'att',c:ok[0]}:null;
-    if(T.some(p=>!p.d))return(T.length<S.lim&&cand.length&&rnd(3)===0)?{t:'att',c:cand[0]}:null;
+    if(T.some(p=>p.d==null))return(T.length<S.lim&&cand.length&&rnd(3)===0)?{t:'att',c:cand[0]}:null;
     return(T.length<S.lim&&cand.length&&S.deck.length>0)?{t:'att',c:cand[0]}:{t:'done'}}
   return null},
 win(S,me){return S.over?S.lose!==me:null},
 render(S,me){
-  const T=S.table,und=T.filter(p=>!p.d).length,tc=S.deck.length?S.deck[0]:null;
+  const T=S.table,und=T.filter(p=>p.d==null).length,tc=S.deck.length?S.deck[0]:null;
   let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.att?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)} 🃏${S.hands[i].length}${S.out[i]?' ✅':''}${i===S.att?' ⚔️':i===S.def?' 🛡️':''}</span>`).join('')}</div>`;
   h+=`<div class="uno">${tc!=null?dcard(tc,'big'):`<div class="dk big ${S.tr===1||S.tr===2?'r':''}">${SU[S.tr]}</div>`}<div>Козырь ${SU[S.tr]} · в колоде: ${S.deck.length}<p class="muted">${E(S.log)}</p></div></div>`;
   h+=`<div class="tbl" style="min-height:110px;justify-content:center">${T.map(p=>`<div class="pair">${dcard(p.a)}${p.d!=null?dcard(p.d,'on'):''}</div>`).join('')}</div>`;
@@ -1748,6 +1748,88 @@ render(S,me){const my=S.h===me&&!S.over&&S.lives[me]>0;
   <div class="locs">${S.names.map((x,k)=>k===me||S.lives[k]<=0||S.over?'':B(`${TOK[k]} ${E(x)}`,()=>send({t:'pass',k}),my?'big':'ghost')).join('')}</div>
   <div class="log" style="text-align:center;max-height:none">${S.log.map(E).join('<br>')}</div>`}};
 [GMK,SEA,LIAR,RCT,BOMB].forEach(g=>{GAMES.push(g);GM[g.id]=g});
+
+/* ===== ОПТИМИЗАЦИЯ ===== */
+const st4=document.createElement('style');st4.textContent=`.card{backdrop-filter:none!important;content-visibility:auto;contain-intrinsic-size:260px 330px}header{backdrop-filter:none!important;background:#0b0818f2!important}.bg i:nth-child(n+9){display:none}@media(prefers-reduced-motion:reduce){.bg{display:none}}
+.mn{display:grid;grid-template-columns:repeat(9,1fr);gap:2px;max-width:420px;margin:10px auto}.mn i{aspect-ratio:1;border-radius:5px;background:#475569;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:clamp(12px,3.6vw,20px);cursor:pointer}.mn i:hover{background:#64748b}.mn i.o{background:#1e293b;cursor:default}.mn i.b{background:#7f1d1d;cursor:default}`;document.head.appendChild(st4);
+document.addEventListener('visibilitychange',()=>{const b=$('#bg');if(b)b.style.display=document.hidden?'none':''});
+/* состояние сериализуется один раз для всех, если нет личных представлений */
+pushState=function(){const G=GM[net.gid],S=net.S;let shared=null;for(const k in net.conns){const c=net.conns[k];if(!c||!c.open)continue;
+  if(G.view)c.send({t:'state',S:pub(G.view(S,+k))});else c.send(shared||(shared={t:'state',S:pub(S)}))}};
+/* аэрохоккей: фиксированный шаг по реальному времени (не замедляется при лагах), 30 Гц рассылка */
+hkStart=function(){clearInterval(net.rt);HK=hkInit();let last=performance.now(),acc=0,lb=0;
+  net.rt=setInterval(()=>{if(!net.S||net.S.over)return;const n=performance.now();acc+=Math.min(100,n-last);last=n;
+    while(acc>=16.67){hkStep(1/60);acc-=16.67;if(!net.S||net.S.over)return}
+    if(n-lb>=33){lb=n;const K=HK.k,p=HK.p;broadcast({t:'rt',h:[K[0]|0,K[1]|0,p[0][0]|0,p[0][1]|0,p[1][0]|0,p[1][1]|0]})}},16)};
+HOCK.onStart=hkStart;
+
+/* ===== 3 НОВЫЕ ИГРЫ ===== */
+/* 1. МИННОЕ ПОЛЕ */
+const MW=9,MNN=12;
+function mnN(S,k){const r=k/MW|0,c=k%MW;let n=0;for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const rr=r+a,cc=c+b;if((a||b)&&rr>=0&&rr<MW&&cc>=0&&cc<MW&&S._m[rr*MW+cc])n++}return n}
+const mnNb=k=>{const r=k/MW|0,c=k%MW,o=[];for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const rr=r+a,cc=c+b;if((a||b)&&rr>=0&&rr<MW&&cc>=0&&cc<MW)o.push(rr*MW+cc)}return o};
+const MINE={id:'mine',name:'Минное поле',icon:'💣',color:'#64748b',cat:['board','party'],time:'8 мин',min:2,max:4,sb:1,bd:900,
+desc:'Общее поле сапёра на всех: открывай клетки по очереди, собирай очки и не наступи на мину. Безопасная клетка — ходишь снова!',
+rules:'На поле 9×9 спрятано 12 мин. Открой клетку: число показывает, сколько мин вокруг. Безопасная клетка (и всё, что открылось рядом) даёт очко за каждую клетку, и ты ходишь снова. Мина — минус 3 очка и ход переходит. Когда все безопасные клетки открыты, побеждает тот, у кого больше очков.',
+init(names){const m=Array(MW*MW).fill(0);let n=0;while(n<MNN){const k=rnd(MW*MW);if(!m[k]){m[k]=1;n++}}
+  return{names,c:Array(MW*MW).fill(-1),_m:m,turn:0,sc:names.map(()=>0),left:MW*MW-MNN,over:false,log:'Игра началась!'}},
+act(S,i,a){if(S.over||i!==S.turn||a.t!=='o'||!(a.k>=0&&a.k<MW*MW)||S.c[a.k]!==-1)return;
+  if(S._m[a.k]){S.c[a.k]=9;S.sc[i]-=3;S.log=`💥 ${S.names[i]} подорвался (−3)`;S.turn=(S.turn+1)%S.names.length;return}
+  const q=[a.k];let cnt=0;while(q.length){const x=q.pop();if(S.c[x]!==-1)continue;S.c[x]=mnN(S,x);cnt++;if(!S.c[x])q.push(...mnNb(x))}
+  S.sc[i]+=cnt;S.left-=cnt;S.log=`${S.names[i]} открыл ${cnt} кл. (+${cnt})`;if(S.left<=0)S.over=true},
+bot(S,i){if(S.over||S.turn!==i)return null;const c=S.c,mines=new Set(),safe=new Set(),un=[];c.forEach((v,k)=>{if(v===-1)un.push(k)});
+  const info=k=>{const nb=mnNb(k),u=nb.filter(x=>c[x]===-1),m9=nb.filter(x=>c[x]===9).length;return{u,m9}};
+  c.forEach((v,k)=>{if(v>0&&v<9){const{u,m9}=info(k);if(u.length&&v-m9===u.length)u.forEach(x=>mines.add(x))}});
+  c.forEach((v,k)=>{if(v>0&&v<9){const{u,m9}=info(k);if(u.length&&u.filter(x=>mines.has(x)).length+m9===v)u.forEach(x=>{if(!mines.has(x))safe.add(x)})}});
+  const sa=[...safe];if(sa.length&&(LV()>0||rnd(2)))return{t:'o',k:sa[rnd(sa.length)]};
+  const p=un.filter(k=>LV()===0||!mines.has(k));const pool=p.length?p:un;return{t:'o',k:pool[rnd(pool.length)]}},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){const my=S.turn===me&&!S.over,col=['','#60a5fa','#4ade80','#f87171','#a78bfa','#fb923c','#22d3ee','#fff','#9ca3af'];
+  return `<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)}${i===me?' (ты)':''} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">осталось: ${S.left}</span></div>
+  ${S.over?`<h2 style="text-align:center">🏆 ${E(S.names[S.sc.indexOf(Math.max(...S.sc))])} победил(а)!</h2>`:`<p class="muted" style="text-align:center">${my?'Твой ход — открой клетку':'Ходит '+E(S.names[S.turn])+'…'} · ${E(S.log)}</p>`}
+  <div class="mn">${S.c.map((v,k)=>v===-1?`<i ${my?`onclick="${H(()=>send({t:'o',k}))}"`:''}></i>`:v===9?'<i class="b">💣</i>':`<i class="o" style="color:${col[v]}">${v||''}</i>`).join('')}</div>`}};
+
+/* 2. СКОРОСТНОЙ НАБОР */
+const TYP={id:'typ',name:'Скоростной набор',icon:'⌨️',color:'#06b6d4',cat:['fast','party'],time:'4 мин',min:1,max:8,sb:1,bd:1700,
+desc:'Все видят одно слово — кто первым наберёт его правильно, получает очко. Проверка мгновенная, жми буквы быстрее!',
+opts:[{k:'n',n:'Слов',v:['10','15','25'],d:0}],
+rules:'На экране появляется слово. Набери его в поле — как только оно написано верно, очко твоё и появляется следующее. Регистр и буква «ё» не важны. Побеждает тот, у кого больше очков.',
+init(names,o){const p=wordPool(2).filter(w=>!w.includes(' '));return{names,_p:p,word:p.pop(),n:1,N:[10,15,25][v_(o,'n',0)],sc:names.map(()=>0),last:'',over:false}},
+act(S,i,a){if(S.over||i<0||a.t!=='a'||a.n!==S.n||norm(a.w||'')!==norm(S.word))return;S.sc[i]++;S.last=`${S.names[i]} успел(а): «${S.word}»`;if(S.n>=S.N)S.over=true;else{S.n++;S.word=S._p.pop()}},
+bot(S,i){if(S.over)return null;return rnd(100)<[25,45,70][LV()]?{t:'a',n:S.n,w:S.word}:null},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip" style="--c:${COL[i]}">${TOK[i]} ${E(x)}${i===me?' (ты)':''} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">слово ${S.n}/${S.N}</span></div>`;
+  if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очк.</h2>`}
+  const go=H(()=>{const el=$('#ty'+S.n);if(el)send({t:'a',n:S.n,w:el.value})});
+  return h+`<div class="role" style="padding:26px"><b style="font-size:clamp(30px,8vw,56px);letter-spacing:3px">${E(S.word)}</b></div>
+  <div class="row" style="justify-content:center"><input id="ty${S.n}" placeholder="Набирай здесь…" style="width:min(360px,90%);font-size:22px;text-align:center" autocomplete="off" autocapitalize="off" oninput="if(norm(this.value)==='${E(S.word)}')${go}"></div>
+  <p class="muted" style="text-align:center">${E(S.last)}</p>`},
+after(S){const el=$('#ty'+S.n);el&&!S.over&&el.focus()}};
+
+/* 3. УГАДАЙ ЧИСЛО */
+const NUM={id:'num',name:'Угадай число',icon:'🔢',color:'#f43f5e',cat:['party','fast'],time:'6 мин',min:2,max:6,sb:1,bd:1000,
+desc:'Загадано число от 1 до 100. Игроки по очереди называют числа и получают подсказки «больше / меньше». Кто попал точно — берёт очко!',
+opts:[{k:'r',n:'Раундов',v:['3','5','8'],d:1}],
+rules:'В каждом раунде компьютер загадывает число от 1 до 100. По очереди называй число (оно должно быть в оставшемся диапазоне). Подсказка сужает границы для всех. Кто назвал число точно — получает очко. Побеждает набравший больше очков.',
+init(names,o){return{names,_s:1+rnd(100),lo:1,hi:100,turn:0,sc:names.map(()=>0),r:1,R:[3,5,8][v_(o,'r',1)],hist:[],ph:'g',ans:0,over:false}},
+act(S,i,a){if(S.over)return;const n=S.names.length;
+  if(a.t==='g'&&S.ph==='g'&&i===S.turn){const g=Math.floor(+a.g);if(!(g>=S.lo&&g<=S.hi))return;
+    if(g===S._s){S.sc[i]++;S.ans=g;S.ph='res';S.hist.unshift(`${S.names[i]}: ${g} — ✅ угадал(а)!`)}
+    else{if(g<S._s){S.lo=g+1;S.hist.unshift(`${S.names[i]}: ${g} — ⬆ больше`)}else{S.hi=g-1;S.hist.unshift(`${S.names[i]}: ${g} — ⬇ меньше`)}S.hist.length=Math.min(S.hist.length,6);S.turn=(S.turn+1)%n}}
+  else if(a.t==='next'&&S.ph==='res'&&i>=0){if(S.r>=S.R){S.over=true;return}S.r++;S._s=1+rnd(100);S.lo=1;S.hi=100;S.hist=[];S.ph='g';S.turn=(S.r-1)%n}},
+bot(S,i,all){if(S.over)return null;if(S.ph==='res')return all?{t:'next'}:null;if(S.turn!==i)return null;
+  const m=Math.floor((S.lo+S.hi)/2),g=LV()===2?m:LV()===1?Math.max(S.lo,Math.min(S.hi,m+rnd(9)-4)):S.lo+rnd(S.hi-S.lo+1);return{t:'g',g}},
+win(S,me){return S.over?S.sc[me]===Math.max(...S.sc):null},
+render(S,me){const my=S.turn===me&&S.ph==='g'&&!S.over;
+  let h=`<div class="sc">${S.names.map((x,i)=>`<span class="chip ${i===S.turn&&S.ph==='g'&&!S.over?'st':''}" style="--c:${COL[i]}">${TOK[i]} ${E(x)}${i===me?' (ты)':''} <b>${S.sc[i]}</b></span>`).join('')}<span class="chip">раунд ${S.r}/${S.R}</span></div>`;
+  if(S.over){const w=S.sc.indexOf(Math.max(...S.sc));return h+`<h2 style="text-align:center">🏆 ${E(S.names[w])} — ${S.sc[w]} очк.</h2>`}
+  h+=`<div class="role" style="padding:16px">Число между <b style="font-size:34px">${S.lo}</b> и <b style="font-size:34px">${S.hi}</b>${S.ph==='res'?`<br>🎉 Загадано было <b>${S.ans}</b>`:''}</div>`;
+  if(my){const id='ng'+S.r+'_'+S.hist.length,go=H(()=>{const el=$('#'+id),g=parseInt(el.value,10);if(!(g>=S.lo&&g<=S.hi))return toast(`Введи число от ${S.lo} до ${S.hi}`);send({t:'g',g})});
+    h+=`<div class="row" style="justify-content:center"><input id="${id}" type="number" min="${S.lo}" max="${S.hi}" placeholder="Твоё число" style="width:160px;font-size:22px;text-align:center" onkeydown="if(event.key==='Enter')${go}"><button class="btn big" onclick="${go}">Назвать</button></div>`}
+  else if(S.ph==='res')h+=`<div style="text-align:center">${B(S.r>=S.R?'Итоги ➜':'Следующий раунд ➜',()=>send({t:'next'}),'big')}</div>`;
+  else h+=`<p class="muted" style="text-align:center">Называет ${E(S.names[S.turn])}…</p>`;
+  return h+`<div class="log" style="text-align:center;max-height:none;margin-top:10px">${S.hist.map(E).join('<br>')}</div>`}};
+[MINE,TYP,NUM].forEach(g=>{GAMES.push(g);GM[g.id]=g});
 
 if(!net.gid&&prof)home();
 })();
