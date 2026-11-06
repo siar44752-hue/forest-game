@@ -4,7 +4,7 @@
 *{box-sizing:border-box;margin:0}html,body{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}body{overflow:hidden;font:14px system-ui,sans-serif;background:#9ad1f0;color:#fff}
 #c{position:fixed;inset:0}.cr{display:flex;justify-content:space-between;padding:6px 10px;border-radius:8px;background:#ffffff12;margin:4px 0}.cr.big{font-size:18px}.cr.good{background:#2a9d8f77}.cr.bad{background:#e6394677}
 .cb{min-width:60px;height:52px;margin:4px;font-size:18px;border-radius:12px;box-shadow:0 3px 0 #0006;transition:transform .08s,filter .08s}.cb:active,.cb.pr{transform:translateY(2px) scale(.93);filter:brightness(1.35)}.cb.coin{border-radius:50%;width:56px;background:#e9c46a}.cb.bill{background:#90be6d;min-width:78px}.cb.ok{background:#2a9d8f;color:#fff}.cg,.ca{display:flex;flex-wrap:wrap;justify-content:center}#ck-ch{min-height:22px;opacity:.85}#ck-m{color:#ffb4a2;min-height:20px}
-#st{position:fixed;inset:4% 14%;background:#101820f5;border-radius:14px;padding:14px;z-index:4;display:none;overflow:auto}.sh{display:flex;justify-content:space-between;align-items:center;gap:8px}#st button{margin:2px}#st button.on{background:#e9c46a;box-shadow:0 0 0 2px #fff}.it{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #fff2}.it i{width:22px;height:22px;border-radius:6px;display:inline-block}.it b{flex:1}.it em{opacity:.7;font-size:12px}
+#nd{position:fixed;left:8px;bottom:8px;z-index:7;background:#000c;padding:8px;border-radius:8px;font:11px/1.35 monospace;max-width:92vw;display:none}#nd pre{white-space:pre-wrap;margin:0 0 6px}#ph{position:fixed;inset:5% 22%;background:#101820f5;border-radius:18px;padding:14px;z-index:4;display:none;overflow:auto}.touch #ph{inset:1%}#st{position:fixed;inset:4% 14%;background:#101820f5;border-radius:14px;padding:14px;z-index:4;display:none;overflow:auto}.sh{display:flex;justify-content:space-between;align-items:center;gap:8px}#st button{margin:2px}#st button.on{background:#e9c46a;box-shadow:0 0 0 2px #fff}.it{display:flex;align-items:center;gap:8px;padding:6px;border-bottom:1px solid #fff2}.it i{width:22px;height:22px;border-radius:6px;display:inline-block}.it b{flex:1}.it em{opacity:.7;font-size:12px}
 .pop{position:fixed;left:50%;top:42%;transform:translateX(-50%);font:700 34px system-ui;color:#ffd166;text-shadow:0 2px 8px #000;pointer-events:none;z-index:6;animation:up 1.2s ease-out forwards}@keyframes up{to{top:26%;opacity:0}}
 .touch #st{inset:1%}.touch#cash{min-width:92%;max-height:96%;overflow:auto}#tc{display:none}.tb{position:fixed;width:64px;height:64px;border-radius:50%;background:#ffffff40;border:2px solid #fff8;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;z-index:3}.tb.on{background:#f4a261aa}#jk{position:fixed;width:100px;height:100px;border-radius:50%;background:#fff2;border:2px solid #fff6;display:none;z-index:3}#jd{position:fixed;width:44px;height:44px;border-radius:50%;background:#fff7;display:none;z-index:3}#tb2{display:none}.touch #hint{bottom:150px;font-size:12px;max-width:80%;text-align:center}.touch #mm{width:100px;height:100px}.touch #hud{font-size:12px}.touch #pc{inset:2%}.touch button{padding:14px 20px;font-size:16px}.touch #cash button{min-width:64px}
 #menu{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:linear-gradient(#1d3557,#457b9d);z-index:9;text-align:center}
@@ -32,9 +32,9 @@ select{padding:7px;border-radius:6px}#cash{position:fixed;left:50%;top:50%;trans
 <div id="pc"><div style="display:flex;justify-content:space-between"><h2>💻 Бизнес-компьютер</h2><button onpointerdown="closePC()">✕ Закрыть</button></div>
 <div id="pinfo"></div><h3>Заказ товара</h3>
 <select id="oi"></select> <select id="oq"></select> <select id="os"></select> <button id="ob" onpointerdown="doOrder()">Заказать и оплатить</button><div id="pord"></div></div>
-<div id="cash"></div><div id="st"></div><div id="tc"><div id="jk"></div><div id="jd"></div>
+<div id="cash"></div><div id="nd"><pre id="ndt"></pre><button id="ndb">Копировать отчёт</button></div><div id="st"></div><div id="ph"></div><div id="tc"><div id="jk"></div><div id="jd"></div>
 <div class="tb" style="right:16px;bottom:24px;width:88px;height:88px" data-k="KeyE">E</div><div class="tb" style="right:120px;bottom:24px" data-h="Space">⤒</div>
-<div class="tb" style="right:120px;bottom:100px" data-t="run">🏃</div><div class="tb" style="right:16px;bottom:126px;width:52px;height:52px" data-k="KeyB">🔨</div><div class="tb" style="right:16px;bottom:190px;width:52px;height:52px" data-k="KeyV">👁</div><div class="tb" style="right:16px;bottom:254px;width:52px;height:52px" data-k="KeyY">👕</div>
+<div class="tb" style="right:120px;bottom:100px" data-t="run">🏃</div><div class="tb" style="right:16px;bottom:126px;width:52px;height:52px" data-k="KeyB">🔨</div><div class="tb" style="right:16px;bottom:190px;width:52px;height:52px" data-k="KeyV">👁</div><div class="tb" style="right:16px;bottom:254px;width:52px;height:52px" data-k="KeyY">👕</div><div class="tb" style="right:80px;bottom:254px;width:52px;height:52px" data-k="KeyF">🚐</div><div class="tb" style="right:80px;bottom:190px;width:52px;height:52px" data-k="KeyP">📱</div><div class="tb" style="right:80px;bottom:318px;width:52px;height:52px" data-k="KeyN">📶</div>
 <div id="tb2"><div class="tb" style="left:16px;bottom:170px;width:96px;border-radius:16px" data-f="place">Поставить</div><div class="tb" style="left:124px;bottom:170px;width:52px;height:52px" data-k="KeyR">R</div><div class="tb" style="left:184px;bottom:170px;width:52px;height:52px" data-k="KeyX">X</div><div class="tb" style="left:244px;bottom:170px;width:52px;height:52px" data-f="next">▶</div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script>
@@ -64,48 +64,108 @@ const inStoreP=p=>p.x>10.5&&p.x<23.5&&Math.abs(p.z)<6.5;
 // ---------- состояние ----------
 let G,isHost=true,myId='h',peer=null,conn=null,playing=false,ui=false,fp=false,code='',lastEv=0,roomCode='';
 const P={x:-1,y:0,z:9,ry:0,vy:0,mv:0,hold:null};
-function newState(){return{money:300,rep:10,rev:0,price:ITEMS.map(i=>i.p),cashier:false,shelves:ITEMS.map((_,i)=>({it:i,n:0})),boxes:[],trucks:[],orders:[],cust:[],build:[],staff:null,acc:{h:newAcc(),g:newAcc()},players:{},nid:1,ev:{id:0},t:0,ping:0,sal:0}}
+function newState(){return{money:300,rep:10,rev:0,price:ITEMS.map(i=>i.p),cashier:false,shelves:ITEMS.map((_,i)=>({it:i,n:0})),boxes:[],trucks:[],orders:[],cust:[],build:[],staff:null,acc:{h:newAcc(),g:newAcc()},van:{x:-12,z:14.5,ry:Math.PI/2,sp:0,drv:null,pas:null,doors:0,cargo:[]},pk:[],dl:{orders:[],hist:[],rating:4.5,earn:0,seq:1,nt:20},players:{},nid:1,ev:{id:0},t:0,ping:0,sal:0}}
 function LVL(){let l=1;LV.forEach((v,i)=>{if(G.rev>=v)l=i+1});return l}
 function say(text,sfx){G.ev={id:++G.nid,text,sfx:sfx||0}}
 const dist=(p,x,z)=>Math.hypot(p.x-x,p.z-z);
-function collide(p){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,dz=p.z-c.z,hx=c.w/2,hz=c.d/2;const nx=Math.max(-hx,Math.min(hx,dx)),nz=Math.max(-hz,Math.min(hz,dz));let ax=dx-nx,az=dz-nz,d=Math.hypot(ax,az);if(d<.4){if(d<1e-4){ax=1;az=0;d=1}const k=(.4-d)/d;p.x+=ax*k;p.z+=az*k}}}
+function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,dz=p.z-c.z,hx=c.w/2,hz=c.d/2;const nx=Math.max(-hx,Math.min(hx,dx)),nz=Math.max(-hz,Math.min(hz,dz));let ax=dx-nx,az=dz-nz,d=Math.hypot(ax,az);if(d<rd){if(d<1e-4){ax=1;az=0;d=1}const k=(rd-d)/d;p.x+=ax*k;p.z+=az*k}}}
 // ---------- звук ----------
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
+// ---------- сетевая диагностика (клавиша N или ?net=1) ----------
+const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,lost:0,err:null,pings:[]};
+const ENC=typeof TextEncoder!='undefined'?new TextEncoder():null;
+function netCount(dir,m){const str=typeof m=='string',k=str?'snapshot':((m&&m.t)||'?'),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
+ if(str){const sn=NET.snap;sn.size=b;sn.max=Math.max(sn.max,b);if(dir=='in'){const t=performance.now();if(sn.last){sn.gap=t-sn.last;sn.maxGap=Math.max(sn.maxGap,sn.gap)}sn.last=t;sn.n++}}}
+function netTap(c){if(!c||c._tap)return;c._tap=1;const o=c.send.bind(c);c.send=m=>{netCount('out',m);return o(m)};c.on('data',m=>netCount('in',m))}
+const netDC=()=>conn&&(conn.dataChannel||conn._dc)||null,netPC=()=>conn&&conn.peerConnection||null;
+function netSample(){const R={out:{},in:{}};for(const d of['out','in'])for(const k in NET[d]){const o=NET[d][k];R[d][k]=[o.w,o.wb];o.w=o.wb=0}NET.rate=R;
+ const dc=netDC();NET.dc=dc?{state:dc.readyState,buf:dc.bufferedAmount,ordered:dc.ordered,reliable:dc.maxRetransmits==null&&dc.maxPacketLifeTime==null,q:conn.bufferSize}:null;
+ if(NET.dc){NET.dcHist.push(NET.dc.buf);NET.qHist.push(NET.dc.q||0);if(NET.dcHist.length>60){NET.dcHist.shift();NET.qHist.shift()}}
+ const p=isHost?G.ping:ping;NET.pings.push(p);if(NET.pings.length>60)NET.pings.shift();if(NET.snap.last&&performance.now()-NET.snap.last>5000)NET.snap.maxGap=Math.max(NET.snap.maxGap,performance.now()-NET.snap.last)}
+async function netStats(){const pc=netPC();if(!pc||!pc.getStats)return;try{const rep=await pc.getStats(),st={},tr=[],ch=[];let pair=null;rep.forEach(x=>{st[x.id]=x;if(x.type=='transport')tr.push(x);if(x.type=='data-channel')ch.push(x)});
+ tr.forEach(x=>{if(x.selectedCandidatePairId&&st[x.selectedCandidatePairId])pair=st[x.selectedCandidatePairId]});if(!pair)rep.forEach(x=>{if(x.type=='candidate-pair'&&(x.selected||(x.nominated&&x.state=='succeeded')))pair=x});
+ const L=pair&&st[pair.localCandidateId],Rm=pair&&st[pair.remoteCandidateId];
+ NET.ice=pair?{rtt:pair.currentRoundTripTime!=null?Math.round(pair.currentRoundTripTime*1000):null,avg:pair.responsesReceived?Math.round(pair.totalRoundTripTime/pair.responsesReceived*1000):null,bitrate:pair.availableOutgoingBitrate?Math.round(pair.availableOutgoingBitrate/1000):null,sent:pair.bytesSent,recv:pair.bytesReceived,local:L?L.candidateType+'/'+(L.protocol||'?')+(L.relayProtocol?'/'+L.relayProtocol:''):'?',remote:Rm?Rm.candidateType+'/'+(Rm.protocol||'?'):'?',relay:!!((L&&L.candidateType=='relay')||(Rm&&Rm.candidateType=='relay')),discarded:pair.packetsDiscardedOnSend||0,unanswered:(pair.requestsSent||0)-(pair.responsesReceived||0),state:pair.state}:null;
+ NET.dcs=ch.map(x=>({state:x.state,ms:x.messagesSent,mr:x.messagesReceived,bs:x.bytesSent,br:x.bytesReceived}));NET.conn=pc.connectionState;NET.ices=pc.iceConnectionState;NET.dtls=tr[0]&&tr[0].dtlsState;NET.err=null}catch(e){NET.err=String(e)}}
+function netVerdict(){const v=[],I=NET.ice,D=NET.dc,p=isHost?G.ping:ping,mx=Math.max.apply(null,NET.dcHist.concat([0])),mq=Math.max.apply(null,NET.qHist.concat([0]));
+ if(!I)v.push('ICE-пара пока не определена');else{if(I.relay)v.push('⚠ трафик идёт через TURN-ретранслятор ('+I.local+')');else v.push('прямое соединение ('+I.local+' ↔ '+I.remote+')');if(I.rtt!=null&&p>3*I.rtt+300)v.push('⚠ ping игры ('+p+' мс) ≫ RTT сети ('+I.rtt+' мс): задержка = очередь отправки, не сеть');if(I.unanswered>3)v.push('⚠ STUN-проверки без ответа: '+I.unanswered+' (признак потерь)')}
+ if(D&&D.buf>262144)v.push('⚠ bufferedAmount '+Math.round(D.buf/1024)+' КБ: данные копятся в канале');if(mx>262144)v.push('⚠ пик bufferedAmount за минуту '+Math.round(mx/1024)+' КБ');if(mq>20)v.push('⚠ очередь PeerJS: '+mq+' сообщений');
+ if(NET.snap.maxGap>1000)v.push('⚠ снапшоты приходили с паузой до '+Math.round(NET.snap.maxGap)+' мс');if(NET.reconn>1||NET.lost>0)v.push('⚠ переподключений: '+NET.reconn+', потерь связи: '+NET.lost);if(NET.err)v.push('getStats: '+NET.err);return v}
+function netReport(){return{role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
+function netText(){const R=NET.rate,f=o=>Object.keys(o).map(k=>k+' '+o[k][0]+'/с '+(o[k][1]/1024).toFixed(1)+'КБ/с').join(' · ')||'—',I=NET.ice,D=NET.dc,p=isHost?G.ping:ping;
+ return ['РОЛЬ: '+(isHost?'хост':'гость')+' · игра: '+p+' мс','ICE: '+(I?(I.relay?'RELAY ':'direct ')+I.local+' ↔ '+I.remote+' · RTT '+I.rtt+' мс (ср. '+I.avg+') · bitrate~'+I.bitrate+' кбит/с':'—'),
+ 'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out),'Вх: '+f(R.in),
+ 'Снапшот: '+NET.snap.size+' Б (макс '+NET.snap.max+') · интервал '+Math.round(NET.snap.gap)+' мс (макс '+Math.round(NET.snap.maxGap)+')','Вердикт:',].concat(netVerdict().map(x=>' • '+x)).join('\n')}
+$('ndb').addEventListener('pointerdown',e=>{e.preventDefault();const t=JSON.stringify(netReport(),null,1);try{navigator.clipboard.writeText(t)}catch(x){}console.log(t);$('ndb').textContent='Скопировано (см. и консоль)'});setInterval(netSample,1000);setInterval(netStats,2000);
+let netOn=/[?&]net=1/.test(location.search);
+function netToggle(){netOn=!netOn;$('nd').style.display=netOn?'block':'none'}
+setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
 // ---------- сеть (хост = авторитет) ----------
 function mst(t){$('mst').textContent=t}
 function startHost(solo){
  try{G=JSON.parse(localStorage.getItem('twobiz1'));}catch(e){G=null}
- const base=newState();if(G){Object.assign(base,{money:G.money,rev:G.rev,rep:G.rep,price:G.price,cashier:G.cashier,shelves:G.shelves,build:G.build||[],staff:G.staff?{x:-7,y:0,z:-2,ry:0,mv:0,hold:null}:null,acc:mergeAcc(G.acc)})}G=base;
- isHost=true;myId='h';G.players={h:P};P.id='h';G.build.forEach(b=>G.nid=Math.max(G.nid,b.id+1));enter();
+ const base=newState();if(G){Object.assign(base,{money:G.money,rev:G.rev,rep:G.rep,price:G.price,cashier:G.cashier,shelves:G.shelves,build:G.build||[],staff:G.staff?{x:-7,y:0,z:-2,ry:0,mv:0,hold:null}:null,acc:mergeAcc(G.acc),dl:G.dl||base.dl,pk:G.pk||[],van:G.van?Object.assign(base.van,G.van,{drv:null,pas:null,sp:0}):base.van})}G=base;
+ isHost=true;myId='h';G.players={h:P};P.id='h';G.build.concat(G.pk,G.dl.orders,G.van.cargo).forEach(b=>G.nid=Math.max(G.nid,b.id+1));enter();
  if(solo){roomCode='';return}
  roomCode=Math.random().toString(36).slice(2,6).toUpperCase();
  peer=new Peer('twobiz-'+roomCode);
- peer.on('connection',c=>{if(conn&&conn!==c)try{conn.close()}catch(e){}conn=c;c.on('open',()=>{if(!G.players.g)G.players.g={id:'g',x:1,y:0,z:9,ry:0,mv:0,hold:null};say('Брат подключился!',1)});
+ peer.on('connection',c=>{if(conn&&conn!==c)try{conn.close()}catch(e){}conn=c;netTap(c);c.on('open',()=>{if(!G.players.g)G.players.g={id:'g',x:1,y:0,z:9,ry:0,mv:0,hold:null};say('Брат подключился!',1)});
   c.on('data',m=>handle('g',m));
-  c.on('close',()=>{if(conn!==c)return;const p=G.players.g;if(p&&p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(b){b.x=p.x;b.z=p.z;b.y=.3}}delete G.players.g;conn=null;say('Брат отключился. Прогресс сохранён',3)})});
+  c.on('close',()=>{if(conn!==c)return;const p=G.players.g;if(p&&p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(b){b.x=p.x;b.z=p.z;b.y=.3}}delete G.players.g;if(G.van.drv=='g'){G.van.drv=G.van.pas;G.van.pas=null;if(!G.van.drv)G.van.sp=0}if(G.van.pas=='g')G.van.pas=null;conn=null;say('Брат отключился. Прогресс сохранён',3)})});
  peer.on('disconnected',()=>peer.reconnect());
  peer.on('error',e=>say('Сеть: '+e.type,3));
  setInterval(()=>{if(conn&&conn.open)conn.send(JSON.stringify(G))},80);
  setInterval(save,10000);
 }
-function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,staff:G.staff?1:0,acc:G.acc}))}
+function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,staff:G.staff?1:0,acc:G.acc,pk:G.pk,van:G.van,dl:Object.assign({},G.dl,{orders:G.dl.orders.map(o=>Object.assign({},o,{due:o.due-G.t,at:o.at-G.t,end:o.end?o.end-G.t:undefined}))})}))}
 let retry=null;
 function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 символов');code=c;mst('Подключаемся...');
  if(peer)try{peer.destroy()}catch(e){}
  isHost=false;myId='g';P.id='g';P.x=1;
  peer=new Peer();let ok=false;
- peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});
+ peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});netTap(conn);NET.reconn++;
   conn.on('open',()=>{ok=true;if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
-   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping});conn.send({t:'ping',ts:Date.now()})}},60)});
-  conn.on('data',m=>{if(typeof m=='string'){G=JSON.parse(m);const me=G.players[myId];if(me)P.hold=me.hold}else if(m.t=='pong')ping=Date.now()-m.ts});
+   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});conn.send({t:'ping',ts:Date.now()})}},60)});
+  conn.on('data',m=>{if(typeof m=='string'){G=JSON.parse(m);const me=G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong')ping=Date.now()-m.ts});
   conn.on('close',lost)});
  peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing)lost()});
  setTimeout(()=>{if(!ok&&!playing)mst('Не удалось подключиться. Проверь код')},8000)}
 let ping=0;
-function lost(){$('toast').textContent='Связь потеряна, переподключаемся...';$('toast').style.opacity=1;retry=setTimeout(()=>joinGame(code),3000)}
+function lost(){NET.lost++;$('toast').textContent='Связь потеряна, переподключаемся...';$('toast').style.opacity=1;retry=setTimeout(()=>joinGame(code),3000)}
 function sendM(m){if(isHost)handle('h',m);else if(conn&&conn.open)conn.send(m)}
 function cashC(pid){const c=G.cust.find(c=>c.st=='wait'),p=G.players[pid];if(!c||!p||dist(p,REG[0],3)>3.4)return null;if(c.by&&c.by!=pid)return null;c.by=pid;if(!c.cl)c.cl=[];return c}
+// ---------- доставка ----------
+const HOUSES=[-30,-18,-6,6,18,30].map((x,i)=>({x,n:12+i*2,s:'Липовая ул.'})),DESK=[-7.2,-.8],VCAP=8;ALLC.push({x:DESK[0],z:DESK[1],w:1,d:1.6});HOUSES.forEach(h=>ALLC.push({x:h.x,z:31,w:8,d:6}));
+const DTY={norm:{n:'Обычный',q:[2,3],bags:1,t:360,w:5},small:{n:'Малый',q:[1,1],bags:1,t:300,w:3},family:{n:'Семейный',q:[5,7],bags:3,t:420,w:2},rush:{n:'Срочный',q:[2,3],bags:1,t:200,w:2,mul:1.3},multi:{n:'Несколько пакетов',q:[4,5],bags:2,t:380,w:2},heavy:{n:'Тяжёлый',q:[5,6],bags:2,t:400,w:1,mul:1.15}};
+function newOrder(){const D=G.dl,ks=Object.keys(DTY);let tot=0;ks.forEach(k=>tot+=DTY[k].w);let q=Math.random()*tot,tk=ks[0];for(const k of ks){q-=DTY[k].w;if(q<=0){tk=k;break}}const Y=DTY[tk];
+ let left=Y.q[0]+Math.floor(Math.random()*(Y.q[1]-Y.q[0]+1));const ids=[0,1,2,3].sort(()=>Math.random()-.5),items=[];let j=0;
+ while(left>0){const n=Math.min(left,1+Math.floor(Math.random()*3)),i=ids[j++%4],e=items.find(x=>x[0]==i);if(e)e[1]+=n;else items.push([i,n]);left-=n}
+ const pay=Math.round(items.reduce((a,x)=>a+x[1]*G.price[x[0]],0)*(Y.mul||1)),o={id:G.nid++,n:D.seq++,type:tk,addr:Math.floor(Math.random()*HOUSES.length),items,bags:Y.bags,pay,fee:tk=='rush'?10:6,due:G.t+Y.t,at:G.t,st:'new',dl:0};
+ D.orders.push(o);say('📱 Новый заказ #'+o.n+' ('+Y.n+'): '+HOUSES[o.addr].s+', '+HOUSES[o.addr].n,2);return o}
+function packOrder(pid,oid){const p=G.players[pid],o=G.dl.orders.find(o=>o.id==oid);if(!p||!o||o.st!='new')return;if(dist(p,DESK[0],DESK[1])>3.4)return say('Подойди к столу сборки заказов',3);
+ const miss=o.items.filter(x=>G.shelves[x[0]].n<x[1]);if(miss.length)return say('Не хватает: '+miss.map(x=>ITEMS[x[0]].n).join(', '),3);
+ o.items.forEach(x=>G.shelves[x[0]].n-=x[1]);o.st='packed';for(let k=0;k<o.bags;k++)G.pk.push({id:G.nid++,o:o.id,x:DESK[0]+1.1,y:.25,z:DESK[1]-.7+k*.7});say('Заказ #'+o.n+' собран: пакетов '+o.bags,1)}
+function rearPt(){const v=G.van;return[v.x-Math.sin(v.ry)*2.6,v.z-Math.cos(v.ry)*2.6]}
+function actDl(pid,p){if(p.hold)return false;const v=G.van,rr=rearPt(),dR=dist(p,rr[0],rr[1]);
+ if(p.pkh){const k=G.pk.find(k=>k.id==p.pkh);if(!k){p.pkh=null;return true}const o=G.dl.orders.find(o=>o.id==k.o);
+  if(dR<3.2){if(!v.doors)return say('Сначала открой двери (E у задних дверей без груза)',3),true;if(v.cargo.length>=VCAP)return say('Багажник полон',3),true;v.cargo.push({id:k.id,o:k.o});G.pk=G.pk.filter(x=>x!=k);p.pkh=null;say('Загружено: в фургоне '+v.cargo.length+'/'+VCAP,1);return true}
+  const hh=HOUSES.findIndex(h=>dist(p,h.x,26.2)<2.6);if(hh>=0){if(o&&o.addr==hh&&o.st=='packed')deliverBag(o,k,pid,p);else say('Не тот адрес!',3);return true}
+  k.x=p.x+Math.sin(p.ry)*.9;k.z=p.z+Math.cos(p.ry)*.9;k.y=.25;p.pkh=null;return true}
+ if(dR<3.2){if(!v.doors){v.doors=1;say('Двери открыты',1);return true}if(v.cargo.length){const c=v.cargo.pop();G.pk.push({id:c.id,o:c.o,x:p.x,y:.25,z:p.z});p.pkh=c.id;return true}v.doors=0;say('Двери закрыты',1);return true}
+ let best=null,bd=2.2;for(const k of G.pk){if(Object.values(G.players).some(q=>q.pkh==k.id))continue;const d=dist(p,k.x,k.z);if(d<bd){bd=d;best=k}}
+ if(best){const hs=held();let b2=9;for(const b of G.boxes)if(!hs.has(b.id))b2=Math.min(b2,dist(p,b.x,b.z));if(bd<=b2){p.pkh=best.id;return true}}return false}
+function deliverBag(o,k,pid,p){G.pk=G.pk.filter(x=>x!=k);p.pkh=null;o.dl++;say('Пакет вручён ('+o.dl+'/'+o.bags+')',1);if(o.dl>=o.bags)finishOrder(o,pid)}
+function finishOrder(o,pid){if(o.st!='packed')return;o.st='done';o.end=G.t;const D=G.dl,late=G.t>o.due;let pay=o.pay+o.fee,tip=0,bonus=0;
+ if(late){pay=Math.round(pay*.6*100)/100;D.rating=Math.max(1,D.rating-.3)}else{tip=Math.round(pay*(.05+Math.random()*.15)*100)/100;if(o.due-G.t>(o.due-o.at)*.5)bonus=Math.round(pay*.2*100)/100;D.rating=Math.min(5,D.rating+.1)}
+ const tot=Math.round((pay+tip+bonus)*100)/100;G.money=+(G.money+tot).toFixed(2);G.rev+=tot;D.earn+=tot;o.res={pay,tip,bonus,late};
+ const a=G.acc[pid];if(a)a.m+=Math.round(3+tip*.5);const dv=G.van.drv;if(dv&&dv!=pid&&G.acc[dv])G.acc[dv].m+=3;
+ D.hist.unshift({n:o.n,addr:o.addr,total:tot,late});D.hist.length=Math.min(D.hist.length,8);say('Доставка #'+o.n+(late?' (с опозданием)':'')+': +$'+tot.toFixed(1),2)}
+function dlTick(dt){const D=G.dl,v=G.van;if(!v.drv)v.sp=0;
+ for(const id in G.players){const p=G.players[id];if(p.inv){if(v.drv!=id&&v.pas!=id)p.inv=0;else{p.x=v.x;p.z=v.z;p.y=0}}}
+ D.nt-=dt;if(D.nt<=0){if(D.orders.filter(o=>o.st=='new'||o.st=='packed').length<3)newOrder();D.nt=(45+Math.random()*50)*(1.4-D.rating/10)}
+ for(const o of D.orders){if((o.st=='new'||o.st=='packed')&&G.t>o.due+120){o.st='fail';o.end=G.t;G.pk=G.pk.filter(k=>k.o!=o.id);v.cargo=v.cargo.filter(k=>k.o!=o.id);for(const p of Object.values(G.players))if(p.pkh&&!G.pk.some(k=>k.id==p.pkh))p.pkh=null;D.rating=Math.max(1,D.rating-.5);D.hist.unshift({n:o.n,addr:o.addr,total:0,fail:1});D.hist.length=Math.min(D.hist.length,8);say('Заказ #'+o.n+' сорван: рейтинг ↓',3)}}
+ D.orders=D.orders.filter(o=>!(o.st=='done'||o.st=='fail')||G.t-o.end<60)}
 function handle(pid,m){
  if(m.t=='a')act(pid);
  else if(m.t=='order'){const s=SUP[m.s],it=ITEMS[m.i];if(!s||!it||LVL()<s.lv)return;const q=Math.max(1,Math.min(5,m.q|0));const cost=+(it.c*BOXN*q*s.m+s.fee).toFixed(1);
@@ -113,6 +173,9 @@ function handle(pid,m){
  else if(m.t=='price'){const i=m.i;if(G.price[i]!==undefined)G.price[i]=Math.max(.5,Math.min(ITEMS[i].p*3,+(G.price[i]+(m.d>0?.5:-.5)).toFixed(1)))}
  else if(m.t=='build'){const k=BK[m.k];if(!k||G.build.length>=80)return;const x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,rr=m.r&1;if(!bvalid(m.k,x,z,rr))return say('Сюда нельзя',3);if(G.money<k.cost)return say('Не хватает денег!',3);G.money-=k.cost;G.build.push({id:G.nid++,k:m.k,x,z,r:rr});say('Построено: '+k.n+' −$'+k.cost,1)}
  else if(m.t=='del'){const i=G.build.findIndex(b=>b.id==m.id);if(i<0)return;const b=G.build[i];G.money+=BK[b.k].cost;G.build.splice(i,1);say('Убрано, возврат $'+BK[b.k].cost,1)}
+ else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv||p.hold||p.pkh||dist(p,v.x,v.z)>3.6)return;if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Пассажир в фургоне',1)}}
+ else if(m.t=='exit'){const p=G.players[pid],v=G.van;if(!p||!p.inv)return;if(Math.abs(v.sp)>3)return say('Остановись, чтобы выйти',3);p.inv=0;p.x=v.x+Math.cos(v.ry)*2.3;p.z=v.z-Math.sin(v.ry)*2.3;p.y=0;if(v.drv==pid){v.drv=v.pas;v.pas=null;if(!v.drv)v.sp=0}else if(v.pas==pid)v.pas=null}
+ else if(m.t=='pack')packOrder(pid,m.o);
  else if(m.t=='lock')cashC(pid);
  else if(m.t=='unlock'){const c=G.cust.find(c=>c.by==pid);if(c)c.by=null}
  else if(m.t=='chg'){const c=cashC(pid);if(c&&[1,2,5,10,20,50,100].includes(m.v)&&c.given<300){c.cl.push(m.v);c.given+=m.v}}
@@ -128,10 +191,10 @@ function handle(pid,m){
  else if(m.t=='lset'){const a=G.acc[pid];if(a&&Number.isInteger(m.i)&&a.sets[m.i]){a.ap=Object.assign({},DEF,a.sets[m.i]);fixAp(a);a.tch=1}}
  else if(m.t=='hello'){const a=G.acc[pid];if(!a||a.tch||!m.acc)return;const o=mergeAcc({[pid]:m.acc})[pid];o.tch=1;G.acc[pid]=o} else if(m.t=='hire'&&m.w=='st'){if(G.staff||LVL()<3||G.money<200)return say('Нужен ур.3 и $200',3);G.money-=200;G.staff={x:-7,y:0,z:-2,ry:0,mv:0,hold:null};say('Грузчик нанят! $20/мин',2)}
  else if(m.t=='hire'){if(G.cashier||LVL()<2||G.money<150)return say('Нельзя нанять кассира (нужен ур.2 и $150)',3);G.money-=150;G.cashier=true;say('Кассир нанят! Зарплата $15/мин',2)}
- else if(m.t=='p'){const p=G.players[pid];if(p){p.x=m.x;p.y=m.y;p.z=m.z;p.ry=m.ry;p.mv=m.mv;G.ping=m.pg||0}}
+ else if(m.t=='p'){const p=G.players[pid];if(p){if(!p.inv){p.x=m.x;p.y=m.y;p.z=m.z;p.ry=m.ry;p.mv=m.mv}G.ping=m.pg||0;const q=m.vn;if(q&&G.van.drv==pid&&[q.x,q.z,q.ry,q.sp].every(Number.isFinite)){G.van.x=q.x;G.van.z=q.z;G.van.ry=q.ry;G.van.sp=q.sp}}}
  else if(m.t=='ping'&&conn&&conn.open)conn.send({t:'pong',ts:m.ts})}
 function held(){const s=new Set(Object.values(G.players).map(p=>p.hold));if(G.staff)s.add(G.staff.hold);return s}
-function act(pid){const p=G.players[pid];if(!p)return;
+function act(pid){const p=G.players[pid];if(!p)return;if(p.inv)return;if(actDl(pid,p))return;
  if(p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(!b){p.hold=null;return}
   const si=SH.findIndex(s=>dist(p,s[0],s[1]+1.2)<2.4);
   if(si>=0){if(b.it!=si)return say('Эта полка для: '+ITEMS[si].n,3);const sh=G.shelves[si];if(sh.n+BOXN>CAP)return say('Полка полна',3);sh.n+=BOXN;if(G.acc[pid])G.acc[pid].m+=1;G.boxes=G.boxes.filter(x=>x!=b);p.hold=null;return say('Товар выложен на полку',1)}
@@ -169,7 +232,7 @@ function staffTick(dt){const w=G.staff,hs=held();let tx,tz;
  else{let best=null,bd=1e9;for(const b of G.boxes){if(hs.has(b.id)||G.shelves[b.it].n+BOXN>CAP)continue;const d=Math.hypot(w.x-b.x,w.z-b.z);if(d<bd){bd=d;best=b}}
   if(!best){tx=-7;tz=-2}else{tx=best.x;tz=best.z;if(bd<.6){w.hold=best.id;return}}}
  walkTo(w,tx,tz,2.6,dt)}
-function tick(dt){G.t+=dt;navT-=dt;if(navT<=0||!NAV){NAV=blockedMap();navT=.4}for(const c of G.cust)if(c.by&&(!G.players[c.by]||dist(G.players[c.by],REG[0],3)>4.5))c.by=null;if(G.staff)staffTick(dt);
+function tick(dt){G.t+=dt;navT-=dt;if(navT<=0||!NAV){NAV=blockedMap();navT=.4}for(const c of G.cust)if(c.by&&(!G.players[c.by]||dist(G.players[c.by],REG[0],3)>4.5))c.by=null;dlTick(dt);if(G.staff)staffTick(dt);
  for(const o of G.orders)if(o.st=='wait'&&G.t>=o.eta){o.st='way';G.trucks.push({id:G.nid++,x:-45,z:16,st:'in',o:o.id,it:o.it,q:o.q,w:0});say('Грузовик выехал к вам!',1)}
  for(const t of G.trucks){if(t.st=='in'){t.x+=9*dt;if(t.x>=12){t.x=12;t.st='stop';const o=G.orders.find(o=>o.id==t.o);if(o)o.st='done';
    for(let k=0;k<t.q;k++)G.boxes.push({id:G.nid++,it:t.it,n:BOXN,x:8+(k%4)*1.1,y:.3,z:11-(k/4|0)*1.1});say('Грузовик приехал! Разгружай у жёлтой зоны',2)}}
@@ -245,13 +308,24 @@ const TERM=[17,-4.3],MAN=[{n:'Эконом',x:13.2,z:-2.4,ap:{t:'t1',b:'b1',s:'s
  bx(.1,2.2,1.8,0xa8d8ea,22.8,1.2,0);bx(.14,2.4,2,0x444444,22.86,1.2,0);
  MAN.forEach(q=>{bx(1,.25,1,0xdddddd,q.x,.125,q.z);ALLC.push({x:q.x,z:q.z,w:1,d:1});const m=new T.Group();m.userData={};setLook(m,Object.assign({},DEF,q.ap,{sk:1}));m.position.set(q.x,.25,q.z);scene.add(m)});
  const lt=new T.PointLight(0xfff0e0,.6,22);lt.position.set(17,2.8,0);scene.add(lt)}
-const M={p:new Map,b:new Map,c:new Map,t:new Map,s:new Map,d:new Map};let TT=0;
+// ---------- район доставки и фургон ----------
+bx(200,.05,3,0xbbbbbb,0,.02,22.3);
+HOUSES.forEach((h,i)=>{bx(8,4.5,6,[0xe5989b,0xb5838d,0x90a4ae,0xcdb4db,0xa7c957,0xf4a261][i],h.x,2.25,31);bx(8.6,.6,6.6,0x7f5539,h.x,4.8,31);bx(1.2,2.2,.1,0x5c3d2e,h.x,1.1,27.95);bx(1.6,.05,2.4,0xcfd8dc,h.x,.04,26.9);
+ const tn=ctex(64,64,(c,w,hh)=>{c.fillStyle='#fff';c.fillRect(0,0,w,hh);c.fillStyle='#222';c.font='bold 40px sans-serif';c.textAlign='center';c.fillText(h.n,w/2,46)});tx(bx(.8,.8,.08,0xffffff,h.x+1.6,2.6,27.9),tn);
+ h.bm=new T.Mesh(new T.CylinderGeometry(.5,.5,6,12,1,true),new T.MeshBasicMaterial({color:0xffd166,transparent:true,opacity:.35,side:T.DoubleSide}));h.bm.position.set(h.x,3,26.2);h.bm.visible=false;scene.add(h.bm)});
+bx(1,.9,1.6,0x9c6644,DESK[0],.45,DESK[1]);bx(.9,.06,1.5,0xe9c46a,DESK[0],.93,DESK[1]);
+const vanM=new T.Group(),logo=ctex(256,96,(c,w,h)=>{c.fillStyle='#fff';c.fillRect(0,0,w,h);c.fillStyle='#e63946';c.fillRect(0,h-16,w,16);c.fillStyle='#1d3557';c.font='bold 40px sans-serif';c.textAlign='center';c.fillText('TWO BUSINESS',w/2,52)});
+vanM.add(mk(1.9,1.8,3.2,0xf8f9fa,0,1.4,-.5),mk(1.9,1.2,1.4,0x2a9d8f,0,1.0,1.6),mk(1.7,.6,.05,0x223344,0,1.35,2.31),mk(.3,.2,.05,0xffe066,-.6,.8,2.32),mk(.3,.2,.05,0xffe066,.6,.8,2.32),mk(.3,.2,.05,0xc1121f,-.7,.9,-2.12),mk(.3,.2,.05,0xc1121f,.7,.9,-2.12));
+[[-1,1],[1,1]].forEach(a=>{const p=new T.Mesh(new T.PlaneGeometry(2.4,.9),new T.MeshBasicMaterial({map:logo}));p.position.set(a[0]*.96,1.5,-.5);p.rotation.y=a[0]*Math.PI/2;vanM.add(p)});
+vanM.userData.wh=[];[[-1,1.3],[1,1.3],[-1,-1.4],[1,-1.4]].forEach(a=>{const w=new T.Group(),m=new T.Mesh(new T.CylinderGeometry(.42,.42,.3,12),new T.MeshLambertMaterial({color:0x222222}));m.rotation.z=Math.PI/2;w.add(m);w.position.set(a[0]*.95,.42,a[1]);vanM.add(w);vanM.userData.wh.push(w)});
+const dl=new T.Group(),dr=new T.Group();dl.position.set(-.95,1.4,-2.1);dr.position.set(.95,1.4,-2.1);const pl1=mk(.95,1.7,.06,0xe9ecef,.47,0,0),pl2=mk(.95,1.7,.06,0xe9ecef,-.47,0,0);dl.add(pl1);dr.add(pl2);vanM.add(dl,dr);vanM.userData.dl=dl;vanM.userData.dr=dr;vanM.traverse(o=>{if(o.isMesh)o.castShadow=true});vanM.position.set(-12,0,14.5);vanM.rotation.y=Math.PI/2;scene.add(vanM);
+const M={p:new Map,k:new Map,b:new Map,c:new Map,t:new Map,s:new Map,d:new Map};let TT=0;
 function sync(map,list,mk2,upd,dt){const seen=new Set;for(const o of list){seen.add(o.id);let m=map.get(o.id);if(!m){m=mk2(o);m.position.set(o.x,o.y||0,o.z);scene.add(m);map.set(o.id,m)}upd(m,o,dt)}for(const[k,m]of map)if(!seen.has(k)){scene.remove(m);map.delete(k)}}
 const lerpA=(m,a,dt)=>{let d=a-m.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));m.rotation.y+=d*Math.min(1,dt*10)};
 function walk(m,spd,carry,air){const u=(m.userData.c||m).userData;if(!u.ll)return;const k=Math.min(1,spd/3),s=Math.sin(TT*10)*k*.8;u.ll.rotation.x=air?.5:s;u.lr.rotation.x=air?-.4:-s;if(carry)u.al.rotation.x=u.ar.rotation.x=-1.25;else if(air)u.al.rotation.x=u.ar.rotation.x=-2.3;else{u.al.rotation.x=-s;u.ar.rotation.x=s}u.B.position.y=Math.abs(Math.sin(TT*10))*.05*k+(carry?0:Math.sin(TT*2)*.005)}
 function render(dt){TT+=dt;
  const pls=Object.keys(G.players).map(id=>id==myId?P:G.players[id]);
- sync(M.p,pls,o=>new T.Group(),(m,o)=>{setLook(m,apOf(o.id));if(o.id==myId){m.position.set(o.x,o.y,o.z);m.rotation.y=o.ry;m.visible=!fp||mirror}else{const k=Math.min(1,dt*12);m.position.x+=(o.x-m.position.x)*k;m.position.y+=((o.y||0)-m.position.y)*k;m.position.z+=(o.z-m.position.z)*k;lerpA(m,o.ry,dt)}walk(m,o.mv||0,!!o.hold,(o.y||0)>.15)},dt);
+ sync(M.p,pls,o=>new T.Group(),(m,o)=>{setLook(m,apOf(o.id));if(o.id==myId){m.position.set(o.x,o.y,o.z);m.rotation.y=o.ry;m.visible=(!fp||mirror)&&!o.inv}else{m.visible=!o.inv;const k=Math.min(1,dt*12);m.position.x+=(o.x-m.position.x)*k;m.position.y+=((o.y||0)-m.position.y)*k;m.position.z+=(o.z-m.position.z)*k;lerpA(m,o.ry,dt)}walk(m,o.mv||0,!!(o.hold||o.pkh),(o.y||0)>.15)},dt);
  const hp={};pls.forEach(p=>{if(p.hold)hp[p.hold]=p});if(G.staff&&G.staff.hold)hp[G.staff.hold]=G.staff;
  sync(M.b,G.boxes,o=>mk(.7,.55,.7,ITEMS[o.it].col,0,0,0),(m,o)=>{const h=hp[o.id];const tx=h?h.x+Math.sin(h.ry)*.7:o.x,ty=h?1.0+(h.y||0):o.y,tz=h?h.z+Math.cos(h.ry)*.7:o.z;const k=Math.min(1,dt*15);m.position.x+=(tx-m.position.x)*k;m.position.y+=(ty-m.position.y)*k;m.position.z+=(tz-m.position.z)*k},dt);
  for(const m of M.b.values()){if(!m.parent)scene.add(m)}
@@ -259,27 +333,34 @@ function render(dt){TT+=dt;
  sync(M.t,G.trucks,o=>{const g=new T.Group();g.add(mk(6,2.6,2.6,0xf8f9fa,0,1.8,0),mk(1.6,2,2.4,0xe63946,3.8,1.4,0),mk(5.9,.3,2.4,0x333333,0,.4,0));return g},(m,o)=>{m.position.x=o.x;m.position.z=o.z},dt);
  sync(M.s,G.staff?[Object.assign({},G.staff,{id:'s'})]:[],o=>char(0xff9f1c),(m,o)=>{const k=Math.min(1,dt*10);m.position.x+=(o.x-m.position.x)*k;m.position.z+=(o.z-m.position.z)*k;lerpA(m,o.ry,dt);walk(m,o.mv||0,!!o.hold)},dt);
  sync(M.d,G.build,o=>mk(BK[o.k].w,BK[o.k].h,BK[o.k].d,BK[o.k].c,0,0,0),(m,o)=>{m.position.set(o.x,BK[o.k].h/2,o.z);m.rotation.y=o.r?Math.PI/2:0},dt);
+ const hk={};pls.forEach(p=>{if(p.pkh)hk[p.pkh]=p});
+ sync(M.k,G.pk,o=>{const g=new T.Group();g.add(mk(.45,.5,.3,0xe9c46a,0,.25,0),mk(.47,.08,.32,0xc1121f,0,.52,0));return g},(m,o)=>{const h=hk[o.id],k=Math.min(1,dt*15);const tx=h?h.x+Math.sin(h.ry)*.7:o.x,ty=h?1.0+(h.y||0):o.y,tz=h?h.z+Math.cos(h.ry)*.7:o.z;m.position.x+=(tx-m.position.x)*k;m.position.y+=(ty-m.position.y)*k;m.position.z+=(tz-m.position.z)*k},dt);
+ {const own=P.inv&&G.van.drv==myId&&VL,v=own?VL:G.van,k=own?1:Math.min(1,dt*10);vanM.position.x+=(v.x-vanM.position.x)*k;vanM.position.z+=(v.z-vanM.position.z)*k;if(own)vanM.rotation.y=v.ry;else lerpA(vanM,v.ry,dt);
+  const u=vanM.userData,kd=Math.min(1,dt*6),tg=G.van.doors?1.9:0;u.dl.rotation.y+=(tg-u.dl.rotation.y)*kd;u.dr.rotation.y+=(-tg-u.dr.rotation.y)*kd;u.wh.forEach(w=>w.rotation.x+=v.sp*dt/.42)}
+ HOUSES.forEach((h,i)=>{h.bm.visible=G.dl.orders.some(o=>o.addr==i&&(o.st=='new'||o.st=='packed'));h.bm.rotation.y+=dt});
  for(let i=0;i<4;i++)stock[i].forEach((m,j)=>m.visible=j<G.shelves[i].n);
  cashierM.visible=!!G.cashier;sign.material.color.set(G.shelves.some(s=>s.n>0)?0x00ff00:0xff0000);
  const dx=Math.sin(yaw),dz=Math.cos(yaw);
- if(mirror){cam.position.set(P.x+Math.sin(P.ry)*3.2,P.y+1.5,P.z+Math.cos(P.ry)*3.2);cam.lookAt(P.x,P.y+1.2,P.z)}else if(fp){cam.position.set(P.x,P.y+1.65,P.z);cam.lookAt(P.x+dx*Math.cos(pitch),P.y+1.65-Math.sin(pitch),P.z+dz*Math.cos(pitch))}
+ if(P.inv){const q=(G.van.drv==myId&&VL)?VL:G.van,dx=Math.sin(q.ry),dz=Math.cos(q.ry);if(fp){cam.position.set(q.x+dx*.6,1.9,q.z+dz*.6);cam.lookAt(q.x+dx*10,1.6,q.z+dz*10)}else{cam.position.set(q.x-dx*8,4.2,q.z-dz*8);cam.lookAt(q.x,1.2,q.z)}}else if(mirror){cam.position.set(P.x+Math.sin(P.ry)*3.2,P.y+1.5,P.z+Math.cos(P.ry)*3.2);cam.lookAt(P.x,P.y+1.2,P.z)}else if(fp){cam.position.set(P.x,P.y+1.65,P.z);cam.lookAt(P.x+dx*Math.cos(pitch),P.y+1.65-Math.sin(pitch),P.z+dz*Math.cos(pitch))}
  else{const d=5;cam.position.set(P.x-dx*d*Math.cos(pitch),P.y+1.6+Math.sin(pitch)*d,P.z-dz*d*Math.cos(pitch));cam.lookAt(P.x,P.y+1.4,P.z)}
  ren.render(scene,cam);minimap(pls)}
 const mm=$('mm').getContext('2d');
 function minimap(pls){mm.clearRect(0,0,150,150);const S=2.2,cx=75,cz=75,X=x=>cx+(x-P.x)*S,Z=z=>cz+(z-P.z)*S;
  mm.fillStyle='#c9a66b88';mm.fillRect(X(-8),Z(-6),16*S,12*S);mm.fillStyle='#ffd60a88';mm.fillRect(X(6),Z(9.5),8*S,3*S);
  const dot=(x,z,c,r)=>{mm.fillStyle=c;mm.beginPath();mm.arc(X(x),Z(z),r,0,7);mm.fill()};
- G.boxes.forEach(b=>dot(b.x,b.z,'#f4a261',2));G.cust.forEach(c=>dot(c.x,c.z,'#fff',2.5));G.trucks.forEach(t=>dot(t.x,t.z,'#e63946',4));pls.forEach(p=>dot(p.x,p.z,p.id=='h'?'#2a9d8f':'#e76f51',4));dot(PCP[0],PCP[1],'#00e5ff',2)}
+ G.boxes.forEach(b=>dot(b.x,b.z,'#f4a261',2));HOUSES.forEach(h=>{mm.fillStyle='#ffffff55';mm.fillRect(X(h.x-4),Z(28),8*S,6*S)});
+ G.dl.orders.forEach(o=>{if(o.st=='new'||o.st=='packed')dot(HOUSES[o.addr].x,26.2,'#ffd166',4)});const vv=(P.inv&&G.van.drv==myId&&VL)?VL:G.van,a0=G.dl.orders.find(o=>o.st=='packed')||G.dl.orders.find(o=>o.st=='new');dot(vv.x,vv.z,'#4cc9f0',5);
+ if(a0){mm.strokeStyle='#ffd166';mm.beginPath();mm.moveTo(X(vv.x),Z(vv.z));mm.lineTo(X(HOUSES[a0.addr].x),Z(26.2));mm.stroke()}G.cust.forEach(c=>dot(c.x,c.z,'#fff',2.5));G.trucks.forEach(t=>dot(t.x,t.z,'#e63946',4));pls.forEach(p=>dot(p.x,p.z,p.id=='h'?'#2a9d8f':'#e76f51',4));dot(PCP[0],PCP[1],'#00e5ff',2)}
 // ---------- управление ----------
 const keys={};let yaw=Math.PI,pitch=.35,locked=false;
 addEventListener('keydown',e=>{if(!playing||e.target.tagName=='INPUT')return;keys[e.code]=1;
- if(e.code=='KeyE'&&!ui){if(bm)return;const sn=P.hold?null:stNear();if(sn)sn[1]();else if(!P.hold&&dist(P,PCP[0],PCP[1])<2.8)openPC();else if(!P.hold&&G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)openCash();else sendM({t:'a'})}
- if(e.code=='KeyV')fp=!fp;if(e.code=='KeyY'&&!ui)openSt('ward');buildKeys(e);if(e.code=='Escape')closePC();if(e.code=='Space')e.preventDefault()});
+ if(e.code=='KeyE'&&!ui){if(bm||P.inv)return;const sn=P.hold?null:stNear();if(sn)sn[1]();else if(!P.hold&&dist(P,PCP[0],PCP[1])<2.8)openPC();else if(!P.hold&&G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)openCash();else sendM({t:'a'})}
+ if(e.code=='KeyV')fp=!fp;if(e.code=='KeyY'&&!ui)openSt('ward');if(e.code=='KeyF'&&!ui)(P.inv?exitVan():sendM({t:'drive'}));if(e.code=='KeyP'){if($('ph').style.display=='block')closePC();else if(!ui)openPh()}if(e.code=='KeyH'&&P.inv)beep(330,.3,'square');if(e.code=='KeyN')netToggle();buildKeys(e);if(e.code=='Escape')closePC();if(e.code=='Space')e.preventDefault()});
 addEventListener('keyup',e=>keys[e.code]=0);
 $('c').addEventListener('click',()=>{if(!playing||ui)return;if(!locked){$('c').requestPointerLock();return}placeBuild()});
 document.addEventListener('pointerlockchange',()=>locked=document.pointerLockElement==$('c'));
 addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.003;pitch=Math.max(-.5,Math.min(1.1,pitch+e.movementY*.003))});
-function control(dt){if(ui)return;const dx=Math.sin(yaw),dz=Math.cos(yaw),rx=-Math.cos(yaw),rz=Math.sin(yaw);
+function control(dt){if(ui)return;if(P.inv){vanDrive(dt);return}if(drvPrev){drvPrev=false;engine(null)}const dx=Math.sin(yaw),dz=Math.cos(yaw),rx=-Math.cos(yaw),rz=Math.sin(yaw);
  const f=(keys.KeyW?1:0)-(keys.KeyS?1:0)-joy.y,r=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x;let vx=dx*f+rx*r,vz=dz*f+rz*r;const l=Math.hypot(vx,vz),sp=(keys.ShiftLeft||keys.ShiftRight||tRun)?7:4;
  if(l>0){vx/=l;vz/=l;P.x+=vx*sp*dt;P.z+=vz*sp*dt;P.ry=Math.atan2(vx,vz);P.mv=sp}else P.mv=0;
  if(keys.Space&&P.y<=.001)P.vy=7;P.vy-=20*dt;P.y+=P.vy*dt;if(P.y<0){P.y=0;P.vy=0}
@@ -307,6 +388,26 @@ document.querySelectorAll('.tb').forEach(b=>{const D=b.dataset;
   else if(D.f=='place')placeBuild();else if(D.f=='next')bk=(bk+1)%4},{passive:false});
  b.addEventListener('touchend',e=>{if(D.h)keys[D.h]=0})});
 try{setTouch(matchMedia('(pointer:coarse)').matches)}catch(e){}
+// ---------- фургон и телефон ----------
+let VL=null,drvPrev=false,engO=null,phInit=0,phSig='';
+function engine(sp){try{if(sp===null){if(engO){engO.stop();engO=null}return}AC=AC||new AudioContext();if(!engO){engO=AC.createOscillator();const g=AC.createGain();engO.type='sawtooth';g.gain.value=.025;engO.connect(g);g.connect(AC.destination);engO.start()}engO.frequency.value=50+Math.abs(sp)*9}catch(e){}}
+function vanStep(dt){const v=VL,k=keys,th=Math.max(-1,Math.min(1,(k.KeyW?1:0)-(k.KeyS?1:0)-joy.y)),st=Math.max(-1,Math.min(1,(k.KeyA?1:0)-(k.KeyD?1:0)-joy.x));
+ v.sp+=(th>0?6:8)*th*dt;if(!th)v.sp-=Math.sign(v.sp)*Math.min(Math.abs(v.sp),2.5*dt);if(k.Space)v.sp-=Math.sign(v.sp)*Math.min(Math.abs(v.sp),14*dt);
+ v.sp=Math.max(-4,Math.min(12,v.sp));v.ry+=st*1.7*dt*Math.max(-1,Math.min(1,v.sp/4));
+ const mx=Math.sin(v.ry)*v.sp*dt,mz=Math.cos(v.ry)*v.sp*dt;v.x+=mx;v.z+=mz;const bx0=v.x,bz0=v.z;collide(v,1.3);if(Math.hypot(v.x-bx0,v.z-bz0)>.02)v.sp*=.6;
+ v.x=Math.max(-90,Math.min(90,v.x));v.z=Math.max(-10,Math.min(44,v.z))}
+function vanDrive(dt){const v=G.van,me=v.drv==myId;if(me){if(!drvPrev||!VL)VL={x:v.x,z:v.z,ry:v.ry,sp:v.sp};vanStep(dt);if(isHost)Object.assign(v,{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp})}drvPrev=me;const q=me?VL:v;P.x=q.x;P.z=q.z;P.y=0;P.mv=0;engine(me?q.sp:null)}
+function exitVan(){const s=(G.van.drv==myId&&VL)?VL:G.van;if(Math.abs(s.sp)>3)return beep(200,.2,'square');P.x=s.x+Math.cos(s.ry)*2.3;P.z=s.z-Math.sin(s.ry)*2.3;P.y=0;P.inv=0;sendM({t:'exit'})}
+function vanNear(){if(dist(P,G.van.x,G.van.z)<3.4)return'F — сесть в фургон';const rr=rearPt();if(dist(P,rr[0],rr[1])<3.2)return'E — двери / груз фургона';if(dist(P,DESK[0],DESK[1])<3.2)return'E — взять пакет · P — телефон: собрать заказ';return null}
+function openPh(){if(!phInit){phInit=1;$('ph').addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;e.preventDefault();beep(600,.05);if(b.dataset.x)closePC();else if(b.dataset.pack)sendM({t:'pack',o:+b.dataset.pack})})}ui=true;document.exitPointerLock();$('ph').style.display='block';renderPh(1)}
+function renderPh(f){if($('ph').style.display!='block')return;const D=G.dl,sig=JSON.stringify([D,G.van.cargo.length,myM(),Math.floor(G.t),G.shelves.map(q=>q.n)]);if(!f&&sig==phSig)return;phSig=sig;
+ const stl={new:'🆕 Нужно собрать',packed:'📦 Собрано — вези',done:'✅ Доставлено',fail:'❌ Сорван'};
+ let h='<div class="sh"><h2>📱 Доставка</h2><b>⭐ '+D.rating.toFixed(1)+' · 💳 $'+myM()+' · заработано $'+D.earn.toFixed(0)+'</b><button data-x="1">✕</button></div><p>🚐 В фургоне: '+G.van.cargo.length+'/'+VCAP+'. Личный бонус: вручил +$3 и 50% чаевых, водитель +$3. Опоздание — оплата 60% и рейтинг ↓.</p>';
+ if(!D.orders.length)h+='<p>Новых заказов пока нет</p>';
+ D.orders.slice().reverse().forEach(o=>{const left=Math.round(o.due-G.t),act=o.st=='new'||o.st=='packed',ok=o.items.every(x=>G.shelves[x[0]].n>=x[1]);
+  h+='<div class="it" style="flex-wrap:wrap"><b>#'+o.n+' '+DTY[o.type].n+'</b><span>'+HOUSES[o.addr].s+' '+HOUSES[o.addr].n+'</span><span>$'+(o.pay+o.fee)+'</span><span>'+(act?(left>=0?Math.floor(left/60)+':'+String(left%60).padStart(2,'0'):'ОПОЗДАНИЕ'):'')+'</span><em>'+stl[o.st]+(o.st=='packed'?' ('+o.dl+'/'+o.bags+' вручено)':'')+'</em><div style="width:100%">'+o.items.map(x=>ITEMS[x[0]].n+' ×'+x[1]+(o.st!='new'||G.shelves[x[0]].n>=x[1]?' ✓':' ✗ (на полке '+G.shelves[x[0]].n+')')).join(', ')+'</div>'+(o.st=='new'?'<button data-pack="'+o.id+'" '+(ok?'':'disabled')+'>Собрать (у стола сборки)</button>':'')+'</div>'});
+ if(D.hist.length)h+='<p>История: '+D.hist.slice(0,5).map(x=>'#'+x.n+(x.fail?' ❌':' +$'+x.total.toFixed(0))).join(' · ')+'</p>';$('ph').innerHTML=h}
+setInterval(()=>renderPh(0),300);
 // ---------- строительство ----------
 const BK=[{n:'Стена',w:3,d:.3,h:3,c:0xf4f1ea,cost:30},{n:'Прилавок',w:2,d:.8,h:1,c:0x8d6e63,cost:40},{n:'Стол',w:1.6,d:1,h:.8,c:0xb08968,cost:25},{n:'Растение',w:.6,d:.6,h:1.2,c:0x2d6a4f,cost:10}];
 let bm=false,bk=0,br=0,bpos={x:0,z:0},bok=false;
@@ -365,7 +466,7 @@ setInterval(()=>renderSt(0),250);
 function stNear(){if(dist(P,TERM[0],TERM[1])<2.6)return['E — магазин одежды: каталог и примерка',()=>openSt('shop')];for(const q of MAN)if(dist(P,q.x,q.z)<1.9)return['E — примерить образ «'+q.n+'»',()=>openSt('shop',q.ap)];if(dist(P,22.3,0)<2.4)return['E — зеркало и гардероб',()=>openSt('ward')];return null}
 // ---------- компьютер ----------
 function openPC(){ui=true;document.exitPointerLock();$('pc').style.display='block';renderPC()}
-function closePC(){if($('cash').style.display=='block')sendM({t:'unlock'});ui=false;$('pc').style.display='none';$('cash').style.display='none';$('st').style.display='none';tryAP=null;mirror=false}
+function closePC(){if($('cash').style.display=='block')sendM({t:'unlock'});ui=false;$('pc').style.display='none';$('cash').style.display='none';$('st').style.display='none';tryAP=null;mirror=false;$('ph').style.display='none'}
 const SELI=$('oi'),SELQ=$('oq'),SELS=$('os');
 ITEMS.forEach((it,i)=>SELI.add(new Option(it.n+' (закуп $'+it.c+'/шт, коробка = '+BOXN+' шт)',i)));
 for(let i=1;i<=5;i++)SELQ.add(new Option(i+' кор.',i));
@@ -376,7 +477,7 @@ function renderPC(){if(!ui)return;const lv=LVL();
  <table><tr><th>Товар</th><th>Закупка</th><th>Цена продажи</th><th>На полке</th></tr>`;
  ITEMS.forEach((it,i)=>h+=`<tr><td>${it.n}</td><td>$${it.c}</td><td><button onpointerdown="sendM({t:'price',i:${i},d:-1})">−</button> $${G.price[i]} <button onpointerdown="sendM({t:'price',i:${i},d:1})">+</button></td><td>${G.shelves[i].n}/${CAP}</td></tr>`);
  h+=`</table><p>Сотрудник: ${G.cashier?'кассир работает ($15/мин)':`<button onpointerdown="sendM({t:'hire'})" ${lv<2?'disabled':''}>Нанять кассира $150 (ур.2)</button>`}</p>`;
- h+='<p>Грузчик: '+(G.staff?'работает ($20/мин), сам носит коробки на полки':'<button onpointerdown="sendM({t:\'hire\',w:\'st\'})" '+(lv<3?'disabled':'')+'>Нанять грузчика $200 (ур.3)</button>')+'</p><p>Стройка: B (1–4 вид, R поворот, ЛКМ поставить, X убрать)</p>';$('pinfo').innerHTML=h;
+ h+='<p>Грузчик: '+(G.staff?'работает ($20/мин), сам носит коробки на полки':'<button onpointerdown="sendM({t:\'hire\',w:\'st\'})" '+(lv<3?'disabled':'')+'>Нанять грузчика $200 (ур.3)</button>')+'</p><p>Стройка: B (1–4 вид, R поворот, ЛКМ поставить, X убрать)</p><p>🚐 Доставки: '+G.dl.orders.filter(o=>o.st=='new'||o.st=='packed').length+' активных — телефон (P), сборка у стола слева</p>';$('pinfo').innerHTML=h;
  $('pord').innerHTML='<h3>Заказы</h3>'+G.orders.slice().reverse().map(o=>`${ITEMS[o.it].n} ×${o.q} кор. — ${o.st=='wait'?'⏳ готовится':o.st=='way'?'🚚 в пути':'✅ доставлено'} ($${o.cost})`).join('<br>')}
 setInterval(renderPC,600);
 // ---------- главный цикл ----------
@@ -387,10 +488,10 @@ function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  if(G.ev.id!=lastEv){lastEv=G.ev.id;const t=$('toast');t.textContent=G.ev.text;t.style.opacity=1;clearTimeout(t.h);t.h=setTimeout(()=>t.style.opacity=0,2500);if(SFX[G.ev.sfx])SFX[G.ev.sfx]();if(G.ev.sfx==2&&/^Продажа/.test(G.ev.text))pop(G.ev.text)}
  if(P.mv&&P.y<.05){stepT-=dt;if(stepT<=0){stepT=P.mv>5?.28:.4;beep(90,.04,'square')}}
  const lv=LVL(),online=Object.keys(G.players).length;
- $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+G.ping+' мс':'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+ping+' мс':'🔴 Нет связи')}`;
+ $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · 🚐 ${G.van.cargo.length}/8 · 📦 ${G.dl.rating.toFixed(1)} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+G.ping+' мс':'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+ping+' мс':'🔴 Нет связи')}`;
  let h='WASD · Shift · Space · V — вид · клик — мышь';
  if(P.hold){const b=G.boxes.find(b=>b.id==P.hold);h='E — положить: на полку «'+(b?ITEMS[b.it].n:'?')+'» / передать брату / бросить'}
- else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
+ else if(P.inv)h='Фургон: WASD · Space тормоз · H сигнал · F выйти';else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
  else if(G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)h='E — касса: выдай сдачу';
  else if(G.boxes.some(b=>dist(P,b.x,b.z)<2.2))h='E — взять коробку';
  $('hint').textContent=bm?'СТРОЙКА: 1-4 — '+BK[bk].n+' $'+BK[bk].cost+' · R поворот · ЛКМ поставить · X убрать (возврат 100%) · B выход':(touch?h.replace(/^E — /,'Кнопка E — '):h);
