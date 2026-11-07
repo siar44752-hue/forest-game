@@ -73,7 +73,7 @@ function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
 // ---------- сетевая диагностика (клавиша N или ?net=1) ----------
-const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,lost:0,err:null,pings:[]};
+const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,err:null,pings:[]};
 const ENC=typeof TextEncoder!='undefined'?new TextEncoder():null;
 function netCount(dir,m){const str=typeof m=='string',k=str?'snapshot':((m&&m.t)||'?'),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
  if(str){const sn=NET.snap;sn.size=b;sn.max=Math.max(sn.max,b);if(dir=='in'){const t=performance.now();if(sn.last){sn.gap=t-sn.last;sn.maxGap=Math.max(sn.maxGap,sn.gap)}sn.last=t;sn.n++}}}
@@ -95,12 +95,18 @@ function netVerdict(){const v=[],I=NET.ice,D=NET.dc,p=isHost?G.ping:ping,mx=Math
 function netReport(){return{role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
 function netText(){const R=NET.rate,f=o=>Object.keys(o).map(k=>k+' '+o[k][0]+'/с '+(o[k][1]/1024).toFixed(1)+'КБ/с').join(' · ')||'—',I=NET.ice,D=NET.dc,p=isHost?G.ping:ping;
  return ['РОЛЬ: '+(isHost?'хост':'гость')+' · игра: '+p+' мс','ICE: '+(I?(I.relay?'RELAY ':'direct ')+I.local+' ↔ '+I.remote+' · RTT '+I.rtt+' мс (ср. '+I.avg+') · bitrate~'+I.bitrate+' кбит/с':'—'),
- 'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out),'Вх: '+f(R.in),
+ 'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out)+' · пропущено при перегрузке: '+(NET.skipped||0),'Вх: '+f(R.in),
  'Снапшот: '+NET.snap.size+' Б (макс '+NET.snap.max+') · интервал '+Math.round(NET.snap.gap)+' мс (макс '+Math.round(NET.snap.maxGap)+')','Вердикт:',].concat(netVerdict().map(x=>' • '+x)).join('\n')}
 $('ndb').addEventListener('pointerdown',e=>{e.preventDefault();const t=JSON.stringify(netReport(),null,1);try{navigator.clipboard.writeText(t)}catch(x){}console.log(t);$('ndb').textContent='Скопировано (см. и консоль)'});setInterval(netSample,1000);setInterval(netStats,2000);
 let netOn=/[?&]net=1/.test(location.search);
 function netToggle(){netOn=!netOn;$('nd').style.display=netOn?'block':'none'}
 setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
+// ---------- сеть: быстрый поток + медленное состояние по изменению ----------
+const FAST=['t','players','cust','trucks','boxes','pk','staff','van','ev','ping','money','rep'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v;
+let lastSlow='',lastSlowT=0;
+function netPush(){if(!conn||!conn.open)return;const dc=conn.dataChannel;if((dc&&dc.bufferedAmount>131072)||(conn.bufferSize||0)>2){NET.skipped=(NET.skipped||0)+1;return}
+ const f={},sl={};for(const k in G)(FAST.includes(k)?f:sl)[k]=G[k];const ss=JSON.stringify(sl,RND);
+ if(ss!==lastSlow||Date.now()-lastSlowT>5000){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}conn.send('F'+JSON.stringify(f,RND))}
 // ---------- сеть (хост = авторитет) ----------
 function mst(t){$('mst').textContent=t}
 function startHost(solo){
@@ -110,29 +116,29 @@ function startHost(solo){
  if(solo){roomCode='';return}
  roomCode=Math.random().toString(36).slice(2,6).toUpperCase();
  peer=new Peer('twobiz-'+roomCode);
- peer.on('connection',c=>{if(conn&&conn!==c)try{conn.close()}catch(e){}conn=c;netTap(c);c.on('open',()=>{if(!G.players.g)G.players.g={id:'g',x:1,y:0,z:9,ry:0,mv:0,hold:null};say('Брат подключился!',1)});
+ peer.on('connection',c=>{if(conn&&conn!==c)try{conn.close()}catch(e){}conn=c;netTap(c);c.on('open',()=>{lastSlow='';if(!G.players.g)G.players.g={id:'g',x:1,y:0,z:9,ry:0,mv:0,hold:null};say('Брат подключился!',1)});
   c.on('data',m=>handle('g',m));
   c.on('close',()=>{if(conn!==c)return;const p=G.players.g;if(p&&p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(b){b.x=p.x;b.z=p.z;b.y=.3}}delete G.players.g;if(G.van.drv=='g'){G.van.drv=G.van.pas;G.van.pas=null;if(!G.van.drv)G.van.sp=0}if(G.van.pas=='g')G.van.pas=null;conn=null;say('Брат отключился. Прогресс сохранён',3)})});
  peer.on('disconnected',()=>peer.reconnect());
  peer.on('error',e=>say('Сеть: '+e.type,3));
- setInterval(()=>{if(conn&&conn.open)conn.send(JSON.stringify(G))},80);
+ setInterval(netPush,100);
  setInterval(save,10000);
 }
 function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,staff:G.staff?1:0,acc:G.acc,pk:G.pk,van:G.van,dl:Object.assign({},G.dl,{orders:G.dl.orders.map(o=>Object.assign({},o,{due:o.due-G.t,at:o.at-G.t,end:o.end?o.end-G.t:undefined}))})}))}
 let retry=null;
 function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 символов');code=c;mst('Подключаемся...');
- if(peer)try{peer.destroy()}catch(e){}
+ const old=peer;conn=null;if(old)try{old.destroy()}catch(e){}
  isHost=false;myId='g';P.id='g';P.x=1;
- peer=new Peer();let ok=false;
+ const myPeer=peer=new Peer();let ok=false;
  peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});netTap(conn);NET.reconn++;
   conn.on('open',()=>{ok=true;if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
-   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});conn.send({t:'ping',ts:Date.now()})}},60)});
-  conn.on('data',m=>{if(typeof m=='string'){G=JSON.parse(m);const me=G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong')ping=Date.now()-m.ts});
-  conn.on('close',lost)});
- peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing)lost()});
+   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>65536){NET.skipped=(NET.skipped||0)+1;return}conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
+  conn.on('data',m=>{if(typeof m=='string'){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong')ping=Date.now()-m.ts});
+  const mine=conn;mine.on('close',()=>{if(conn===mine)lost()})});
+ peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing&&peer===myPeer)lost()});
  setTimeout(()=>{if(!ok&&!playing)mst('Не удалось подключиться. Проверь код')},8000)}
 let ping=0;
-function lost(){NET.lost++;$('toast').textContent='Связь потеряна, переподключаемся...';$('toast').style.opacity=1;retry=setTimeout(()=>joinGame(code),3000)}
+function lost(){NET.lost++;clearTimeout(retry);$('toast').textContent='Связь потеряна, переподключаемся...';$('toast').style.opacity=1;retry=setTimeout(()=>joinGame(code),3000)}
 function sendM(m){if(isHost)handle('h',m);else if(conn&&conn.open)conn.send(m)}
 function cashC(pid){const c=G.cust.find(c=>c.st=='wait'),p=G.players[pid];if(!c||!p||dist(p,REG[0],3)>3.4)return null;if(c.by&&c.by!=pid)return null;c.by=pid;if(!c.cl)c.cl=[];return c}
 // ---------- доставка ----------
