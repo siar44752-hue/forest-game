@@ -73,11 +73,13 @@ function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
 // ---------- сетевая диагностика (клавиша N или ?net=1) ----------
-const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,err:null,pings:[]};
+const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,tl:[],lastIn:0,lastPong:Date.now(),icePrev:null,cands:null,err:null,pings:[]};
 const ENC=typeof TextEncoder!='undefined'?new TextEncoder():null;
-function netCount(dir,m){const str=typeof m=='string',k=str?'snapshot':((m&&m.t)||'?'),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
+function netCount(dir,m){if(dir=='in')NET.lastIn=performance.now();const str=typeof m=='string',k=str?'snapshot':((m&&m.t)||'?'),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
  if(str){const sn=NET.snap;sn.size=b;sn.max=Math.max(sn.max,b);if(dir=='in'){const t=performance.now();if(sn.last){sn.gap=t-sn.last;sn.maxGap=Math.max(sn.maxGap,sn.gap)}sn.last=t;sn.n++}}}
-function netTap(c){if(!c||c._tap)return;c._tap=1;const o=c.send.bind(c);c.send=m=>{netCount('out',m);return o(m)};c.on('data',m=>netCount('in',m))}
+function netHook(c){const pc=c&&c.peerConnection;if(!pc||pc._h||!pc.addEventListener)return;pc._h=1;const L=(t)=>{NET.tl.push(((Date.now()-NET.t0)/1000).toFixed(1)+'с '+t);if(NET.tl.length>30)NET.tl.shift()};
+ pc.addEventListener('iceconnectionstatechange',()=>L('ice='+pc.iceConnectionState));pc.addEventListener('connectionstatechange',()=>L('conn='+pc.connectionState));L('hook ice='+pc.iceConnectionState+' conn='+pc.connectionState)}
+function netTap(c){if(!c||c._tap)return;c._tap=1;NET.lastIn=performance.now();netHook(c);const o=c.send.bind(c);c.send=m=>{netCount('out',m);return o(m)};c.on('data',m=>netCount('in',m))}
 const netDC=()=>conn&&(conn.dataChannel||conn._dc)||null,netPC=()=>conn&&conn.peerConnection||null;
 function netSample(){const R={out:{},in:{}};for(const d of['out','in'])for(const k in NET[d]){const o=NET[d][k];R[d][k]=[o.w,o.wb];o.w=o.wb=0}NET.rate=R;
  const dc=netDC();NET.dc=dc?{state:dc.readyState,buf:dc.bufferedAmount,ordered:dc.ordered,reliable:dc.maxRetransmits==null&&dc.maxPacketLifeTime==null,q:conn.bufferSize}:null;
@@ -87,17 +89,21 @@ async function netStats(){const pc=netPC();if(!pc||!pc.getStats)return;try{const
  tr.forEach(x=>{if(x.selectedCandidatePairId&&st[x.selectedCandidatePairId])pair=st[x.selectedCandidatePairId]});if(!pair)rep.forEach(x=>{if(x.type=='candidate-pair'&&(x.selected||(x.nominated&&x.state=='succeeded')))pair=x});
  const L=pair&&st[pair.localCandidateId],Rm=pair&&st[pair.remoteCandidateId];
  NET.ice=pair?{rtt:pair.currentRoundTripTime!=null?Math.round(pair.currentRoundTripTime*1000):null,avg:pair.responsesReceived?Math.round(pair.totalRoundTripTime/pair.responsesReceived*1000):null,bitrate:pair.availableOutgoingBitrate?Math.round(pair.availableOutgoingBitrate/1000):null,sent:pair.bytesSent,recv:pair.bytesReceived,local:L?L.candidateType+'/'+(L.protocol||'?')+(L.relayProtocol?'/'+L.relayProtocol:''):'?',remote:Rm?Rm.candidateType+'/'+(Rm.protocol||'?'):'?',relay:!!((L&&L.candidateType=='relay')||(Rm&&Rm.candidateType=='relay')),discarded:pair.packetsDiscardedOnSend||0,unanswered:(pair.requestsSent||0)-(pair.responsesReceived||0),state:pair.state}:null;
- NET.dcs=ch.map(x=>({state:x.state,ms:x.messagesSent,mr:x.messagesReceived,bs:x.bytesSent,br:x.bytesReceived}));NET.conn=pc.connectionState;NET.ices=pc.iceConnectionState;NET.dtls=tr[0]&&tr[0].dtlsState;NET.err=null}catch(e){NET.err=String(e)}}
+ if(NET.ice)NET.icePrev=NET.ice;const cs={l:{},r:{}};rep.forEach(x=>{if(x.type=='local-candidate')cs.l[x.candidateType]=(cs.l[x.candidateType]||0)+1;if(x.type=='remote-candidate')cs.r[x.candidateType]=(cs.r[x.candidateType]||0)+1});NET.cands=cs;NET.dcs=ch.map(x=>({state:x.state,ms:x.messagesSent,mr:x.messagesReceived,bs:x.bytesSent,br:x.bytesReceived}));NET.conn=pc.connectionState;NET.ices=pc.iceConnectionState;NET.dtls=tr[0]&&tr[0].dtlsState;NET.err=null}catch(e){NET.err=String(e)}}
 function netVerdict(){const v=[],I=NET.ice,D=NET.dc,p=isHost?G.ping:ping,mx=Math.max.apply(null,NET.dcHist.concat([0])),mq=Math.max.apply(null,NET.qHist.concat([0]));
  if(!I)v.push('ICE-пара пока не определена');else{if(I.relay)v.push('⚠ трафик идёт через TURN-ретранслятор ('+I.local+')');else v.push('прямое соединение ('+I.local+' ↔ '+I.remote+')');if(I.rtt!=null&&p>3*I.rtt+300)v.push('⚠ ping игры ('+p+' мс) ≫ RTT сети ('+I.rtt+' мс): задержка = очередь отправки, не сеть');if(I.unanswered>3)v.push('⚠ STUN-проверки без ответа: '+I.unanswered+' (признак потерь)')}
  if(D&&D.buf>262144)v.push('⚠ bufferedAmount '+Math.round(D.buf/1024)+' КБ: данные копятся в канале');if(mx>262144)v.push('⚠ пик bufferedAmount за минуту '+Math.round(mx/1024)+' КБ');if(mq>20)v.push('⚠ очередь PeerJS: '+mq+' сообщений');
- if(NET.snap.maxGap>1000)v.push('⚠ снапшоты приходили с паузой до '+Math.round(NET.snap.maxGap)+' мс');if(NET.reconn>1||NET.lost>0)v.push('⚠ переподключений: '+NET.reconn+', потерь связи: '+NET.lost);if(NET.err)v.push('getStats: '+NET.err);return v}
-function netReport(){return{role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
+ if(NET.snap.maxGap>1000)v.push('⚠ снапшоты приходили с паузой до '+Math.round(NET.snap.maxGap)+' мс');if(NET.reconn>1||NET.lost>0)v.push('⚠ переподключений: '+NET.reconn+', потерь связи: '+NET.lost);if(NET.err)v.push('getStats: '+NET.err);if(NET.conn=='failed'||NET.ices=='failed'||NET.ices=='disconnected')v.push('⚠ ICE: '+NET.ices+', connection: '+NET.conn+' — путь между игроками оборван или нестабилен (это не очередь отправки)');return v}
+function netReport(){return{role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,icePrev:NET.icePrev,cands:NET.cands,timeline:NET.tl.slice(-20),idleMs:Math.round(performance.now()-NET.lastIn),pongAgeMs:Date.now()-NET.lastPong,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
 function netText(){const R=NET.rate,f=o=>Object.keys(o).map(k=>k+' '+o[k][0]+'/с '+(o[k][1]/1024).toFixed(1)+'КБ/с').join(' · ')||'—',I=NET.ice,D=NET.dc,p=isHost?G.ping:ping;
  return ['РОЛЬ: '+(isHost?'хост':'гость')+' · игра: '+p+' мс','ICE: '+(I?(I.relay?'RELAY ':'direct ')+I.local+' ↔ '+I.remote+' · RTT '+I.rtt+' мс (ср. '+I.avg+') · bitrate~'+I.bitrate+' кбит/с':'—'),
  'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out)+' · пропущено при перегрузке: '+(NET.skipped||0),'Вх: '+f(R.in),
- 'Снапшот: '+NET.snap.size+' Б (макс '+NET.snap.max+') · интервал '+Math.round(NET.snap.gap)+' мс (макс '+Math.round(NET.snap.maxGap)+')','Вердикт:',].concat(netVerdict().map(x=>' • '+x)).join('\n')}
-$('ndb').addEventListener('pointerdown',e=>{e.preventDefault();const t=JSON.stringify(netReport(),null,1);try{navigator.clipboard.writeText(t)}catch(x){}console.log(t);$('ndb').textContent='Скопировано (см. и консоль)'});setInterval(netSample,1000);setInterval(netStats,2000);
+ 'Снапшот: '+NET.snap.size+' Б (макс '+NET.snap.max+') · интервал '+Math.round(NET.snap.gap)+' мс (макс '+Math.round(NET.snap.maxGap)+')','События: '+NET.tl.slice(-4).join(' | '),'Вердикт:',].concat(netVerdict().map(x=>' • '+x)).join('\n')}
+$('ndb').addEventListener('pointerdown',e=>{e.preventDefault();const t=JSON.stringify(netReport(),null,1);try{navigator.clipboard.writeText(t)}catch(x){}console.log(t);$('ndb').textContent='Скопировано (см. и консоль)'});function netWatch(){if(!playing||!conn||!conn.open)return;const pc=netPC(),bad=!!pc&&(pc.connectionState=='failed'||pc.connectionState=='closed'||pc.iceConnectionState=='failed'),idle=performance.now()-NET.lastIn>8000;if(!bad&&!idle)return;
+ NET.tl.push(((Date.now()-NET.t0)/1000).toFixed(1)+'с watchdog: '+(bad?'ICE failed':'нет данных 8 с'));if(isHost){try{conn.close()}catch(e){}}else lost()}
+const pingTxt=v=>{const st=isHost?performance.now()-NET.lastIn:Date.now()-NET.lastPong;return st>3000?'нет ответа '+Math.round(st/1000)+' с':v+' мс'};
+function peerOpts(){const o={};try{if(typeof URLSearchParams=='undefined')return o;const q=new URLSearchParams(location.search),ice=q.get('ice');if(ice)o.config={iceServers:JSON.parse(ice),iceTransportPolicy:q.get('relay')?'relay':'all'}}catch(e){}return o}
+setInterval(netWatch,2000);setInterval(netSample,1000);setInterval(netStats,2000);
 let netOn=/[?&]net=1/.test(location.search);
 function netToggle(){netOn=!netOn;$('nd').style.display=netOn?'block':'none'}
 setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
@@ -115,7 +121,7 @@ function startHost(solo){
  isHost=true;myId='h';G.players={h:P};P.id='h';G.build.concat(G.pk,G.dl.orders,G.van.cargo).forEach(b=>G.nid=Math.max(G.nid,b.id+1));enter();
  if(solo){roomCode='';return}
  roomCode=Math.random().toString(36).slice(2,6).toUpperCase();
- peer=new Peer('twobiz-'+roomCode);
+ peer=new Peer('twobiz-'+roomCode,peerOpts());
  peer.on('connection',c=>{if(conn&&conn!==c)try{conn.close()}catch(e){}conn=c;netTap(c);c.on('open',()=>{lastSlow='';if(!G.players.g)G.players.g={id:'g',x:1,y:0,z:9,ry:0,mv:0,hold:null};say('Брат подключился!',1)});
   c.on('data',m=>handle('g',m));
   c.on('close',()=>{if(conn!==c)return;const p=G.players.g;if(p&&p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(b){b.x=p.x;b.z=p.z;b.y=.3}}delete G.players.g;if(G.van.drv=='g'){G.van.drv=G.van.pas;G.van.pas=null;if(!G.van.drv)G.van.sp=0}if(G.van.pas=='g')G.van.pas=null;conn=null;say('Брат отключился. Прогресс сохранён',3)})});
@@ -129,11 +135,11 @@ let retry=null;
 function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 символов');code=c;mst('Подключаемся...');
  const old=peer;conn=null;if(old)try{old.destroy()}catch(e){}
  isHost=false;myId='g';P.id='g';P.x=1;
- const myPeer=peer=new Peer();let ok=false;
+ const myPeer=peer=new Peer(undefined,peerOpts());let ok=false;
  peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});netTap(conn);NET.reconn++;
-  conn.on('open',()=>{ok=true;if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
+  conn.on('open',()=>{ok=true;NET.lastPong=Date.now();if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
    clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>65536){NET.skipped=(NET.skipped||0)+1;return}conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
-  conn.on('data',m=>{if(typeof m=='string'){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong')ping=Date.now()-m.ts});
+  conn.on('data',m=>{if(typeof m=='string'){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong'){ping=Date.now()-m.ts;NET.lastPong=Date.now()}});
   const mine=conn;mine.on('close',()=>{if(conn===mine)lost()})});
  peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing&&peer===myPeer)lost()});
  setTimeout(()=>{if(!ok&&!playing)mst('Не удалось подключиться. Проверь код')},8000)}
@@ -494,7 +500,7 @@ function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  if(G.ev.id!=lastEv){lastEv=G.ev.id;const t=$('toast');t.textContent=G.ev.text;t.style.opacity=1;clearTimeout(t.h);t.h=setTimeout(()=>t.style.opacity=0,2500);if(SFX[G.ev.sfx])SFX[G.ev.sfx]();if(G.ev.sfx==2&&/^Продажа/.test(G.ev.text))pop(G.ev.text)}
  if(P.mv&&P.y<.05){stepT-=dt;if(stepT<=0){stepT=P.mv>5?.28:.4;beep(90,.04,'square')}}
  const lv=LVL(),online=Object.keys(G.players).length;
- $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · 🚐 ${G.van.cargo.length}/8 · 📦 ${G.dl.rating.toFixed(1)} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+G.ping+' мс':'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+ping+' мс':'🔴 Нет связи')}`;
+ $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · 🚐 ${G.van.cargo.length}/8 · 📦 ${G.dl.rating.toFixed(1)} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+pingTxt(G.ping):'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+pingTxt(ping):'🔴 Нет связи')}`;
  let h='WASD · Shift · Space · V — вид · клик — мышь';
  if(P.hold){const b=G.boxes.find(b=>b.id==P.hold);h='E — положить: на полку «'+(b?ITEMS[b.it].n:'?')+'» / передать брату / бросить'}
  else if(P.inv)h='Фургон: WASD · Space тормоз · H сигнал · F выйти';else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
