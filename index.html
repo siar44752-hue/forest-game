@@ -52,14 +52,21 @@ const CLD={};[['t0','top','Футболка белая',0,0xe8e8e8,0],['t1','top
 ['s0','shoes','Кроссовки белые',0,0xf1f1f1,0],['s1','shoes','Кроссовки яркие',35,0xe76f51,0],['s2','shoes','Ботинки',90,0x4a3427,1],['s3','shoes','Туфли',170,0x111111,2],
 ['h1','hat','Кепка',25,0xd62828,0],['h2','hat','Шапка',30,0x2b9348,1],['h3','hat','Каска',60,0xffc300,2],['h4','hat','Шляпа',140,0x3a3a3a,3],
 ['g1','glasses','Очки круглые',30,0x222222,0],['g2','glasses','Солнцезащитные',80,0x111111,1],['g3','glasses','Дизайнерские',180,0xb8860b,0],
-['k1','pack','Рюкзак',45,0x3a86ff,0],['k2','pack','Сумка',70,0x8d5524,1],['k3','pack','Походный рюкзак',130,0x2d6a4f,2]].forEach(a=>CLD[a[0]]={id:a[0],s:a[1],n:a[2],p:a[3],c:a[4],st:a[5]});
-const CLL=Object.values(CLD),SLK={top:'t',bottom:'b',shoes:'s',hat:'h',glasses:'g',pack:'k'},SLR={t:'top',b:'bottom',s:'shoes',h:'hat',g:'glasses',k:'pack'};
+['k1','pack','Рюкзак',45,0x3a86ff,0],['k2','pack','Сумка',70,0x8d5524,1],['k3','pack','Походный рюкзак',130,0x2d6a4f,2],
+['t7','top','Майка',10,0xf1faee,5],['t8','top','Поло',35,0x2a9d8f,1],['t9','top','Свитер',65,0xc9184a,6],['t10','top','Пуховик',190,0x3a86ff,7],['t11','top','Жилет',85,0x6c584c,8],['t12','top','Рабочая роба',40,0xff7b00,9],
+['b5','bottom','Чёрные джинсы',40,0x1b1b1b,0],['b6','bottom','Карго',70,0x6b705c,3],['b7','bottom','Юбка',45,0xb5179e,2],['b8','bottom','Белые брюки',95,0xf8f9fa,0],
+['s4','shoes','Резиновые сапоги',40,0xffd60a,3],['s5','shoes','Шлёпанцы',15,0x4cc9f0,4],['s6','shoes','Кеды красные',30,0xd00000,0],
+['h5','hat','Берет',35,0x7b2cbf,4],['h6','hat','Панама',45,0xe9d8a6,5],['h7','hat','Корона',400,0xffd700,6],['h8','hat','Наушники',90,0x222222,7],['h9','hat','Праздничный колпак',20,0xff006e,8],
+['g4','glasses','Прямоугольные',55,0x333333,2],['g5','glasses','Визор',220,0x00e5ff,3],
+['k4','pack','Мессенджер',85,0x6d6875,3],['k5','pack','Мини-рюкзак',50,0xff70a6,4],
+['n1','neck','Шарф',25,0xd62828,0],['n2','neck','Бабочка',35,0x111111,1],['n3','neck','Золотая цепь',300,0xffd700,2],['n4','neck','Бейдж на шнурке',10,0x2a9d8f,3]].forEach(a=>CLD[a[0]]={id:a[0],s:a[1],n:a[2],p:a[3],c:a[4],st:a[5]});
+const CLL=Object.values(CLD),SLK={top:'t',bottom:'b',shoes:'s',hat:'h',glasses:'g',pack:'k',neck:'n'},SLR={t:'top',b:'bottom',s:'shoes',h:'hat',g:'glasses',k:'pack',n:'neck'};
 const SK=[0xf1c27d,0xe0ac69,0xc68642,0x8d5524],HCOL=[0x2b1b0e,0x6b4423,0xd9b44a,0x1a1a1a,0xb5451b,0xcfcfcf],BDS=[.95,1,1.07];
-const DEF={sk:0,bd:1,hs:0,hc:0,t:'t0',b:'b0',s:'s0',h:null,g:null,k:null};
+const DEF={sk:0,bd:1,hs:0,hc:0,t:'t0',b:'b0',s:'s0',h:null,g:null,k:null,n:null};
 function newAcc(){return{m:60,own:['t0','b0','s0'],ap:Object.assign({},DEF),sets:[null,null,null],tch:0}}
 function fixAp(a){for(const k in SLR){const id=a.ap[k];if(id&&!(CLD[id]&&CLD[id].s==SLR[k]&&a.own.includes(id)))a.ap[k]=k=='t'?'t0':k=='b'?'b0':k=='s'?'s0':null}}
 function mergeAcc(sv){const o={h:newAcc(),g:newAcc()};if(sv)for(const k of ['h','g'])if(sv[k]){const a=o[k],q=sv[k];a.m=Math.max(0,Math.min(1e6,+q.m||0));a.own=Array.from(new Set(a.own.concat((q.own||[]).filter(i=>CLD[i]))));a.ap=Object.assign({},DEF,q.ap);a.sets=[0,1,2].map(i=>(q.sets&&q.sets[i])||null);a.tch=q.tch?1:0;fixAp(a)}return o}
-function randAP(sd){let q=sd|0;const r=n=>{q=(q*9301+49297)%233280;return Math.floor(q/233280*n)},pk=sl=>{const l=CLL.filter(i=>i.s==sl);return l[r(l.length)].id};return{sk:r(4),bd:r(3),hs:r(5),hc:r(6),t:pk('top'),b:pk('bottom'),s:pk('shoes'),h:r(3)?null:pk('hat'),g:r(3)?null:pk('glasses'),k:r(3)?null:pk('pack')}}
+function randAP(sd){let q=sd|0;const r=n=>{q=(q*9301+49297)%233280;return Math.floor(q/233280*n)},pk=sl=>{const l=CLL.filter(i=>i.s==sl);return l[r(l.length)].id};return{sk:r(4),bd:r(3),hs:r(5),hc:r(6),t:pk('top'),b:pk('bottom'),s:pk('shoes'),h:r(3)?null:pk('hat'),g:r(3)?null:pk('glasses'),k:r(3)?null:pk('pack'),n:r(4)?null:pk('neck')}}
 const inStoreP=p=>p.x>10.5&&p.x<23.5&&Math.abs(p.z)<6.5;
 // ---------- состояние ----------
 let G,isHost=true,myId='h',peer=null,conn=null,playing=false,ui=false,fp=false,code='',lastEv=0,roomCode='';
@@ -73,16 +80,18 @@ function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
 // ---------- версия ----------
-const VERSION='v11 · 07.11.2026',CHANGES=['Фургон: выход больше не «возвращает» в кабину при лаге сети','Сеть: быстрый поток + события, порог очереди 8 КБ, меньше трафика','Показывается версия игры; при разных версиях у хоста и гостя — предупреждение'];
+const VERSION='v12 · 07.11.2026',CHANGES=['Сеть: движение по ненадёжному каналу (лаг не замораживает всё), хост не засыпает при свёрнутой вкладке','Фургон: подсказки при отказе «сесть», скорость на экране, исправлен сброс посадки при лаге','Одежда: 52 вещи + новый слот «Шея» (шарфы, цепи и т.д.)','Диагностика лагов: хронология пауз и свёрнутой вкладки (N)'];
 $('ver').innerHTML='<b style="font-size:20px;background:#e63946;padding:4px 12px;border-radius:8px">'+VERSION+'</b><div style="font-size:13px;opacity:.9;margin-top:6px">Что нового: '+CHANGES.join(' · ')+'</div>';$('vtag').textContent=VERSION;
 // ---------- сетевая диагностика (клавиша N или ?net=1) ----------
 const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,tl:[],lastIn:0,lastPong:Date.now(),icePrev:null,cands:null,err:null,pings:[]};
 const ENC=typeof TextEncoder!='undefined'?new TextEncoder():null;
-function netCount(dir,m){if(dir=='in')NET.lastIn=performance.now();const str=typeof m=='string',k=str?'snapshot':((m&&m.t)||'?'),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
- if(str){const sn=NET.snap;sn.size=b;sn.max=Math.max(sn.max,b);if(dir=='in'){const t=performance.now();if(sn.last){sn.gap=t-sn.last;sn.maxGap=Math.max(sn.maxGap,sn.gap)}sn.last=t;sn.n++}}}
+function netCount(dir,m,kk){if(dir=='in')NET.lastIn=performance.now();const str=typeof m=='string',k=kk||(str?'snapshot':((m&&m.t)||'?')),b=str?(ENC?ENC.encode(m).length:m.length):JSON.stringify(m).length,o=NET[dir][k]||(NET[dir][k]={n:0,b:0,w:0,wb:0});o.n++;o.b+=b;o.w++;o.wb+=b;
+ if(str&&(!kk||kk=='mv:F')){const sn=NET.snap;sn.size=b;sn.max=Math.max(sn.max,b);if(dir=='in'){const t=performance.now();if(sn.last){sn.gap=t-sn.last;sn.maxGap=Math.max(sn.maxGap,sn.gap);if(sn.gap>1500)logTl('пауза снапшотов '+Math.round(sn.gap)+' мс')}sn.last=t;sn.n++}}}
+function logTl(t){NET.tl.push(((Date.now()-NET.t0)/1000).toFixed(1)+'с '+t);if(NET.tl.length>60)NET.tl.shift()}
+document.addEventListener('visibilitychange',()=>logTl(document.hidden?'вкладка скрыта':'вкладка видна'));
 function netHook(c){const pc=c&&c.peerConnection;if(!pc||pc._h||!pc.addEventListener)return;pc._h=1;const L=(t)=>{NET.tl.push(((Date.now()-NET.t0)/1000).toFixed(1)+'с '+t);if(NET.tl.length>30)NET.tl.shift()};
  pc.addEventListener('iceconnectionstatechange',()=>L('ice='+pc.iceConnectionState));pc.addEventListener('connectionstatechange',()=>L('conn='+pc.connectionState));L('hook ice='+pc.iceConnectionState+' conn='+pc.connectionState)}
-function netTap(c){if(!c||c._tap)return;c._tap=1;NET.lastIn=performance.now();netHook(c);const o=c.send.bind(c);c.send=m=>{netCount('out',m);return o(m)};c.on('data',m=>netCount('in',m))}
+function netTap(c){if(!c||c._tap)return;c._tap=1;NET.lastIn=performance.now();netHook(c);netChan();const o=c.send.bind(c);c.send=m=>{netCount('out',m);return o(m)};c.on('data',m=>netCount('in',m))}
 const netDC=()=>conn&&(conn.dataChannel||conn._dc)||null,netPC=()=>conn&&conn.peerConnection||null;
 function netSample(){const R={out:{},in:{}};for(const d of['out','in'])for(const k in NET[d]){const o=NET[d][k];R[d][k]=[o.w,o.wb];o.w=o.wb=0}NET.rate=R;
  const dc=netDC();NET.dc=dc?{state:dc.readyState,buf:dc.bufferedAmount,ordered:dc.ordered,reliable:dc.maxRetransmits==null&&dc.maxPacketLifeTime==null,q:conn.bufferSize}:null;
@@ -97,7 +106,7 @@ function netVerdict(){const v=[],I=NET.ice,D=NET.dc,p=isHost?G.ping:ping,mx=Math
  if(!I)v.push('ICE-пара пока не определена');else{if(I.relay)v.push('⚠ трафик идёт через TURN-ретранслятор ('+I.local+')');else v.push('прямое соединение ('+I.local+' ↔ '+I.remote+')');if(I.rtt!=null&&p>3*I.rtt+300)v.push('⚠ ping игры ('+p+' мс) ≫ RTT сети ('+I.rtt+' мс): задержка = очередь отправки, не сеть');if(I.unanswered>3)v.push('⚠ STUN-проверки без ответа: '+I.unanswered+' (признак потерь)')}
  if(D&&D.buf>262144)v.push('⚠ bufferedAmount '+Math.round(D.buf/1024)+' КБ: данные копятся в канале');if(mx>262144)v.push('⚠ пик bufferedAmount за минуту '+Math.round(mx/1024)+' КБ');if(mq>20)v.push('⚠ очередь PeerJS: '+mq+' сообщений');
  if(NET.snap.maxGap>1000)v.push('⚠ снапшоты приходили с паузой до '+Math.round(NET.snap.maxGap)+' мс');if(NET.reconn>1||NET.lost>0)v.push('⚠ переподключений: '+NET.reconn+', потерь связи: '+NET.lost);if(NET.err)v.push('getStats: '+NET.err);if(NET.conn=='failed'||NET.ices=='failed'||NET.ices=='disconnected')v.push('⚠ ICE: '+NET.ices+', connection: '+NET.conn+' — путь между игроками оборван или нестабилен (это не очередь отправки)');return v}
-function netReport(){return{version:VERSION,role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,icePrev:NET.icePrev,cands:NET.cands,timeline:NET.tl.slice(-20),idleMs:Math.round(performance.now()-NET.lastIn),pongAgeMs:Date.now()-NET.lastPong,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
+function netReport(){return{version:VERSION,role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,icePrev:NET.icePrev,cands:NET.cands,timeline:NET.tl.slice(-40),idleMs:Math.round(performance.now()-NET.lastIn),pongAgeMs:Date.now()-NET.lastPong,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
 function netText(){const R=NET.rate,f=o=>Object.keys(o).map(k=>k+' '+o[k][0]+'/с '+(o[k][1]/1024).toFixed(1)+'КБ/с').join(' · ')||'—',I=NET.ice,D=NET.dc,p=isHost?G.ping:ping;
  return ['РОЛЬ: '+(isHost?'хост':'гость')+' · игра: '+p+' мс','ICE: '+(I?(I.relay?'RELAY ':'direct ')+I.local+' ↔ '+I.remote+' · RTT '+I.rtt+' мс (ср. '+I.avg+') · bitrate~'+I.bitrate+' кбит/с':'—'),
  'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out)+' · пропущено при перегрузке: '+(NET.skipped||0),'Вх: '+f(R.in),
@@ -113,12 +122,22 @@ setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
 // ---------- сеть: быстрый поток + медленное состояние по изменению ----------
 const FAST=['t','players','cust','trucks','staff','van','ev','ping','money','rep'],SKIPK=['sal','nid','lv'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v,NETBUF=8192;
 let lastSlow='',lastSlowT=0;
+const SID=Math.random().toString(36).slice(2,7);
 function netFast(){const f={};for(const k of FAST)if(G[k]!==undefined)f[k]=G[k];
  f.players={};for(const id in G.players){const p=G.players[id];f.players[id]={id:p.id||id,x:p.x,y:p.y,z:p.z,ry:p.ry,mv:p.mv,hold:p.hold,pkh:p.pkh,inv:p.inv}}
- f.cust=G.cust.map(c=>({id:c.id,x:c.x,z:c.z,ry:c.ry,col:c.col,st:c.st,total:c.total,pay:c.pay,given:c.given,cl:c.cl,by:c.by,bag:c.bag,wt:c.wt}));return f}
+ f.cust=G.cust.map(c=>({id:c.id,x:c.x,z:c.z,ry:c.ry,col:c.col,st:c.st,total:c.total,pay:c.pay,given:c.given,cl:c.cl,by:c.by,bag:c.bag,wt:c.wt}));f.q=Date.now();f.s=SID;return f}
 function netSlow(){const sl={};for(const k in G){if(FAST.includes(k)||SKIPK.includes(k))continue;sl[k]=G[k]}sl.dl=Object.assign({},G.dl,{nt:0});sl.ver=VERSION;return sl}
-function netPush(){if(!conn||!conn.open)return;const dc=conn.dataChannel;if((dc&&dc.bufferedAmount>NETBUF)||(conn.bufferSize||0)>2){NET.skipped=(NET.skipped||0)+1;return}
- const ss=JSON.stringify(netSlow(),RND);if(ss!==lastSlow||Date.now()-lastSlowT>5000){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}conn.send('F'+JSON.stringify(netFast(),RND))}
+function netChan(){const pc=netPC();if(!pc||!pc.createDataChannel||pc._mv)return;try{const ch=pc.createDataChannel('mv',{ordered:false,maxRetransmits:0,negotiated:true,id:9});pc._mv=ch;ch.onopen=()=>logTl('канал mv открыт (unreliable)');ch.onclose=()=>logTl('канал mv закрыт');ch.onerror=()=>logTl('mv ошибка');
+ ch.onmessage=e=>{const d=e.data;if(typeof d!='string')return;netCount('in',d,'mv:'+d[0]);if(d[0]=='F')onSnap(d);else if(d[0]=='p'&&isHost)mvIn(d)}}catch(e){NET.mvErr=String(e);logTl('mv не создан: '+e)}}
+const netMv=()=>{const pc=netPC();return pc&&pc._mv&&pc._mv.readyState=='open'?pc._mv:null};
+function mvIn(s){try{const m=JSON.parse(s.slice(1));m.t='p';handle('g',m)}catch(e){}}
+function sendP(o){o.q=Date.now();const mv=netMv();if(mv&&mv.bufferedAmount<NETBUF){const t='p'+JSON.stringify(o,RND);netCount('out',t,'mv:p');try{mv.send(t);return}catch(e){}}o.t='p';conn.send(o)}
+function netPush(){if(!conn||!conn.open)return;const dc=conn.dataChannel,mv=netMv(),busy=(dc&&dc.bufferedAmount>NETBUF)||(conn.bufferSize||0)>2;
+ const ss=JSON.stringify(netSlow(),RND),sNeed=ss!==lastSlow||Date.now()-lastSlowT>5000;
+ if(mv){if(sNeed&&!busy){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}if(mv.bufferedAmount>NETBUF){NET.skipped=(NET.skipped||0)+1;return}const f='F'+JSON.stringify(netFast(),RND);netCount('out',f,'mv:F');try{mv.send(f)}catch(e){NET.mvErr=String(e)}return}
+ if(busy){NET.skipped=(NET.skipped||0)+1;return}if(sNeed){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}conn.send('F'+JSON.stringify(netFast(),RND))}
+function stepHost(dt){let a=Math.min(.25,dt);while(a>1e-4){const q=Math.min(.05,a);tick(q);a-=q}}
+let bgW=null;function bgStart(){if(bgW||typeof Worker=='undefined'||typeof Blob=='undefined')return;try{bgW=new Worker(URL.createObjectURL(new Blob(['setInterval(function(){postMessage(1)},50)'],{type:'text/javascript'})));let last=performance.now(),acc=0;bgW.onmessage=()=>{const now=performance.now();if(!document.hidden||!isHost){last=now;return}const dt=(now-last)/1000;last=now;stepHost(dt);acc+=dt;if(acc>=.1){acc=0;netPush()}}}catch(e){logTl('worker: '+e)}}
 // ---------- сеть (хост = авторитет) ----------
 function mst(t){$('mst').textContent=t}
 function startHost(solo){
@@ -133,7 +152,7 @@ function startHost(solo){
   c.on('close',()=>{if(conn!==c)return;const p=G.players.g;if(p&&p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(b){b.x=p.x;b.z=p.z;b.y=.3}}delete G.players.g;if(G.van.drv=='g'){G.van.drv=G.van.pas;G.van.pas=null;if(!G.van.drv)G.van.sp=0}if(G.van.pas=='g')G.van.pas=null;conn=null;say('Брат отключился. Прогресс сохранён',3)})});
  peer.on('disconnected',()=>peer.reconnect());
  peer.on('error',e=>say('Сеть: '+e.type,3));
- setInterval(netPush,100);
+ setInterval(netPush,100);bgStart();
  setInterval(save,10000);
 }
 function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,staff:G.staff?1:0,acc:G.acc,pk:G.pk,van:G.van,dl:Object.assign({},G.dl,{orders:G.dl.orders.map(o=>Object.assign({},o,{due:o.due-G.t,at:o.at-G.t,end:o.end?o.end-G.t:undefined}))})}))}
@@ -144,7 +163,7 @@ function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 си
  const myPeer=peer=new Peer(undefined,peerOpts());let ok=false;
  peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});netTap(conn);NET.reconn++;
   conn.on('open',()=>{ok=true;NET.lastPong=Date.now();conn.send({t:'ver',v:VERSION});if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
-   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>NETBUF){NET.skipped=(NET.skipped||0)+1;return}conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
+   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>NETBUF){NET.skipped=(NET.skipped||0)+1;return}sendP({x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
   conn.on('data',m=>{if(typeof m=='string')onSnap(m);else if(m.t=='pong'){ping=Date.now()-m.ts;NET.lastPong=Date.now()}});
   const mine=conn;mine.on('close',()=>{if(conn===mine)lost()})});
  peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing&&peer===myPeer)lost()});
@@ -191,7 +210,7 @@ function handle(pid,m){
  else if(m.t=='price'){const i=m.i;if(G.price[i]!==undefined)G.price[i]=Math.max(.5,Math.min(ITEMS[i].p*3,+(G.price[i]+(m.d>0?.5:-.5)).toFixed(1)))}
  else if(m.t=='build'){const k=BK[m.k];if(!k||G.build.length>=80)return;const x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,rr=m.r&1;if(!bvalid(m.k,x,z,rr))return say('Сюда нельзя',3);if(G.money<k.cost)return say('Не хватает денег!',3);G.money-=k.cost;G.build.push({id:G.nid++,k:m.k,x,z,r:rr});say('Построено: '+k.n+' −$'+k.cost,1)}
  else if(m.t=='del'){const i=G.build.findIndex(b=>b.id==m.id);if(i<0)return;const b=G.build[i];G.money+=BK[b.k].cost;G.build.splice(i,1);say('Убрано, возврат $'+BK[b.k].cost,1)}
- else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv||p.hold||p.pkh||dist(p,v.x,v.z)>(pid=='h'?3.6:8))return;if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Пассажир в фургоне',1)}}
+ else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv)return;if(p.hold||p.pkh)return say('Сначала положи груз из рук',3);if(dist(p,v.x,v.z)>(pid=='h'?3.6:8))return say('Подойди ближе к фургону',3);if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Вы пассажир: машину ведёт другой игрок',1)}else say('В фургоне нет мест',3)}
  else if(m.t=='exit'){const p=G.players[pid],v=G.van;if(!p||!p.inv)return;if(pid=='h'&&Math.abs(v.sp)>3)return say('Остановись, чтобы выйти',3);p.inv=0;p.x=v.x+Math.cos(v.ry)*2.3;p.z=v.z-Math.sin(v.ry)*2.3;p.y=0;if(v.drv==pid){v.drv=v.pas;v.pas=null;if(!v.drv)v.sp=0}else if(v.pas==pid)v.pas=null}
  else if(m.t=='pack')packOrder(pid,m.o);
  else if(m.t=='ver'){NET.gver=m.v}
@@ -210,7 +229,7 @@ function handle(pid,m){
  else if(m.t=='lset'){const a=G.acc[pid];if(a&&Number.isInteger(m.i)&&a.sets[m.i]){a.ap=Object.assign({},DEF,a.sets[m.i]);fixAp(a);a.tch=1}}
  else if(m.t=='hello'){const a=G.acc[pid];if(!a||a.tch||!m.acc)return;const o=mergeAcc({[pid]:m.acc})[pid];o.tch=1;G.acc[pid]=o} else if(m.t=='hire'&&m.w=='st'){if(G.staff||LVL()<3||G.money<200)return say('Нужен ур.3 и $200',3);G.money-=200;G.staff={x:-7,y:0,z:-2,ry:0,mv:0,hold:null};say('Грузчик нанят! $20/мин',2)}
  else if(m.t=='hire'){if(G.cashier||LVL()<2||G.money<150)return say('Нельзя нанять кассира (нужен ур.2 и $150)',3);G.money-=150;G.cashier=true;say('Кассир нанят! Зарплата $15/мин',2)}
- else if(m.t=='p'){const p=G.players[pid];if(p){if(!p.inv){p.x=m.x;p.y=m.y;p.z=m.z;p.ry=m.ry;p.mv=m.mv}G.ping=m.pg||0;const q=m.vn;if(q&&G.van.drv==pid&&[q.x,q.z,q.ry,q.sp].every(Number.isFinite)){G.van.x=q.x;G.van.z=q.z;G.van.ry=q.ry;G.van.sp=q.sp}}}
+ else if(m.t=='p'){const p=G.players[pid];if(p&&m.q!==undefined){if(m.q<=(NET.glq||0)&&(NET.glq||0)-m.q<5000)return;NET.glq=m.q}if(p){if(!p.inv){p.x=m.x;p.y=m.y;p.z=m.z;p.ry=m.ry;p.mv=m.mv}G.ping=m.pg||0;const q=m.vn;if(q&&G.van.drv==pid&&[q.x,q.z,q.ry,q.sp].every(Number.isFinite)){G.van.x=q.x;G.van.z=q.z;G.van.ry=q.ry;G.van.sp=q.sp}}}
  else if(m.t=='ping'&&conn&&conn.open)conn.send({t:'pong',ts:m.ts})}
 function held(){const s=new Set(Object.values(G.players).map(p=>p.hold));if(G.staff)s.add(G.staff.hold);return s}
 function act(pid){const p=G.players[pid];if(!p)return;if(p.inv)return;if(actDl(pid,p))return;
@@ -302,19 +321,28 @@ const sg=ctex(256,64,(c,w,h)=>{c.fillStyle='#1d3557';c.fillRect(0,0,w,h);c.fillS
 const pl=new T.PointLight(0xfff0d0,.5,20);pl.position.set(0,2.8,0);scene.add(pl);
 function char(a){const ap=typeof a=='number'?Object.assign({},DEF,{tc:a}):(a||DEF);
  const g=new T.Group(),B=new T.Group(),mt=c=>new T.MeshLambertMaterial({color:c});g.add(B);
- const add=(p,geo,c,x,y,z)=>{const m=new T.Mesh(geo,mt(c));m.position.set(x,y,z);m.castShadow=true;p.add(m);return m},bg=(w,h,d)=>new T.BoxGeometry(w,h,d),sp=r=>new T.SphereGeometry(r,10,8);
- const top=CLD[ap.t]||CLD.t0,bot=CLD[ap.b]||CLD.b0,shoe=CLD[ap.s]||CLD.s0,sk=SK[ap.sk%4],tc=ap.tc||top.c,bc=bot.c;
- add(B,bg(top.st==3?.7:.62,.8,.38),tc,0,1.12,0);
- if(top.st==2)add(B,bg(.5,.2,.2),tc,0,1.6,-.2);if(top.st==4)add(B,bg(.08,.5,.02),0xb00020,0,1.2,.2);if(top.st==3)add(B,bg(.04,.78,.02),0x999999,0,1.12,.2);if(top.st==1)add(B,bg(.3,.08,.3),0xffffff,0,1.55,.02);
- add(B,bg(.62,.3,.36),bc,0,.65,0);
- const leg=x=>{const l=new T.Group(),sh=bot.st==1;l.position.set(x,.72,0);add(l,bg(.26,sh?.34:.7,.28),bc,0,sh?-.17:-.35,0);if(sh)add(l,bg(.22,.36,.24),sk,0,-.52,0);const hh=shoe.st==1?.3:.14;add(l,bg(.3,hh,.4),shoe.c,0,-.72+hh/2,.05);B.add(l);return l};
- const arm=x=>{const q=new T.Group(),lg=top.st>0;q.position.set(x,1.46,0);add(q,bg(.2,.34,.22),tc,0,-.17,0);add(q,bg(.18,.34,.2),lg?tc:sk,0,-.5,0);add(q,sp(.1),sk,0,-.7,0);B.add(q);return q};
- const ll=leg(-.16),lr=leg(.16),al=arm(-.4),ar=arm(.4),hd=new T.Group();hd.position.y=1.84;B.add(hd);add(hd,sp(.24),sk,0,0,0);add(hd,bg(.05,.05,.02),0x222222,-.09,.03,.22);add(hd,bg(.05,.05,.02),0x222222,.09,.03,.22);
+ const add=(p,geo,c,x,y,z)=>{const m=new T.Mesh(geo,mt(c));m.position.set(x,y,z);m.castShadow=true;p.add(m);return m},bg=(w,h,d)=>new T.BoxGeometry(w,h,d),sp=r=>new T.SphereGeometry(r,10,8),cy=(a,b,h,n)=>new T.CylinderGeometry(a,b,h,n||10);
+ const top=CLD[ap.t]||CLD.t0,bot=CLD[ap.b]||CLD.b0,shoe=CLD[ap.s]||CLD.s0,sk=SK[ap.sk%4],tc=ap.tc||top.c,bc=bot.c,ts=top.st,bs=bot.st;
+ add(B,bg(ts==3?.7:ts==7?.8:ts==6?.66:.62,.8,ts==7?.46:.38),tc,0,1.12,0);
+ if(ts==2)add(B,bg(.5,.2,.2),tc,0,1.6,-.2);if(ts==4)add(B,bg(.08,.5,.02),0xb00020,0,1.2,.2);if(ts==3)add(B,bg(.04,.78,.02),0x999999,0,1.12,.2);if(ts==1)add(B,bg(.3,.08,.3),0xffffff,0,1.55,.02);
+ if(ts==8)add(B,bg(.22,.7,.02),0xf1f1f1,0,1.12,.2);if(ts==9){add(B,bg(.64,.07,.4),0xf1f1f1,0,1.0,0);add(B,bg(.64,.07,.4),0xf1f1f1,0,1.3,0)}
+ if(bs==2)add(B,bg(.76,.32,.46),bc,0,.58,0);else add(B,bg(.62,.3,.36),bc,0,.65,0);
+ const leg=x=>{const l=new T.Group(),sh=bs==1;l.position.set(x,.72,0);
+  if(bs==2)add(l,bg(.24,.7,.26),sk,0,-.35,0);else{add(l,bg(.26,sh?.34:.7,.28),bc,0,sh?-.17:-.35,0);if(sh)add(l,bg(.22,.36,.24),sk,0,-.52,0);if(bs==3)add(l,bg(.05,.16,.2),0x4a4f3d,x<0?-.15:.15,-.2,.02)}
+  const hh=shoe.st==1?.3:shoe.st==3?.45:shoe.st==4?.06:.14;add(l,bg(.3,hh,.4),shoe.c,0,-.72+hh/2,.05);B.add(l);return l};
+ const arm=x=>{const q=new T.Group(),lg=ts>0&&ts!=5,w=ts==7?.28:.2,sc=ts==8?0xf1f1f1:tc;q.position.set(x,1.46,0);add(q,bg(w,.34,w+.02),ts==5?sk:tc,0,-.17,0);add(q,bg(w-.02,.34,w),lg?sc:sk,0,-.5,0);add(q,sp(.1),sk,0,-.7,0);B.add(q);return q};
+ const ll=leg(-.16),lr=leg(.16),al=arm(-.42),ar=arm(.42),hd=new T.Group();hd.position.y=1.84;B.add(hd);add(hd,sp(.24),sk,0,0,0);add(hd,bg(.05,.05,.02),0x222222,-.09,.03,.22);add(hd,bg(.05,.05,.02),0x222222,.09,.03,.22);
  const hc=HCOL[ap.hc%6],hs=ap.hs%5;if(hs<4){const h=add(hd,sp(.26),hc,0,.07,-.02);h.scale.set(1,.8,1.02)}
  if(hs==1)add(hd,bg(.5,.6,.18),hc,0,-.2,-.2);if(hs==2)for(const x of[-.12,0,.12])add(hd,new T.ConeGeometry(.08,.22,6),hc,x,.32,0);if(hs==3){add(hd,sp(.1),hc,0,0,-.3);add(hd,bg(.08,.35,.08),hc,0,-.18,-.3)}
- const ht=CLD[ap.h];if(ht){const c=ht.c;if(ht.st==0){const h=add(hd,sp(.27),c,0,.1,0);h.scale.y=.55;add(hd,bg(.3,.03,.22),c,0,.08,.25)}else if(ht.st==1){const h=add(hd,sp(.27),c,0,.1,0);h.scale.y=.8}else if(ht.st==2){const h=add(hd,sp(.28),c,0,.1,0);h.scale.y=.75;add(hd,bg(.5,.03,.4),c,0,.08,.05)}else{add(hd,new T.CylinderGeometry(.18,.2,.3,10),c,0,.3,0);add(hd,new T.CylinderGeometry(.38,.38,.03,12),c,0,.15,0)}}
- const gl=CLD[ap.g];if(gl){if(gl.st==1)add(hd,bg(.38,.1,.03),gl.c,0,.04,.23);else{add(hd,bg(.15,.12,.03),gl.c,-.1,.04,.23);add(hd,bg(.15,.12,.03),gl.c,.1,.04,.23);add(hd,bg(.06,.02,.02),gl.c,0,.05,.23)}}
- const pk=CLD[ap.k];if(pk){if(pk.st==1)add(B,bg(.12,.3,.3),pk.c,-.4,.8,0);else if(pk.st==2)add(B,bg(.46,.72,.26),pk.c,0,1.15,-.32);else add(B,bg(.4,.5,.2),pk.c,0,1.12,-.3)}
+ const ht=CLD[ap.h];if(ht){const c=ht.c,q=ht.st;if(q==0){const h=add(hd,sp(.27),c,0,.1,0);h.scale.y=.55;add(hd,bg(.3,.03,.22),c,0,.08,.25)}else if(q==1){const h=add(hd,sp(.27),c,0,.1,0);h.scale.y=.8}else if(q==2){const h=add(hd,sp(.28),c,0,.1,0);h.scale.y=.75;add(hd,bg(.5,.03,.4),c,0,.08,.05)}
+  else if(q==3){add(hd,cy(.18,.2,.3),c,0,.3,0);add(hd,cy(.38,.38,.03,12),c,0,.15,0)}else if(q==4){const h=add(hd,sp(.3),c,.05,.15,0);h.scale.set(1,.3,1)}
+  else if(q==5){const h=add(hd,sp(.26),c,0,.12,0);h.scale.y=.6;add(hd,cy(.45,.45,.03,14),c,0,.1,0);add(hd,cy(.265,.265,.05,12),0x6b4f2a,0,.13,0)}
+  else if(q==6){add(hd,cy(.2,.24,.16,8),c,0,.22,0);for(let i=0;i<5;i++){const a2=i/5*6.283;add(hd,new T.ConeGeometry(.04,.12,4),c,Math.sin(a2)*.2,.34,Math.cos(a2)*.2)}}
+  else if(q==7){add(hd,bg(.52,.03,.04),c,0,.26,0);add(hd,bg(.08,.17,.17),c,-.26,0,0);add(hd,bg(.08,.17,.17),c,.26,0,0)}else{add(hd,new T.ConeGeometry(.2,.45,10),c,0,.42,0)}}
+ const gl=CLD[ap.g];if(gl){const q=gl.st,c=gl.c;if(q==1)add(hd,bg(.38,.1,.03),c,0,.04,.23);else if(q==3)add(hd,bg(.44,.1,.06),c,0,.05,.23);else{const w=q==2?.17:.15,h=q==2?.12:.12;add(hd,bg(w,h,.03),c,-.1,.04,.23);add(hd,bg(w,h,.03),c,.1,.04,.23);add(hd,bg(.06,.02,.02),c,0,.05,.23)}}
+ const nk=CLD[ap.n];if(nk){const c=nk.c,q=nk.st;if(q==0){add(B,bg(.5,.14,.42),c,0,1.56,0);add(B,bg(.14,.4,.05),c,.12,1.38,.22)}else if(q==1){add(B,bg(.1,.1,.04),c,-.07,1.56,.2);add(B,bg(.1,.1,.04),c,.07,1.56,.2);add(B,bg(.04,.05,.05),0x333333,0,1.56,.2)}
+  else if(q==2){add(B,bg(.3,.03,.02),c,0,1.5,.2);const l1=add(B,bg(.03,.2,.02),c,-.14,1.4,.2),l2=add(B,bg(.03,.2,.02),c,.14,1.4,.2);l1.rotation.z=.25;l2.rotation.z=-.25;add(B,bg(.06,.06,.02),c,0,1.28,.2)}else{add(B,bg(.04,.4,.02),c,0,1.38,.2);add(B,bg(.14,.18,.02),0xffffff,0,1.14,.21)}}
+ const pk=CLD[ap.k];if(pk){if(pk.st==1)add(B,bg(.12,.3,.3),pk.c,-.42,.8,0);else if(pk.st==2)add(B,bg(.46,.72,.26),pk.c,0,1.15,-.32);else if(pk.st==3){add(B,bg(.3,.22,.12),pk.c,.36,.82,.1);const st=add(B,bg(.05,.85,.02),pk.c,0,1.15,.2);st.rotation.z=-.55}else if(pk.st==4)add(B,bg(.28,.32,.14),pk.c,0,1.2,-.26);else add(B,bg(.4,.5,.2),pk.c,0,1.12,-.3)}
  g.scale.set(1,BDS[ap.bd%3],1);g.userData={ll,lr,al,ar,B};return g}
 function setLook(W,ap){const k=JSON.stringify(ap),u=W.userData;if(u.k===k)return;if(u.c)W.remove(u.c);u.c=char(ap);u.k=k;W.add(u.c)}
 const hsl=h=>new T.Color().setHSL(h/360,.6,.5).getHex();
@@ -374,7 +402,7 @@ function minimap(pls){mm.clearRect(0,0,150,150);const S=2.2,cx=75,cz=75,X=x=>cx+
 const keys={};let yaw=Math.PI,pitch=.35,locked=false;
 addEventListener('keydown',e=>{if(!playing||e.target.tagName=='INPUT')return;keys[e.code]=1;
  if(e.code=='KeyE'&&!ui){if(bm||P.inv)return;const sn=P.hold?null:stNear();if(sn)sn[1]();else if(!P.hold&&dist(P,PCP[0],PCP[1])<2.8)openPC();else if(!P.hold&&G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)openCash();else sendM({t:'a'})}
- if(e.code=='KeyV')fp=!fp;if(e.code=='KeyY'&&!ui)openSt('ward');if(e.code=='KeyF'&&!ui)(P.inv?exitVan():sendM({t:'drive'}));if(e.code=='KeyP'){if($('ph').style.display=='block')closePC();else if(!ui)openPh()}if(e.code=='KeyH'&&P.inv)beep(330,.3,'square');if(e.code=='KeyN')netToggle();buildKeys(e);if(e.code=='Escape')closePC();if(e.code=='Space')e.preventDefault()});
+ if(e.code=='KeyV')fp=!fp;if(e.code=='KeyY'&&!ui)openSt('ward');if(e.code=='KeyF'&&!ui)(P.inv?exitVan():(P.pend=null,sendM({t:'drive'})));if(e.code=='KeyP'){if($('ph').style.display=='block')closePC();else if(!ui)openPh()}if(e.code=='KeyH'&&P.inv)beep(330,.3,'square');if(e.code=='KeyN')netToggle();buildKeys(e);if(e.code=='Escape')closePC();if(e.code=='Space')e.preventDefault()});
 addEventListener('keyup',e=>keys[e.code]=0);
 $('c').addEventListener('click',()=>{if(!playing||ui)return;if(!locked){$('c').requestPointerLock();return}placeBuild()});
 document.addEventListener('pointerlockchange',()=>locked=document.pointerLockElement==$('c'));
@@ -416,8 +444,9 @@ function vanStep(dt){const v=VL,k=keys,th=Math.max(-1,Math.min(1,(k.KeyW?1:0)-(k
  const mx=Math.sin(v.ry)*v.sp*dt,mz=Math.cos(v.ry)*v.sp*dt;v.x+=mx;v.z+=mz;const bx0=v.x,bz0=v.z;collide(v,1.3);if(Math.hypot(v.x-bx0,v.z-bz0)>.02)v.sp*=.6;
  v.x=Math.max(-90,Math.min(90,v.x));v.z=Math.max(-10,Math.min(44,v.z))}
 function vanDrive(dt){const v=G.van,me=v.drv==myId;if(me){if(!drvPrev||!VL)VL={x:v.x,z:v.z,ry:v.ry,sp:v.sp};vanStep(dt);if(isHost)Object.assign(v,{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp})}drvPrev=me;const q=me?VL:v;P.x=q.x;P.z=q.z;P.y=0;P.mv=0;engine(me?q.sp:null)}
-function exitVan(){const s=(G.van.drv==myId&&VL)?VL:G.van;if(Math.abs(s.sp)>3)return beep(200,.2,'square');P.x=s.x+Math.cos(s.ry)*2.3;P.z=s.z-Math.sin(s.ry)*2.3;P.y=0;P.inv=0;if(!isHost){P.pend=0;P.pendT=performance.now()+5000}sendM({t:'exit'})}
-function onSnap(m){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(!me)return;P.hold=me.hold;P.pkh=me.pkh;
+function toast(t){const e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(e.h);e.h=setTimeout(()=>e.style.opacity=0,2200)}
+function exitVan(){const s=(G.van.drv==myId&&VL)?VL:G.van;if(Math.abs(s.sp)>3){toast('Остановись (пробел — тормоз), чтобы выйти');return beep(200,.2,'square')}P.x=s.x+Math.cos(s.ry)*2.3;P.z=s.z-Math.sin(s.ry)*2.3;P.y=0;P.inv=0;if(!isHost){P.pend=0;P.pendT=performance.now()+5000}sendM({t:'exit'})}
+function onSnap(m){const o=JSON.parse(m.slice(1));if(o.q!==undefined){if(o.s!==NET.fs){NET.fs=o.s;NET.fq=0}if(o.q<=NET.fq&&NET.fq-o.q<5000)return;NET.fq=o.q}Object.assign(G,o);const me=G.players&&G.players[myId];if(!me)return;P.hold=me.hold;P.pkh=me.pkh;
  if(P.pend===0){if(me.inv==0||performance.now()>P.pendT)P.pend=null;else return}P.inv=me.inv}
 function exitRetry(){if(!isHost&&P.pend===0&&performance.now()<P.pendT)sendM({t:'exit'})}
 setInterval(exitRetry,1500);
@@ -460,7 +489,7 @@ function renderCash(){if($('cash').style.display!='block')return;const c=G.cust.
 setInterval(renderCash,100);
 function pop(t){const d=document.createElement('div');d.className='pop';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),1200)}
 // ---------- магазин одежды и гардероб ----------
-const SLOTS=[['top','Верх'],['bottom','Низ'],['shoes','Обувь'],['hat','Шапки'],['glasses','Очки'],['pack','Рюкзаки'],['look','Вид']],HN=['Короткие','Длинные','Дерзкие','Хвост','Лысый'];
+const SLOTS=[['top','Верх'],['bottom','Низ'],['shoes','Обувь'],['hat','Шапки'],['glasses','Очки'],['pack','Рюкзаки'],['neck','Шея'],['look','Вид']],HN=['Короткие','Длинные','Дерзкие','Хвост','Лысый'];
 const tier=p=>p==0?'базовая':p<=40?'дешёвая':p<=120?'обычная':'дорогая',hx=c=>'#'+c.toString(16).padStart(6,'0');
 let tryAP=null,mirror=false,stTab='shop',stSlot='top',stSig='',stInit=0;
 const myAcc=()=>G.acc&&G.acc[myId],apOf=id=>id==myId&&tryAP?tryAP:(G.acc&&G.acc[id]?G.acc[id].ap:DEF),myM=()=>{const a=myAcc();return a?a.m:0};
@@ -480,7 +509,7 @@ function renderSt(f){if($('st').style.display!='block')return;const a=myAcc();if
   h+='<p>Цвет волос</p>';HCOL.forEach((c,i)=>h+='<button data-l="hc" data-n="'+i+'" style="background:'+hx(c)+';color:#fff">'+(a.ap.hc==i?'✓':'&nbsp;')+'</button>')}
  else{CLL.filter(i=>i.s==stSlot&&(shop||a.own.includes(i.id))).forEach(i=>{const own=a.own.includes(i.id),worn=a.ap[SLK[i.s]]==i.id;
   h+='<div class="it"><i style="background:'+hx(i.c)+'"></i><b>'+i.n+'</b><em>'+tier(i.p)+'</em><span>'+(own?'куплено':'$'+i.p)+'</span><button data-try="'+i.id+'">Примерить</button>'+(own?'<button data-wear="'+i.id+'" data-s="'+i.s+'">'+(worn?'✓ надето':'Надеть')+'</button>':'<button data-buy="'+i.id+'" '+(inS&&a.m>=i.p?'':'disabled')+'>Купить</button>')+'</div>'});
-  if(['hat','glasses','pack'].includes(stSlot))h+='<div class="it"><b>Без аксессуара</b><button data-wear="none" data-s="'+stSlot+'">Снять</button></div>'}
+  if(['hat','glasses','pack','neck'].includes(stSlot))h+='<div class="it"><b>Без аксессуара</b><button data-wear="none" data-s="'+stSlot+'">Снять</button></div>'}
  if(tryAP){let cost=0;for(const k in SLR){const id=tryAP[k];if(id&&!a.own.includes(id))cost+=CLD[id].p}h+='<p>Образ: к оплате $'+cost+' <button data-buyall="1" '+(inS&&cost>0&&a.m>=cost?'':'disabled')+'>Купить всё</button></p>'}
  if(!inS&&shop)h+='<p>⚠ Покупки только внутри магазина одежды</p>';
  h+='<p>Комплекты: '+[0,1,2].map(i=>'<button data-sv="'+i+'">💾 '+(i+1)+(a.sets[i]?'*':'')+'</button><button data-ld="'+i+'" '+(a.sets[i]?'':'disabled')+'>Надеть '+(i+1)+'</button>').join(' ')+'</p>';
@@ -506,8 +535,8 @@ setInterval(renderPC,600);
 // ---------- главный цикл ----------
 function enter(){playing=true;setTouch(touch);setInterval(()=>{if(!isHost&&G.acc&&G.acc.g)try{localStorage.setItem('twobiz-me',JSON.stringify(G.acc.g))}catch(e){}},4000);$('menu').style.display='none';['hud','hint','mm'].forEach(i=>$(i).style.display='block');last=performance.now();requestAnimationFrame(frame);beep(440,.1)}
 let last=0;
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
- control(dt);if(isHost)tick(dt);
+function frame(now){const raw=Math.min(.25,(now-last)/1000),dt=Math.min(.05,raw);last=now;if(raw>=.2)logTl('долгий кадр '+Math.round(raw*1000)+' мс');
+ control(dt);if(isHost)stepHost(raw);
  if(G.ev.id!=lastEv){lastEv=G.ev.id;const t=$('toast');t.textContent=G.ev.text;t.style.opacity=1;clearTimeout(t.h);t.h=setTimeout(()=>t.style.opacity=0,2500);if(SFX[G.ev.sfx])SFX[G.ev.sfx]();if(G.ev.sfx==2&&/^Продажа/.test(G.ev.text))pop(G.ev.text)}
  if(P.mv&&P.y<.05){stepT-=dt;if(stepT<=0){stepT=P.mv>5?.28:.4;beep(90,.04,'square')}}
  const lv=LVL(),online=Object.keys(G.players).length;
@@ -515,7 +544,7 @@ function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  $('vwarn').textContent=isHost?(NET.gver&&NET.gver!=VERSION?'⚠ Версия брата: '+NET.gver+' (у вас '+VERSION+')':''):(G.ver&&G.ver!=VERSION?'⚠ Версия хоста: '+G.ver+' (у вас '+VERSION+')':'');
  let h='WASD · Shift · Space · V — вид · клик — мышь';
  if(P.hold){const b=G.boxes.find(b=>b.id==P.hold);h='E — положить: на полку «'+(b?ITEMS[b.it].n:'?')+'» / передать брату / бросить'}
- else if(P.inv)h='Фургон: WASD · Space тормоз · H сигнал · F выйти';else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
+ else if(P.inv){const q=(G.van.drv==myId&&VL)?VL:G.van;h='🚐 '+Math.round(Math.abs(q.sp)*3.6)+' км/ч · '+(G.van.drv==myId?'W газ · S назад · A/D руль · Space тормоз · H сигнал':'вы пассажир')+' · F выйти'}else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
  else if(G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)h='E — касса: выдай сдачу';
  else if(G.boxes.some(b=>dist(P,b.x,b.z)<2.2))h='E — взять коробку';
  $('hint').textContent=bm?'СТРОЙКА: 1-4 — '+BK[bk].n+' $'+BK[bk].cost+' · R поворот · ЛКМ поставить · X убрать (возврат 100%) · B выход':(touch?h.replace(/^E — /,'Кнопка E — '):h);
