@@ -21,14 +21,14 @@ input{padding:10px;border-radius:8px;border:0;width:120px;text-transform:upperca
 select{padding:7px;border-radius:6px}#cash{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#101820f2;border-radius:12px;padding:18px;z-index:4;display:none;min-width:320px}#cash button{margin:3px;min-width:44px}
 </style></head><body>
 <canvas id="c"></canvas>
-<div id="menu"><h1>TWO BUSINESS</h1><div>Кооперативный бизнес-симулятор: магазин с нуля для двоих</div>
+<div id="menu"><h1>TWO BUSINESS</h1><div id="ver"></div><div>Кооперативный бизнес-симулятор: магазин с нуля для двоих</div>
 <button onclick="startHost(false)">🏪 Создать комнату</button>
 <div><input id="code" maxlength="4" placeholder="КОД"> <button onclick="joinGame($('code').value.toUpperCase())">Подключиться</button></div>
 <button onclick="startHost(true)">Играть одному</button>
 <button style="background:#888;font-size:12px" onclick="localStorage.removeItem('twobiz1');this.textContent='Сохранение удалено'">Сбросить сохранение</button>
 <div id="mst" style="min-height:20px"></div>
 <div style="max-width:560px;opacity:.8;font-size:13px">WASD — ходьба, Shift — бег, Space — прыжок, мышь — камера (клик по экрану), E — взять/положить/обслужить/компьютер, V — вид от 1-го лица.<br>Заказывай товар на компьютере (слева в магазине) → грузовик → неси коробки на полки соответствующего товара → покупатели → касса (стой у кассы, E).</div></div>
-<div id="hud"></div><div id="hint"></div><div id="toast"></div><canvas id="mm" width="150" height="150"></canvas>
+<div id="hud"></div><div id="vwarn" style="position:fixed;top:150px;left:8px;z-index:3;color:#ffd166;font-weight:700"></div><div id="vtag" style="position:fixed;right:6px;bottom:2px;font:10px monospace;opacity:.6;z-index:2;pointer-events:none"></div><div id="hint"></div><div id="toast"></div><canvas id="mm" width="150" height="150"></canvas>
 <div id="pc"><div style="display:flex;justify-content:space-between"><h2>💻 Бизнес-компьютер</h2><button onpointerdown="closePC()">✕ Закрыть</button></div>
 <div id="pinfo"></div><h3>Заказ товара</h3>
 <select id="oi"></select> <select id="oq"></select> <select id="os"></select> <button id="ob" onpointerdown="doOrder()">Заказать и оплатить</button><div id="pord"></div></div>
@@ -72,6 +72,9 @@ function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,
 // ---------- звук ----------
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
+// ---------- версия ----------
+const VERSION='v11 · 07.11.2026',CHANGES=['Фургон: выход больше не «возвращает» в кабину при лаге сети','Сеть: быстрый поток + события, порог очереди 8 КБ, меньше трафика','Показывается версия игры; при разных версиях у хоста и гостя — предупреждение'];
+$('ver').innerHTML='<b style="font-size:20px;background:#e63946;padding:4px 12px;border-radius:8px">'+VERSION+'</b><div style="font-size:13px;opacity:.9;margin-top:6px">Что нового: '+CHANGES.join(' · ')+'</div>';$('vtag').textContent=VERSION;
 // ---------- сетевая диагностика (клавиша N или ?net=1) ----------
 const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,tl:[],lastIn:0,lastPong:Date.now(),icePrev:null,cands:null,err:null,pings:[]};
 const ENC=typeof TextEncoder!='undefined'?new TextEncoder():null;
@@ -94,7 +97,7 @@ function netVerdict(){const v=[],I=NET.ice,D=NET.dc,p=isHost?G.ping:ping,mx=Math
  if(!I)v.push('ICE-пара пока не определена');else{if(I.relay)v.push('⚠ трафик идёт через TURN-ретранслятор ('+I.local+')');else v.push('прямое соединение ('+I.local+' ↔ '+I.remote+')');if(I.rtt!=null&&p>3*I.rtt+300)v.push('⚠ ping игры ('+p+' мс) ≫ RTT сети ('+I.rtt+' мс): задержка = очередь отправки, не сеть');if(I.unanswered>3)v.push('⚠ STUN-проверки без ответа: '+I.unanswered+' (признак потерь)')}
  if(D&&D.buf>262144)v.push('⚠ bufferedAmount '+Math.round(D.buf/1024)+' КБ: данные копятся в канале');if(mx>262144)v.push('⚠ пик bufferedAmount за минуту '+Math.round(mx/1024)+' КБ');if(mq>20)v.push('⚠ очередь PeerJS: '+mq+' сообщений');
  if(NET.snap.maxGap>1000)v.push('⚠ снапшоты приходили с паузой до '+Math.round(NET.snap.maxGap)+' мс');if(NET.reconn>1||NET.lost>0)v.push('⚠ переподключений: '+NET.reconn+', потерь связи: '+NET.lost);if(NET.err)v.push('getStats: '+NET.err);if(NET.conn=='failed'||NET.ices=='failed'||NET.ices=='disconnected')v.push('⚠ ICE: '+NET.ices+', connection: '+NET.conn+' — путь между игроками оборван или нестабилен (это не очередь отправки)');return v}
-function netReport(){return{role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,icePrev:NET.icePrev,cands:NET.cands,timeline:NET.tl.slice(-20),idleMs:Math.round(performance.now()-NET.lastIn),pongAgeMs:Date.now()-NET.lastPong,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
+function netReport(){return{version:VERSION,role:isHost?'host':'guest',sec:Math.round((Date.now()-NET.t0)/1000),pingGame:isHost?G.ping:ping,ice:NET.ice,icePrev:NET.icePrev,cands:NET.cands,timeline:NET.tl.slice(-20),idleMs:Math.round(performance.now()-NET.lastIn),pongAgeMs:Date.now()-NET.lastPong,connection:NET.conn,iceState:NET.ices,dtls:NET.dtls,dataChannel:NET.dc,dcStats:NET.dcs,bufMaxKB:Math.round(Math.max.apply(null,NET.dcHist.concat([0]))/1024),peerjsQueueMax:Math.max.apply(null,NET.qHist.concat([0])),rate:NET.rate,totals:{out:NET.out,in:NET.in},snapshot:NET.snap,pingHistory:NET.pings.slice(-30),reconnects:NET.reconn,lost:NET.lost,verdict:netVerdict(),ua:navigator.userAgent}}
 function netText(){const R=NET.rate,f=o=>Object.keys(o).map(k=>k+' '+o[k][0]+'/с '+(o[k][1]/1024).toFixed(1)+'КБ/с').join(' · ')||'—',I=NET.ice,D=NET.dc,p=isHost?G.ping:ping;
  return ['РОЛЬ: '+(isHost?'хост':'гость')+' · игра: '+p+' мс','ICE: '+(I?(I.relay?'RELAY ':'direct ')+I.local+' ↔ '+I.remote+' · RTT '+I.rtt+' мс (ср. '+I.avg+') · bitrate~'+I.bitrate+' кбит/с':'—'),
  'Канал: '+(D?D.state+' · bufferedAmount '+Math.round(D.buf/1024)+' КБ · очередь PeerJS '+D.q+' · reliable='+D.reliable+' ordered='+D.ordered:'—'),'Исх: '+f(R.out)+' · пропущено при перегрузке: '+(NET.skipped||0),'Вх: '+f(R.in),
@@ -108,11 +111,14 @@ let netOn=/[?&]net=1/.test(location.search);
 function netToggle(){netOn=!netOn;$('nd').style.display=netOn?'block':'none'}
 setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
 // ---------- сеть: быстрый поток + медленное состояние по изменению ----------
-const FAST=['t','players','cust','trucks','boxes','pk','staff','van','ev','ping','money','rep'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v;
+const FAST=['t','players','cust','trucks','staff','van','ev','ping','money','rep'],SKIPK=['sal','nid','lv'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v,NETBUF=8192;
 let lastSlow='',lastSlowT=0;
-function netPush(){if(!conn||!conn.open)return;const dc=conn.dataChannel;if((dc&&dc.bufferedAmount>131072)||(conn.bufferSize||0)>2){NET.skipped=(NET.skipped||0)+1;return}
- const f={},sl={};for(const k in G)(FAST.includes(k)?f:sl)[k]=G[k];const ss=JSON.stringify(sl,RND);
- if(ss!==lastSlow||Date.now()-lastSlowT>5000){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}conn.send('F'+JSON.stringify(f,RND))}
+function netFast(){const f={};for(const k of FAST)if(G[k]!==undefined)f[k]=G[k];
+ f.players={};for(const id in G.players){const p=G.players[id];f.players[id]={id:p.id||id,x:p.x,y:p.y,z:p.z,ry:p.ry,mv:p.mv,hold:p.hold,pkh:p.pkh,inv:p.inv}}
+ f.cust=G.cust.map(c=>({id:c.id,x:c.x,z:c.z,ry:c.ry,col:c.col,st:c.st,total:c.total,pay:c.pay,given:c.given,cl:c.cl,by:c.by,bag:c.bag,wt:c.wt}));return f}
+function netSlow(){const sl={};for(const k in G){if(FAST.includes(k)||SKIPK.includes(k))continue;sl[k]=G[k]}sl.dl=Object.assign({},G.dl,{nt:0});sl.ver=VERSION;return sl}
+function netPush(){if(!conn||!conn.open)return;const dc=conn.dataChannel;if((dc&&dc.bufferedAmount>NETBUF)||(conn.bufferSize||0)>2){NET.skipped=(NET.skipped||0)+1;return}
+ const ss=JSON.stringify(netSlow(),RND);if(ss!==lastSlow||Date.now()-lastSlowT>5000){lastSlow=ss;lastSlowT=Date.now();conn.send('S'+ss)}conn.send('F'+JSON.stringify(netFast(),RND))}
 // ---------- сеть (хост = авторитет) ----------
 function mst(t){$('mst').textContent=t}
 function startHost(solo){
@@ -137,9 +143,9 @@ function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 си
  isHost=false;myId='g';P.id='g';P.x=1;
  const myPeer=peer=new Peer(undefined,peerOpts());let ok=false;
  peer.on('open',()=>{conn=peer.connect('twobiz-'+c,{reliable:true});netTap(conn);NET.reconn++;
-  conn.on('open',()=>{ok=true;NET.lastPong=Date.now();if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
-   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>65536){NET.skipped=(NET.skipped||0)+1;return}conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
-  conn.on('data',m=>{if(typeof m=='string'){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(me){P.hold=me.hold;P.pkh=me.pkh;P.inv=me.inv}}else if(m.t=='pong'){ping=Date.now()-m.ts;NET.lastPong=Date.now()}});
+  conn.on('open',()=>{ok=true;NET.lastPong=Date.now();conn.send({t:'ver',v:VERSION});if(!playing){G=newState();enter()}clearTimeout(retry);try{const sv=localStorage.getItem('twobiz-me');if(sv)conn.send({t:'hello',acc:JSON.parse(sv)})}catch(e){}$('toast').textContent='Связь установлена';
+   clearInterval(globalThis.siv);globalThis.siv=setInterval(()=>{if(conn&&conn.open){const dc=conn.dataChannel;if(dc&&dc.bufferedAmount>NETBUF){NET.skipped=(NET.skipped||0)+1;return}conn.send({t:'p',x:P.x,y:P.y,z:P.z,ry:P.ry,mv:P.mv,pg:ping,vn:(G.van&&G.van.drv==myId&&VL)?{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp}:undefined});if(++NET.pc%16==0)conn.send({t:'ping',ts:Date.now()})}},60)});
+  conn.on('data',m=>{if(typeof m=='string')onSnap(m);else if(m.t=='pong'){ping=Date.now()-m.ts;NET.lastPong=Date.now()}});
   const mine=conn;mine.on('close',()=>{if(conn===mine)lost()})});
  peer.on('error',e=>{mst('Ошибка: '+e.type);if(playing&&peer===myPeer)lost()});
  setTimeout(()=>{if(!ok&&!playing)mst('Не удалось подключиться. Проверь код')},8000)}
@@ -185,9 +191,10 @@ function handle(pid,m){
  else if(m.t=='price'){const i=m.i;if(G.price[i]!==undefined)G.price[i]=Math.max(.5,Math.min(ITEMS[i].p*3,+(G.price[i]+(m.d>0?.5:-.5)).toFixed(1)))}
  else if(m.t=='build'){const k=BK[m.k];if(!k||G.build.length>=80)return;const x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,rr=m.r&1;if(!bvalid(m.k,x,z,rr))return say('Сюда нельзя',3);if(G.money<k.cost)return say('Не хватает денег!',3);G.money-=k.cost;G.build.push({id:G.nid++,k:m.k,x,z,r:rr});say('Построено: '+k.n+' −$'+k.cost,1)}
  else if(m.t=='del'){const i=G.build.findIndex(b=>b.id==m.id);if(i<0)return;const b=G.build[i];G.money+=BK[b.k].cost;G.build.splice(i,1);say('Убрано, возврат $'+BK[b.k].cost,1)}
- else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv||p.hold||p.pkh||dist(p,v.x,v.z)>3.6)return;if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Пассажир в фургоне',1)}}
- else if(m.t=='exit'){const p=G.players[pid],v=G.van;if(!p||!p.inv)return;if(Math.abs(v.sp)>3)return say('Остановись, чтобы выйти',3);p.inv=0;p.x=v.x+Math.cos(v.ry)*2.3;p.z=v.z-Math.sin(v.ry)*2.3;p.y=0;if(v.drv==pid){v.drv=v.pas;v.pas=null;if(!v.drv)v.sp=0}else if(v.pas==pid)v.pas=null}
+ else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv||p.hold||p.pkh||dist(p,v.x,v.z)>(pid=='h'?3.6:8))return;if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Пассажир в фургоне',1)}}
+ else if(m.t=='exit'){const p=G.players[pid],v=G.van;if(!p||!p.inv)return;if(pid=='h'&&Math.abs(v.sp)>3)return say('Остановись, чтобы выйти',3);p.inv=0;p.x=v.x+Math.cos(v.ry)*2.3;p.z=v.z-Math.sin(v.ry)*2.3;p.y=0;if(v.drv==pid){v.drv=v.pas;v.pas=null;if(!v.drv)v.sp=0}else if(v.pas==pid)v.pas=null}
  else if(m.t=='pack')packOrder(pid,m.o);
+ else if(m.t=='ver'){NET.gver=m.v}
  else if(m.t=='lock')cashC(pid);
  else if(m.t=='unlock'){const c=G.cust.find(c=>c.by==pid);if(c)c.by=null}
  else if(m.t=='chg'){const c=cashC(pid);if(c&&[1,2,5,10,20,50,100].includes(m.v)&&c.given<300){c.cl.push(m.v);c.given+=m.v}}
@@ -409,7 +416,11 @@ function vanStep(dt){const v=VL,k=keys,th=Math.max(-1,Math.min(1,(k.KeyW?1:0)-(k
  const mx=Math.sin(v.ry)*v.sp*dt,mz=Math.cos(v.ry)*v.sp*dt;v.x+=mx;v.z+=mz;const bx0=v.x,bz0=v.z;collide(v,1.3);if(Math.hypot(v.x-bx0,v.z-bz0)>.02)v.sp*=.6;
  v.x=Math.max(-90,Math.min(90,v.x));v.z=Math.max(-10,Math.min(44,v.z))}
 function vanDrive(dt){const v=G.van,me=v.drv==myId;if(me){if(!drvPrev||!VL)VL={x:v.x,z:v.z,ry:v.ry,sp:v.sp};vanStep(dt);if(isHost)Object.assign(v,{x:VL.x,z:VL.z,ry:VL.ry,sp:VL.sp})}drvPrev=me;const q=me?VL:v;P.x=q.x;P.z=q.z;P.y=0;P.mv=0;engine(me?q.sp:null)}
-function exitVan(){const s=(G.van.drv==myId&&VL)?VL:G.van;if(Math.abs(s.sp)>3)return beep(200,.2,'square');P.x=s.x+Math.cos(s.ry)*2.3;P.z=s.z-Math.sin(s.ry)*2.3;P.y=0;P.inv=0;sendM({t:'exit'})}
+function exitVan(){const s=(G.van.drv==myId&&VL)?VL:G.van;if(Math.abs(s.sp)>3)return beep(200,.2,'square');P.x=s.x+Math.cos(s.ry)*2.3;P.z=s.z-Math.sin(s.ry)*2.3;P.y=0;P.inv=0;if(!isHost){P.pend=0;P.pendT=performance.now()+5000}sendM({t:'exit'})}
+function onSnap(m){Object.assign(G,JSON.parse(m.slice(1)));const me=G.players&&G.players[myId];if(!me)return;P.hold=me.hold;P.pkh=me.pkh;
+ if(P.pend===0){if(me.inv==0||performance.now()>P.pendT)P.pend=null;else return}P.inv=me.inv}
+function exitRetry(){if(!isHost&&P.pend===0&&performance.now()<P.pendT)sendM({t:'exit'})}
+setInterval(exitRetry,1500);
 function vanNear(){if(dist(P,G.van.x,G.van.z)<3.4)return'F — сесть в фургон';const rr=rearPt();if(dist(P,rr[0],rr[1])<3.2)return'E — двери / груз фургона';if(dist(P,DESK[0],DESK[1])<3.2)return'E — взять пакет · P — телефон: собрать заказ';return null}
 function openPh(){if(!phInit){phInit=1;$('ph').addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;e.preventDefault();beep(600,.05);if(b.dataset.x)closePC();else if(b.dataset.pack)sendM({t:'pack',o:+b.dataset.pack})})}ui=true;document.exitPointerLock();$('ph').style.display='block';renderPh(1)}
 function renderPh(f){if($('ph').style.display!='block')return;const D=G.dl,sig=JSON.stringify([D,G.van.cargo.length,myM(),Math.floor(G.t),G.shelves.map(q=>q.n)]);if(!f&&sig==phSig)return;phSig=sig;
@@ -501,6 +512,7 @@ function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;
  if(P.mv&&P.y<.05){stepT-=dt;if(stepT<=0){stepT=P.mv>5?.28:.4;beep(90,.04,'square')}}
  const lv=LVL(),online=Object.keys(G.players).length;
  $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · 🚐 ${G.van.cargo.length}/8 · 📦 ${G.dl.rating.toFixed(1)} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+pingTxt(G.ping):'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+pingTxt(ping):'🔴 Нет связи')}`;
+ $('vwarn').textContent=isHost?(NET.gver&&NET.gver!=VERSION?'⚠ Версия брата: '+NET.gver+' (у вас '+VERSION+')':''):(G.ver&&G.ver!=VERSION?'⚠ Версия хоста: '+G.ver+' (у вас '+VERSION+')':'');
  let h='WASD · Shift · Space · V — вид · клик — мышь';
  if(P.hold){const b=G.boxes.find(b=>b.id==P.hold);h='E — положить: на полку «'+(b?ITEMS[b.it].n:'?')+'» / передать брату / бросить'}
  else if(P.inv)h='Фургон: WASD · Space тормоз · H сигнал · F выйти';else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
