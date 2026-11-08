@@ -19,6 +19,10 @@ input{padding:10px;border-radius:8px;border:0;width:120px;text-transform:upperca
 #pc{position:fixed;inset:6% 18%;background:#101820f2;border-radius:12px;padding:18px;z-index:4;display:none;overflow:auto}
 #pc table{width:100%;border-collapse:collapse;margin:6px 0}#pc td,#pc th{padding:5px;border-bottom:1px solid #fff2;text-align:left}
 select{padding:7px;border-radius:6px}#cash{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#101820f2;border-radius:12px;padding:18px;z-index:4;display:none;min-width:320px}#cash button{margin:3px;min-width:44px}
+#bp{position:fixed;left:8px;bottom:70px;width:min(360px,94vw);max-height:52vh;overflow:auto;background:#101820ee;border-radius:12px;padding:8px;z-index:3;display:none;font-size:13px}
+#bp .bh{display:flex;align-items:center;gap:8px;margin-bottom:4px}#bp .bh span{flex:1;text-align:right}#bp button{margin:2px;padding:6px 10px;font-size:13px}#bp .bt{display:flex;flex-wrap:wrap}#bp .on{background:#e9c46a;box-shadow:0 0 0 2px #fff}#bp .ok{background:#2a9d8f;color:#fff}
+#bp .bi{display:grid;grid-template-columns:18px 1fr auto;gap:2px 8px;width:100%;text-align:left;background:#ffffff14;color:#fff;align-items:center}#bp .bi i{width:16px;height:16px;border-radius:4px}#bp .bi em{grid-column:2/4;font-size:11px;opacity:.7;font-style:normal;font-weight:400}#bp .bi.on{background:#e9c46a55}#bp .bn{padding:4px 2px}
+.touch #bp{left:auto;right:8px;top:116px;bottom:auto;width:min(300px,48vw);max-height:46vh}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="menu"><h1>TWO BUSINESS</h1><div id="ver"></div><div>Кооперативный бизнес-симулятор: магазин с нуля для двоих</div>
@@ -32,14 +36,15 @@ select{padding:7px;border-radius:6px}#cash{position:fixed;left:50%;top:50%;trans
 <div id="pc"><div style="display:flex;justify-content:space-between"><h2>💻 Бизнес-компьютер</h2><button onpointerdown="closePC()">✕ Закрыть</button></div>
 <div id="pinfo"></div><h3>Заказ товара</h3>
 <select id="oi"></select> <select id="oq"></select> <select id="os"></select> <button id="ob" onpointerdown="doOrder()">Заказать и оплатить</button><div id="pord"></div></div>
-<div id="cash"></div><div id="nd"><pre id="ndt"></pre><button id="ndb">Копировать отчёт</button></div><div id="st"></div><div id="ph"></div><div id="tc"><div id="jk"></div><div id="jd"></div>
+<div id="cash"></div><div id="nd"><pre id="ndt"></pre><button id="ndb">Копировать отчёт</button></div><div id="st"></div><div id="bp"></div><div id="ph"></div><div id="tc"><div id="jk"></div><div id="jd"></div>
 <div class="tb" style="right:16px;bottom:24px;width:88px;height:88px" data-k="KeyE">E</div><div class="tb" style="right:120px;bottom:24px" data-h="Space">⤒</div>
 <div class="tb" style="right:120px;bottom:100px" data-t="run">🏃</div><div class="tb" style="right:16px;bottom:126px;width:52px;height:52px" data-k="KeyB">🔨</div><div class="tb" style="right:16px;bottom:190px;width:52px;height:52px" data-k="KeyV">👁</div><div class="tb" style="right:16px;bottom:254px;width:52px;height:52px" data-k="KeyY">👕</div><div class="tb" style="right:80px;bottom:254px;width:52px;height:52px" data-k="KeyF">🚐</div><div class="tb" style="right:80px;bottom:190px;width:52px;height:52px" data-k="KeyP">📱</div><div class="tb" style="right:80px;bottom:318px;width:52px;height:52px" data-k="KeyN">📶</div>
-<div id="tb2"><div class="tb" style="left:16px;bottom:170px;width:96px;border-radius:16px" data-f="place">Поставить</div><div class="tb" style="left:124px;bottom:170px;width:52px;height:52px" data-k="KeyR">R</div><div class="tb" style="left:184px;bottom:170px;width:52px;height:52px" data-k="KeyX">X</div><div class="tb" style="left:244px;bottom:170px;width:52px;height:52px" data-f="next">▶</div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<div id="tb2"><div class="tb" style="left:16px;bottom:170px;width:88px;height:88px;border-radius:16px" data-b="place">✔</div><div class="tb" style="left:112px;bottom:170px;width:52px;height:52px" data-b="rot">⟳</div><div class="tb" style="left:172px;bottom:170px;width:52px;height:52px" data-b="move">✋</div><div class="tb" style="left:232px;bottom:170px;width:52px;height:52px" data-b="sell">🗑</div><div class="tb" style="left:112px;bottom:234px;width:52px;height:52px" data-b="near">−</div><div class="tb" style="left:172px;bottom:234px;width:52px;height:52px" data-b="far">+</div><div class="tb" style="left:232px;bottom:234px;width:52px;height:52px" data-b="cancel">✕</div></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script>
 const T=THREE,$=id=>document.getElementById(id);
-const ITEMS=[{n:'Молоко',c:2,p:4,col:0xffffff},{n:'Хлеб',c:1.5,p:3,col:0xd9a066},{n:'Яблоки',c:1,p:2.5,col:0xe63946},{n:'Чипсы',c:2.5,p:5,col:0xffd166}];
+const ITEMS=[{n:'Молоко',c:2,p:4,col:0xffffff,t:1,e:'🥛'},{n:'Хлеб',c:1.5,p:3,col:0xd9a066,t:0,e:'🍞'},{n:'Яблоки',c:1,p:2.5,col:0xe63946,t:0,e:'🍎'},{n:'Чипсы',c:2.5,p:5,col:0xffd166,t:0,e:'🥔'},
+{n:'Йогурт',c:3,p:6.5,col:0xf4a6c0,t:1,e:'🥣',sh:'cup'},{n:'Мороженое',c:3.5,p:7.5,col:0x9be7ff,t:2,e:'🍦',sh:'tub'}];
 const SUP=[{n:'ЭкоОпт (дёшево, 25с)',m:1,fee:15,t:25,lv:1},{n:'БыстроПлюс (8с)',m:1.2,fee:40,t:8,lv:1},{n:'МегаОпт −15% (40с, ур.3)',m:.85,fee:80,t:40,lv:3}];
 const LV=[0,150,500,1200,3000,8000],CAP=18,BOXN=6;
 const SH=[[-5.5,-4.8],[-2,-4.8],[1.5,-4.8],[5,-4.8]],REG=[5.5,1.5],PCP=[-6.4,2];
@@ -71,7 +76,7 @@ const inStoreP=p=>p.x>10.5&&p.x<23.5&&Math.abs(p.z)<6.5;
 // ---------- состояние ----------
 let G,isHost=true,myId='h',peer=null,conn=null,playing=false,ui=false,fp=false,code='',lastEv=0,roomCode='';
 const P={x:-1,y:0,z:9,ry:0,vy:0,mv:0,hold:null};
-function newState(){return{money:300,rep:10,rev:0,price:ITEMS.map(i=>i.p),cashier:false,shelves:ITEMS.map((_,i)=>({it:i,n:0})),boxes:[],trucks:[],orders:[],cust:[],build:[],staff:null,acc:{h:newAcc(),g:newAcc()},van:{x:-12,z:14.5,ry:Math.PI/2,sp:0,drv:null,pas:null,doors:0,cargo:[],model:'small',cond:100,owned:false},diff:1,pk:[],dl:{orders:[],hist:[],rating:4.5,earn:0,seq:1,nt:20},players:{},nid:1,ev:{id:0},t:0,ping:0,sal:0}}
+function newState(){return{money:300,rep:10,rev:0,price:ITEMS.map(i=>i.p),cashier:false,shelves:ITEMS.map((_,i)=>({it:i,n:0})),boxes:[],trucks:[],orders:[],cust:[],build:[],staff:null,acc:{h:newAcc(),g:newAcc()},van:{x:-12,z:14.5,ry:Math.PI/2,sp:0,drv:null,pas:null,doors:0,cargo:[],model:'small',cond:100,owned:false},diff:1,exp:0,mess:0,attr:40,ab:[0,0,0],pk:[],dl:{orders:[],hist:[],rating:4.5,earn:0,seq:1,nt:20},players:{},nid:1,ev:{id:0},t:0,ping:0,sal:0}}
 function LVL(){let l=1;LV.forEach((v,i)=>{if(G.rev>=v)l=i+1});return l}
 function say(text,sfx){G.ev={id:++G.nid,text,sfx:sfx||0}}
 const dist=(p,x,z)=>Math.hypot(p.x-x,p.z-z);
@@ -80,7 +85,7 @@ function collide(p,rd=.4){for(const c of ALLC.concat(bcols())){const dx=p.x-c.x,
 let AC;function beep(f,d=.1,ty='sine'){try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.value=.07;g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
 const SFX=[null,()=>beep(520,.12),()=>{beep(880,.08);setTimeout(()=>beep(1175,.12),90)},()=>beep(300,.15,'square')];
 // ---------- версия ----------
-const VERSION='v13 · 07.11.2026',CHANGES=['Баланс: покупателей в одиночной игре на ~40% меньше, настройка потока (спокойный/обычный/высокий), часы и час-пик','Автосалон: 4 модели транспорта (цена, места, скорость, топливо, износ), обслуживание — компьютер (E)','Доставка: +$20 за заказ, можно принять или отклонить заказ, клиент отменяет просроченные','Сеть v12 не тронута'];
+const VERSION='v14 · 08.11.2026',CHANGES=['Строительство: каталог (B), превью, поворот на 4 стороны, перемещение, продажа 60%, замена','Оборудование: полки, стеллажи, холодильник, морозилка, склад, мусорка, декор','Дополнительные кассы с очередями и кассирами','Новые товары: Йогурт и Мороженое','Привлекательность магазина и расширение помещения','Сеть v12 не тронута'];
 $('ver').innerHTML='<b style="font-size:20px;background:#e63946;padding:4px 12px;border-radius:8px">'+VERSION+'</b><div style="font-size:13px;opacity:.9;margin-top:6px">Что нового: '+CHANGES.join(' · ')+'</div>';$('vtag').textContent=VERSION;
 // ---------- сетевая диагностика (клавиша N или ?net=1) ----------
 const NET={t0:Date.now(),out:{},in:{},rate:{out:{},in:{}},snap:{n:0,last:0,gap:0,maxGap:0,size:0,max:0},ice:null,dc:null,dcs:[],dcHist:[],qHist:[],reconn:0,pc:0,lost:0,tl:[],lastIn:0,lastPong:Date.now(),icePrev:null,cands:null,err:null,pings:[]};
@@ -120,7 +125,7 @@ let netOn=/[?&]net=1/.test(location.search);
 function netToggle(){netOn=!netOn;$('nd').style.display=netOn?'block':'none'}
 setInterval(()=>{if(netOn&&playing)$('ndt').textContent=netText()},500);
 // ---------- сеть: быстрый поток + медленное состояние по изменению ----------
-const FAST=['t','players','cust','trucks','staff','van','ev','ping','money','rep'],SKIPK=['sal','nid','lv'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v,NETBUF=8192;
+const FAST=['t','players','cust','trucks','staff','van','ev','ping','money','rep'],SKIPK=['sal','nid','lv','mess'],RND=(k,v)=>typeof v=='number'&&!Number.isInteger(v)?Math.round(v*100)/100:v,NETBUF=8192;
 let lastSlow='',lastSlowT=0;
 const SID=Math.random().toString(36).slice(2,7);
 function netFast(){const f={};for(const k of FAST)if(G[k]!==undefined)f[k]=G[k];
@@ -142,7 +147,7 @@ let bgW=null;function bgStart(){if(bgW||typeof Worker=='undefined'||typeof Blob=
 function mst(t){$('mst').textContent=t}
 function startHost(solo){
  try{G=JSON.parse(localStorage.getItem('twobiz1'));}catch(e){G=null}
- const base=newState();if(G){Object.assign(base,{money:G.money,rev:G.rev,rep:G.rep,price:G.price,cashier:G.cashier,shelves:G.shelves,build:G.build||[],staff:G.staff?{x:-7,y:0,z:-2,ry:0,mv:0,hold:null}:null,acc:mergeAcc(G.acc),dl:G.dl||base.dl,pk:G.pk||[],van:G.van?Object.assign(base.van,{owned:true},G.van,{drv:null,pas:null,sp:0}):base.van,diff:G.diff===undefined?1:G.diff})}G=base;
+ const base=newState();if(G){Object.assign(base,{money:G.money,rev:G.rev,rep:G.rep,price:ITEMS.map((it,i)=>G.price&&typeof G.price[i]=='number'?G.price[i]:it.p),cashier:G.cashier,shelves:ITEMS.map((_,i)=>(G.shelves&&G.shelves[i])||{it:i,n:0}),build:(G.build||[]).filter(b=>BK[b.k]).map(b=>({id:b.id,k:b.k,x:b.x,z:b.z,r:(b.r|0)&3,it:(b.it===undefined||b.it===null)?-1:b.it,n:Math.max(0,Math.min(BK[b.k].cap||0,+b.n||0)),cs:b.cs&&BK[b.k].kind=='reg'?1:0})),exp:Math.max(0,Math.min(EXP.length,G.exp|0)),mess:+G.mess||0,staff:G.staff?{x:-7,y:0,z:-2,ry:0,mv:0,hold:null}:null,acc:mergeAcc(G.acc),dl:G.dl||base.dl,pk:G.pk||[],van:G.van?Object.assign(base.van,{owned:true},G.van,{drv:null,pas:null,sp:0}):base.van,diff:G.diff===undefined?1:G.diff})}G=base;
  isHost=true;myId='h';G.players={h:P};P.id='h';G.build.concat(G.pk,G.dl.orders,G.van.cargo).forEach(b=>G.nid=Math.max(G.nid,b.id+1));enter();
  if(solo){roomCode='';return}
  roomCode=Math.random().toString(36).slice(2,6).toUpperCase();
@@ -155,7 +160,7 @@ function startHost(solo){
  setInterval(netPush,100);bgStart();
  setInterval(save,10000);
 }
-function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,staff:G.staff?1:0,acc:G.acc,diff:G.diff,pk:G.pk,van:G.van,dl:Object.assign({},G.dl,{orders:G.dl.orders.map(o=>Object.assign({},o,{due:o.due-G.t,at:o.at-G.t,end:o.end?o.end-G.t:undefined}))})}))}
+function save(){const{money,rev,rep,price,cashier,shelves}=G;localStorage.setItem('twobiz1',JSON.stringify({money,rev,rep,price,cashier,shelves,build:G.build,exp:G.exp,mess:+(G.mess||0).toFixed(1),staff:G.staff?1:0,acc:G.acc,diff:G.diff,pk:G.pk,van:G.van,dl:Object.assign({},G.dl,{orders:G.dl.orders.map(o=>Object.assign({},o,{due:o.due-G.t,at:o.at-G.t,end:o.end?o.end-G.t:undefined}))})}))}
 let retry=null;
 function joinGame(c){if(!c||c.length<4)return mst('Введи код из 4 символов');code=c;mst('Подключаемся...');
  const old=peer;conn=null;if(old)try{old.destroy()}catch(e){}
@@ -183,8 +188,8 @@ function newOrder(){const D=G.dl,ks=Object.keys(DTY);let tot=0;ks.forEach(k=>tot
  const pay=Math.round(items.reduce((a,x)=>a+x[1]*G.price[x[0]],0)*(Y.mul||1)),o={id:G.nid++,n:D.seq++,type:tk,addr:Math.floor(Math.random()*HOUSES.length),items,bags:Y.bags,pay,fee:20,due:G.t+Y.t,at:G.t,st:'offer',ofT:G.t+120,dl:0};
  D.orders.push(o);say('📱 Новый заказ #'+o.n+' ('+Y.n+'): '+HOUSES[o.addr].s+', '+HOUSES[o.addr].n+' — примите в телефоне (P)',2);return o}
 function packOrder(pid,oid){const p=G.players[pid],o=G.dl.orders.find(o=>o.id==oid);if(!p||!o||o.st!='new')return;if(dist(p,DESK[0],DESK[1])>3.4)return say('Подойди к столу сборки заказов',3);
- const miss=o.items.filter(x=>G.shelves[x[0]].n<x[1]);if(miss.length)return say('Не хватает: '+miss.map(x=>ITEMS[x[0]].n).join(', '),3);
- o.items.forEach(x=>G.shelves[x[0]].n-=x[1]);o.st='packed';for(let k=0;k<o.bags;k++)G.pk.push({id:G.nid++,o:o.id,x:DESK[0]+1.1,y:.25,z:DESK[1]-.7+k*.7});say('Заказ #'+o.n+' собран: пакетов '+o.bags,1)}
+ const miss=o.items.filter(x=>stockOf(x[0])<x[1]);if(miss.length)return say('Не хватает: '+miss.map(x=>ITEMS[x[0]].n).join(', '),3);
+ o.items.forEach(x=>takeStock(x[0],x[1]));o.st='packed';for(let k=0;k<o.bags;k++)G.pk.push({id:G.nid++,o:o.id,x:DESK[0]+1.1,y:.25,z:DESK[1]-.7+k*.7});say('Заказ #'+o.n+' собран: пакетов '+o.bags,1)}
 function rearPt(){const v=G.van,k=2.6*(VM[v.model]||VM.small).sz;return[v.x-Math.sin(v.ry)*k,v.z-Math.cos(v.ry)*k]}
 function actDl(pid,p){if(p.hold)return false;const v=G.van,rr=rearPt(),dR=dist(p,rr[0],rr[1]);
  if(p.pkh){const k=G.pk.find(k=>k.id==p.pkh);if(!k){p.pkh=null;return true}const o=G.dl.orders.find(o=>o.id==k.o);
@@ -212,8 +217,16 @@ function handle(pid,m){
  else if(m.t=='order'){const s=SUP[m.s],it=ITEMS[m.i];if(!s||!it||LVL()<s.lv)return;const q=Math.max(1,Math.min(5,m.q|0));const cost=+(it.c*BOXN*q*s.m+s.fee).toFixed(1);
   if(G.money<cost)return say('Не хватает денег!',3);G.money=+(G.money-cost).toFixed(2);G.orders.push({id:G.nid++,it:m.i,q,st:'wait',eta:G.t+s.t,cost});if(G.orders.length>8)G.orders.shift();say('Заказ оплачен: −$'+cost,1)}
  else if(m.t=='price'){const i=m.i;if(G.price[i]!==undefined)G.price[i]=Math.max(.5,Math.min(ITEMS[i].p*3,+(G.price[i]+(m.d>0?.5:-.5)).toFixed(1)))}
- else if(m.t=='build'){const k=BK[m.k];if(!k||G.build.length>=80)return;const x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,rr=m.r&1;if(!bvalid(m.k,x,z,rr))return say('Сюда нельзя',3);if(G.money<k.cost)return say('Не хватает денег!',3);G.money-=k.cost;G.build.push({id:G.nid++,k:m.k,x,z,r:rr});say('Построено: '+k.n+' −$'+k.cost,1)}
- else if(m.t=='del'){const i=G.build.findIndex(b=>b.id==m.id);if(i<0)return;const b=G.build[i];G.money+=BK[b.k].cost;G.build.splice(i,1);say('Убрано, возврат $'+BK[b.k].cost,1)}
+ else if(m.t=='build'){const k=BK[m.k];if(!k||!G.players[pid])return;const rr=(m.r|0)&3,x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,ex=m.rep?bobj(m.rep):null;if(m.rep&&!ex)return;if(!Number.isFinite(x)||!Number.isFinite(z))return;
+  if(G.build.length-(ex?1:0)>=80)return say('Достигнут лимит объектов (80)',3);if(!bvalid(m.k,x,z,rr,ex?ex.id:0))return say('Сюда нельзя',3);
+  const back=ex?Math.round(BK[ex.k].cost*SELLK):0;if(G.money+back<k.cost)return say('Не хватает денег: нужно $'+(k.cost-back),3);
+  if(ex)dropBuild(ex);G.money=+(G.money-k.cost+back).toFixed(2);G.build.push({id:G.nid++,k:m.k,x,z,r:rr,it:-1,n:0,cs:0});say((ex?'Заменено на: ':'Построено: ')+k.n+' −$'+(k.cost-back),1)}
+ else if(m.t=='del'){const b=bobj(m.id);if(!b)return;const g=Math.round(BK[b.k].cost*SELLK);dropBuild(b);G.money=+(G.money+g).toFixed(2);say('Продано: '+BK[b.k].n+', возврат $'+g,1)}
+ else if(m.t=='bmove'){const b=bobj(m.id);if(!b)return;const x=Math.round(m.x*2)/2,z=Math.round(m.z*2)/2,rr=(m.r|0)&3;if(!Number.isFinite(x)||!Number.isFinite(z))return;if(!bvalid(b.k,x,z,rr,b.id))return say('Сюда нельзя',3);b.x=x;b.z=z;b.r=rr;say('Перемещено: '+BK[b.k].n,1)}
+ else if(m.t=='brot'){const b=bobj(m.id);if(!b)return;const rr=(b.r+1)&3;if(!bvalid(b.k,b.x,b.z,rr,b.id))return say('Не хватает места для поворота',3);b.r=rr}
+ else if(m.t=='hirereg'){const b=bobj(m.id);if(!b||BK[b.k].kind!='reg'||b.cs)return;if(LVL()<2||G.money<REGHIRE)return say('Нужен ур.2 и $'+REGHIRE,3);G.money-=REGHIRE;b.cs=1;say('Кассир нанят на кассу ($'+REGPAY+'/мин)',2)}
+ else if(m.t=='firereg'){const b=bobj(m.id);if(b&&b.cs){b.cs=0;say('Кассир уволен',1)}}
+ else if(m.t=='exp'){const e=EXP[G.exp|0];if(!e)return say('Больше расширять нечего',3);if(LVL()<e.lv)return say('Нужен уровень '+e.lv,3);if(G.money<e.cost)return say('Не хватает денег: $'+e.cost,3);G.money=+(G.money-e.cost).toFixed(2);G.exp=(G.exp|0)+1;say('Магазин расширен: '+e.n,2)}
  else if(m.t=='drive'){const p=G.players[pid],v=G.van;if(!p||p.inv)return;if(!v.owned)return say('Фургон не куплен: компьютер (E) → Автосалон',3);if(p.hold||p.pkh)return say('Сначала положи груз из рук',3);if(dist(p,v.x,v.z)>(pid=='h'?3.6:8))return say('Подойди ближе к фургону',3);if(!v.drv){v.drv=pid;p.inv=1;say('За рулём фургона',1)}else if(!v.pas){v.pas=pid;p.inv=1;say('Вы пассажир: машину ведёт другой игрок',1)}else say('В фургоне нет мест',3)}
  else if(m.t=='exit'){const p=G.players[pid],v=G.van;if(!p||!p.inv)return;if(pid=='h'&&Math.abs(v.sp)>3)return say('Остановись, чтобы выйти',3);p.inv=0;p.x=v.x+Math.cos(v.ry)*2.3;p.z=v.z-Math.sin(v.ry)*2.3;p.y=0;if(v.drv==pid){v.drv=v.pas;v.pas=null;if(!v.drv)v.sp=0}else if(v.pas==pid)v.pas=null}
  else if(m.t=='pack')packOrder(pid,m.o);
@@ -245,16 +258,22 @@ function held(){const s=new Set(Object.values(G.players).map(p=>p.hold));if(G.st
 function act(pid){const p=G.players[pid];if(!p)return;if(p.inv)return;if(actDl(pid,p))return;
  if(p.hold){const b=G.boxes.find(b=>b.id==p.hold);if(!b){p.hold=null;return}
   const si=SH.findIndex(s=>dist(p,s[0],s[1]+1.2)<2.4);
-  if(si>=0){if(b.it!=si)return say('Эта полка для: '+ITEMS[si].n,3);const sh=G.shelves[si];if(sh.n+BOXN>CAP)return say('Полка полна',3);sh.n+=BOXN;if(G.acc[pid])G.acc[pid].m+=1;G.boxes=G.boxes.filter(x=>x!=b);p.hold=null;return say('Товар выложен на полку',1)}
+  if(si>=0&&(b.it==si||!nearBuild(p,['shelf','store']))){if(b.it!=si)return say('Эта полка для: '+ITEMS[si].n,3);const sh=G.shelves[si];if(sh.n+BOXN>CAP)return say('Полка полна',3);sh.n+=BOXN;if(G.acc[pid])G.acc[pid].m+=1;G.boxes=G.boxes.filter(x=>x!=b);p.hold=null;return say('Товар выложен на полку',1)}
+  const eb=nearBuild(p,['shelf','store']);if(eb){const K=BK[eb.k],amt=b.n||BOXN,t=ITEMS[b.it].t;
+   if(K.kind=='shelf'&&t!=K.t)return say('«'+K.n+'» — '+TN[K.t]+'. «'+ITEMS[b.it].n+'» — '+TN[t],3);
+   if(eb.n>0&&ITEMS[eb.it]&&eb.it!=b.it)return say('Здесь лежит другой товар: '+ITEMS[eb.it].n,3);
+   if(eb.n+amt>K.cap)return say('Заполнено ('+K.cap+' шт.)',3);
+   eb.it=b.it;eb.n+=amt;if(G.acc[pid])G.acc[pid].m+=1;G.boxes=G.boxes.filter(x=>x!=b);p.hold=null;return say(K.kind=='store'?'Коробка убрана на склад':'Товар выложен: '+K.n,1)}
   for(const oid in G.players){const o=G.players[oid];if(oid!=pid&&!o.hold&&dist(p,o.x,o.z)<2.4){o.hold=b.id;p.hold=null;return say('Коробка передана',1)}}
   b.x=p.x+Math.sin(p.ry)*.9;b.z=p.z+Math.cos(p.ry)*.9;b.y=.3;p.hold=null;return}
  const w=G.cust.find(c=>c.st=='wait');if(w&&dist(p,REG[0],3)<2.8)return;
  const hs=held();let best=null,bd=2.2;for(const b of G.boxes){if(hs.has(b.id))continue;const d=dist(p,b.x,b.z);if(d<bd){bd=d;best=b}}
- if(best){p.hold=best.id;say('Коробка: '+ITEMS[best.it].n,1)}}
-function serve(c,pid){if(pid&&G.acc[pid])G.acc[pid].m+=Math.max(1,Math.round(c.total*.1));c.by=null;G.money=+(G.money+c.total).toFixed(2);G.rev+=c.total;G.rep=Math.min(100,G.rep+1);say('Продажа +$'+c.total.toFixed(1),2);c.st='go';c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}
+ if(best){p.hold=best.id;say('Коробка: '+ITEMS[best.it].n,1)}
+ else{const sr=nearBuild(p,['store']);if(sr&&sr.n>0&&ITEMS[sr.it]){const q=Math.min(BOXN,sr.n),id=G.nid++;G.boxes.push({id,it:sr.it,n:q,x:p.x,y:.3,z:p.z});sr.n-=q;p.hold=id;say('Коробка со склада: '+ITEMS[sr.it].n,1)}}}
+function serve(c,pid){if(pid&&G.acc[pid])G.acc[pid].m+=Math.max(1,Math.round(c.total*.1));c.by=null;G.money=+(G.money+c.total).toFixed(2);G.rev+=c.total;G.rep=Math.min(100,G.rep+1+(G.attr>70?.2:0));G.mess=Math.min(40,(G.mess||0)+.4);say('Продажа +$'+c.total.toFixed(1),2);c.st='go';c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}
 // ---------- симуляция (только хост) ----------
 let spT=5;
-const NG={x0:-10,z0:-7,w:49,h:45,s:.5},NS=new WeakMap;let NAV=null,navT=0;
+const NG={x0:-14,z0:-15,w:57,h:61,s:.5},NS=new WeakMap;let NAV=null,navT=0;
 function blockedMap(){const m=new Uint8Array(NG.w*NG.h),add=(c,f)=>{const i0=Math.max(0,Math.floor((c.x-c.w/2-f-NG.x0)/NG.s)),i1=Math.min(NG.w-1,Math.floor((c.x+c.w/2+f-NG.x0)/NG.s)),j0=Math.max(0,Math.floor((c.z-c.d/2-f-NG.z0)/NG.s)),j1=Math.min(NG.h-1,Math.floor((c.z+c.d/2+f-NG.z0)/NG.s));for(let j=j0;j<=j1;j++)for(let i=i0;i<=i1;i++)m[j*NG.w+i]=1};
  ALLC.concat(bcols()).forEach(c=>add(c,.45));const hs=held();G.boxes.forEach(b=>{if(!hs.has(b.id))add({x:b.x,z:b.z,w:.7,d:.7},.25)});return m}
 function findPath(x,z,tx,tz){if(!NAV)NAV=blockedMap();const W=NG.w,H=NG.h,S=NG.s;
@@ -277,35 +296,41 @@ function walkTo(o,tx,tz,sp,dt){let s=NS.get(o);if(!s){s={p:[],gx:1e9,gz:1e9,rp:0
 function staffTick(dt){const w=G.staff,hs=held();let tx,tz;
  if(w.hold){const b=G.boxes.find(b=>b.id==w.hold);if(!b){w.hold=null;return}const s=SH[b.it];tx=s[0];tz=s[1]+1.4;
   if(Math.hypot(w.x-tx,w.z-tz)<.5){const sh=G.shelves[b.it];if(sh.n+BOXN<=CAP){sh.n+=BOXN;G.boxes=G.boxes.filter(x=>x!=b)}else{b.x=w.x;b.z=w.z;b.y=.3}w.hold=null;return}}
- else{let best=null,bd=1e9;for(const b of G.boxes){if(hs.has(b.id)||G.shelves[b.it].n+BOXN>CAP)continue;const d=Math.hypot(w.x-b.x,w.z-b.z);if(d<bd){bd=d;best=b}}
+ else{let best=null,bd=1e9;for(const b of G.boxes){if(hs.has(b.id)||b.it>=NIT||G.shelves[b.it].n+BOXN>CAP)continue;const d=Math.hypot(w.x-b.x,w.z-b.z);if(d<bd){bd=d;best=b}}
   if(!best){tx=-7;tz=-2}else{tx=best.x;tz=best.z;if(bd<.6){w.hold=best.id;return}}}
  walkTo(w,tx,tz,2.6,dt)}
 function hourNow(){return((9*60+G.t*3)%1440)/60}
 function clockTxt(){const m=Math.floor((9*60+G.t*3)%1440);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
 function flowMul(){const h=hourNow(),tod=h<8?.3:h<11?.9:h<14?1.2:h<17?.9:h<20?1.2:h<22?.6:.3,coop=Object.keys(G.players).length>=2;
- return(coop?1:.6)*[.75,1,1.3][G.diff===undefined?1:G.diff]*tod*(1+Math.min(.5,G.build.length*.02+(G.cashier?.1:0)+(G.staff?.1:0)))*(.85+Math.min(100,G.rep)/100*.3)}
-function tick(dt){G.t+=dt;navT-=dt;if(navT<=0||!NAV){NAV=blockedMap();navT=.4}for(const c of G.cust)if(c.by&&(!G.players[c.by]||dist(G.players[c.by],REG[0],3)>4.5))c.by=null;dlTick(dt);if(G.staff)staffTick(dt);
+ return(coop?1:.6)*[.75,1,1.3][G.diff===undefined?1:G.diff]*tod*(1+Math.min(.5,(G.cashier?.1:0)+(G.staff?.1:0)))*(1+((G.attr==null?40:G.attr)-36)/100*.25)*(.85+Math.min(100,G.rep)/100*.3)}
+function tick(dt){G.t+=dt;attrT-=dt;if(attrT<=0){attrT=1;attrCalc()}navT-=dt;if(navT<=0||!NAV){NAV=blockedMap();navT=.4}for(const c of G.cust)if(c.by&&(!G.players[c.by]||dist(G.players[c.by],REG[0],3)>4.5))c.by=null;dlTick(dt);if(G.staff)staffTick(dt);
  for(const o of G.orders)if(o.st=='wait'&&G.t>=o.eta){o.st='way';G.trucks.push({id:G.nid++,x:-45,z:16,st:'in',o:o.id,it:o.it,q:o.q,w:0});say('Грузовик выехал к вам!',1)}
  for(const t of G.trucks){if(t.st=='in'){t.x+=9*dt;if(t.x>=12){t.x=12;t.st='stop';const o=G.orders.find(o=>o.id==t.o);if(o)o.st='done';
    for(let k=0;k<t.q;k++)G.boxes.push({id:G.nid++,it:t.it,n:BOXN,x:8+(k%4)*1.1,y:.3,z:11-(k/4|0)*1.1});say('Грузовик приехал! Разгружай у жёлтой зоны',2)}}
   else if(t.st=='stop'){t.w+=dt;if(t.w>30)t.st='out'}else t.x+=9*dt}
  G.trucks=G.trucks.filter(t=>t.x<60);
- G.sal+=dt;if(G.sal>60){G.sal=0;if(G.staff){if(G.money>=20)G.money-=20;else{G.staff=null;say('Грузчик уволен: нет денег',3)}}if(G.cashier){if(G.money>=15)G.money-=15;else{G.cashier=false;say('Нечем платить кассиру — уволен',3)}}}
+ G.sal+=dt;if(G.sal>60){G.sal=0;if(G.staff){if(G.money>=20)G.money-=20;else{G.staff=null;say('Грузчик уволен: нет денег',3)}}if(G.cashier){if(G.money>=15)G.money-=15;else{G.cashier=false;say('Нечем платить кассиру — уволен',3)}}for(const b of G.build)if(b.cs){if(G.money>=REGPAY)G.money-=REGPAY;else{b.cs=0;say('Нечем платить кассиру кассы — уволен',3)}}}
  spT-=dt;const lv=LVL();if(G.lv&&lv>G.lv){for(const k in G.acc)G.acc[k].m+=50;say('Уровень '+lv+'! Каждому +$50 личных',2)}G.lv=lv;if(spT<=0){spT=Math.max(3,12-lv*1.5-G.rep/15)*(.7+Math.random()*.6)/flowMul();if(G.cust.length<Math.max(2,Math.round((3+lv*2)*Math.min(1.2,Math.max(.6,flowMul()/(Object.keys(G.players).length>=2?1:.6))))))spawnCust()}
- const q=G.cust.filter(c=>c.st=='queue'||c.st=='wait').sort((a,b)=>a.qt-b.qt);
+ const qs={};for(const c of G.cust)if(c.st=='queue'||c.st=='wait'){if(c.rg&&c.rg!='m'){const o=bobj(c.rg);if(!o||!o.cs)c.rg='m'}(qs[c.rg||'m']=qs[c.rg||'m']||[]).push(c)}
+ for(const k in qs)qs[k].sort((a,b)=>a.qt-b.qt);
  for(const c of G.cust){let tx,tz;
-  if(c.st=='queue'||c.st=='wait'){const i=q.indexOf(c);tx=REG[0];tz=3+Math.min(i,2)*1.0}else{c.sw=(c.sw||0)+dt;if(c.sw>25){c.sw=0;c.steps.shift();if(!c.steps.length)c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}const s=c.steps[0];if(!s)continue;tx=s.x;tz=s.z}
-  if(tx!==undefined){const d=walkTo(c,tx,tz,c.sp,dt);if(d<=.15){c.x=tx;c.z=tz;
-    if(c.st=='queue'||c.st=='wait'){if(q.indexOf(c)==0){c.st='wait';if(!c.pay){c.wt=G.t;const a=[c.total,Math.ceil(c.total/10)*10,Math.ceil(c.total/50)*50,Math.ceil(c.total/100)*100];c.pay=a[Math.random()*4|0]}if(G.cashier&&!c.by){c.w+=dt;if(c.w>1.8)serve(c)}}}
+  if(c.st=='queue'||c.st=='wait'){const rg=c.rg||'m',i=qs[rg].indexOf(c);
+   if(c.st=='queue'&&i>0&&G.t-c.qt>PAT){G.rep=Math.max(0,G.rep-1);c.st='go';c.by=null;c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}];say('Покупатель устал ждать и ушёл',3);continue}
+   if(rg=='m'){tx=REG[0];tz=3+Math.min(i,2)*1.0}else{const qp=regQ(bobj(rg),Math.min(i,2));tx=qp[0];tz=qp[1]}}
+  else{c.sw=(c.sw||0)+dt;if(c.sw>25){c.sw=0;c.steps.shift();if(!c.steps.length)c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}const s=c.steps[0];if(!s)continue;tx=s.x;tz=s.z}
+  if(tx!==undefined){const inq=c.st=='queue'||c.st=='wait',xr=inq&&c.rg&&c.rg!='m',d=walkTo(c,tx,tz,c.sp,dt);if(d<=(xr?.4:.15)){c.x=tx;c.z=tz;
+    if(inq){const rg=c.rg||'m';if(qs[rg].indexOf(c)==0){
+      if(rg=='m'){c.st='wait';if(!c.pay){c.wt=G.t;const a=[c.total,Math.ceil(c.total/10)*10,Math.ceil(c.total/50)*50,Math.ceil(c.total/100)*100];c.pay=a[Math.random()*4|0]}if(G.cashier&&!c.by){c.w+=dt;if(c.w>1.8)serve(c)}}
+      else{const o=bobj(rg),need=(1.4+.5*c.bag.length)/(1+.08*Math.min(2,nTables()));RT[o.id]=(RT[o.id]||0)+dt;if(RT[o.id]>=need){RT[o.id]=0;o.sv=(o.sv||0)+1;serve(c)}}}}
     else{const s=c.steps.shift();c.sw=0;if(s.a=='del')c.dead=1;
-     else if(s.a=='take'){const sh=G.shelves[s.i];let n=Math.min(1+(Math.random()*3|0),sh.n,Math.floor((c.cash-c.total)/G.price[s.i]));if(n>0){sh.n-=n;c.total+=n*G.price[s.i];c.bag.push(s.i)}}
-     else if(s.a=='q'){if(c.total>0&&q.length<3){c.st='queue';c.qt=G.t;c.total=Math.max(1,Math.round(c.total));c.given=0}else{G.rep=Math.max(0,G.rep-1);c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}}}}}}
+     else if(s.a=='take'){let n=Math.min(1+(Math.random()*3|0),stockOf(s.i),Math.floor((c.cash-c.total)/G.price[s.i]));if(n>0){n=takeStock(s.i,n,s.src);if(n>0){c.total+=n*G.price[s.i];c.bag.push(s.i)}}}
+     else if(s.a=='q'){const rg=c.total>0?pickReg(c,qs):null;if(rg){c.st='queue';c.rg=rg;c.qt=G.t;c.total=Math.max(1,Math.round(c.total));c.given=0;(qs[rg]=qs[rg]||[]).push(c)}else{G.rep=Math.max(0,G.rep-1);c.steps=[{x:0,z:5},{x:0,z:9},{x:-8,z:13,a:'del'}]}}}}}}
  G.cust=G.cust.filter(c=>!c.dead)}
-function spawnCust(){if(!G.shelves.some(s=>s.n>0))return;
+function spawnCust(){if(!ITEMS.some((_,i)=>stockOf(i)>0))return;
  const c={id:G.nid++,x:-4+Math.random()*3,z:13,ry:0,col:Math.random()*360|0,st:'go',steps:[{x:0,z:8},{x:0,z:4.5}],cash:8+Math.random()*(20+LVL()*10),total:0,bag:[],sp:1.6+Math.random()*.8,w:0,qt:0};
- let cand=[];G.shelves.forEach((s,i)=>{const r=G.price[i]/ITEMS[i].p;if(s.n>0&&Math.random()<1.5-.5*r)cand.push(i)});
+ let cand=[];ITEMS.forEach((it,i)=>{const r=G.price[i]/it.p;if(stockOf(i)>0&&Math.random()<1.5-.5*r+((G.attr==null?40:G.attr)-36)/400)cand.push(i)});
  cand.sort(()=>Math.random()-.5);cand=cand.slice(0,1+(Math.random()*3|0));
- cand.forEach(i=>c.steps.push({x:SH[i][0],z:-3,a:'take',i}));c.steps.push({x:5.5,z:4.5,a:'q'});G.cust.push(c)}
+ cand.forEach(i=>{const st=takeDest(i);c.steps.push({x:st.x,z:st.z,a:'take',i,src:st.src})});c.steps.push({x:5.5,z:4.5,a:'q'});G.cust.push(c)}
 // ---------- 3D мир ----------
 const scene=new T.Scene();scene.background=new T.Color(0x9ad1f0);scene.fog=new T.Fog(0x9ad1f0,60,150);
 const cam=new T.PerspectiveCamera(70,innerWidth/innerHeight,.1,200);
@@ -322,7 +347,7 @@ const TEX={grass:ctex(128,128,(c,w,h)=>noise(c,w,h,'#6aa84f',100,900),40,40),roa
  tile:ctex(128,128,(c,w,h)=>{for(let i=0;i<2;i++)for(let j=0;j<2;j++){c.fillStyle=(i+j)%2?'#d9c7a3':'#cdb78c';c.fillRect(i*64,j*64,64,64)}c.strokeStyle='#8a7a5a';c.lineWidth=2;c.strokeRect(0,0,128,128);c.strokeRect(0,0,64,64);c.strokeRect(64,64,64,64)},8,6),
  wall:ctex(128,128,(c,w,h)=>{noise(c,w,h,'#f2eee6',100,500);c.fillStyle='#d9d2c3';c.fillRect(0,h-14,w,14)},3,1)};
 tx(bx(200,.2,200,0x6aa84f,0,-.1,0),TEX.grass);tx(bx(200,.05,8,0x333333,0,.01,16),TEX.road);for(let i=-48;i<50;i+=4)bx(1.6,.02,.15,0xffffff,i,.04,16);bx(200,.08,3.5,0xbbbbbb,0,.02,10.7);bx(9,.03,3,0xffd60a,10,.1,11);tx(bx(16,.1,12,0xc9a66b,0,.05,0),TEX.tile);
-COL.forEach(c=>tx(bx(c.w,3,c.d,0xf4f1ea,c.x,1.5,c.z),TEX.wall));
+const WM0=[],WM=COL.map(c=>{WM0.push({w:c.w,d:c.d});return tx(bx(c.w,3,c.d,0xf4f1ea,c.x,1.5,c.z),TEX.wall)});
 for(let i=0;i<7;i++){bx(7,5+i%3*2,6,[0xe5989b,0xb5838d,0x90a4ae,0xcdb4db][i%4],-30+i*10,3,-16);}
 for(let i=0;i<14;i++){const x=-40+i*7;bx(.4,2,.4,0x6d4c41,x,1,24);const t=new T.Mesh(new T.ConeGeometry(1.4,3,8),new T.MeshLambertMaterial({color:0x2d6a4f}));t.position.set(x,3.5,24);scene.add(t)}
 const stock=[];
@@ -393,7 +418,7 @@ function render(dt){TT+=dt;
  sync(M.c,G.cust,o=>char(randAP(o.col)),(m,o)=>{const dx=o.x-m.position.x,dz=o.z-m.position.z;const sp=Math.hypot(dx,dz)/Math.max(dt,.001);const k=Math.min(1,dt*10);m.position.x+=dx*k;m.position.z+=dz*k;lerpA(m,o.ry,dt);walk(m,sp)},dt);
  sync(M.t,G.trucks,o=>{const g=new T.Group();g.add(mk(6,2.6,2.6,0xf8f9fa,0,1.8,0),mk(1.6,2,2.4,0xe63946,3.8,1.4,0),mk(5.9,.3,2.4,0x333333,0,.4,0));return g},(m,o)=>{m.position.x=o.x;m.position.z=o.z},dt);
  sync(M.s,G.staff?[Object.assign({},G.staff,{id:'s'})]:[],o=>char(0xff9f1c),(m,o)=>{const k=Math.min(1,dt*10);m.position.x+=(o.x-m.position.x)*k;m.position.z+=(o.z-m.position.z)*k;lerpA(m,o.ry,dt);walk(m,o.mv||0,!!o.hold)},dt);
- sync(M.d,G.build,o=>mk(BK[o.k].w,BK[o.k].h,BK[o.k].d,BK[o.k].c,0,0,0),(m,o)=>{m.position.set(o.x,BK[o.k].h/2,o.z);m.rotation.y=o.r?Math.PI/2:0},dt);
+ sync(M.d,G.build,o=>bmodel(o.k),bupd,dt);
  const hk={};pls.forEach(p=>{if(p.pkh)hk[p.pkh]=p});
  sync(M.k,G.pk,o=>{const g=new T.Group();g.add(mk(.45,.5,.3,0xe9c46a,0,.25,0),mk(.47,.08,.32,0xc1121f,0,.52,0));return g},(m,o)=>{const h=hk[o.id],k=Math.min(1,dt*15);const tx=h?h.x+Math.sin(h.ry)*.7:o.x,ty=h?1.0+(h.y||0):o.y,tz=h?h.z+Math.cos(h.ry)*.7:o.z;m.position.x+=(tx-m.position.x)*k;m.position.y+=(ty-m.position.y)*k;m.position.z+=(tz-m.position.z)*k},dt);
  {const own=P.inv&&G.van.drv==myId&&VL,v=own?VL:G.van,k=own?1:Math.min(1,dt*10);vanM.position.x+=(v.x-vanM.position.x)*k;vanM.position.z+=(v.z-vanM.position.z)*k;if(own)vanM.rotation.y=v.ry;else lerpA(vanM,v.ry,dt);
@@ -407,7 +432,7 @@ function render(dt){TT+=dt;
  ren.render(scene,cam);minimap(pls)}
 const mm=$('mm').getContext('2d');
 function minimap(pls){mm.clearRect(0,0,150,150);const S=2.2,cx=75,cz=75,X=x=>cx+(x-P.x)*S,Z=z=>cz+(z-P.z)*S;
- mm.fillStyle='#c9a66b88';mm.fillRect(X(-8),Z(-6),16*S,12*S);mm.fillStyle='#ffd60a88';mm.fillRect(X(6),Z(9.5),8*S,3*S);
+ mm.fillStyle='#c9a66b88';mm.fillRect(X(SB.x0),Z(SB.z0),(SB.x1-SB.x0)*S,(SB.z1-SB.z0)*S);mm.fillStyle='#ffd60a88';mm.fillRect(X(6),Z(9.5),8*S,3*S);
  const dot=(x,z,c,r)=>{mm.fillStyle=c;mm.beginPath();mm.arc(X(x),Z(z),r,0,7);mm.fill()};
  G.boxes.forEach(b=>dot(b.x,b.z,'#f4a261',2));HOUSES.forEach(h=>{mm.fillStyle='#ffffff55';mm.fillRect(X(h.x-4),Z(28),8*S,6*S)});
  G.dl.orders.forEach(o=>{if(o.st=='new'||o.st=='packed')dot(HOUSES[o.addr].x,26.2,'#ffd166',4)});const vv=(P.inv&&G.van.drv==myId&&VL)?VL:G.van,a0=G.dl.orders.find(o=>o.st=='packed')||G.dl.orders.find(o=>o.st=='new');dot(vv.x,vv.z,'#4cc9f0',5);
@@ -430,9 +455,8 @@ let stepT=0;
 // ---------- сенсорное управление ----------
 let touch=false,tRun=false,lastT=0;const joy={x:0,y:0,id:null,ox:0,oy:0},look={id:null,x:0,y:0};
 function setTouch(v){touch=v;$('tc').style.display=v&&playing?'block':'none';document.body.classList.toggle('touch',v)}
-function placeBuild(){if(bm&&bok)sendM({t:'build',k:bk,x:bpos.x,z:bpos.z,r:br})}
 addEventListener('touchstart',e=>{lastT=Date.now();if(!touch)setTouch(true);if(e.target.id=='c')e.preventDefault();if(!playing||ui)return;
- for(const t of e.changedTouches){if(t.target.closest&&t.target.closest('.tb'))continue;
+ for(const t of e.changedTouches){if(t.target.closest&&(t.target.closest('.tb')||t.target.closest('#bp')))continue;
   if(t.clientX<innerWidth*.45&&joy.id===null){joy.id=t.identifier;joy.ox=t.clientX;joy.oy=t.clientY;joy.x=joy.y=0;const k=$('jk');k.style.display=$('jd').style.display='block';k.style.left=(t.clientX-50)+'px';k.style.top=(t.clientY-50)+'px';$('jd').style.left=(t.clientX-22)+'px';$('jd').style.top=(t.clientY-22)+'px'}
   else if(t.clientX>=innerWidth*.45&&look.id===null){look.id=t.identifier;look.x=t.clientX;look.y=t.clientY}}},{passive:false});
 addEventListener('touchmove',e=>{if(e.target.id=='c')e.preventDefault();for(const t of e.changedTouches){
@@ -446,7 +470,7 @@ document.querySelectorAll('.tb').forEach(b=>{const D=b.dataset;
  b.addEventListener('touchstart',e=>{e.preventDefault();e.stopPropagation();lastT=Date.now();
   if(D.k){dispatchEvent(new KeyboardEvent('keydown',{code:D.k}));setTimeout(()=>dispatchEvent(new KeyboardEvent('keyup',{code:D.k})),60)}
   else if(D.h)keys[D.h]=1;else if(D.t=='run'){tRun=!tRun;b.classList.toggle('on',tRun)}
-  else if(D.f=='place')placeBuild();else if(D.f=='next')bk=(bk+1)%4},{passive:false});
+  else if(D.b)bAct(D.b)},{passive:false});
  b.addEventListener('touchend',e=>{if(D.h)keys[D.h]=0})});
 try{setTouch(matchMedia('(pointer:coarse)').matches)}catch(e){}
 // ---------- фургон и телефон ----------
@@ -475,19 +499,145 @@ function renderPh(f){if($('ph').style.display!='block')return;const D=G.dl,sig=J
  if(D.hist.length)h+='<p>История: '+D.hist.slice(0,5).map(x=>'#'+x.n+(x.fail?' ❌':' +$'+x.total.toFixed(0))).join(' · ')+'</p>';$('ph').innerHTML=h}
 setInterval(()=>renderPh(0),300);
 // ---------- строительство ----------
-const BK=[{n:'Стена',w:3,d:.3,h:3,c:0xf4f1ea,cost:30},{n:'Прилавок',w:2,d:.8,h:1,c:0x8d6e63,cost:40},{n:'Стол',w:1.6,d:1,h:.8,c:0xb08968,cost:25},{n:'Растение',w:.6,d:.6,h:1.2,c:0x2d6a4f,cost:10}];
-let bm=false,bk=0,br=0,bpos={x:0,z:0},bok=false;
-const ghost=mk(1,1,1,0x00ff66,0,0,0);ghost.material.transparent=true;ghost.material.opacity=.5;ghost.visible=false;scene.add(ghost);
+// ---------- строительство v14 ----------
+const SELLK=.6,TN=['обычные товары','охлаждаемые товары','замороженные товары'],REGPAY=12,REGHIRE=100,PAT=70,NIT=4;
+const BCAT=[['trade','🛒 Торговля'],['cash','🧾 Кассы'],['work','📦 Склад'],['decor','🌿 Декор'],['wall','🧱 Стены']];
+// порядок НЕ менять: k — индекс, сохранённый в старых сохранениях (0–3 — старые объекты)
+const BK=[
+{n:'Стена',cat:'wall',w:3,d:.3,h:3,c:0xf4f1ea,cost:30,kind:'wall',desc:'Перегородка'},
+{n:'Прилавок',cat:'trade',w:2,d:.8,h:1,c:0x8d6e63,cost:40,kind:'shelf',t:0,cap:9,desc:'Выкладка обычных товаров, 9 шт.'},
+{n:'Рабочий стол',cat:'work',w:1.6,d:1,h:.8,c:0xb08968,cost:25,kind:'table',desc:'Кассы работают на 8% быстрее (до 2 столов)'},
+{n:'Растение',cat:'decor',w:.6,d:.6,h:1.2,c:0x2d6a4f,cost:10,kind:'plant',at:1,desc:'Привлекательность +1'},
+{n:'Торговая полка',cat:'trade',w:2,d:.7,h:1.5,c:0xa1887f,cost:90,kind:'shelf',t:0,cap:12,desc:'Обычные товары, 12 шт.'},
+{n:'Большой стеллаж',cat:'trade',w:3,d:.9,h:2,c:0x6d4c41,cost:220,kind:'shelf',t:0,cap:30,desc:'Обычные товары, 30 шт.'},
+{n:'Холодильник',cat:'trade',w:1.2,d:.8,h:2,c:0xe9f1f7,cost:260,kind:'shelf',t:1,cap:18,desc:'Охлаждаемые: молоко, йогурт. 18 шт.'},
+{n:'Морозильная витрина',cat:'trade',w:2,d:.9,h:1,c:0xdff3fb,cost:320,kind:'shelf',t:2,cap:18,desc:'Замороженное: мороженое. 18 шт.'},
+{n:'Касса',cat:'cash',w:1.6,d:.9,h:1,c:0x777777,cost:250,kind:'reg',desc:'Своя очередь. Нужен кассир: $100 + $12/мин'},
+{n:'Стеллаж склада',cat:'work',w:2.4,d:.8,h:2.2,c:0x7f8c8d,cost:140,kind:'store',cap:36,desc:'6 коробок одного товара, убирает хлам с пола'},
+{n:'Мусорный контейнер',cat:'work',w:.7,d:.7,h:1,c:0x2f5d3a,cost:35,kind:'bin',desc:'Быстрее убирает беспорядок (до 3 шт.)'},
+{n:'Светильник',cat:'decor',w:.5,d:.5,h:2.2,c:0xffe9a8,cost:45,kind:'light',at:2.5,desc:'Освещение: привлекательность +2.5'},
+{n:'Большое растение',cat:'decor',w:.9,d:.9,h:1.8,c:0x2d6a4f,cost:55,kind:'plant',at:2,desc:'Привлекательность +2'},
+{n:'Вывеска-стенд',cat:'decor',w:1.6,d:.2,h:1.6,c:0x1d3557,cost:120,kind:'sign',at:6,desc:'Привлекательность +6'}];
+const EXP=[{n:'Пристройка на север (+4 м)',cost:1200,lv:3,z0:-10},{n:'Боковое крыло на запад (+4 м)',cost:3000,lv:4,x0:-12},{n:'Вторая пристройка на север (+4 м)',cost:6500,lv:5,z0:-14}];
+const SB={x0:-8,x1:8,z0:-6,z1:6},RT={};
+let bm=false,bmode='new',bk=4,br=0,bpos={x:0,z:0},bok=false,bcat='trade',bsel=0,bmv=0,brep=0,bdist=3,bpOpen=true,bpSig='',appliedExp=-1,FL2=null,attrT=0;
 const bsz=(k,r)=>r%2?{w:BK[k].d,d:BK[k].w}:{w:BK[k].w,d:BK[k].d};
-function bcols(){return G&&G.build?G.build.map(b=>{const s=bsz(b.k,b.r);return{x:b.x,z:b.z,w:s.w,d:s.d}}):[]}
+function bcols(ex){return G&&G.build?G.build.filter(b=>b.id!=ex).map(b=>{const s=bsz(b.k,b.r);return{x:b.x,z:b.z,w:s.w,d:s.d}}):[]}
 const KEEP=[{x:-1,z:-3.3,w:14,d:2.2},{x:5.5,z:3.2,w:2.4,d:1.8},{x:-5.9,z:2,w:1.6,d:2.4}];
-function bvalid(k,x,z,r){const s=bsz(k,r);for(const c of KEEP)if(Math.abs(x-c.x)<(s.w+c.w)/2&&Math.abs(z-c.z)<(s.d+c.d)/2)return false;if(Math.abs(x)+s.w/2>7.7||Math.abs(z)+s.d/2>5.7)return false;if(Math.abs(x)<1.7&&z>3.5)return false;
- for(const c of ALLC.concat(bcols()))if(Math.abs(x-c.x)<(s.w+c.w)/2&&Math.abs(z-c.z)<(s.d+c.d)/2)return false;
+// ---- склад товаров (полки + торговые объекты) ----
+function bobj(id){return G.build.find(b=>b.id==id)}
+function stockOf(i){let n=G.shelves[i]?G.shelves[i].n:0;for(const b of G.build){const K=BK[b.k];if(K&&K.kind=='shelf'&&b.it===i)n+=b.n||0}return n}
+function takeStock(i,want,src){let got=0;const tk=o=>{const t=Math.min(want-got,o.n||0);if(t>0){o.n-=t;got+=t}};
+ if(src){const o=bobj(src);if(o&&o.it===i)tk(o)}
+ if(got<want&&G.shelves[i])tk(G.shelves[i]);
+ for(const b of G.build){if(got>=want)break;const K=BK[b.k];if(K&&K.kind=='shelf'&&b.it===i)tk(b)}
+ return got}
+function nearBuild(p,kinds,r){let best=null,bd=r||1.5;for(const b of G.build){const K=BK[b.k];if(!K||!kinds.includes(K.kind))continue;const s=bsz(b.k,b.r),dx=Math.max(0,Math.abs(p.x-b.x)-s.w/2),dz=Math.max(0,Math.abs(p.z-b.z)-s.d/2),d=Math.hypot(dx,dz);if(d<bd){bd=d;best=b}}return best}
+function dropBuild(b){const i=G.build.indexOf(b);if(i>=0)G.build.splice(i,1);delete RT[b.id];let n=b.n||0,j=0;
+ while(n>0&&b.it>=0&&ITEMS[b.it]){const q=Math.min(BOXN,n);G.boxes.push({id:G.nid++,it:b.it,n:q,x:b.x+(j%3-1)*.8,y:.3,z:b.z+BK[b.k].d/2+.9+(j/3|0)*.8});n-=q;j++}}
+// ---- кассы ----
+function bFront(r){return[[0,1],[1,0],[0,-1],[-1,0]][r&3]}
+function regQ(o,i){const f=bFront(o.r),s=bsz(o.k,o.r),h=f[0]?s.w/2:s.d/2;return[o.x+f[0]*(h+.9+i),o.z+f[1]*(h+.9+i)]}
+function pickReg(c,qs){const L=[{k:'m',x:REG[0],z:4}];for(const b of G.build)if(BK[b.k].kind=='reg'&&b.cs)L.push({k:b.id,x:b.x,z:b.z});let best=null,bs=1e9;
+ for(const o of L){const n=(qs[o.k]||[]).length;if(n>=3)continue;const s=n+Math.hypot(c.x-o.x,c.z-o.z)/18+Math.random()*.3;if(s<bs){bs=s;best=o.k}}return best}
+function takeDest(i){const L=[];if(i<NIT&&G.shelves[i].n>0)L.push({x:SH[i][0],z:-3});for(const b of G.build)if(BK[b.k].kind=='shelf'&&b.it===i&&b.n>0){const q=regQ(b,0);L.push({x:q[0],z:q[1],src:b.id})}return L[Math.random()*L.length|0]||{x:0,z:0}}
+function nTables(){let n=0;for(const b of G.build)if(BK[b.k].kind=='table')n++;return n}
+// ---- привлекательность ----
+function attrCalc(){let pl=0,lt=0,sg=0,bin=0;
+ for(const b of G.build){const K=BK[b.k],f=K.kind;if(f=='plant')pl+=K.at;else if(f=='light')lt+=K.at;else if(f=='sign')sg+=K.at;else if(f=='bin')bin++}
+ const dec=Math.min(8,pl)+Math.min(10,lt)+Math.min(12,sg);G.mess=Math.max(0,Math.min(40,(G.mess||0)-(.03+.05*Math.min(3,bin))));
+ const hs=held();let cl=0;for(const b of G.boxes)if(!hs.has(b.id)&&b.x>SB.x0&&b.x<SB.x1&&b.z>SB.z0&&b.z<SB.z1)cl++;
+ const pen=Math.min(20,Math.max(0,G.mess-6)*.35+Math.min(8,cl*.8)),rp=Math.min(15,G.rep*.15);
+ G.attr=Math.max(0,Math.min(100,Math.round(34+dec+rp-pen)));const ab=[Math.round(dec),Math.round(rp),Math.round(pen)];if(!G.ab||ab.some((v,i)=>v!==G.ab[i]))G.ab=ab}
+// ---- проверка места ----
+const inShop=(x,z)=>x>SB.x0+.3&&x<SB.x1-.3&&z>SB.z0+.3&&z<SB.z1-.3;
+function bvalid(k,x,z,r,ex){const s=bsz(k,r);for(const c of KEEP)if(Math.abs(x-c.x)<(s.w+c.w)/2&&Math.abs(z-c.z)<(s.d+c.d)/2)return false;
+ if(x-s.w/2<SB.x0+.3||x+s.w/2>SB.x1-.3||z-s.d/2<SB.z0+.3||z+s.d/2>SB.z1-.3)return false;if(Math.abs(x)<1.7&&z>3.5)return false;
+ const all=ALLC.concat(bcols(ex));for(const c of all)if(Math.abs(x-c.x)<(s.w+c.w)/2&&Math.abs(z-c.z)<(s.d+c.d)/2)return false;
+ if(BK[k].kind=='reg'){const q=regQ({k,r,x,z},0);if(!inShop(q[0],q[1]))return false;for(const c of all.concat(KEEP))if(Math.abs(q[0]-c.x)<c.w/2+.35&&Math.abs(q[1]-c.z)<c.d/2+.35)return false}
  for(const id in G.players){const p=id==myId?P:G.players[id];if(Math.abs(p.x-x)<s.w/2+.6&&Math.abs(p.z-z)<s.d/2+.6)return false}return true}
-function buildKeys(e){if(e.code=='KeyB'){bm=!bm;return}if(!bm)return;
- if(/^Digit[1-4]$/.test(e.code))bk=+e.code[5]-1;if(e.code=='KeyR')br^=1;
- if(e.code=='KeyX'){let best=null,bd=2;for(const b of G.build){const d=Math.hypot(b.x-bpos.x,b.z-bpos.z);if(d<bd){bd=d;best=b}}if(best)sendM({t:'del',id:best.id})}}
-function buildUpdate(){ghost.visible=bm;if(!bm)return;bpos={x:Math.round((P.x+Math.sin(yaw)*3)*2)/2,z:Math.round((P.z+Math.cos(yaw)*3)*2)/2};bok=bvalid(bk,bpos.x,bpos.z,br);const s=BK[bk];ghost.scale.set(s.w,s.h,s.d);ghost.rotation.y=br?Math.PI/2:0;ghost.position.set(bpos.x,s.h/2,bpos.z);ghost.material.color.set(bok?0x00ff66:0xff3333)}
+// ---- 3D-модели ----
+const STG=new T.BoxGeometry(1,1,1),GEO={b:STG,cup:new T.CylinderGeometry(.5,.42,1,10),tub:new T.CylinderGeometry(.5,.5,1,10)},SGM={};
+const sgm=c=>SGM[c]||(SGM[c]=new T.MeshLambertMaterial({color:c}));
+function stk(g,sl){return sl.map(s=>{const m=new T.Mesh(STG,sgm(0xffffff));m.position.set(s[0],s[1],s[2]);m.scale.set(s[3],s[4],s[5]);m.visible=false;g.add(m);return m})}
+function glass(m,o){m.material.transparent=true;m.material.opacity=o||.4;m.castShadow=false;return m}
+let SIGNTEX=null;
+function bmodel(k){const K=BK[k],g=new T.Group(),w=K.w,d=K.d,h=K.h,ad=(...a)=>{const m=mk(...a);g.add(m);return m},u=g.userData={},sl=[];
+ const row=(n,y,z,sx,sy,sz,x0,x1)=>{for(let j=0;j<n;j++)sl.push([n>1?x0+j*(x1-x0)/(n-1):(x0+x1)/2,y,z,sx,sy,sz])};
+ const ball=(r,col,x,y,z)=>{const m=new T.Mesh(new T.SphereGeometry(r,8,6),new T.MeshLambertMaterial({color:col}));m.position.set(x,y,z);m.castShadow=true;g.add(m)};
+ if(K.kind=='wall')ad(w,h,d,K.c,0,h/2,0);
+ else if(K.kind=='table'){ad(w,.08,d,K.c,0,h-.04,0);[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(a=>ad(.08,h-.08,.08,0x6d4c41,a[0]*(w/2-.08),(h-.08)/2,a[1]*(d/2-.08)))}
+ else if(K.kind=='plant'){if(h>1.4){ad(.5,.4,.5,0x8d5524,0,.2,0);ball(.42,0x2d8a4e,0,.85,0);ball(.36,0x34a05a,.12,1.25,.05);ball(.3,0x2d8a4e,-.1,1.55,0)}else{ad(.3,.25,.3,0x8d5524,0,.125,0);ball(.32,K.c,0,.7,0)}}
+ else if(K.kind=='bin'){ad(.6,.8,.6,K.c,0,.4,0);ad(.7,.1,.7,0x1f3d27,0,.85,0)}
+ else if(K.kind=='light'){ad(.4,.05,.4,0x333333,0,.03,0);ad(.05,1.95,.05,0x555555,0,1,0);ad(.5,.3,.5,0xffe9a8,0,2.05,0).material.emissive.set(0xffc95a)}
+ else if(K.kind=='sign'){ad(.08,1.2,.08,0x555555,-w/2+.1,.6,0);ad(.08,1.2,.08,0x555555,w/2-.1,.6,0);
+  if(!SIGNTEX)SIGNTEX=ctex(256,128,(c,W,H)=>{c.fillStyle='#1d3557';c.fillRect(0,0,W,H);c.fillStyle='#ffd166';c.font='bold 44px sans-serif';c.textAlign='center';c.fillText('ОТКРЫТО',W/2,58);c.font='bold 30px sans-serif';c.fillText('свежие товары',W/2,100)});
+  const b=ad(w,.8,.08,0xffffff,0,1.2,0);b.material.map=SIGNTEX;b.material.color.set(0xffffff)}
+ else if(K.kind=='reg'){ad(w,.9,d,K.c,0,.45,0);ad(w+.04,.06,d+.04,0x444444,0,.93,0);ad(.5,.4,.05,0x4caf50,0,1.2,-d/4);u.led=ad(.12,.12,.12,0xff4444,w/2-.2,1.05,d/4);u.cash=char(0x1d3557);u.cash.position.set(0,0,-(d/2+.5));u.cash.visible=false;g.add(u.cash)}
+ else if(K.kind=='store'){[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(a=>ad(.06,h,.06,0x546e7a,a[0]*(w/2-.03),h/2,a[1]*(d/2-.03)));for(let i=0;i<3;i++){const y=.1+i*.9;ad(w,.05,d,0x90a4ae,0,y,0);row(2,y+.25,0,.5,.4,.5,-w/4,w/4)}}
+ else if(K.kind=='shelf'){
+  if(K.cap==9){ad(w,h-.1,d,K.c,0,(h-.1)/2,0);ad(w+.06,.08,d+.06,0xa1887f,0,h-.06,0);row(9,h+.1,0,.16,.2,.16,-w/2+.15,w/2-.15)}
+  else if(K.t===0){const n3=K.cap>20?4:3,per=Math.round(K.cap/n3);ad(w,h,.05,K.c,0,h/2,-d/2+.03);[-1,1].forEach(a=>ad(.05,h,d,K.c,a*(w/2-.03),h/2,0));for(let i=0;i<n3;i++){const y=.1+i*(h-.15)/n3;ad(w-.05,.05,d,0xcdb89a,0,y,0);row(per,y+.17,.02,.24,.3,.24,-w/2+.25,w/2-.25)}}
+  else if(K.t===1){ad(w,h,d*.4,K.c,0,h/2,-d*.3);[-1,1].forEach(a=>ad(.05,h,d,K.c,a*(w/2-.025),h/2,0));ad(w,.1,d,K.c,0,h-.05,0);ad(w,.1,d,K.c,0,.05,0);[0,1,2].forEach(i=>{ad(w-.1,.03,d*.6,0xcfd8dc,0,.45+i*.5,d*.2);row(6,.57+i*.5,d*.2,.14,.22,.14,-w/2+.15,w/2-.15)});glass(ad(w-.06,h-.2,.03,0x9fd3ee,0,h/2,d/2));ad(w+.02,.14,d+.02,0x2a9d8f,0,h-.07,0)}
+  else{[-1,1].forEach(a=>ad(w,h-.25,.05,K.c,0,(h-.25)/2,a*(d/2-.025)));[-1,1].forEach(a=>ad(.05,h-.25,d,K.c,a*(w/2-.025),(h-.25)/2,0));ad(w,.1,d,K.c,0,.05,0);row(9,.28,-d/5,.17,.15,.17,-w/2+.2,w/2-.2);row(9,.28,d/5,.17,.15,.17,-w/2+.2,w/2-.2);glass(ad(w-.04,.04,d-.04,0x9fd3ee,0,h-.12,0));ad(w+.02,.1,d+.02,0x2a9d8f,0,h-.05,0)}}
+ if(sl.length)u.sl=stk(g,sl);return g}
+function bupd(m,o){const K=BK[o.k],u=m.userData;m.position.set(o.x,0,o.z);m.rotation.y=(o.r&3)*Math.PI/2;
+ if(u.sl){const n=K.cap?Math.min(u.sl.length,Math.ceil((o.n||0)/K.cap*u.sl.length)):0,key=n+'/'+o.it;if(u.key!=key){u.key=key;const it=ITEMS[o.it],col=it?it.col:0xffffff;u.sl.forEach((s,i)=>{s.visible=i<n;s.material=sgm(col);s.geometry=GEO[(it&&it.sh)||'b']})}}
+ if(u.cash)u.cash.visible=!!o.cs;if(u.led)u.led.material.color.set(o.cs?0x00ff66:0xff4444)}
+// ---- расширение магазина ----
+function applyExp(n){appliedExp=n;SB.x0=-8;SB.z0=-6;for(let i=0;i<n&&i<EXP.length;i++){if(EXP[i].x0!==undefined)SB.x0=EXP[i].x0;if(EXP[i].z0!==undefined)SB.z0=EXP[i].z0}
+ const W=[{x:(SB.x0+SB.x1)/2,z:SB.z0,w:SB.x1-SB.x0+.4,d:.4},{x:SB.x0,z:(SB.z0+SB.z1)/2,w:.4,d:SB.z1-SB.z0},{x:SB.x1,z:(SB.z0+SB.z1)/2,w:.4,d:SB.z1-SB.z0},{x:(SB.x0-1.2)/2,z:6,w:-1.2-SB.x0,d:.4},{x:4.6,z:6,w:6.8,d:.4}];
+ W.forEach((c,i)=>{Object.assign(COL[i],c);WM[i].position.set(c.x,1.5,c.z);WM[i].scale.set(c.w/WM0[i].w,1,c.d/WM0[i].d)});NAV=null;
+ if(n>0){const w=SB.x1-SB.x0,d=SB.z1-SB.z0;if(!FL2){const t=TEX.tile.clone();t.needsUpdate=true;FL2=tx(bx(1,.1,1,0xc9a66b,0,.055,0),t)}FL2.scale.set(w,1,d);FL2.position.set((SB.x0+SB.x1)/2,.055,(SB.z0+SB.z1)/2);FL2.material.map.repeat.set(w/2,d/2)}}
+// ---- управление ----
+function bcatItems(c){return BK.map((b,i)=>[b,i]).filter(x=>x[0].cat==c).sort((a,b)=>a[0].cost-b[0].cost)}
+const bHold=()=>bmv?bobj(bmv):null;
+function placeBuild(){bAct('place')}
+function bAct(a){if(!bm)return;const sel=bsel?bobj(bsel):null;
+ if(a=='place'){if(bmode=='new'){const K=BK[bk],ro=brep?bobj(brep):null,back=ro?Math.round(BK[ro.k].cost*SELLK):0;if(!bok)return toast('Сюда нельзя ставить');if(G.money<K.cost-back){beep(200,.15,'square');return toast('Не хватает денег: нужно $'+(K.cost-back))}
+   sendM({t:'build',k:bk,x:bpos.x,z:bpos.z,r:br,rep:brep||0});if(brep){brep=0;bmode='edit'}}
+  else if(bmv){if(!bok)return toast('Сюда нельзя');sendM({t:'bmove',id:bmv,x:bpos.x,z:bpos.z,r:br});bmv=0}}
+ else if(a=='rot'){br=(br+1)&3;if(bmode=='edit'&&!bmv&&sel)sendM({t:'brot',id:sel.id})}
+ else if(a=='sell'){if(sel&&!bmv)sendM({t:'del',id:sel.id})}
+ else if(a=='move'){if(sel){bmv=sel.id;br=sel.r}}
+ else if(a=='repl'){if(sel&&!bmv){brep=sel.id;br=sel.r;bmode='new'}}
+ else if(a=='mode'){bmode=bmode=='new'?'edit':'new';bmv=0;brep=0}
+ else if(a=='cancel'){if(bmv)bmv=0;else if(brep){brep=0;bmode='edit'}else bm=false}
+ else if(a=='far')bdist=Math.min(7,bdist+.5);else if(a=='near')bdist=Math.max(1.5,bdist-.5);bpSig=''}
+function buildKeys(e){const c=e.code;if(c=='KeyB'){bm=!bm;bmv=0;brep=0;bpSig='';return}if(!bm)return;
+ if(/^Digit[1-9]$/.test(c)){const l=bcatItems(bcat),i=+c[5]-1;if(bmode=='new'&&l[i]){bk=l[i][1];bpSig=''}}
+ else if(c=='KeyR')bAct('rot');else if(c=='KeyQ')bAct('mode');else if(c=='KeyX')bAct('sell');else if(c=='KeyM')bAct('move');else if(c=='KeyU')bAct('repl');else if(c=='Enter')bAct('place');else if(c=='Escape')bAct('cancel');
+ else if(c=='Tab'){e.preventDefault();const i=BCAT.findIndex(x=>x[0]==bcat);bcat=BCAT[(i+1)%BCAT.length][0];bk=bcatItems(bcat)[0][1];bmode='new';bpSig=''}}
+addEventListener('wheel',e=>{if(bm&&playing&&!ui)bAct(e.deltaY>0?'far':'near')},{passive:true});
+const GH={},selBox=new T.Mesh(new T.BoxGeometry(1,1,1),new T.MeshBasicMaterial({color:0xffd166,wireframe:true}));selBox.visible=false;scene.add(selBox);
+function ghostFor(k){let g=GH[k];if(!g){g=bmodel(k);g.traverse(o=>{if(o.isMesh&&!o.material.isMeshBasicMaterial){o.material=o.material.clone();o.material.transparent=true;o.material.opacity=.55;o.castShadow=false}});if(g.userData.cash)g.userData.cash.visible=false;g.visible=false;scene.add(g);GH[k]=g}return g}
+function buildUpdate(){for(const k in GH)GH[k].visible=false;selBox.visible=false;if(!bm)return;
+ bpos={x:Math.round((P.x+Math.sin(yaw)*bdist)*2)/2,z:Math.round((P.z+Math.cos(yaw)*bdist)*2)/2};let k=null,ex=0;
+ if(bmode=='new'){k=bk;if(brep){const o=bobj(brep);if(o){bpos={x:o.x,z:o.z};ex=o.id}else brep=0}}
+ else{if(bmv){const o=bobj(bmv);if(o){k=o.k;ex=o.id}else bmv=0}
+  if(!bmv){bsel=0;let bd=1.2;for(const o of G.build){const s=bsz(o.k,o.r),d=Math.hypot(Math.max(0,Math.abs(bpos.x-o.x)-s.w/2),Math.max(0,Math.abs(bpos.z-o.z)-s.d/2));if(d<bd){bd=d;bsel=o.id}}
+   const o=bsel?bobj(bsel):null;if(o){const s=bsz(o.k,o.r);selBox.visible=true;selBox.scale.set(s.w+.1,BK[o.k].h+.1,s.d+.1);selBox.position.set(o.x,BK[o.k].h/2,o.z)}}}
+ if(k!==null){bok=bvalid(k,bpos.x,bpos.z,br,ex);const g=ghostFor(k);g.visible=true;g.position.set(bpos.x,0,bpos.z);g.rotation.y=br*Math.PI/2;const em=bok?0x0b6b2f:0x8a1414;g.traverse(o=>{if(o.isMesh&&o.material.emissive&&o.material.transparent)o.material.emissive.set(em)})}else bok=false}
+function bpRender(){const el=$('bp');if(!bm){if(el.style.display!='none')el.style.display='none';return}
+ const o=bsel&&bmode=='edit'?bobj(bsel):null,sig=JSON.stringify([bmode,bcat,bk,bsel,bmv,brep,Math.floor(G.money),bok,bpOpen,o&&[o.n,o.it,o.cs,o.r],G.attr]);if(sig==bpSig&&el.style.display=='block')return;bpSig=sig;el.style.display='block';
+ let h='<div class="bh"><b>🔨 Стройка</b><span>💰 $'+G.money.toFixed(0)+' · ✨ '+(G.attr==null?'—':G.attr)+'</span><button data-b="fold">'+(bpOpen?'▾':'▴')+'</button><button data-b="cancel">✕</button></div>';
+ if(bpOpen){h+='<div class="bt"><button data-m="new" class="'+(bmode=='new'?'on':'')+'">➕ Купить</button><button data-m="edit" class="'+(bmode=='edit'?'on':'')+'">✏️ Изменить</button></div>';
+  if(bmode=='new'){h+='<div class="bt">'+BCAT.map(c=>'<button data-cat="'+c[0]+'" class="'+(bcat==c[0]?'on':'')+'">'+c[1]+'</button>').join('')+'</div>';
+   if(brep){const ro=bobj(brep);h+='<div class="bn">🔁 Замена: '+(ro?BK[ro.k].n:'?')+' → выбери новый предмет и нажми «Поставить»</div>'}
+   bcatItems(bcat).forEach((x,i)=>{const K=x[0],ok=G.money>=K.cost;h+='<button class="bi '+(bk==x[1]?'on':'')+'" data-k="'+x[1]+'"><i style="background:#'+K.c.toString(16).padStart(6,'0')+'"></i><b>'+(i+1)+'. '+K.n+'</b><span style="color:'+(ok?'#9be37a':'#ff8a8a')+'">$'+K.cost+'</span><em>'+K.desc+'</em></button>'});
+   h+='<div class="bt"><button data-b="place" class="ok">✔ Поставить</button><button data-b="rot">⟳ Поворот (R)</button></div>'+(bok?'':'<div class="bn" style="color:#ff8a8a">⛔ Здесь нельзя: столкновение, стена или нет места</div>')}
+  else{if(bmv){h+='<div class="bn">✋ Перемещение: '+BK[bobj(bmv)?bobj(bmv).k:0].n+'. Выбери место → «Поставить»</div><div class="bt"><button data-b="place" class="ok">✔ Поставить</button><button data-b="rot">⟳ Поворот</button><button data-b="cancel">Отмена</button></div>'}
+   else if(o){const K=BK[o.k];h+='<div class="bn"><b>'+K.n+'</b> · возврат при продаже $'+Math.round(K.cost*SELLK)+(K.cap?' · товара: '+(o.n||0)+'/'+K.cap+(o.it>=0&&ITEMS[o.it]?' ('+ITEMS[o.it].e+' '+ITEMS[o.it].n+')':''):'')+(K.kind=='reg'?' · '+(o.cs?'кассир работает':'нет кассира (ПК — найм)'):'')+'</div><div class="bt"><button data-b="move">✋ Двигать (M)</button><button data-b="rot">⟳ Повернуть (R)</button><button data-b="repl">🔁 Заменить (U)</button><button data-b="sell">💰 Продать (X)</button></div>'}
+   else h+='<div class="bn">Наведи прицел на установленный объект (подойди ближе, колесо/кнопки ± — дальность)</div>'}
+  h+='<div class="bn" style="opacity:.7;font-size:11px">ЛКМ/Enter — поставить · R — поворот · Q — режим · Tab — категория · 1–9 — предмет · колесо — дальность · B/Esc — выход. Продажа возвращает '+Math.round(SELLK*100)+'%, товар с полки вернётся коробками.</div>'}
+ el.innerHTML=h}
+function bHint(){return'СТРОЙКА · '+(bmode=='new'?BK[bk].n+' $'+BK[bk].cost+(bok?'':' · ⛔ нельзя здесь'):(bmv?'перемещение · ЛКМ — поставить, R — поворот, Esc — отмена':(bsel?BK[bobj(bsel).k].n+' · M двигать · R поворот · U заменить · X продать':'наведи на объект')))+' · Q режим · Tab категория · B выход'}
+function pcExtra(){const ab=G.ab||[0,0,0];let h='<h3>✨ Привлекательность: '+(G.attr==null?'—':G.attr)+'/100</h3><p style="opacity:.85">Основа 34 + оформление +'+ab[0]+' + репутация +'+ab[1]+' − беспорядок '+ab[2]+'. Даёт до ±10% к потоку покупателей. Цены, ассортимент и очереди важнее. Мусорные контейнеры и стеллажи склада убирают беспорядок.</p>';
+ const rg=G.build.filter(b=>BK[b.k].kind=='reg'),qn=r=>G.cust.filter(c=>(c.st=='queue'||c.st=='wait')&&(r=='m'?(!c.rg||c.rg=='m'):c.rg==r)).length;
+ h+='<h3>🧾 Кассы</h3><div>Главная касса · очередь '+qn('m')+'/3 · '+(G.cashier?'кассир работает':'вручную (E у кассы)')+'</div>';
+ if(!rg.length)h+='<p style="opacity:.75">Дополнительных касс нет. Купить: B → «Кассы».</p>';
+ rg.forEach((b,i)=>{h+='<div>Касса #'+(i+1)+' · очередь '+qn(b.id)+'/3 · обслужено '+(b.sv||0)+' · '+(b.cs?'кассир работает ($'+REGPAY+'/мин) <button onpointerdown="sendM({t:\'firereg\',id:'+b.id+'})">Уволить</button>':'<button onpointerdown="sendM({t:\'hirereg\',id:'+b.id+'})" '+(LVL()<2?'disabled':'')+'>Нанять кассира $'+REGHIRE+' (ур.2)</button> · без кассира не работает')+'</div>'});
+ const e=EXP[G.exp|0];h+='<h3>🏗 Расширение магазина ('+(G.exp|0)+'/'+EXP.length+')</h3>'+(e?'<p>Следующее: <b>'+e.n+'</b> — $'+e.cost+' · нужен ур.'+e.lv+' <button onpointerdown="sendM({t:\'exp\'})" '+(LVL()<e.lv||G.money<e.cost?'disabled':'')+'>Купить расширение</button></p>':'<p>Все расширения куплены. Размер магазина: '+(SB.x1-SB.x0)+'×'+(SB.z1-SB.z0)+' м</p>');return h}
 // ---------- ручная касса (DOM собирается один раз) ----------
 let cashInit=0;
 function openCash(){if(!cashInit)initCash();ui=true;document.exitPointerLock();$('cash').style.display='block';sendM({t:'lock'});renderCash()}
@@ -534,21 +684,23 @@ function stNear(){if(dist(P,TERM[0],TERM[1])<2.6)return['E — магазин о
 function openPC(){ui=true;document.exitPointerLock();$('pc').style.display='block';renderPC()}
 function closePC(){if($('cash').style.display=='block')sendM({t:'unlock'});ui=false;$('pc').style.display='none';$('cash').style.display='none';$('st').style.display='none';tryAP=null;mirror=false;$('ph').style.display='none'}
 const SELI=$('oi'),SELQ=$('oq'),SELS=$('os');
-ITEMS.forEach((it,i)=>SELI.add(new Option(it.n+' (закуп $'+it.c+'/шт, коробка = '+BOXN+' шт)',i)));
+ITEMS.forEach((it,i)=>SELI.add(new Option(it.e+' '+it.n+' (закуп $'+it.c+'/шт, коробка = '+BOXN+' шт)',i)));
 for(let i=1;i<=5;i++)SELQ.add(new Option(i+' кор.',i));
 function doOrder(){const b=$('ob');b.disabled=true;setTimeout(()=>b.disabled=false,700);sendM({t:'order',i:+SELI.value,q:+SELQ.value,s:+SELS.value})}
 function renderPC(){if(!ui)return;const lv=LVL();
  SELS.innerHTML='';SUP.forEach((s,i)=>{const o=new Option(s.n+' +$'+s.fee+' доставка',i);o.disabled=lv<s.lv;SELS.add(o)});if(!SELS.value)SELS.value=0;
  let h=`<p>Баланс: <b>$${G.money.toFixed(1)}</b> · Выручка: $${G.rev.toFixed(0)} · Уровень: <b>${lv}</b> · Репутация: ${G.rep.toFixed(0)}/100</p><p>${lv<LV.length?'Цель: выручка $'+LV[lv]+' → уровень '+(lv+1):'Максимальный уровень. Скоро: филиалы'}</p>
  <table><tr><th>Товар</th><th>Закупка</th><th>Цена продажи</th><th>На полке</th></tr>`;
- ITEMS.forEach((it,i)=>h+=`<tr><td>${it.n}</td><td>$${it.c}</td><td><button onpointerdown="sendM({t:'price',i:${i},d:-1})">−</button> $${G.price[i]} <button onpointerdown="sendM({t:'price',i:${i},d:1})">+</button></td><td>${G.shelves[i].n}/${CAP}</td></tr>`);
+ ITEMS.forEach((it,i)=>h+=`<tr><td>${it.e} ${it.n}</td><td>$${it.c}</td><td><button onpointerdown="sendM({t:'price',i:${i},d:-1})">−</button> $${G.price[i]} <button onpointerdown="sendM({t:'price',i:${i},d:1})">+</button></td><td>${stockOf(i)}${i>=NIT?' (холод. оборудование)':''}</td></tr>`);
  h+=`</table><p>Сотрудник: ${G.cashier?'кассир работает ($15/мин)':`<button onpointerdown="sendM({t:'hire'})" ${lv<2?'disabled':''}>Нанять кассира $150 (ур.2)</button>`}</p>`;
- h+='<p>Грузчик: '+(G.staff?'работает ($20/мин), сам носит коробки на полки':'<button onpointerdown="sendM({t:\'hire\',w:\'st\'})" '+(lv<3?'disabled':'')+'>Нанять грузчика $200 (ур.3)</button>')+'</p><p>Стройка: B (1–4 вид, R поворот, ЛКМ поставить, X убрать)</p><p>🚐 Доставки: '+G.dl.orders.filter(o=>o.st=='new'||o.st=='packed').length+' активных — телефон (P), сборка у стола слева</p>';h+='<p>Поток покупателей: '+['Спокойный','Обычный','Высокий'].map((n,i)=>'<button onpointerdown="sendM({t:\'diff\',v:'+i+'})" '+(G.diff==i?'style="outline:2px solid #ffd166"':'')+'>'+n+'</button>').join(' ')+' · сейчас ×'+flowMul().toFixed(2)+' · время '+clockTxt()+'</p>';
+ h+='<p>Грузчик: '+(G.staff?'работает ($20/мин), сам носит коробки на полки':'<button onpointerdown="sendM({t:\'hire\',w:\'st\'})" '+(lv<3?'disabled':'')+'>Нанять грузчика $200 (ур.3)</button>')+'</p><p>Стройка: B — каталог оборудования, Q — режим «Изменить»</p><p>🚐 Доставки: '+G.dl.orders.filter(o=>o.st=='new'||o.st=='packed').length+' активных — телефон (P), сборка у стола слева</p>';h+='<p>Поток покупателей: '+['Спокойный','Обычный','Высокий'].map((n,i)=>'<button onpointerdown="sendM({t:\'diff\',v:'+i+'})" '+(G.diff==i?'style="outline:2px solid #ffd166"':'')+'>'+n+'</button>').join(' ')+' · сейчас ×'+flowMul().toFixed(2)+' · время '+clockTxt()+'</p>';
  {const vv=G.van,md=VM[vv.model]||VM.small,cd=vv.cond==null?100:vv.cond;h+='<h3>🚐 Автосалон</h3><p>Транспорт: '+(vv.owned?md.n:'не куплен')+' · состояние '+Math.round(cd)+'% · места '+md.cap+' · скорость '+md.spd+' · топливо ×'+md.fuel+' <button onpointerdown="sendM({t:\'service\'})">Обслужить $'+Math.round((100-cd)*1.2)+'</button></p>';
   Object.keys(VM).forEach(k=>{const m=VM[k];h+='<div>'+m.n+' — $'+m.price+' · места '+m.cap+' · скорость '+m.spd+' · топливо ×'+m.fuel+' <button onpointerdown="sendM({t:\'buyveh\',id:\''+k+'\'})" '+(vv.owned&&vv.model==k?'disabled':'')+'>'+(vv.owned?'Заменить (зачёт 40%)':'Купить')+'</button></div>'})}
- $('pinfo').innerHTML=h;
+ h+=pcExtra();$('pinfo').innerHTML=h;
  $('pord').innerHTML='<h3>Заказы</h3>'+G.orders.slice().reverse().map(o=>`${ITEMS[o.it].n} ×${o.q} кор. — ${o.st=='wait'?'⏳ готовится':o.st=='way'?'🚚 в пути':'✅ доставлено'} ($${o.cost})`).join('<br>')}
 setInterval(renderPC,600);
+$('bp').addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();e.stopPropagation();beep(600,.04);const D=b.dataset;
+ if(D.cat){bcat=D.cat;const l=bcatItems(bcat);if(!l.some(x=>x[1]==bk))bk=l[0][1]}else if(D.k!==undefined)bk=+D.k;else if(D.m){bmode=D.m;bmv=0;brep=0}else if(D.b=='fold')bpOpen=!bpOpen;else if(D.b)bAct(D.b);bpSig=''});
 // ---------- главный цикл ----------
 function enter(){playing=true;setTouch(touch);setInterval(()=>{if(!isHost&&G.acc&&G.acc.g)try{localStorage.setItem('twobiz-me',JSON.stringify(G.acc.g))}catch(e){}},4000);$('menu').style.display='none';['hud','hint','mm'].forEach(i=>$(i).style.display='block');last=performance.now();requestAnimationFrame(frame);beep(440,.1)}
 let last=0;
@@ -557,13 +709,13 @@ function frame(now){const raw=Math.min(.25,(now-last)/1000),dt=Math.min(.05,raw)
  if(G.ev.id!=lastEv){lastEv=G.ev.id;const t=$('toast');t.textContent=G.ev.text;t.style.opacity=1;clearTimeout(t.h);t.h=setTimeout(()=>t.style.opacity=0,2500);if(SFX[G.ev.sfx])SFX[G.ev.sfx]();if(G.ev.sfx==2&&/^Продажа/.test(G.ev.text))pop(G.ev.text)}
  if(P.mv&&P.y<.05){stepT-=dt;if(stepT<=0){stepT=P.mv>5?.28:.4;beep(90,.04,'square')}}
  const lv=LVL(),online=Object.keys(G.players).length;
- $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · 🚐 ${G.van.cargo.length}/${vcap()} · 📦 ${G.dl.rating.toFixed(1)} · 🕒 ${clockTxt()} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+pingTxt(G.ping):'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+pingTxt(ping):'🔴 Нет связи')}`;
+ $('hud').innerHTML=`💰 Компания <b>$${G.money.toFixed(1)}</b> · 💳 Мои <b>$${myM()}</b> · ⭐ ${G.rep.toFixed(0)} · ✨ ${G.attr==null?'—':G.attr} · 🚐 ${G.van.cargo.length}/${vcap()} · 📦 ${G.dl.rating.toFixed(1)} · 🕒 ${clockTxt()} · Ур. ${lv}<br>${lv<LV.length?'Цель: выручка $'+G.rev.toFixed(0)+' / $'+LV[lv]:'Макс. уровень'}<br>${isHost?(roomCode?(online>1?'🟢 Брат в игре · '+pingTxt(G.ping):'🟡 Ждём брата. Код: <b>'+roomCode+'</b>'):'Одиночная игра'):(conn&&conn.open?'🟢 Подключено · '+pingTxt(ping):'🔴 Нет связи')}`;
  $('vwarn').textContent=isHost?(NET.gver&&NET.gver!=VERSION?'⚠ Версия брата: '+NET.gver+' (у вас '+VERSION+')':''):(G.ver&&G.ver!=VERSION?'⚠ Версия хоста: '+G.ver+' (у вас '+VERSION+')':'');
  let h='WASD · Shift · Space · V — вид · клик — мышь';
  if(P.hold){const b=G.boxes.find(b=>b.id==P.hold);h='E — положить: на полку «'+(b?ITEMS[b.it].n:'?')+'» / передать брату / бросить'}
  else if(P.inv){const q=(G.van.drv==myId&&VL)?VL:G.van;h='🚐 '+Math.round(Math.abs(q.sp)*3.6)+' км/ч · '+(G.van.drv==myId?'W газ · S назад · A/D руль · Space тормоз · H сигнал':'вы пассажир')+' · F выйти'}else if(P.pkh)h='E — загрузить в фургон / вручить клиенту / бросить';else if(vanNear())h=vanNear();else if(stNear())h=stNear()[0];else if(dist(P,PCP[0],PCP[1])<2.8)h='E — компьютер (заказы, цены, найм)';
  else if(G.cust.some(c=>c.st=='wait')&&dist(P,REG[0],3)<2.8)h='E — касса: выдай сдачу';
  else if(G.boxes.some(b=>dist(P,b.x,b.z)<2.2))h='E — взять коробку';
- $('hint').textContent=bm?'СТРОЙКА: 1-4 — '+BK[bk].n+' $'+BK[bk].cost+' · R поворот · ЛКМ поставить · X убрать (возврат 100%) · B выход':(touch?h.replace(/^E — /,'Кнопка E — '):h);
- $('tb2').style.display=touch&&bm?'block':'none';buildUpdate();render(dt);requestAnimationFrame(frame)}
+ $('hint').textContent=bm?bHint():(touch?h.replace(/^E — /,'Кнопка E — '):h);
+ $('tb2').style.display=touch&&bm?'block':'none';if(appliedExp!==(G.exp|0))applyExp(G.exp|0);buildUpdate();bpRender();render(dt);requestAnimationFrame(frame)}
 </script></body></html>
